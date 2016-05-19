@@ -6,8 +6,8 @@ require '../src/Instagram.php';
 // $username = '4ewir';
 // $password = 'qweqwe';
 
-$username = $argv[1]
-$password = $argv[2]
+$username = $argv[1];
+$password = $argv[2];
 
 $debug = false;
 
