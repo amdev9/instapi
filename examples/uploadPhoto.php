@@ -1,6 +1,6 @@
 <?php
 
-require '../src/Instagram.php';
+require '/root/instapi/src/Instagram.php';
 
 /////// CONFIG ///////
 // $username = '4ewir';
