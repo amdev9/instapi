@@ -13,6 +13,9 @@ $debug = false;
 
 $photo = $argv[4];       // path to the photo
 $caption = $argv[3];     // caption
+
+$filePhoto = dirname(__FILE__).$photo;
+
 //////////////////////
 
 $i = new Instagram($username, $password, $debug);
@@ -25,7 +28,7 @@ try {
 }
 
 try {
-    $i->uploadPhoto($photo, $caption);
+    $i->uploadPhoto($filePhoto, $caption);
 } catch (Exception $e) {
     echo $e->getMessage();
 }
