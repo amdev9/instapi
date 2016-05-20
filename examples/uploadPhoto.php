@@ -18,23 +18,26 @@ $photo = $argv[4];       // path to the photo
 
 $filePhoto = '/root/instapi/src/'.$photo;
 
-echo $caption;
+// echo $caption;
+
+
+
 
 //////////////////////
 
-// $i = new Instagram($username, $password, $debug);
+$i = new Instagram($username, $password, $debug);
 
-// try {
-//     $i->login();
-// } catch (InstagramException $e) {
-//     $e->getMessage();
-//     exit();
-// }
+try {
+    $i->login();
+} catch (InstagramException $e) {
+    $e->getMessage();
+    exit();
+}
 
-// try {
-//     $i->uploadPhoto($filePhoto, $caption);
-// } catch (Exception $e) {
-//     echo $e->getMessage();
-// }
+try {
+    $i->uploadPhoto($filePhoto, $caption);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 
 
