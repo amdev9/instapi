@@ -10,9 +10,11 @@ $username = $argv[1];
 $password = $argv[2];
 
 $debug = false;
+$caption = $argv[3]; 
 
+echo $argv[4];
 $photo = $argv[4];       // path to the photo
-$caption = $argv[3];     // caption
+    // caption
 
 $filePhoto = '/root/instapi/src/'.$photo;
 
