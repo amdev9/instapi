@@ -14,7 +14,7 @@ $debug = false;
 $photo = $argv[4];       // path to the photo
 $caption = $argv[3];     // caption
 
-$filePhoto = dirname(__FILE__).$photo;
+$filePhoto = dirname(__FILE__).'/'.$photo;
 
 //////////////////////
 
