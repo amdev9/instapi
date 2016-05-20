@@ -16,6 +16,7 @@ $caption = $argv[3];     // caption
 
 $filePhoto = dirname(__FILE__).'/'.$photo;
 
+echo $filePhoto;
 //////////////////////
 
 $i = new Instagram($username, $password, $debug);
