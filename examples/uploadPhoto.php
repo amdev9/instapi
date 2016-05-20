@@ -10,18 +10,13 @@ $username = $argv[1];
 $password = $argv[2];
 
 $debug = false;
-$caption = $argv[3]; 
-
- 
-$photo = $argv[4];       // path to the photo
-    // caption
+$caption ='What do you think about it? #Nike #NikeRun #NikeFree #NikeAir #NikeGirl #NikeOriginal #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
+$photo = $argv[3];      // path to the photo
+  					  
 
 $filePhoto = '/root/instapi/src/'.$photo;
 
 // echo $caption;
-
-
-
 
 //////////////////////
 
