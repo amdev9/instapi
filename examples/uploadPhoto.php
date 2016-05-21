@@ -10,7 +10,8 @@ $username = $argv[1];
 $password = $argv[2];
 
 $debug = false;
-$caption ='What do you think about it? #Nike #NikeRun #NikeFree #NikeAir #NikeGirl #NikeOriginal #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
+$smile = "\u{1F60D}";
+$caption ='What do you think about it? '.$smile.' #Nike #NikeRun #NikeFree #NikeAir #NikeGirl #NikeOriginal #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
 $photo = $argv[3];      // path to the photo
   					  
 
