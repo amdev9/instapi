@@ -14,7 +14,7 @@ $smile = "\u{1F60D}";
 $caption ='What do you think about it? '.$smile.' #Nike #NikeRun #NikeFree #NikeAir #NikeGirl #NikeOriginal #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
 $photo = $argv[3];      // path to the photo
   					  
-echo $caption
+echo $caption;
 $filePhoto = '/root/instapi/src/'.$photo;
 
 // echo $caption;
