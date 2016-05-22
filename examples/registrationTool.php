@@ -1,6 +1,6 @@
 <?php
 
-require_once '../src/InstagramRegistration.php';
+require_once '/Users/alex/home/dev/rails/instagram/InstAPI/src/InstagramRegistration.php';
 
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
@@ -8,32 +8,48 @@ $debug = false;
 
 $r = new InstagramRegistration($debug);
 
-echo "###########################\n";
-echo "#                         #\n";
-echo "# Instagram Register Tool #\n";
-echo "#                         #\n";
-echo "###########################\n";
+// echo "###########################\n";
+// echo "#                         #\n";
+// echo "# Instagram Register Tool #\n";
+// echo "#                         #\n";
+// echo "###########################\n";
 
-do {
-    echo "\n\nUsername: ";
-    $username = trim(fgets(STDIN));
-
+// do {
+    // echo "\n\nUsername: ";
+    // $username = trim(fgets(STDIN));
+    $username = $argv[1];
     $check = $r->checkUsername($username);
     if ($check['available'] == false) {
-        echo "Username $username not available, try with another one\n\n";
+        echo "$username not available\n";
     }
-} while ($check['available'] == false);
+    else {
+    	echo "$username is available - ";
+    }
 
-echo "Username $username is available\n\n";
+    //  $pwd = $argv[2]."\n";
+    //  $em = $argv[3]."\n";
+   	// echo $pwd;
+   	// echo $em;
 
-echo "\nPassword: ";
-$password = trim(fgets(STDIN));
+// } while ($check['available'] == false);
 
-echo "\nEmail: ";
-$email = trim(fgets(STDIN));
 
-$result = $r->createAccount($username, $password, $email);
+if ($check['available'] == true) {
 
-if (isset($result['account_created']) && ($result['account_created'] == true)) {
-    echo 'Your account was successfully created! :)';
+	// echo "\nPassword: ";
+	// $password = trim(fgets(STDIN));
+	
+	// echo "\nEmail: ";
+	// $email = trim(fgets(STDIN));
+	
+	$password = $argv[2];
+	$email = $argv[3];
+	$result = $r->createAccount($username, $password, $email);
+
+	if (isset($result['account_created']) && ($result['account_created'] == true)) {
+    	echo "OK\n";
+	}
 }
+
+
+
