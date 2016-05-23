@@ -10,7 +10,7 @@ require '/root/instapi/src/Instagram.php';
 $username = $argv[1];
 $password = $argv[2];
 
-$debug = false;
+$debug = true;
 
 
 // $smile = "\u{1F60D}";
