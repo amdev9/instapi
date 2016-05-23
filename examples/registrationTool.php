@@ -42,8 +42,9 @@ if ($check['available'] == true) {
 	// echo "\nEmail: ";
 	// $email = trim(fgets(STDIN));
 	
-	$password = $argv[2];
-	$email = $argv[3];
+    $email = $argv[2];
+	$password = $argv[3];
+
 	$result = $r->createAccount($username, $password, $email);
 
 	if (isset($result['account_created']) && ($result['account_created'] == true)) {
