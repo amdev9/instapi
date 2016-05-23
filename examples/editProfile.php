@@ -78,7 +78,7 @@ $filePhoto = '/root/instapi/src/'.$photo;
 // }
 
 try {
-    $i->removeProfilePicture();
+    $i->changeProfilePicture($filePhoto);
 } catch (Exception $e) {
     echo $e->getMessage();
 }
