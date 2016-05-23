@@ -868,16 +868,15 @@ class Instagram
         'external_url'  => $url,
         'phone_number'  => $phone,
         'username'      => $this->username,
-        'first_name'     => $first_name,
-
+        'first_name'    => $first_name,
         'biography'     => $biography,
         'email'         => $email,
         'gender'        => $gender,
         'chaining_enabled'  => $chaining_enabled,
     ]);
       //  'full_name'     => $first_name,
-      // return $this->request('accounts/edit_profile/', $this->generateSignature($data))[1];
-      return $this->request('accounts/edit/', $this->generateSignature($data))[1];
+      return $this->request('accounts/edit_profile/', $this->generateSignature($data))[1];
+      // return $this->request('accounts/edit/', $this->generateSignature($data))[1];
       
   }
 
