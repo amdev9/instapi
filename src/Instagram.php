@@ -874,7 +874,9 @@ class Instagram
         'gender'        => $gender,
     ]);
 
-      return $this->request('accounts/edit_profile/', $this->generateSignature($data))[1];
+      // return $this->request('accounts/edit_profile/', $this->generateSignature($data))[1];
+      return $this->request('accounts/edit/', $this->generateSignature($data))[1];
+      
   }
 
   /**
