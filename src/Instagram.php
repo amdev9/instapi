@@ -859,7 +859,7 @@ class Instagram
    * @return array
    *   edit profile data
    */
-  public function editProfile($url, $phone, $first_name, $biography, $email, $gender)
+  public function editProfile($url, $phone, $first_name, $biography, $email, $gender, $chaining_enabled)
   {
       $data = json_encode([
         '_uuid'         => $this->uuid,
