@@ -55,33 +55,33 @@ try {
    */
   
 
-$url = "";
-$phone = "";
-$first_name = "Eva Gross";
-$biography = "";
-$email = "magaz.inefashionshop@gmail.com";
-$gender = 0;
-$chaining_enabled = true;
+// $url = "";
+// $phone = "";
+// $first_name = "Eva Gross";
+// $biography = "";
+// $email = "magaz.inefashionshop@gmail.com";
+// $gender = 0;
+// $chaining_enabled = true;
 
 // set profile picture
-$photo = "12.jpg";
+$photo = $argv[3]; 
 $filePhoto = '/root/instapi/src/'.$photo;
 
 
 
 // Create separate file and define $url, $phone, $first_name, $biography, $email, $gender
 // our case: $first_name = $argv[1]; 
-try {
-    $i->editProfile($url, $phone, $first_name, $biography, $email, $gender, $chaining_enabled);
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
-
 // try {
-//     $i->changeProfilePicture($filePhoto);
+//     $i->editProfile($url, $phone, $first_name, $biography, $email, $gender, $chaining_enabled);
 // } catch (Exception $e) {
 //     echo $e->getMessage();
 // }
+
+try {
+    $i->changeProfilePicture($filePhoto);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 
 
 // try {
