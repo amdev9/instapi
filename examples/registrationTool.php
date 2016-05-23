@@ -1,6 +1,6 @@
 <?php
 
-require_once '/Users/alex/home/dev/rails/instagram/InstAPI/src/InstagramRegistration.php';
+require_once '/root/instapi/src/InstagramRegistration.php';
 
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
