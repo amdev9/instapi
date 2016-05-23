@@ -1,6 +1,5 @@
 <?php
 
-require_once 'func.php';
 require_once 'Constants.php';
 require_once 'InstagramException.php';
 
@@ -17,6 +16,7 @@ class Instagram
   protected $isLoggedIn = false;  // Session status
   protected $rank_token;          // Rank token
   protected $IGDataPath;          // Data storage path
+  protected $memcache;          // Data storage path
 
   /**
    * Default class constructor.
@@ -32,7 +32,11 @@ class Instagram
    */
   public function __construct($username, $password, $debug = false, $IGDataPath = null)
   {
+      $this->username = $username;
+      $this->password = $password;
       $this->debug = $debug;
+
+      $this->uuid = $this->generateUUID(true);
       $this->device_id = $this->generateDeviceId(md5($username.$password));
 
       if (!is_null($IGDataPath)) {
@@ -147,7 +151,7 @@ class Instagram
 
     protected function timelineFeed()
     {
-        return $this->request('feed/timeline/')[1];
+        return $this->request('feed/timeline/?' . (isset($params['max_id']) ? "max_id=".$params['max_id']."&" : ""))[1];
     }
 
     protected function megaphoneLog()
@@ -859,7 +863,7 @@ class Instagram
    * @return array
    *   edit profile data
    */
-  public function editProfile($url, $phone, $first_name, $biography, $email, $gender, $chaining_enabled)
+  public function editProfile($url, $phone, $first_name, $biography, $email, $gender)
   {
       $data = json_encode([
         '_uuid'         => $this->uuid,
@@ -868,16 +872,13 @@ class Instagram
         'external_url'  => $url,
         'phone_number'  => $phone,
         'username'      => $this->username,
-        'first_name'    => $first_name,
+        'full_name'     => $first_name,
         'biography'     => $biography,
         'email'         => $email,
         'gender'        => $gender,
-        'chaining_enabled'  => $chaining_enabled,
     ]);
-      //  'full_name'     => $first_name,
+
       return $this->request('accounts/edit_profile/', $this->generateSignature($data))[1];
-      // return $this->request('accounts/edit/', $this->generateSignature($data))[1];
-      
   }
 
   /**
@@ -1172,9 +1173,9 @@ class Instagram
    * @return array
    *   timeline data
    */
-  public function getTimeline()
+  public function getTimeline(array $params = null)
   {
-      $timeline = $this->request("feed/timeline/?rank_token=$this->rank_token&ranked_content=true&")[1];
+      $timeline = $this->request("feed/timeline/?" . (isset($params['max_id']) ? "max_id=".$params['max_id']."&" : "") . "rank_token=$this->rank_token&ranked_content=true&")[1];
 
       if ($timeline['status'] != 'ok') {
           throw new InstagramException($timeline['message']."\n");
@@ -1185,26 +1186,18 @@ class Instagram
       return $timeline;
   }
 
-    /**
-     * Get user feed.
-     * @param string $usernameId
-     *    Username id
-     * @param null $maxid
-     *    Max Id
-     * @param null $count
-     *    Count
-     * @return array User feed data
-     *    User feed data
-     * @throws InstagramException
-     */
-  public function getUserFeed($usernameId, $maxid = null, $count = null)
+  /**
+   * Get user feed.
+   *
+   * @param string $usernameId
+   *    Username id
+   *
+   * @return array
+   *   User feed data
+   */
+  public function getUserFeed($usernameId)
   {
-      $userFeed = $this->request(
-          "feed/user/$usernameId/?rank_token=$this->rank_token&"
-          .(!is_null($maxid) ? "&max_id=".$maxid : '')
-          .(!is_null($count) ? "&count=".$maxid : '')
-          ."ranked_content=true&"
-      )[1];
+      $userFeed = $this->request("feed/user/$usernameId/?rank_token=$this->rank_token&ranked_content=true&" . (isset($params['max_id']) ? "max_id=".$params['max_id'] : ""))[1];
 
       if ($userFeed['status'] != 'ok') {
           throw new InstagramException($userFeed['message']."\n");
@@ -1216,21 +1209,21 @@ class Instagram
   }
 
   /**
-   * Get hashtag feed.
-   *
-   * @param string $hashtagString
-   *    Hashtag string, not including the #
-   *
-   * @return array
-   *   Hashtag feed data
-   */
-  public function getHashtagFeed($hashtagString, $maxid = null)
+  * Get hashtag feed
+  *
+  * @param String $hashtagString
+  *    Hashtag string, not including the #
+  *
+  * @return array
+  *   Hashtag feed data
+  */
+  public function getHashtagFeed($hashtagString, $params = null)
   {
-      if (is_null($maxid)) {
-          $endpoint = "feed/tag/$hashtagString/?rank_token=$this->rank_token&ranked_content=true&";
-      } else {
-          $endpoint = "feed/tag/$hashtagString/?max_id=".$maxid."&rank_token=$this->rank_token&ranked_content=true&";
-      }
+    if (is_null($params['max_id'])) {
+      $endpoint = "feed/tag/$hashtagString/?rank_token=$this->rank_token&ranked_content=true&";
+    } else {
+      $endpoint = "feed/tag/$hashtagString/?max_id=" . $params['max_id'] . "&rank_token=$this->rank_token&ranked_content=true&";
+    }
 
       $hashtagFeed = $this->request($endpoint)[1];
 
@@ -1301,9 +1294,9 @@ class Instagram
    * @return array
    *   User feed data
    */
-  public function getSelfUserFeed()
+  public function getSelfUserFeed(array $params = null)
   {
-      return $this->getUserFeed($this->username_id);
+      return $this->getUserFeed($this->username_id, $params);
   }
 
   /**
@@ -1312,9 +1305,9 @@ class Instagram
    * @return array
    *   popular feed data
    */
-  public function getPopularFeed()
+  public function getPopularFeed(array $params = null)
   {
-      $popularFeed = $this->request("feed/popular/?people_teaser_supported=1&rank_token=$this->rank_token&ranked_content=true&")[1];
+      $popularFeed = $this->request("feed/popular/?" . (isset($params['max_id']) ? "max_id=".$params['max_id']."&" : "") . "people_teaser_supported=1&rank_token=$this->rank_token&ranked_content=true&")[1];
 
       if ($popularFeed['status'] != 'ok') {
           throw new InstagramException($popularFeed['message']."\n");
@@ -1334,9 +1327,9 @@ class Instagram
     * @return array
     *   followers data
     */
-   public function getUserFollowings($usernameId, $maxid = null)
+   public function getUserFollowings($usernameId, array $params = null)
    {
-       return $this->request("friendships/$usernameId/following/?max_id=$maxid&ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
+       return $this->request("friendships/$usernameId/following/?" . (isset($params['max_id']) ? "max_id=".$params['max_id']."&" : "") . "ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
    }
 
   /**
@@ -1348,9 +1341,9 @@ class Instagram
    * @return array
    *   followers data
    */
-  public function getUserFollowers($usernameId, $maxid = null)
+  public function getUserFollowers($usernameId, array $params = null)
   {
-      return $this->request("friendships/$usernameId/followers/?max_id=$maxid&ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
+      return $this->request("friendships/$usernameId/followers/?" . (isset($params['max_id']) ? "max_id=".$params['max_id']."&" : "") . "ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
   }
 
   /**
@@ -1359,9 +1352,9 @@ class Instagram
    * @return array
    *   followers data
    */
-  public function getSelfUserFollowers()
+  public function getSelfUserFollowers(array $params = null)
   {
-      return $this->getUserFollowers($this->username_id);
+      return $this->getUserFollowers($this->username_id, $params);
   }
 
   /**
@@ -1370,9 +1363,9 @@ class Instagram
    * @return array
    *   users we are following data
    */
-  public function getSelfUsersFollowing()
+  public function getUsersFollowing(array $params = null)
   {
-      return $this->request('friendships/following/?ig_sig_key_version='.Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
+      return $this->request('friendships/following/?' . (isset($params['max_id']) ? "max_id=".$params['max_id']."&" : "") . 'ig_sig_key_version='.Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
   }
 
   /**
@@ -1426,9 +1419,9 @@ class Instagram
    * @return array
    *   Media comments data
    */
-  public function getMediaComments($mediaId)
+  public function getMediaComments($mediaId, array $params = null)
   {
-      return $this->request("media/$mediaId/comments/?")[1];
+      return $this->request("media/$mediaId/comments/?" . (isset($params['max_id']) ? "max_id=".$params['max_id']."&" : ""))[1];
   }
 
   /**
@@ -1519,6 +1512,27 @@ class Instagram
       return $this->request("friendships/destroy/$userId/", $this->generateSignature($data))[1];
   }
 
+
+    /**
+     * Check friendship status.
+     *
+     * @param string $userId
+     *
+     * @return array
+     *   Friendship status data
+     */
+    public function getRelationshipToCurrentUser($userId)
+    {
+        $data = json_encode([
+            '_uuid'      => $this->uuid,
+            '_uid'       => $this->username_id,
+            'user_id'    => $userId,
+            '_csrftoken' => $this->token,
+        ]);
+
+        return $this->request("friendships/show/$userId/", $this->generateSignature($data))[1];
+    }
+
   /**
    * Block.
    *
@@ -1565,9 +1579,9 @@ class Instagram
    * @return array
    *   Liked media data
    */
-  public function getLikedMedia()
+  public function getLikedMedia(array $params = null)
   {
-      return $this->request('feed/liked/?')[1];
+      return $this->request('feed/liked/?' . (isset($params['max_id']) ? "max_id=".$params['max_id']."&" : ""))[1];
   }
 
     public function generateSignature($data)
@@ -1621,21 +1635,15 @@ class Instagram
         return $body;
     }
 
-    protected function request($endpoint, $post = null, $login = false)
-    {
-        if (!$this->isLoggedIn && !$login) {
-            throw new InstagramException("Not logged in\n");
-
-            return;
-        }
+    protected function apiRequest($endpoint, $post = null, $login = false) {
 
         $headers = [
-        'Connection: close',
-        'Accept: */*',
-        'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
-        'Cookie2: $Version=1',
-        'Accept-Language: en-US',
-    ];
+            'Connection: close',
+            'Accept: */*',
+            'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
+            'Cookie2: $Version=1',
+            'Accept-Language: en-US',
+        ];
 
         $ch = curl_init();
 
@@ -1663,16 +1671,48 @@ class Instagram
 
         curl_close($ch);
 
-        if ($this->debug) {
-            echo "REQUEST: $endpoint\n";
-            if (!is_null($post)) {
-                if (!is_array($post)) {
-                    echo 'DATA: '.urldecode($post)."\n";
-                }
-            }
-            echo "RESPONSE: $body\n\n";
+        $result = [$header, json_decode($body, true)];
+
+        if ($memcache = $this->getMemcache() and isset($result[1]['status']) and $result[1]['status'] == 'ok') {
+            $url = stristr($endpoint, 'rank_token', true);
+            $key = md5($this->username . $url);
+            $ttl = 60*10; // 10 minutes
+            $memcache->replace($key, $result, $ttl) || $memcache->set($key, $result, $ttl);
         }
 
-        return [$header, json_decode($body, true)];
+        return $result;
+    }
+
+    protected function request($endpoint, $post = null, $login = false) {
+        if (!$this->isLoggedIn && !$login) {
+            throw new InstagramException("Not logged in\n");
+        }
+
+        $memcache = $this->getMemcache();
+
+        if (!$memcache) {
+            $response = $this->apiRequest($endpoint, $post, $login);
+        } else {
+            $url = stristr($endpoint, 'rank_token', true);
+            $key = md5($this->username . $url);
+            $response = $memcache->get($key);
+            if ($this->debug or $post or !$response) {
+                $response = $this->apiRequest($endpoint, $post, $login);
+            }
+        }
+
+        return $response;
+    }
+
+    private function getMemcache() {
+        $this->memcache = false;
+        if (extension_loaded('memcached')) {
+            $memcache_server = 'localhost';
+            $memcache_port = '11211';
+
+            $this->memcache = new \Memcached;
+            $this->memcache->addServer($memcache_server, $memcache_port);
+        }
+        return $this->memcache;
     }
 }
