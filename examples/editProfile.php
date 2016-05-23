@@ -77,11 +77,11 @@ try {
     echo $e->getMessage();
 }
 
-try {
-    $i->changeProfilePicture($filePhoto);
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
+// try {
+//     $i->changeProfilePicture($filePhoto);
+// } catch (Exception $e) {
+//     echo $e->getMessage();
+// }
 
 
 // try {
