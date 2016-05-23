@@ -859,7 +859,7 @@ class Instagram
    * @return array
    *   edit profile data
    */
-  public function editProfile($url, $phone, $first_name, $biography, $email, $gender)
+  public function editProfile($url, $phone, $first_name, $biography, $email, $gender, $chaining_enabled)
   {
       $data = json_encode([
         '_uuid'         => $this->uuid,
@@ -873,10 +873,9 @@ class Instagram
         'biography'     => $biography,
         'email'         => $email,
         'gender'        => $gender,
-         
+        'chaining_enabled'  => $chaining_enabled,
     ]);
-//  'full_name'     => $first_name,
-        
+      //  'full_name'     => $first_name,
       // return $this->request('accounts/edit_profile/', $this->generateSignature($data))[1];
       return $this->request('accounts/edit/', $this->generateSignature($data))[1];
       
