@@ -8,13 +8,39 @@ require '/root/instapi/src/Instagram.php';
 
 $username = $argv[1];
 $password = $argv[2];
+$photo = $argv[3];      // path to the photo
+
 
 $debug = false;
 $smile = "\u{1F60D}";
-$caption ='What do you think about it? '.$smile.' #Nike #NikeRun #NikeFree #NikeAir #NikeGirl #NikeOriginal #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
-$photo = $argv[3];      // path to the photo
+$caption = "";
+
+if ($username == 'kupit_nike') {
+$captionnike ='What do you think about it? '.$smile.$smile.' #Nike #NikeRun #NikeFree #NikeAir #NikeGirl #NikeOriginal #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
+$caption = $captionnike;
+
+} 
+elseif ($username ==  'eva.gross92') {
+
+$captioneva ='What do you think about me? '.$smile.$smile.' #DateAlive #Dates #DateNight #DateTime #ModelFace #FollowMe #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
+$caption = $captioneva;
+
+}
+ elseif ($username ==  'kupit_adidas') {
+
+$captionadidas ='What do you think about it? '.$smile.$smile.' #Adidas #Adidasmurah #AdidasYeezy #AdidasOriginals #AdidasGirl #AdidasBoost #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
+$caption = $captionadidas;
+} elseif ($username == 'mosmagazinefashion')
+{
+$captionfashion ='What do you think about it? '.$smile.$smile.' #Fashion #FashionGirl #FashionInsta #FashionMagazine #FashionBaby #FashionLove #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
+$caption = $captionfashion;
+}
   					  
 echo $caption;
+
+
+
+
 $filePhoto = '/root/instapi/src/'.$photo;
 
 // echo $caption;
