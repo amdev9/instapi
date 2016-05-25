@@ -12,7 +12,7 @@ $password = $argv[3];
 $photo = $argv[4];      // path to the photo
 $caption = $argv[5]; 
 
-$debug = false;
+$debug = true;
 $smile = "\u{1F60D}";
 
 
