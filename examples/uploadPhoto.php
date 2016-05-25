@@ -19,14 +19,7 @@ if ($username == 'kupit_nike') {
 $captionnike ='What do you think about it? '.$smile.$smile.' #Nike #NikeRun #NikeFree #NikeAir #NikeGirl #NikeOriginal #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
 $caption = $captionnike;
 
-} 
-elseif ($username ==  "fitness.body2") {
-
-$captioneva ='Fitness body'.$smile; // caption
-$caption = $captioneva;
-
-}
- elseif ($username ==  'kupit_adidas') {
+} elseif ($username ==  'kupit_adidas') {
 
 $captionadidas ='What do you think about it? '.$smile.$smile.' #Adidas #Adidasmurah #AdidasYeezy #AdidasOriginals #AdidasGirl #AdidasBoost #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
 $caption = $captionadidas;
