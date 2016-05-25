@@ -7,8 +7,9 @@ require '/root/instapi/src/Instagram.php';
 // $username = '4ewir';
 // $password = 'qweqwe';
 
-$username = $argv[1];
-$password = $argv[2];
+$proxy = $argv[1];
+$username = $argv[2];
+$password = $argv[3];
 
 $debug = true;
 
@@ -25,7 +26,7 @@ $debug = true;
 
 //////////////////////
 
-$i = new Instagram($username, $password, $debug);
+$i = new Instagram($username, $password, $proxy, $debug);
 
 try {
     $i->login();
@@ -64,7 +65,7 @@ try {
  
 
 // set profile picture
-$photo = $argv[3]; 
+$photo = $argv[4]; 
 $filePhoto = '/root/instapi/src/'.$photo;
 
 
