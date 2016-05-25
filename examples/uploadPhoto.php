@@ -12,7 +12,7 @@ $password = $argv[3];
 $photo = $argv[4];      // path to the photo
 $caption =  'What do you think about it?';
 
-$tags = "#SensualBoyes #Girl #PerfectBody #LikeForLike #Like4Like";
+$tags = "#SensualBodyes #Girl #PerfectBody #LikeForLike #Like4Like";
 
 $debug = true;
 $smile = "\u{1F60D}";
