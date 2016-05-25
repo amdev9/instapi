@@ -22,7 +22,7 @@ $caption = $captionnike;
 } 
 elseif ($username ==  'eva.gross92') {
 
-$captioneva ='hm... '.$smile.' #PerfectBody'; // caption
+$captioneva ='Love this girl'; // caption
 $caption = $captioneva;
 
 }
