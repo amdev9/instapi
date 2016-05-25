@@ -9,9 +9,11 @@ class InstagramRegistration
     protected $IGDataPath;
     protected $username;
     protected $uuid;
+    protected $proxy;
 
-    public function __construct($debug = false, $IGDataPath = null)
+    public function __construct($proxy, $debug = false, $IGDataPath = null)
     {
+        $this->proxy = $proxy;
         $this->debug = $debug;
         $this->uuid = $this->generateUUID(true);
         if (!is_null($IGDataPath)) {
@@ -106,9 +108,14 @@ class InstagramRegistration
         curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
         curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        // curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_VERBOSE, false);
+        curl_setopt ($ch, CURLOPT_PROXY, $this->proxy ); 
+        curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+        curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+
+
         if (file_exists($this->IGDataPath."$this->username-cookies.dat")) {
             curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
             curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");

@@ -8,14 +8,15 @@ require '/root/instapi/src/Instagram.php';
 
 $username = $argv[1];
 $password = $argv[2];
-$photo = $argv[3];      // path to the photo
-$caption =  $argv[4]; 
+$proxy = $argv[3];
+$photo = $argv[4];      // path to the photo
+$caption = $argv[5]; 
 
 $debug = false;
 $smile = "\u{1F60D}";
 
 
- 
+ // 'What do you think about it? \u{1F60D}  #Nike #NikeRun #NikeFree #NikeAir #NikeGirl #NikeOriginal #GirlBody #PerfectBody #LikeForLike #Like4Like'
   					  
 echo $caption;
 
@@ -29,7 +30,7 @@ $filePhoto = '/root/instapi/src/'.$photo;
 
 //////////////////////
 
-$i = new Instagram($username, $password, $debug);
+$i = new Instagram($username, $password, $proxy, $debug);
 
 try {
     $i->login();
