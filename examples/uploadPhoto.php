@@ -5,10 +5,10 @@ require '/root/instapi/src/Instagram.php';
 /////// CONFIG ///////
 // $username = '4ewir';
 // $password = 'qweqwe';
+$proxy = $argv[1];
+$username = $argv[2];
+$password = $argv[3];
 
-$username = $argv[1];
-$password = $argv[2];
-$proxy = $argv[3];
 $photo = $argv[4];      // path to the photo
 $caption = $argv[5]; 
 
