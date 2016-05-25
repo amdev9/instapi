@@ -5,7 +5,7 @@ require_once '/root/instapi/src/InstagramRegistration.php';
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
 $debug = false;
-$proxy = "45.55.178.19:5006";
+$proxy = "45.55.178.19:5007";
 
 $r = new InstagramRegistration($proxy, $debug);
 
