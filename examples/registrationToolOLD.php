@@ -1,12 +1,13 @@
 <?php
 
-require_once '../src/InstagramRegistration.php';
+require_once '/root/instapi/src/InstagramRegistration.php';
 
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
 $debug = false;
+$proxy = "45.55.178.19:5006";
 
-$r = new InstagramRegistration($debug);
+$r = new InstagramRegistration($proxy, $debug);
 
 echo "###########################\n";
 echo "#                         #\n";
