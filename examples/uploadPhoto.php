@@ -20,9 +20,9 @@ $captionnike ='What do you think about it? '.$smile.$smile.' #Nike #NikeRun #Nik
 $caption = $captionnike;
 
 } 
-elseif ($username ==  'eva.gross92') {
+elseif ($username ==  "fitness.body2") {
 
-$captioneva ='Love this girl'; // caption
+$captioneva ='Fitness body'.$smile; // caption
 $caption = $captioneva;
 
 }
