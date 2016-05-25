@@ -22,7 +22,7 @@ $caption = $captionnike;
 } 
 elseif ($username ==  'eva.gross92') {
 
-$captioneva ='What do you think about me? '.$smile.$smile.' #PrettyGirl #ModelFace  #GirlBody #PerfectBody #LikeForLike #Like4Like'; // caption
+$captioneva ='hm... '.$smile.' #PerfectBody'; // caption
 $caption = $captioneva;
 
 }
