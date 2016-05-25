@@ -56,32 +56,32 @@ try {
    */
   
 
-// $url = "";
-// $phone = "";
-// $first_name = "Fitness Body";
-// $biography = "";
-// $email = "magaz.inefashionshop@gmail.com";
-// $gender = 0;
+$url = "";
+$phone = "";
+$first_name = "Fitness Body";
+$biography = "";
+$email = "magazin.efashionshop@gmail.com";
+$gender = 0;
  
 
-// set profile picture
-$photo = $argv[4]; 
-$filePhoto = '/root/instapi/src/'.$photo;
+// // set profile picture
+// $photo = $argv[4]; 
+// $filePhoto = '/root/instapi/src/'.$photo;
 
 
 
 // // Create separate file and define $url, $phone, $first_name, $biography, $email, $gender
 // // our case: $first_name = $argv[1]; 
-// try {
-//     $i->editProfile($url, $phone, $first_name, $biography, $email, $gender);
-// } catch (Exception $e) {
-//     echo $e->getMessage();
-// }
-
 try {
-    $i->changeProfilePicture($filePhoto);
+    $i->editProfile($url, $phone, $first_name, $biography, $email, $gender);
 } catch (Exception $e) {
     echo $e->getMessage();
 }
+
+// try {
+//     $i->changeProfilePicture($filePhoto);
+// } catch (Exception $e) {
+//     echo $e->getMessage();
+// }
 
  
