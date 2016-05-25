@@ -20,7 +20,7 @@ $smile = "\u{1F60D}";
 
 
   
-$caption = $caption.'\u{1F60D}'.$tags;
+$caption = $caption.' '.$smile.' '.$tags;
 
 
 
