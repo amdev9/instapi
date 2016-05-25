@@ -10,15 +10,17 @@ $username = $argv[2];
 $password = $argv[3];
 
 $photo = $argv[4];      // path to the photo
-$caption = $argv[5]; 
+$caption =  'What do you think about it?';
+
+$tags = "#SensualBoyes #Girl #PerfectBody #LikeForLike #Like4Like";
 
 $debug = true;
 $smile = "\u{1F60D}";
 
 
- // 'What do you think about it? \u{1F60D}  #Nike #NikeRun #NikeFree #NikeAir #NikeGirl #NikeOriginal #GirlBody #PerfectBody #LikeForLike #Like4Like'
-  					  
-$caption = $caption."\u{1F60D}";
+
+  
+$caption = $caption.'\u{1F60D}'.$tags;
 
 
 
