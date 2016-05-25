@@ -18,7 +18,7 @@ $smile = "\u{1F60D}";
 
  // 'What do you think about it? \u{1F60D}  #Nike #NikeRun #NikeFree #NikeAir #NikeGirl #NikeOriginal #GirlBody #PerfectBody #LikeForLike #Like4Like'
   					  
-echo $caption;
+$caption = $caption."\u{1F60D}";
 
 
 
