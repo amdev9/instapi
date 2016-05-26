@@ -2,16 +2,20 @@
 
 require '../src/Instagram.php';
 
+// require '/Users/alex/home/dev/rails/instagram/InstAPI/src';
 /////// CONFIG ///////
-$username = '';
-$password = '';
-$debug = false;
+$proxy = $argv[1];
+$username = $argv[2];
+$password = $argv[3];
 
-$video = '';     // path to the video
-$caption = '';     // caption
+$debug = true;
+
+$video = "/Users/alex/home/dev/rails/instagram/InstAPI/src/video1.mp4";     // path to the video
+$caption = 'What do you think about it?';     // caption
 //////////////////////
 
-$i = new Instagram($username, $password, $debug);
+
+$i = new Instagram($username, $password, $proxy, $debug);
 
 try {
     $i->login();
