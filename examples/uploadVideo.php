@@ -8,10 +8,11 @@ $proxy = $argv[1];
 $username = $argv[2];
 $password = $argv[3];
 
+ 
 $debug = true;
 
-$video = "/Users/alex/home/dev/rails/instagram/InstAPI/src/video1.mp4";     // path to the video
-$caption = 'What do you think about it?';     // caption
+$video = "/Users/alex/home/dev/rails/instagram/InstAPI/src/video00.mp4";     // path to the video
+$caption = 'Want to meet me in real live?';     // caption
 //////////////////////
 
 

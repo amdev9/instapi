@@ -9,7 +9,7 @@ class Instagram
   protected $username;            // Instagram username
   protected $password;            // Instagram password
   protected $debug;               // Debug
- protected $proxy;
+  protected $proxy;
   protected $uuid;                // UUID
   protected $device_id;           // Device ID
   protected $username_id;         // Username ID
