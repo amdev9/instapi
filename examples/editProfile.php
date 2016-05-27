@@ -21,7 +21,7 @@ $phone = "";//work
 $first_name = "Fitness Body";
 $biography = "Fitness here";
 $email = "magazin.efashionshop@gmail.com";
-$gender = 0; // not allowed to change
+$gender = 3; // male = 1 female =2  not spec = 3
 
 
 //////////////////////
