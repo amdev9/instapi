@@ -13,12 +13,12 @@ $password = $argv[3];//qweqwe123123
 
 $debug = false;
  
-$smile = "\u{1F60D}";
+// $smile = "\u{1F60D}";
 
 
 $url = "";
 $phone = "";//work
-$first_name = $smile."Fitness Body".$smile;
+$first_name = "Fitness Body";
 $biography = "Best fitness motivation here";
 $email = "magazin.efashionshop@gmail.com";
 $gender = 0; // not allowed to change
