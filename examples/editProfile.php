@@ -13,12 +13,12 @@ $password = $argv[3];
 
 $debug = false;
  
-// $smile = "\u{1F60D}";
+$smile = "\u{1F60D}";
 
 
 $url = "";
-$phone = "";//work
-$first_name = "Fitness Body";
+$phone = "";
+$first_name = $smile.'Fitness Body'.$smile;
 $biography = "Fitness here";
 $email = "magazin.efashionshop@gmail.com";
 $gender = 3; // male = 1 female =2  not spec = 3
