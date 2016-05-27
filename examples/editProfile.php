@@ -21,14 +21,15 @@ $phone = "";//work
 $first_name = "Fitness Body";
 $biography = "Best fitness motivation here";
 $email = "magazin.efashionshop@gmail.com";
-// $gender = 0; // not allowed to change
+$gender = ""; // not allowed to change
 
 
 //////////////////////
 
 $i = new Instagram($username, $password, $proxy, $debug);
-
+echo "0";
 try {
+  echo "1";
     $i->login();
 } catch (InstagramException $e) {
     $e->getMessage();
@@ -36,6 +37,7 @@ try {
 }
  
 try { 
+  echo "2";
     $i->editProfile($url, $phone, $first_name, $biography, $email, $gender);
     
 } catch (Exception $e) {
