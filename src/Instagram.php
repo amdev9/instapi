@@ -896,7 +896,7 @@ class Instagram
         'email'         => $email,
         'gender'        => $gender,
     ]);
-
+      echo $data;
       return $this->request('accounts/edit_profile/', $this->generateSignature($data))[1];
   }
 
