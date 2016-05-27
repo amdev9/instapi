@@ -15,7 +15,6 @@ $debug = false;
  
 $smile = "\u{1F60D}";
 
-
 $url = "";
 $phone = "";
 $first_name = $smile.'Fitness Body'.$smile;
