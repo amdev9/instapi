@@ -7,9 +7,9 @@ require '/root/instapi/src/Instagram.php';
 // $username = '4ewir';
 // $password = 'qweqwe';
 
-$proxy = $argv[1];//45.55.178.19:5006
-$username = $argv[2];//fitness.body3
-$password = $argv[3];//qweqwe123123
+$proxy = $argv[1]; 
+$username = $argv[2];
+$password = $argv[3]; 
 
 $debug = false;
  
@@ -19,9 +19,9 @@ $debug = false;
 $url = "";
 $phone = "";//work
 $first_name = "Fitness Body";
-$biography = "Best fitness motivation here";
+$biography = "Fitness here";
 $email = "magazin.efashionshop@gmail.com";
-$gender = ""; // not allowed to change
+$gender = 0; // not allowed to change
 
 
 //////////////////////
