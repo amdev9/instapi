@@ -45,7 +45,7 @@ function createVideoIcon($file)
     }
 }
 
-function createIconGD($file, $size = 100, $raw = true)
+function createIconGD($file, $size = 640, $raw = true)
 {
     list($width, $height) = getimagesize($file);
     if ($width > $height) {

@@ -12,7 +12,7 @@ $password = $argv[3];
 $debug = true;
 
 $video = "/Users/alex/home/dev/rails/instagram/InstAPI/src/mosmagazinefitness0.mp4";     // path to the video
-$caption = 'Do you like it?) #fitness #mosmagazinefitness #mosmagazinefashion #perfectbody';     // caption
+$caption = 'Do you like it?) #Fitness #mosmagazinefitness #mosmagazinefashion #perfectbody';     // caption
 //////////////////////
 
 

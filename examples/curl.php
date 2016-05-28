@@ -1,10 +1,13 @@
 
 <?php
  
-$size = 100;
+$size = 640;
 $raw = true;
  $file = "test.jpg";
  list($width, $height) = getimagesize($file);
+ echo $width.'\n';
+ echo $height.'\n';
+
     if ($width > $height) {
         $y = 0;
         $x = ($width - $height) / 2;
@@ -27,9 +30,10 @@ $raw = true;
 
     imagedestroy($image);
     imagedestroy($image_p);
-imagejpeg($i, 'simpletext.jpg');
-
-
+ 
+// imagejpeg($i, 'test2.jpg', 0 , NULL);
+ 
+imagejpeg(imagecreatefromstring($i), 'test_3.jpg');
 
  // <?php
  //        //error_reporting(E_ALL);
