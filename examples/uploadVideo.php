@@ -7,7 +7,6 @@ require '../src/Instagram.php';
 $proxy = $argv[1];
 $username = $argv[2];
 $password = $argv[3];
-
  
 $debug = true;
 
