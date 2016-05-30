@@ -1,6 +1,6 @@
 <?php
  
-// require '/root/instapi/src/Instagram.php';
+require '/root/instapi/src/Instagram.php';
  
 $proxy = $argv[1]; 
 $username = $argv[2];
