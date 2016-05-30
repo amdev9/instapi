@@ -5,7 +5,7 @@ require_once '/root/instapi/src/InstagramRegistration.php';
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
 $debug = false;
-$proxy = "45.55.178.19:5008";
+$proxy = "45.55.178.19:5009";
 
 $r = new InstagramRegistration($proxy, $debug);
 
@@ -38,3 +38,4 @@ $result = $r->createAccount($username, $password, $email);
 if (isset($result['account_created']) && ($result['account_created'] == true)) {
     echo 'Your account was successfully created! :)';
 }
+
