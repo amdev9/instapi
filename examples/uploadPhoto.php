@@ -5,22 +5,20 @@ require '/root/instapi/src/Instagram.php';
 /////// CONFIG ///////
 // $username = '4ewir';
 // $password = 'qweqwe';
+
+
+$smile = "\u{1F609}";
+
 $proxy = $argv[1];
 $username = $argv[2];
 $password = $argv[3];
 
 $photo = $argv[4];      // path to the photo
-$caption =  'What do you think about it?';
-
-$tags = "#Girl #PerfectBody #LikeForLike #Like4Like";
-
+$caption = $smile.''.$argv[5];      
+ 
 $debug = true;
-$smile = "\u{1F60D}";
 
 
-
-  
-$caption = $caption.' '.$smile.' '.$tags;
 
 
 
