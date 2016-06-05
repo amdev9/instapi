@@ -13,7 +13,7 @@ require '/Users/alex/home/dev/rails/instagram/InstAPI/src/Instagram.php';
 $smile = "\u{1F609}";
 
 $debug = true;
-$proxy = "104.156.229.189:30001";
+$proxy = "104.156.229.189:30003";
 $user = "";
 $photo = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/1.jpg"; 
 $caption = "Cool! join Instagram!";
@@ -96,9 +96,10 @@ if ($pos !== false && isset($result[1]["account_created"]) && ($result[1]["accou
 	}
 	echo "photo downloaded!\n";
 	sleep(4);
-	
+
 	try {
-		$i->searchUsername("suzannesvanevik");
+		$usname = $i->searchUsername("suzannesvanevik");
+		echo $usname;
 	  
 	} catch (Exception $e) {
 	    echo $e->getMessage();
@@ -106,8 +107,8 @@ if ($pos !== false && isset($result[1]["account_created"]) && ($result[1]["accou
 	sleep(4);
 
 	try {
-	  $i->getUserFollowings("19097274", $maxid = null);
-	  
+	  $followers = $i->getUserFollowings("19097274", $maxid = null);
+	  echo   $followers;
 	} catch (Exception $e) {
 	    echo $e->getMessage();
 	}
