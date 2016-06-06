@@ -1,41 +1,85 @@
-
 <?php
- 
-$size = 640;
-$raw = true;
- $file = "test.jpg";
- list($width, $height) = getimagesize($file);
- echo $width.'\n';
- echo $height.'\n';
+$handle = @fopen("/Users/alex/home/dev/rails/instagram/InstA/email_proxy/login_names", "r");
+ $lines=array();
+if ($handle) {
+    while (($buffer = fgets($handle, 4096)) !== false) {
+        // echo $buffer;
 
-    if ($width > $height) {
-        $y = 0;
-        $x = ($width - $height) / 2;
-        $smallestSide = $height;
-    } else {
-        $x = 0;
-        $y = ($height - $width) / 2;
-        $smallestSide = $width;
+
+    //add to array
+     $lines[]=trim($buffer);
+ 
     }
-
-    $image_p = imagecreatetruecolor($size, $size);
-    $image = imagecreatefromstring(file_get_contents($file));
-
-    imagecopyresampled($image_p, $image, 0, 0, $x, $y, $size, $size, $smallestSide, $smallestSide);
-    ob_start();
-    imagejpeg($image_p, null, 100);
- $i = ob_get_contents();
-
- ob_end_clean();
-
-    imagedestroy($image);
-    imagedestroy($image_p);
+    if (!feof($handle)) {
+        echo "Error: unexpected fgets() fail\n";
+    }
+    fclose($handle);
+}
  
-// imagejpeg($i, 'test2.jpg', 0 , NULL);
- 
-imagejpeg(imagecreatefromstring($i), 'test_3.jpg');
+// echo implode ("\n",$lines);
 
- // <?php
+
+
+$i = 0; 
+
+while ($i < count($lines)){
+    $pieces = explode(" ", $lines[$i]);
+ 
+    if ($pieces[0] == "vildenilsen"){
+        $outarray = array_slice($lines, $i + 1);
+         $GLOBALS["lines"] = $outarray;
+        // $file = '/Users/alex/home/dev/rails/instagram/InstA/logs/regDone.dat';
+        // $person = "hanneaas93\n";
+        // file_put_contents($file, $person, FILE_APPEND | LOCK_EX);  
+        file_put_contents("/Users/alex/home/dev/rails/instagram/InstA/email_proxy/login_names", "");
+        file_put_contents("/Users/alex/home/dev/rails/instagram/InstA/email_proxy/login_names", implode("\n",$outarray));
+    
+
+
+        break;
+    }
+     echo $pieces[0]."\n";
+    $i  = $i + 1;
+
+}
+
+
+
+ 
+// $size = 640;
+// $raw = true;
+//  $file = "test.jpg";
+//  list($width, $height) = getimagesize($file);
+//  echo $width.'\n';
+//  echo $height.'\n';
+
+//     if ($width > $height) {
+//         $y = 0;
+//         $x = ($width - $height) / 2;
+//         $smallestSide = $height;
+//     } else {
+//         $x = 0;
+//         $y = ($height - $width) / 2;
+//         $smallestSide = $width;
+//     }
+
+//     $image_p = imagecreatetruecolor($size, $size);
+//     $image = imagecreatefromstring(file_get_contents($file));
+
+//     imagecopyresampled($image_p, $image, 0, 0, $x, $y, $size, $size, $smallestSide, $smallestSide);
+//     ob_start();
+//     imagejpeg($image_p, null, 100);
+//  $i = ob_get_contents();
+
+//  ob_end_clean();
+
+//     imagedestroy($image);
+//     imagedestroy($image_p);
+ 
+ 
+// imagejpeg(imagecreatefromstring($i), 'test_3.jpg');
+
+ // 
  //        //error_reporting(E_ALL);
 
  //        if( $ch = curl_init ())
