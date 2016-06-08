@@ -21,6 +21,11 @@ $gender = 2;
 $phone  = "";
 $photo = "/root/instapi/src/".$argv[5];  
 
+$filePhoto = "/root/instapi/src/1/9.jpg";
+$filePhoto2 = "/root/instapi/src/1/16.jpg";
+$caption = "Wow) Do you like?";
+$caption2 = "Cool!";
+
 
 // READ LOGINS AND FIRST NAMES FROM FILE
 $login_names = @fopen("/root/insta/email_proxy/login_names", "r");
@@ -112,21 +117,21 @@ while ($p < count($prox))
 		    echo $e->getMessage();
 		}
 
-		// sleep(6);
-		// //upload photo
-		// try {
-		//     $i->uploadPhoto($filePhoto, $caption);
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
-		// sleep(8);
-		// //upload photo
-		// try {
-		//     $i->uploadPhoto($filePhoto2, $caption2);
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
-		// echo "photo downloaded!\n";
+		sleep(6);
+		//upload photo
+		try {
+		    $i->uploadPhoto($filePhoto, $caption);
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(8);
+		//upload photo
+		try {
+		    $i->uploadPhoto($filePhoto2, $caption2);
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		echo "photo downloaded!\n";
 		sleep(4);
 
 		// try {
