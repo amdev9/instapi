@@ -12,7 +12,7 @@ require '/Users/alex/home/dev/rails/instagram/InstAPI/src/Instagram.php';
 
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
-$smile = "\u{1F609}";
+$smile =  "\u{1F609}"; // for 7 version php
 
 $debug = true;
 
@@ -26,10 +26,10 @@ $gender = 2;
 $phone  = "";
 $photo = "/Users/alex/home/dev/rails/instagram/InstAPI/src/".$argv[5];  
 
-$filePhoto = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/9.jpg";
-$filePhoto2 = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/16.jpg";
-$caption = "Wow) Do you like?";
-$caption2 = "Cool!";
+$filePhoto = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/2.jpg";
+// $filePhoto2 = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/16.jpg";
+$caption = "Cool!";
+// $caption2 = "Cool!";
 
 
 // READ LOGINS AND FIRST NAMES FROM FILE
@@ -102,7 +102,7 @@ while ($p < count($prox))
 	if ($pos !== false && isset($result[1]["account_created"]) && ($result[1]["account_created"] == true)) 
 	{
 	    
-		echo "connection_established";
+		echo "\nconnection_established\n";
 
 		$GLOBALS["proxy"] = $prox[$p];		 
 		$debug = false;
@@ -131,16 +131,16 @@ while ($p < count($prox))
 		}
 		sleep(8);
 		//upload photo
-		try {
-		    $i->uploadPhoto($filePhoto2, $caption2); // use the same caption
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
+		// try {
+		//     $i->uploadPhoto($filePhoto2, $caption2); // use the same caption
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
 		echo "photo downloaded!\n";
-		sleep(4);
+		sleep(7);
 
 		// try {
-		// 	$usname = $i->searchUsername("suzannesvanevik");
+		// 	$usname = $i->searchUsername("blac.kkorol");
 
 		// 	$resusname =  var_export($usname);
 		// 	echo $resusname;
@@ -148,20 +148,64 @@ while ($p < count($prox))
 		// } catch (Exception $e) {
 		//     echo $e->getMessage();
 		// }
+
 		// sleep(4);
-		// // list of 200 followers need more
+		
+		// need test
+		try {
+		    $usfeed = $i->getUserFeed("13226335", $maxid = null, $minTimestamp = null);// use the same caption
+		    
+		 //    $resusfeed = var_export($usfeed);
+			// echo $resusfeed;
+
+		    echo $usfeed['items'][0]['pk'];
+
+
+			// echo lastest post data
+			
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(10);
+
+		// need test
+
+		try {
+		/// WHILE PAGE SIZE < 200
+			$counter = 0;
+		    $followers = $i->getUserFollowers("13226335", $maxid = null);
+			while ($counter < 4) {
+
+				echo $followers['users'][0]['pk'];
+				echo $followers['users'][0]['is_private'];
+				echo $followers['users'][0]['has_anonymous_profile_picture'];
+				echo "---------------------\n";
+
+				$tmpfollowers = $followers;
+				$followers = $i->getUserFollowers("13226335", $tmpfollowers['next_max_id'] );
+				 
+				// $resfollowers2 = var_export($followers2);
+				// echo $resfollowers2;
+				$counter = $counter +1;
+			}
+
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+
+///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
+
 		// try {
-		//   $followers = $i->getUserFollowers("13226335", $maxid = null);
-		//   $resfollowers=  var_export($followers);
-		//   echo $resfollowers;
-		// 	 $obj = json_decode($followers);
-		// 	 $next_max_id = $obj->{'next_max_id'};
-		// 	 $followers2 = $i->getUserFollowers("13226335", $next_max_id);
-		//   $resfollowers2=  var_export($followers2);
-		//   echo $resfollowers2;
+		// //    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
+		// //$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
+ 	// 		$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats so cooool!");   
+ 	// 		echo "looks like SUCCESS!"
+
 		// } catch (Exception $e) {
 		//     echo $e->getMessage();
 		// }
+
+
 
       $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name."\n";
       file_put_contents("/Users/alex/home/dev/rails/instagram/InstA/logs/regDone.dat",$registered, FILE_APPEND | LOCK_EX);  
