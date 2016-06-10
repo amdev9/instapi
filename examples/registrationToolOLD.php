@@ -8,7 +8,56 @@
 require_once '/Users/alex/home/dev/rails/instagram/InstAPI/src/InstagramRegistration.php';
 
 require '/Users/alex/home/dev/rails/instagram/InstAPI/src/Instagram.php';
+require '/Users/alex/home/dev/redis/predis/autoload.php';
 
+
+
+///check if string contains arabic
+
+function uniord($u) {
+    // i just copied this function fron the php.net comments, but it should work fine!
+    $k = mb_convert_encoding($u, 'UCS-2LE', 'UTF-8');
+    $k1 = ord(substr($k, 0, 1));
+    $k2 = ord(substr($k, 1, 1));
+    return $k2 * 256 + $k1;
+}
+function is_arabic($str) {
+	if(strlen($str) == 0) {
+		return false;
+	} else {
+
+	    if(mb_detect_encoding($str) !== 'UTF-8') {
+	        $str = mb_convert_encoding($str,mb_detect_encoding($str),'UTF-8');
+	    }
+
+	    /*
+	    $str = str_split($str); <- this function is not mb safe, it splits by bytes, not characters. we cannot use it
+	    $str = preg_split('//u',$str); <- this function woulrd probably work fine but there was a bug reported in some php version so it pslits by bytes and not chars as well
+	    */
+	    preg_match_all('/.|\n/u', $str, $matches);
+	    $chars = $matches[0];
+	    $arabic_count = 0;
+	    $latin_count = 0;
+	    $total_count = 0;
+	    foreach($chars as $char) {
+	        //$pos = ord($char); we cant use that, its not binary safe 
+	        $pos = uniord($char);
+	        // echo $char ." --> ".$pos.PHP_EOL;
+
+	        if($pos >= 1536 && $pos <= 1791) {
+	            $arabic_count++;
+	        } else if($pos > 123 && $pos < 123) {
+	            $latin_count++;
+	        }
+	        $total_count++;
+	    }
+	    if(($arabic_count/$total_count) > 0.0001) {
+	        // 60% arabic chars, its probably arabic
+	        return true;
+	    }
+	    return false;
+	}
+}
 
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
@@ -21,14 +70,16 @@ $password = $argv[1];
 $email= $argv[2]; 
 $url = $argv[3];  
 $biography = $argv[4];  
-// $caption = $argv[5];  
+$caption = $argv[5];  
 $gender = 2;
 $phone  = "";
-$photo = "/Users/alex/home/dev/rails/instagram/InstAPI/src/".$argv[5];  
+$photo = "/Users/alex/home/dev/rails/instagram/InstAPI/src/".$argv[6]; 
+$profileSetter = $argv[7]; 
+$dir    = '/Users/alex/home/dev/rails/instagram/InstAPI/src/'.$profileSetter; 
 
-$filePhoto = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/2.jpg";
+// $filePhoto = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/2.jpg";
 // $filePhoto2 = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/16.jpg";
-$caption = "Cool!";
+// $caption = "Cool!";
 // $caption2 = "Cool!";
 
 
@@ -124,18 +175,27 @@ while ($p < count($prox))
 
 		sleep(6);
 		//upload photo
-		try {
-		    $i->uploadPhoto($filePhoto, $caption);
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(8);
-		//upload photo
 		// try {
-		//     $i->uploadPhoto($filePhoto2, $caption2); // use the same caption
-		// } catch (Exception $e) {
+		//     $i->uploadPhoto($filePhoto, $caption);
+		// } catch (restore_exception_handler(oid)n $e) {
 		//     echo $e->getMessage();
 		// }
+		// sleep(8);
+
+		$files1 = scandir($dir);
+		foreach ( $files1 as $key => $value ) {
+		    $ext = pathinfo($value, PATHINFO_EXTENSION);
+		    if ($ext == "jpg") {
+				try {
+				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+
+				sleep(40);
+		    }
+		}
+
 		echo "photo downloaded!\n";
 		sleep(7);
 
@@ -151,36 +211,58 @@ while ($p < count($prox))
 
 		// sleep(4);
 		
-		// need test
-		try {
-		    $usfeed = $i->getUserFeed("13226335", $maxid = null, $minTimestamp = null);// use the same caption
+	 
+		// try {
+		//     $usfeed = $i->getUserFeed("13226335", $maxid = null, $minTimestamp = null);// use the same caption
 		    
-		 //    $resusfeed = var_export($usfeed);
-			// echo $resusfeed;
+		//  //    $resusfeed = var_export($usfeed);
+		// 	// echo $resusfeed;
 
-		    echo $usfeed['items'][0]['pk'];
+		//     echo $usfeed['items'][0]['pk'];
 
 
-			// echo lastest post data
+		// 	// echo lastest post data
 			
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(10);
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		// sleep(10);
 
-		// need test
+		Predis\Autoloader::register();
 
+        $redis = new Predis\Client(array(
+         "scheme" => "tcp",
+         "host" => "127.0.0.1",
+         "port" => 6379));
+
+
+		 $key = "adult";
+
+	
 		try {
 		/// WHILE PAGE SIZE < 200
+
+
 			$counter = 0;
 		    $followers = $i->getUserFollowers("13226335", $maxid = null);
 			while ($counter < 4) {
 
-				echo $followers['users'][0]['pk'];
-				echo $followers['users'][0]['is_private'];
-				echo $followers['users'][0]['has_anonymous_profile_picture'];
-				echo "---------------------\n";
+				
 
+
+		for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
+		        
+
+				// echo $followers['users'][0]['is_private'];
+	 if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false) {
+			
+					$redis->sadd($key, $followers['users'][$iter]['pk']);
+					// echo $followers['users'][$i]['pk'];
+				
+				}
+
+			}
+				
 				$tmpfollowers = $followers;
 				$followers = $i->getUserFollowers("13226335", $tmpfollowers['next_max_id'] );
 				 
@@ -189,11 +271,22 @@ while ($p < count($prox))
 				$counter = $counter +1;
 			}
 
+
 		} catch (Exception $e) {
 		    echo $e->getMessage();
 		}
 
+		// setting up private account
+		// try {
+		//     $i->setPrivateAccount();
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		 
+		
+
 ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
+			// $tes = $redis->spop($key);   /// return user ID 
 
 		// try {
 		// //    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user

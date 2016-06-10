@@ -27,16 +27,16 @@
 
 
 
-// $a = array (1, "next_max_id", "next_max_id2" =>  "b" );
-// $json =  var_export($a);
+// // $a = array (1, "next_max_id", "next_max_id2" =>  "b" );
+// // $json =  var_export($a);
 
-// ['users'][0]['pk']
-// ['users'][0]['is_private']
-// ['users'][0]['has_anonymous_profile_picture']
+// // ['users'][0]['pk']
+// // ['users'][0]['is_private']
+// // ['users'][0]['has_anonymous_profile_picture']
 
 
-// /// RESULTS OF getUserFollowers
-// array (
+// // /// RESULTS OF getUserFollowers
+// $getUserFollowers = array (
 //   'status' => 'ok',
 //   'big_list' => true,
 //   'users' => 
@@ -70,13 +70,21 @@
 //       'pk' => 2645378774,
 //       'is_verified' => false,
 //       'is_private' => false,
-// ),
+// )),
 //   'page_size' => 200,
 //   'next_max_id' => 'AQD_VSOajr20qwiEFu1EOkWcdMkCd4waJsld7n9Cd9l92bafXbSFRSL3bj3onfVYNqUBtklnwRia-9y-kLnsSxGYRPcQxgemDA5QisjLxdLQnPACBQpj2ePEGt-TI32r4q8',
-// )
+// );
 
+  
+  
+// // for ($i = 0; $i < count($getUserFollowers['users']); ++$i ) {
+// // 	echo $getUserFollowers['users'][$i]['pk']. "\n";
+// // }
 
-////////////// RESULTS OF getUserFeed 1 post
+// for($i = 0, $c = count($getUserFollowers['users']); $i < $c; $i++)
+//         var_dump($getUserFollowers['users'][$i]['pk']);
+
+// ////////////// RESULTS OF getUserFeed 1 post
 
 // ['items'][0]['pk']   -  latest media_id
 
@@ -259,17 +267,74 @@
 
 
 
-$recipients = array("1009845355", "3299015045");
-if (!is_array($recipients)) {
-            $recipients = [$recipients];
-        }
-        $string = [];
-        foreach ($recipients as $recipient) {
-            $string[] = "\"$recipient\"";
-        }
-        $recipient_users = implode(',', $string);
+// $recipients = array("1009845355", "3299015045");
+// if (!is_array($recipients)) {
+//             $recipients = [$recipients];
+//         }
+//         $string = [];
+//         foreach ($recipients as $recipient) {
+//             $string[] = "\"$recipient\"";
+//         }
+//         $recipient_users = implode(',', $string);
 
-echo "[[$recipient_users]]";
+// echo "[[$recipient_users]]";
+
+
+
+function uniord($u) {
+    // i just copied this function fron the php.net comments, but it should work fine!
+    $k = mb_convert_encoding($u, 'UCS-2LE', 'UTF-8');
+    $k1 = ord(substr($k, 0, 1));
+    $k2 = ord(substr($k, 1, 1));
+    return $k2 * 256 + $k1;
+ }
+function is_arabic($str) {
+  if(strlen($str) == 0) {
+    return false;
+  } else {
+
+      if(mb_detect_encoding($str) !== 'UTF-8') {
+          $str = mb_convert_encoding($str,mb_detect_encoding($str),'UTF-8');
+      }
+
+      /*
+      $str = str_split($str); <- this function is not mb safe, it splits by bytes, not characters. we cannot use it
+      $str = preg_split('//u',$str); <- this function woulrd probably work fine but there was a bug reported in some php version so it pslits by bytes and not chars as well
+      */
+      preg_match_all('/.|\n/u', $str, $matches);
+      $chars = $matches[0];
+      $arabic_count = 0;
+      $latin_count = 0;
+      $total_count = 0;
+      foreach($chars as $char) {
+          //$pos = ord($char); we cant use that, its not binary safe 
+          $pos = uniord($char);
+          // echo $char ." --> ".$pos.PHP_EOL;
+
+          if($pos >= 1536 && $pos <= 1791) {
+              $arabic_count++;
+          } else if($pos > 123 && $pos < 123) {
+              $latin_count++;
+          }
+          $total_count++;
+      }
+      if(($arabic_count/$total_count) > 0.0001) {
+          // 60% arabic chars, its probably arabic
+          return true;
+      }
+      return false;
+  }
+}
+
+$sss  = 'asdaاasdasdasd';
+// echo $sss;
+
+
+$arabic = is_arabic($sss); 
+var_dump($arabic);
+
+
+
 // echo '["0"]';
 
 
