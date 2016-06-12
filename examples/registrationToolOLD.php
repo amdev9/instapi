@@ -141,7 +141,7 @@ $p = 0;
 
 while ($p < count($prox)) 
 {
-   
+   echo "\n******************------------>".$prox[$p]."<-------------------------*********************\n";
 	$r = new InstagramRegistration($prox[$p], $debug);
 	 
 	
