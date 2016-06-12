@@ -4,7 +4,7 @@
 
 // require '/root/instapi/src/Instagram.php';
 
- 
+date_default_timezone_set('UTC');
  
 
 $roterINSTAPI = '/root/instapi/';
