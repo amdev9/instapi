@@ -7,10 +7,10 @@
  
  
 
-// $roterINSTAPI = '/root/instapi/';
-// $roterPREDIS = '/root/predis/';
+$roterINSTAPI = '/root/instapi/';
+$roterPREDIS = '/root/predis/';
 
-// $roterINSTA = '/root/insta/';
+$roterINSTA = '/root/insta/';
 
 $homerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
 $homerPREDIS = '/Users/alex/home/dev/redis/predis/';
@@ -173,8 +173,7 @@ while ($p < count($prox))
 
 
 
-	if ($pos !== false && isset($result[1]["account_created"]) && ($result[1]["account_created"] == true)) 
-	{
+	if ($pos !== false && isset($result[1]["account_created"]) && ($result[1]["account_created"] == true)) {
 	    
 		echo "\nconnection_established\n";
 
@@ -182,14 +181,6 @@ while ($p < count($prox))
 		echo $prox[$p]." -> ".$proxy;
 		$GLOBALS["proxy"] = $prox[$p];		 
 		$debug = false;
-
-
-	    $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name."\n";
-      	file_put_contents($homerINSTA."logs/regDone.dat",$registered, FILE_APPEND | LOCK_EX);  
-		$outarray = array_slice($prox, $p+1);
-		$GLOBALS["proxy_list"] = $outarray;
-		file_put_contents($homerINSTA."email_proxy/proxy_list", "");
-		file_put_contents($homerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
 
 
 		$i = new Instagram($username, $password, $proxy, $debug);
@@ -391,9 +382,18 @@ while ($p < count($prox))
 			
 			}	
 			sleep(2);
+		
 		}
 
 		
+
+	    $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name."\n";
+      	file_put_contents($homerINSTA."logs/regDone.dat",$registered, FILE_APPEND | LOCK_EX);  
+		$outarray = array_slice($prox, $p+1);
+		$GLOBALS["proxy_list"] = $outarray;
+		file_put_contents($homerINSTA."email_proxy/proxy_list", "");
+		file_put_contents($homerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
+
 
 
 	    break;

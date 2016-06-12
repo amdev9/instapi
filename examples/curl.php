@@ -1,5 +1,38 @@
 <?php
 
+
+$homerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+$homerPREDIS = '/Users/alex/home/dev/redis/predis/';
+$homerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+
+$login_names = @fopen( $homerINSTA."email_proxy/login_names", "r");
+$lines=array();
+if ($login_names) {
+    while (($buffer = fgets($login_names, 4096)) !== false) {
+      $lines[]=trim($buffer); 
+    }
+    if (!feof($login_names)) {
+        echo "Error: unexpected fgets() fail\n";
+    }
+    fclose($login_names);
+}
+// READ PROXIES FROM FILE
+$proxy_list = @fopen($homerINSTA."email_proxy/proxy_list", "r");
+$prox=array();
+if ($proxy_list) {
+    while (($buffer = fgets($proxy_list, 4096)) !== false) {
+      $prox[]=trim($buffer); 
+    }
+    if (!feof($proxy_list)) {
+        echo "Error: unexpected fgets() fail\n";
+    }
+    fclose($proxy_list);
+}
+ 
+
+print_r(      $lines);
+ print_r ($prox);
+
 // $profileSetter = "1";
 // $dir    = '/Users/alex/home/dev/rails/instagram/InstAPI/src/'.$profileSetter;
 // $files1 = scandir($dir);
@@ -281,57 +314,57 @@
 
 
 
-function uniord($u) {
-    // i just copied this function fron the php.net comments, but it should work fine!
-    $k = mb_convert_encoding($u, 'UCS-2LE', 'UTF-8');
-    $k1 = ord(substr($k, 0, 1));
-    $k2 = ord(substr($k, 1, 1));
-    return $k2 * 256 + $k1;
- }
-function is_arabic($str) {
-  if(strlen($str) == 0) {
-    return false;
-  } else {
+// function uniord($u) {
+//     // i just copied this function fron the php.net comments, but it should work fine!
+//     $k = mb_convert_encoding($u, 'UCS-2LE', 'UTF-8');
+//     $k1 = ord(substr($k, 0, 1));
+//     $k2 = ord(substr($k, 1, 1));
+//     return $k2 * 256 + $k1;
+//  }
+// function is_arabic($str) {
+//   if(strlen($str) == 0) {
+//     return false;
+//   } else {
 
-      if(mb_detect_encoding($str) !== 'UTF-8') {
-          $str = mb_convert_encoding($str,mb_detect_encoding($str),'UTF-8');
-      }
+//       if(mb_detect_encoding($str) !== 'UTF-8') {
+//           $str = mb_convert_encoding($str,mb_detect_encoding($str),'UTF-8');
+//       }
 
-      /*
-      $str = str_split($str); <- this function is not mb safe, it splits by bytes, not characters. we cannot use it
-      $str = preg_split('//u',$str); <- this function woulrd probably work fine but there was a bug reported in some php version so it pslits by bytes and not chars as well
-      */
-      preg_match_all('/.|\n/u', $str, $matches);
-      $chars = $matches[0];
-      $arabic_count = 0;
-      $latin_count = 0;
-      $total_count = 0;
-      foreach($chars as $char) {
-          //$pos = ord($char); we cant use that, its not binary safe 
-          $pos = uniord($char);
-          // echo $char ." --> ".$pos.PHP_EOL;
+      
+//       $str = str_split($str); <- this function is not mb safe, it splits by bytes, not characters. we cannot use it
+//       $str = preg_split('//u',$str); <- this function woulrd probably work fine but there was a bug reported in some php version so it pslits by bytes and not chars as well
+      
+//       preg_match_all('/.|\n/u', $str, $matches);
+//       $chars = $matches[0];
+//       $arabic_count = 0;
+//       $latin_count = 0;
+//       $total_count = 0;
+//       foreach($chars as $char) {
+//           //$pos = ord($char); we cant use that, its not binary safe 
+//           $pos = uniord($char);
+//           // echo $char ." --> ".$pos.PHP_EOL;
 
-          if($pos >= 1536 && $pos <= 1791) {
-              $arabic_count++;
-          } else if($pos > 123 && $pos < 123) {
-              $latin_count++;
-          }
-          $total_count++;
-      }
-      if(($arabic_count/$total_count) > 0.0001) {
-          // 60% arabic chars, its probably arabic
-          return true;
-      }
-      return false;
-  }
-}
+//           if($pos >= 1536 && $pos <= 1791) {
+//               $arabic_count++;
+//           } else if($pos > 123 && $pos < 123) {
+//               $latin_count++;
+//           }
+//           $total_count++;
+//       }
+//       if(($arabic_count/$total_count) > 0.0001) {
+//           // 60% arabic chars, its probably arabic
+//           return true;
+//       }
+//       return false;
+//   }
+// }
 
-$sss  = 'asdaاasdasdasd';
-// echo $sss;
+// $sss  = 'asdaاasdasdasd';
+// // echo $sss;
 
 
-$arabic = is_arabic($sss); 
-var_dump($arabic);
+// $arabic = is_arabic($sss); 
+// var_dump($arabic);
 
 
 
