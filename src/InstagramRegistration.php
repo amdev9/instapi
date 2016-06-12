@@ -111,8 +111,8 @@ class InstagramRegistration
          curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_VERBOSE, false);
-        curl_setopt ($ch, CURLOPT_PROXY, $this->proxy ); 
-        curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+        curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
 
 

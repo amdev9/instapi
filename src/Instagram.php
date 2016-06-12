@@ -268,8 +268,8 @@ class Instagram
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
-        curl_setopt ($ch, CURLOPT_PROXY, $this->proxy ); 
-        curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+        curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
 
         $resp = curl_exec($ch);
@@ -346,8 +346,8 @@ class Instagram
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-         curl_setopt ($ch, CURLOPT_PROXY, $this->proxy ); 
-        curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+         curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
 
 
@@ -394,8 +394,8 @@ class Instagram
             curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, substr($videoData, $start, $end));
-             curl_setopt ($ch, CURLOPT_PROXY, $this->proxy ); 
-            curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+             curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+            curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
             curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
 
 
@@ -494,8 +494,8 @@ class Instagram
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-         curl_setopt ($ch, CURLOPT_PROXY, $this->proxy ); 
-            curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+         curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+            curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
             curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
 
 
@@ -784,8 +784,8 @@ class Instagram
       curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
       curl_setopt($ch, CURLOPT_POST, true);
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-      curl_setopt ($ch, CURLOPT_PROXY, $this->proxy ); 
-      curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+      curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+      curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
       curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
 
 
@@ -1688,8 +1688,8 @@ class Instagram
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
-          curl_setopt ($ch, CURLOPT_PROXY, $this->proxy ); 
-        curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+          curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
 
 
