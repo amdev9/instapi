@@ -5,13 +5,24 @@
 // require '/root/instapi/src/Instagram.php';
 
  
-require_once '/root/instapi/src/InstagramRegistration.php';
+ 
 
-require '/root/instapi/src/Instagram.php';
-require '/root/predis/autoload.php';
+// $roterINSTAPI = '/root/instapi/';
+// $roterPREDIS = '/root/predis/';
+
+// $roterINSTA = '/root/insta/';
+
+$homerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+$homerPREDIS = '/Users/alex/home/dev/redis/predis/';
+$homerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+
+require_once $homerINSTAPI.'src/InstagramRegistration.php';
+
+require $homerINSTAPI.'src/Instagram.php';
+require $homerPREDIS.'autoload.php';
 
 
-
+ 
 ///check if string contains arabic
 function f_rand($min=0,$max=1,$mul=100000){
 		    if ($min>$max) return false;
@@ -74,8 +85,7 @@ function is_arabic($str) {
 
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
-$smile =  "\u{1F609}"; // for 7 version php
-
+ 
 $debug = true;
 
 
@@ -86,9 +96,9 @@ $biography = $argv[4];
 $caption = $argv[5];  
 $gender = 2;
 $phone  = "";
-$photo = "/root/instapi/src/".$argv[6]; 
+$photo = $homerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
-$dir    = '/root/instapi/src/'.$profileSetter; 
+$dir    = $homerINSTAPI.'src/'.$profileSetter; 
 
 // $filePhoto = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/2.jpg";
 // $filePhoto2 = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/16.jpg";
@@ -97,7 +107,7 @@ $dir    = '/root/instapi/src/'.$profileSetter;
 
 
 // READ LOGINS AND FIRST NAMES FROM FILE
-$login_names = @fopen("/root/insta/email_proxy/login_names", "r");
+$login_names = @fopen( $homerINSTA."email_proxy/login_names", "r");
 $lines=array();
 if ($login_names) {
     while (($buffer = fgets($login_names, 4096)) !== false) {
@@ -109,7 +119,7 @@ if ($login_names) {
     fclose($login_names);
 }
 // READ PROXIES FROM FILE
-$proxy_list = @fopen("/root/insta/email_proxy/proxy_list", "r");
+$proxy_list = @fopen($homerINSTA."email_proxy/proxy_list", "r");
 $prox=array();
 if ($proxy_list) {
     while (($buffer = fgets($proxy_list, 4096)) !== false) {
@@ -135,21 +145,21 @@ while ($p < count($prox))
 	$r = new InstagramRegistration($prox[$p], $debug);
 	 
 	
-	$i = 0; 
-	while ($i < count($lines)){
-	    $pieces = explode(" ", $lines[$i]);
+	$ii = 0; 
+	while ($ii < count($lines)){
+	    $pieces = explode(" ", $lines[$ii]);
 		$check = $r->checkUsername($pieces[0]);
 	    if ($check['available'] == true) {
 	    	$GLOBALS["username"] = $pieces[0];
 	    	$GLOBALS["first_name"] = $pieces[1]." ".$pieces[2];
-	    	$outar = array_slice($lines, $i+1);
+	    	$outar = array_slice($lines, $ii+1);
 	    	$GLOBALS["lines"] = $outar;
-	    	file_put_contents("/root/insta/email_proxy/login_names", "");
-	    	file_put_contents("/root/insta/email_proxy/login_names", implode("\n",$outar));
+	    	file_put_contents($homerINSTA."email_proxy/login_names", "");
+	    	file_put_contents($homerINSTA."email_proxy/login_names", implode("\n",$outar));
 	    	
 	        break;
 	    }     
-	    $i  = $i + 1;
+	    $ii  = $ii + 1;
 	    sleep(6);
 	} 
 	 
@@ -168,8 +178,20 @@ while ($p < count($prox))
 	    
 		echo "\nconnection_established\n";
 
+
+		echo $prox[$p]." -> ".$proxy;
 		$GLOBALS["proxy"] = $prox[$p];		 
 		$debug = false;
+
+
+	    $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name."\n";
+      	file_put_contents($homerINSTA."logs/regDone.dat",$registered, FILE_APPEND | LOCK_EX);  
+		$outarray = array_slice($prox, $p+1);
+		$GLOBALS["proxy_list"] = $outarray;
+		file_put_contents($homerINSTA."email_proxy/proxy_list", "");
+		file_put_contents($homerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
+
+
 		$i = new Instagram($username, $password, $proxy, $debug);
 		//set profile picture
 		try {
@@ -356,7 +378,7 @@ while ($p < count($prox))
 				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
 		 			
 		 			$i->direct_share($ad_media_id, $message_recipient, $text ); 
-		 			 $i->direct_share($ad_media_id, "1009845355", $text );    
+		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
 		 			 echo "looks like SUCCESS!";
 		 			$redis->rpush("recieved",  $message_recipient); 
 
@@ -374,12 +396,6 @@ while ($p < count($prox))
 		
 
 
-      $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name."\n";
-      file_put_contents("/root/insta/logs/regDone.dat",$registered, FILE_APPEND | LOCK_EX);  
-		$outarray = array_slice($prox, $p+1);
-		$GLOBALS["proxy_list"] = $outarray;
-		file_put_contents("/root/insta/email_proxy/proxy_list", "");
-		file_put_contents("/root/insta/email_proxy/proxy_list", implode("\n",$outarray));
 	    break;
 	}
 	$p  = $p + 1;
