@@ -108,7 +108,7 @@ class InstagramRegistration
         curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
         curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_VERBOSE, false);
         curl_setopt ($ch, CURLOPT_PROXY, $this->proxy ); 
