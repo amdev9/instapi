@@ -12,14 +12,14 @@ $roterPREDIS = '/root/predis/';
 
 $roterINSTA = '/root/insta/';
 
-$homerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-$homerPREDIS = '/Users/alex/home/dev/redis/predis/';
-$homerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+// $roterINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+// $roterPREDIS = '/Users/alex/home/dev/redis/predis/';
+// $roterINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
-require_once $homerINSTAPI.'src/InstagramRegistration.php';
+require_once $roterINSTAPI.'src/InstagramRegistration.php';
 
-require $homerINSTAPI.'src/Instagram.php';
-require $homerPREDIS.'autoload.php';
+require $roterINSTAPI.'src/Instagram.php';
+require $roterPREDIS.'autoload.php';
 
 
  
@@ -96,9 +96,9 @@ $biography = $argv[4];
 $caption = $argv[5];  
 $gender = 2;
 $phone  = "";
-$photo = $homerINSTAPI."src/".$argv[6]; 
+$photo = $roterINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
-$dir    = $homerINSTAPI.'src/'.$profileSetter; 
+$dir    = $roterINSTAPI.'src/'.$profileSetter; 
 
 // $filePhoto = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/2.jpg";
 // $filePhoto2 = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/16.jpg";
@@ -107,7 +107,7 @@ $dir    = $homerINSTAPI.'src/'.$profileSetter;
 
 
 // READ LOGINS AND FIRST NAMES FROM FILE
-$login_names = @fopen( $homerINSTA."email_proxy/login_names", "r");
+$login_names = @fopen( $roterINSTA."email_proxy/login_names", "r");
 $lines=array();
 if ($login_names) {
     while (($buffer = fgets($login_names, 4096)) !== false) {
@@ -119,7 +119,7 @@ if ($login_names) {
     fclose($login_names);
 }
 // READ PROXIES FROM FILE
-$proxy_list = @fopen($homerINSTA."email_proxy/proxy_list", "r");
+$proxy_list = @fopen($roterINSTA."email_proxy/proxy_list", "r");
 $prox=array();
 if ($proxy_list) {
     while (($buffer = fgets($proxy_list, 4096)) !== false) {
@@ -154,8 +154,8 @@ while ($p < count($prox))
 	    	$GLOBALS["first_name"] = $pieces[1]." ".$pieces[2];
 	    	$outar = array_slice($lines, $ii+1);
 	    	$GLOBALS["lines"] = $outar;
-	    	file_put_contents($homerINSTA."email_proxy/login_names", "");
-	    	file_put_contents($homerINSTA."email_proxy/login_names", implode("\n",$outar));
+	    	file_put_contents($roterINSTA."email_proxy/login_names", "");
+	    	file_put_contents($roterINSTA."email_proxy/login_names", implode("\n",$outar));
 	    	
 	        break;
 	    }     
@@ -388,11 +388,11 @@ while ($p < count($prox))
 		
 
 	    $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name."\n";
-      	file_put_contents($homerINSTA."logs/regDone.dat",$registered, FILE_APPEND | LOCK_EX);  
+      	file_put_contents($roterINSTA."logs/regDone.dat",$registered, FILE_APPEND | LOCK_EX);  
 		$outarray = array_slice($prox, $p+1);
 		$GLOBALS["proxy_list"] = $outarray;
-		file_put_contents($homerINSTA."email_proxy/proxy_list", "");
-		file_put_contents($homerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
+		file_put_contents($roterINSTA."email_proxy/proxy_list", "");
+		file_put_contents($roterINSTA."email_proxy/proxy_list", implode("\n",$outarray));
 
 
 
