@@ -7,14 +7,14 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/root/instapi/';
-$romerPREDIS = '/root/predis/';
+// $romerINSTAPI = '/root/instapi/';
+// $romerPREDIS = '/root/predis/';
 
-$romerINSTA = '/root/insta/';
+// $romerINSTA = '/root/insta/';
 
-// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -369,7 +369,7 @@ while ($p < count($prox))
 				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
 		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-				$text = "$hiw $first_name_txt[0] $smi_hi  I am searching for a partner $smil  Please, S_I_G_N U_P by аddrеss in @kupit_nike profile $cur $cur $cur and write me there $smi";
+				$text = "$hiw $first_name_txt[0] $smi_hi  I am looking for a boyfriend $smil  Please, S_I_G_N U_P by аddrеss in @kupit_nike profile $cur $cur $cur and write me there $smi";
 
 		   
 				try {
