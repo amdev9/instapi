@@ -7,14 +7,14 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/root/instapi/';
-$romerPREDIS = '/root/predis/';
+// $romerINSTAPI = '/root/instapi/';
+// $romerPREDIS = '/root/predis/';
 
-$romerINSTA = '/root/insta/';
+// $romerINSTA = '/root/insta/';
 
-// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -160,7 +160,7 @@ while ($p < count($prox))
 	        break;
 	    }     
 	    $ii  = $ii + 1;
-	    sleep(6);
+	    // sleep(6);
 	} 
 	 
 
@@ -265,59 +265,59 @@ while ($p < count($prox))
 		
 		/// WHILE PAGE SIZE < 200
 
-		 $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
-		 $influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+		//  $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+		//  $influencer = $influencers[mt_rand(0, count($influencers) - 1)];
 
-		$red = $redis->lrange("$influencer:max_id", -1, -1); 
+		// $red = $redis->lrange("$influencer:max_id", -1, -1); 
 
-		if(empty ($red)) {
-			try {
-				 $followers = $i->getUserFollowers($influencer, $maxid = null);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
+		// if(empty ($red)) {
+		// 	try {
+		// 		 $followers = $i->getUserFollowers($influencer, $maxid = null);
+		// 	} catch (Exception $e) {
+		// 	    echo $e->getMessage();
+		// 	}
 
 
-		} else {
-			try {
-				 $followers = $i->getUserFollowers($influencer, $red[0]);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
-		}
+		// } else {
+		// 	try {
+		// 		 $followers = $i->getUserFollowers($influencer, $red[0]);
+		// 	} catch (Exception $e) {
+		// 	    echo $e->getMessage();
+		// 	}
+		// }
 
-		$counter = 0;
-		while ($counter < 20) {  // fix to 20
+		// $counter = 0;
+		// while ($counter < 20) {  // fix to 20
 
 				
 
-		for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
+		// for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
 		        
 
-				// echo $followers['users'][0]['is_private'];
-	 if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false) {
+		// 		// echo $followers['users'][0]['is_private'];
+	 // if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false) {
 			
-					$redis->sadd($key, $followers['users'][$iter]['pk']);
-					// echo $followers['users'][$i]['pk'];
+		// 			$redis->sadd($key, $followers['users'][$iter]['pk']);
+		// 			// echo $followers['users'][$i]['pk'];
 				
-				}
+		// 		}
 
-			}
+		// 	}
 				
-				$tmpfollowers = $followers;
-				echo $tmpfollowers['next_max_id'];
+		// 		$tmpfollowers = $followers;
+		// 		echo $tmpfollowers['next_max_id'];
 
-				$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
-				try {
-					$followers = $i->getUserFollowers($influencer, $tmpfollowers['next_max_id'] ); 
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
-				// $resfollowers2 = var_export($followers2);
-				// echo $resfollowers2;
-				$counter = $counter +1;
-				 sleep(6);
-			 }
+		// 		$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
+		// 		try {
+		// 			$followers = $i->getUserFollowers($influencer, $tmpfollowers['next_max_id'] ); 
+		// 		} catch (Exception $e) {
+		// 		    echo $e->getMessage();
+		// 		}
+		// 		// $resfollowers2 = var_export($followers2);
+		// 		// echo $resfollowers2;
+		// 		$counter = $counter +1;
+		// 		 sleep(6);
+		// 	 }
 
 
 		
@@ -334,11 +334,18 @@ while ($p < count($prox))
 ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
 		
 		$time_in_day = 24*60*60;
-		$posts_per_day = 1200;
+		$posts_per_day = 700;
 		$delay =  $time_in_day /  $posts_per_day;
 			$next_iteration_time = time() + $delay; 
 
 		
+	    $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name."\n";
+      	file_put_contents($romerINSTA."logs/regDone.dat",$registered, FILE_APPEND | LOCK_EX);  
+		$outarray = array_slice($prox, $p+1);
+		$GLOBALS["proxy_list"] = $outarray;
+		file_put_contents($romerINSTA."email_proxy/proxy_list", "");
+		file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
+
 		while (true) {
 			if (time() >  $next_iteration_time) {
 				
@@ -362,7 +369,7 @@ while ($p < count($prox))
 				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
 		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-				$text = "$hiw $first_name_txt[0] $smi_hi  Just wanna say that a lot of pretty girls in your neighborhood searching for a partner $smil  Tap on that media $cur $cur $cur  and S_I_G_N U_P for \u{1F193}  by the \u{1F517} in profile @kupit_nike to meet them $smi ";
+				$text = "$hiw $first_name_txt[0] $smi_hi  Just wanna say that a lot of pretty girls in your neighborhood searching for a partner $smil  S_I_G_N U_P for \u{1F193} to meet them in @kupit_nike profile $cur $cur $cur";
 
 		   
 				try {
@@ -370,8 +377,9 @@ while ($p < count($prox))
 				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
 		 			
 		 			$i->direct_share($ad_media_id, $message_recipient, $text ); 
+
 		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
-		 			 echo "looks like SUCCESS!";
+		 			 echo "|||------SEND-------|||\n\n";
 		 			$redis->rpush("recieved",  $message_recipient); 
 
 				} catch (Exception $e) {
@@ -388,19 +396,12 @@ while ($p < count($prox))
 
 		
 
-	    $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name."\n";
-      	file_put_contents($romerINSTA."logs/regDone.dat",$registered, FILE_APPEND | LOCK_EX);  
-		$outarray = array_slice($prox, $p+1);
-		$GLOBALS["proxy_list"] = $outarray;
-		file_put_contents($romerINSTA."email_proxy/proxy_list", "");
-		file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
-
 
 
 	    break;
 	}
 	$p  = $p + 1;
-	sleep(6);
+	// sleep(6);
 }     
    
 

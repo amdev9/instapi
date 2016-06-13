@@ -1,37 +1,54 @@
 <?php
+echo str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)];
 
 
-$homerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-$homerPREDIS = '/Users/alex/home/dev/redis/predis/';
-$homerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
+                $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+                $smiles =  ["\u{1F609}", "\u{1F60C}", "\u{1F46B}" ];    
+                $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+                $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+                $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+                $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+                $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+                $first_name_txt = explode(" ",$first_name);
+                $hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+                $hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-$login_names = @fopen( $homerINSTA."email_proxy/login_names", "r");
-$lines=array();
-if ($login_names) {
-    while (($buffer = fgets($login_names, 4096)) !== false) {
-      $lines[]=trim($buffer); 
-    }
-    if (!feof($login_names)) {
-        echo "Error: unexpected fgets() fail\n";
-    }
-    fclose($login_names);
-}
-// READ PROXIES FROM FILE
-$proxy_list = @fopen($homerINSTA."email_proxy/proxy_list", "r");
-$prox=array();
-if ($proxy_list) {
-    while (($buffer = fgets($proxy_list, 4096)) !== false) {
-      $prox[]=trim($buffer); 
-    }
-    if (!feof($proxy_list)) {
-        echo "Error: unexpected fgets() fail\n";
-    }
-    fclose($proxy_list);
-}
+               echo $text = "$hiw $first_name_txt[0] $smi_hi  Just wanna say that a lot of pretty girls in your neighborhood searching for a partner $smil  S_I_G_N U_P for \u{1F193} to meet them in @kupit_nike profile $cur $cur $cur";
+
+           
+
+// $homerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+// $homerPREDIS = '/Users/alex/home/dev/redis/predis/';
+// $homerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+
+// $login_names = @fopen( $homerINSTA."email_proxy/login_names", "r");
+// $lines=array();
+// if ($login_names) {
+//     while (($buffer = fgets($login_names, 4096)) !== false) {
+//       $lines[]=trim($buffer); 
+//     }
+//     if (!feof($login_names)) {
+//         echo "Error: unexpected fgets() fail\n";
+//     }
+//     fclose($login_names);
+// }
+// // READ PROXIES FROM FILE
+// $proxy_list = @fopen($homerINSTA."email_proxy/proxy_list", "r");
+// $prox=array();
+// if ($proxy_list) {
+//     while (($buffer = fgets($proxy_list, 4096)) !== false) {
+//       $prox[]=trim($buffer); 
+//     }
+//     if (!feof($proxy_list)) {
+//         echo "Error: unexpected fgets() fail\n";
+//     }
+//     fclose($proxy_list);
+// }
  
 
-print_r(      $lines);
- print_r ($prox);
+// print_r(      $lines);
+//  print_r ($prox);
 
 // $profileSetter = "1";
 // $dir    = '/Users/alex/home/dev/rails/instagram/InstAPI/src/'.$profileSetter;

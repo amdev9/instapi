@@ -506,6 +506,11 @@ class Instagram
         $upload = json_decode(substr($resp, $header_len), true);
 
         curl_close($ch);
+
+         
+        echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
+         $respres = var_export($upload);
+         echo $respres;
     }
 
     protected function configureVideo($upload_id, $video, $caption = '')
