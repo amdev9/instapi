@@ -7,14 +7,14 @@
 // date_default_timezone_set('UTC');
  
 
-// $romerINSTAPI = '/root/instapi/';
-// $romerPREDIS = '/root/predis/';
+$romerINSTAPI = '/root/instapi/';
+$romerPREDIS = '/root/predis/';
 
-// $romerINSTA = '/root/insta/';
+$romerINSTA = '/root/insta/';
 
-$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -181,7 +181,7 @@ while ($p < count($prox))
 		echo "\n\n PROX ---------->".$prox[$p]. "\n\n";
 		$GLOBALS["proxy"] = $prox[$p];		 
 		echo "\n _proxy_------>".$proxy."\n";
-		$debug = false;
+		$debug = true; // why our connect closed?????
 
 
 		$i = new Instagram($username, $password, $proxy, $debug);
