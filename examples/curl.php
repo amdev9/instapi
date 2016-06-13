@@ -1,51 +1,6 @@
 <?php
-echo str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)];
 
 
-$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
-                $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
-                $smiles =  ["\u{1F609}", "\u{1F60C}", "\u{1F46B}" ];    
-                $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
-                $cur = $cursors[mt_rand(0, count($cursors) - 1)];
-                $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
-                $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
-                $smil = $smiles[mt_rand(0, count($smiles) - 1)];
-                $first_name_txt = explode(" ",$first_name);
-                $hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
-                $hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
-
-               echo $text = "$hiw $first_name_txt[0] $smi_hi  Just wanna say that a lot of pretty girls in your neighborhood searching for a partner $smil  S_I_G_N U_P for \u{1F193} to meet them in @kupit_nike profile $cur $cur $cur";
-
-           
-
-// $homerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-// $homerPREDIS = '/Users/alex/home/dev/redis/predis/';
-// $homerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
-
-// $login_names = @fopen( $homerINSTA."email_proxy/login_names", "r");
-// $lines=array();
-// if ($login_names) {
-//     while (($buffer = fgets($login_names, 4096)) !== false) {
-//       $lines[]=trim($buffer); 
-//     }
-//     if (!feof($login_names)) {
-//         echo "Error: unexpected fgets() fail\n";
-//     }
-//     fclose($login_names);
-// }
-// // READ PROXIES FROM FILE
-// $proxy_list = @fopen($homerINSTA."email_proxy/proxy_list", "r");
-// $prox=array();
-// if ($proxy_list) {
-//     while (($buffer = fgets($proxy_list, 4096)) !== false) {
-//       $prox[]=trim($buffer); 
-//     }
-//     if (!feof($proxy_list)) {
-//         echo "Error: unexpected fgets() fail\n";
-//     }
-//     fclose($proxy_list);
-// }
- 
 
 // print_r(      $lines);
 //  print_r ($prox);
@@ -517,24 +472,57 @@ $smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}
  
 // imagejpeg(imagecreatefromstring($i), 'test_3.jpg');
 
- // 
- //        //error_reporting(E_ALL);
+ 
+        //error_reporting(E_ALL);
 
- //        if( $ch = curl_init ())
- //        {            
- //         curl_setopt ($ch, CURLOPT_URL, 'http://google.com'); 
- //         curl_setopt ($ch, CURLOPT_TIMEOUT, 60); 
- //         curl_setopt ($ch, CURLOPT_PROXY, "45.55.178.19:5013"); 
- //         curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
- //         curl_setopt ($ch, CURLOPT_RETURNTRANSFER, TRUE); 
- //         curl_setopt ($ch, CURLOPT_FAILONERROR, true); 
- //         curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1); 
- //         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        // if( $ch = curl_init ())
+        // {            
+        //  curl_setopt ($ch, CURLOPT_URL, 'http://whatismyv6.com/'); 
+        //  // curl_setopt ($ch, CURLOPT_TIMEOUT, 60); 
+        //   curl_setopt($ch, CURLOPT_USERAGENT, 'Instagram 8.0.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)');
+        //  curl_setopt ($ch, CURLOPT_PROXY, "104.156.229.189:30610"); 
+        //  curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+        // curl_setopt($ch, CURLOPT_VERBOSE, false);
+        //  curl_setopt ($ch, CURLOPT_RETURNTRANSFER, TRUE); 
+        //  curl_setopt ($ch, CURLOPT_FAILONERROR, true); 
+        //  curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1); 
+        //  curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
          
- //         $result = curl_exec($ch); 
- //         //print curl_errno ($ch); 
- //         //print $result; 
- //         echo $result;
- //         curl_close ($ch); 
- //        } 
- // 
+        //  $result = curl_exec($ch); 
+        //  //print curl_errno ($ch); 
+        //  //print $result; 
+        //  echo $result;
+        //  curl_close ($ch); 
+        // } 
+
+
+
+
+$first_name = "asd as";
+    $smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
+                $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+                $smiles =  ["\u{1F609}", "\u{1F60C}", "\u{1F46B}" ];    
+                $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+                $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+                $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+                $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+                $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+                $first_name_txt = explode(" ",$first_name);
+                $hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+                $hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+
+             echo   $text = "$hiw $first_name_txt[0] $smi_hi  I am searching for a partner $smil  Please, S_I_G_N U_P by аddrеss in @kupit_nike profile $cur $cur $cur and write me there $smi";
+
+
+ //        curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
+ //        curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT);
+ //        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+ //         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+ //        curl_setopt($ch, CURLOPT_HEADER, true);
+ //        curl_setopt($ch, CURLOPT_VERBOSE, false);
+ //        curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+ //        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+ //        curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+
+
+ // // 

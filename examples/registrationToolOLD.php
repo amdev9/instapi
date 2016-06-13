@@ -7,14 +7,14 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/root/instapi/';
-$romerPREDIS = '/root/predis/';
+// $romerINSTAPI = '/root/instapi/';
+// $romerPREDIS = '/root/predis/';
 
-$romerINSTA = '/root/insta/';
+// $romerINSTA = '/root/insta/';
 
-// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -160,7 +160,7 @@ while ($p < count($prox))
 	        break;
 	    }     
 	    $ii  = $ii + 1;
-	    // sleep(6);
+	    sleep(3);
 	} 
 	 
 
@@ -334,7 +334,7 @@ while ($p < count($prox))
 ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
 		
 		$time_in_day = 24*60*60;
-		$posts_per_day = 700;
+		$posts_per_day = 600;
 		$delay =  $time_in_day /  $posts_per_day;
 			$next_iteration_time = time() + $delay; 
 
@@ -369,18 +369,22 @@ while ($p < count($prox))
 				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
 		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-				$text = "$hiw $first_name_txt[0] $smi_hi  Just wanna say that a lot of pretty girls in your neighborhood searching for a partner $smil  S_I_G_N U_P for \u{1F193} to meet them in @kupit_nike profile $cur $cur $cur";
+				$text = "$hiw $first_name_txt[0] $smi_hi  I am searching for a partner $smil  Please, S_I_G_N U_P by аddrеss in @kupit_nike profile $cur $cur $cur and write me there $smi";
 
 		   
 				try {
 				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
 				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
 		 			
-		 			$i->direct_share($ad_media_id, $message_recipient, $text ); 
+		 			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
 
 		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
-		 			 echo "|||------SEND-------|||\n\n";
+		 			 echo "\n\n**SEND**\n\n";
+		 			 if ($answer == "ok") {
 		 			$redis->rpush("recieved",  $message_recipient); 
+		 			} else {
+		 				sleep(100);
+		 			}
 
 				} catch (Exception $e) {
 				    echo $e->getMessage();
@@ -401,7 +405,7 @@ while ($p < count($prox))
 	    break;
 	}
 	$p  = $p + 1;
-	// sleep(6);
+	sleep(6);
 }     
    
 
