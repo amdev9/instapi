@@ -12,15 +12,22 @@ $romerPREDIS = '/root/predis/';
 
 $romerINSTA = '/root/insta/';
 
-// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
 require $romerINSTAPI.'src/Instagram.php';
 require $romerPREDIS.'autoload.php';
 
+
+Predis\Autoloader::register();
+
+$redis = new Predis\Client(array(
+		"scheme" => "tcp",
+		"host" => "127.0.0.1",
+		"port" => 6379));
 
  
 ///check if string contains arabic
@@ -107,29 +114,29 @@ $dir    = $romerINSTAPI.'src/'.$profileSetter;
 
 
 // READ LOGINS AND FIRST NAMES FROM FILE
-$login_names = @fopen( $romerINSTA."email_proxy/login_names", "r");
-$lines=array();
-if ($login_names) {
-    while (($buffer = fgets($login_names, 4096)) !== false) {
-    	$lines[]=trim($buffer); 
-    }
-    if (!feof($login_names)) {
-        echo "Error: unexpected fgets() fail\n";
-    }
-    fclose($login_names);
-}
+// $login_names = @fopen( $romerINSTA."email_proxy/login_names", "r");
+// $lines=array();
+// if ($login_names) {
+//     while (($buffer = fgets($login_names, 4096)) !== false) {
+//     	$lines[]=trim($buffer); 
+//     }
+//     if (!feof($login_names)) {
+//         echo "Error: unexpected fgets() fail\n";
+//     }
+//     fclose($login_names);
+// }
 // READ PROXIES FROM FILE
-$proxy_list = @fopen($romerINSTA."email_proxy/proxy_list", "r");
-$prox=array();
-if ($proxy_list) {
-    while (($buffer = fgets($proxy_list, 4096)) !== false) {
-    	$prox[]=trim($buffer); 
-    }
-    if (!feof($proxy_list)) {
-        echo "Error: unexpected fgets() fail\n";
-    }
-    fclose($proxy_list);
-}
+// $proxy_list = @fopen($romerINSTA."email_proxy/proxy_list", "r");
+// $prox=array();
+// if ($proxy_list) {
+//     while (($buffer = fgets($proxy_list, 4096)) !== false) {
+//     	$prox[]=trim($buffer); 
+//     }
+//     if (!feof($proxy_list)) {
+//         echo "Error: unexpected fgets() fail\n";
+//     }
+//     fclose($proxy_list);
+// }
  
 
 
@@ -137,29 +144,42 @@ $proxy = "";
 $username = "";
 $first_name = "";
 
-$p = 0; 
 
-while ($p < count($prox)) 
+
+while ( $redis->scard("proxy") > 0 ) {  
+// $p = 0; 
+
+// while ($p < count($prox)) 
 {
-   echo "\n******************------------>".$prox[$p]."<-------------------------*********************\n";
-	$r = new InstagramRegistration($prox[$p], $debug);
+  
+	$prox =  $redis->spop("proxy");
+ echo "\n******************------------>".$prox."<------------*********************\n";
+   // $prox[$p]."<-------------------------*********************\n";
+	
+	$redis->sadd("used_proxy", $prox);
+
+	$r = new InstagramRegistration($prox, $debug);
 	 
 	
-	$ii = 0; 
-	while ($ii < count($lines)){
-	    $pieces = explode(" ", $lines[$ii]);
-		$check = $r->checkUsername($pieces[0]);
+	// $ii = 0; 
+	// while ($ii < count($lines)){
+
+    while ( $redis->scard("names") > 0 ) {  
+    	$pieces = explode(" ",  $redis->spop($key));
+        $check = $r->checkUsername($pieces[0]);
+	 //    $pieces = explode(" ", $lines[$ii]);
+		// $check = $r->checkUsername($pieces[0]);
 	    if ($check['available'] == true) {
 	    	$GLOBALS["username"] = $pieces[0];
 	    	$GLOBALS["first_name"] = $pieces[1]." ".$pieces[2];
-	    	$outar = array_slice($lines, $ii+1);
-	    	$GLOBALS["lines"] = $outar;
-	    	file_put_contents($romerINSTA."email_proxy/login_names", "");
-	    	file_put_contents($romerINSTA."email_proxy/login_names", implode("\n",$outar));
+	    	// $outar = array_slice($lines, $ii+1);
+	    	// $GLOBALS["lines"] = $outar;
+	    	// file_put_contents($romerINSTA."email_proxy/login_names", "");
+	    	// file_put_contents($romerINSTA."email_proxy/login_names", implode("\n",$outar));
 	    	
 	        break;
 	    }     
-	    $ii  = $ii + 1;
+	    // $ii  = $ii + 1;
 	    sleep(3);
 	} 
 	 
@@ -178,9 +198,9 @@ while ($p < count($prox))
 		echo "\nconnection_established\n";
 
 
-		echo "\n\n PROX ---------->".$prox[$p]. "\n\n";
-		$GLOBALS["proxy"] = $prox[$p];		 
-		echo "\n _proxy_------>".$proxy."\n";
+		echo "\n\n PROX ---------->".$prox. "\n\n";
+		$GLOBALS["proxy"] = $prox;		 
+		// echo "\n _proxy_------>".$proxy."\n";
 		$debug = true; // why our connect closed?????
 
 
@@ -250,13 +270,6 @@ while ($p < count($prox))
 		// sleep(10);
 
  
-
-		Predis\Autoloader::register();
-
-        $redis = new Predis\Client(array(
-         "scheme" => "tcp",
-         "host" => "127.0.0.1",
-         "port" => 6379));
 
 
 		 $key = "adult";
@@ -341,10 +354,13 @@ while ($p < count($prox))
 		
 	    $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name."\n";
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered, FILE_APPEND | LOCK_EX);  
-		$outarray = array_slice($prox, $p+1);
-		$GLOBALS["proxy_list"] = $outarray;
-		file_put_contents($romerINSTA."email_proxy/proxy_list", "");
-		file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
+
+     	$redis->sadd("registered", $registered);
+
+		// $outarray = array_slice($prox, $p+1);
+		// $GLOBALS["proxy_list"] = $outarray;
+		// file_put_contents($romerINSTA."email_proxy/proxy_list", "");
+		// file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
 
 		while (true) {
 			if (time() >  $next_iteration_time) {
@@ -353,7 +369,7 @@ while ($p < count($prox))
 			 
 				$ad_media_id  = "1270615353921552313";
 
-
+				
 		    	// $ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
 				// $message_recipient = $redis->spop($key);   /// return user ID 
 
@@ -404,7 +420,7 @@ while ($p < count($prox))
 
 	    break;
 	}
-	$p  = $p + 1;
+	// $p  = $p + 1;
 	sleep(6);
 }     
    
