@@ -213,6 +213,13 @@ while ( $redis->scard("proxy") > 0 )
 		    echo $e->getMessage();
 		}
 		sleep(6);
+
+		$registered = $proxy." ".$username." ".$email." ".$password." ".$first_name;
+      	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
+
+     	$redis->sadd("registered", $registered);
+
+
 		//edit profile
 		try { 
 
@@ -348,16 +355,12 @@ while ( $redis->scard("proxy") > 0 )
 ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
 		
 		$time_in_day = 24*60*60;
-		$posts_per_day = 600;
+		$posts_per_day = 500;
 		$delay =  $time_in_day /  $posts_per_day;
 			$next_iteration_time = time() + $delay; 
 
 		
-	    $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name;
-      	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
-
-     	$redis->sadd("registered", $registered);
-
+	   
 		// $outarray = array_slice($prox, $p+1);
 		// $GLOBALS["proxy_list"] = $outarray;
 		// file_put_contents($romerINSTA."email_proxy/proxy_list", "");
