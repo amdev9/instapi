@@ -353,8 +353,8 @@ while ( $redis->scard("proxy") > 0 )
 			$next_iteration_time = time() + $delay; 
 
 		
-	    $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name."\n";
-      	file_put_contents($romerINSTA."logs/regDone.dat",$registered, FILE_APPEND | LOCK_EX);  
+	    $registered = $proxy." ".$username." ".$email." ".$password." ".$first_name;
+      	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
 
      	$redis->sadd("registered", $registered);
 

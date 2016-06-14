@@ -494,46 +494,52 @@
         //  echo $result;
         //  curl_close ($ch); 
         // } 
- $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
- require $romerPREDIS.'autoload.php';
+ // $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+ // require $romerPREDIS.'autoload.php';
 
 
-        Predis\Autoloader::register();
+ //        Predis\Autoloader::register();
 
-        $redis = new Predis\Client(array(
-         "scheme" => "tcp",
-         "host" => "127.0.0.1",
-         "port" => 6379));
+ //        $redis = new Predis\Client(array(
+ //         "scheme" => "tcp",
+ //         "host" => "127.0.0.1",
+ //         "port" => 6379));
 
 
-         $key = "names";
+ //         $key = "names";
 
 
  
-    while ( $redis->scard($key) > 0 ) {  
-        $pieces = explode(" ",  $redis->spop($key));
-        $check = $r->checkUsername($pieces[0]);
-        if ($check['available'] == true) {
-            $GLOBALS["username"] = $pieces[0];
-            $GLOBALS["first_name"] = $pieces[1]." ".$pieces[2];
+ //    while ( $redis->scard($key) > 0 ) {  
+ //        $pieces = explode(" ",  $redis->spop($key));
+ //        $check = $r->checkUsername($pieces[0]);
+ //        if ($check['available'] == true) {
+ //            $GLOBALS["username"] = $pieces[0];
+ //            $GLOBALS["first_name"] = $pieces[1]." ".$pieces[2];
          
-            break;
-        }    
+ //            break;
+ //        }    
 
  
-        sleep(1);
-    } 
+ //        sleep(1);
+ //    } 
      
 
 
-         $key = "proxy";
+ //         $key = "proxy";
  
-    while ( $redis->scard($key) > 0 ) {  
+ //    while ( $redis->scard($key) > 0 ) {  
          
-        echo $redis->spop($key). "\n";
+ //        echo $redis->spop($key). "\n";
  
-        sleep(3);
-    } 
+ //        sleep(3);
+ //    } 
+
+
+exec("/usr/local/bin/send-telegram.sh 'test instagram account --> 400 error'");
+
+//  /dev/null 2>/dev/null &
+
 
 
 // # array (
