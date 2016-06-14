@@ -166,7 +166,7 @@ while ( $redis->scard("proxy") > 0 )
 	// while ($ii < count($lines)){
 
     while ( $redis->scard("names") > 0 ) {  
-    	$pieces = explode(" ",  $redis->spop($key));
+    	$pieces = explode(" ",  $redis->spop("names"));
         $check = $r->checkUsername($pieces[0]);
 	 //    $pieces = explode(" ", $lines[$ii]);
 		// $check = $r->checkUsername($pieces[0]);
@@ -273,7 +273,7 @@ while ( $redis->scard("proxy") > 0 )
  
 
 
-		 $key = "adult";
+		
 
 	
 		
@@ -362,7 +362,7 @@ while ( $redis->scard("proxy") > 0 )
 		// $GLOBALS["proxy_list"] = $outarray;
 		// file_put_contents($romerINSTA."email_proxy/proxy_list", "");
 		// file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
-
+     	$key = "adult";
 		while (true) {
 			if (time() >  $next_iteration_time) {
 				
