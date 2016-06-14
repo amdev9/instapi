@@ -536,7 +536,7 @@
  //    } 
 
 $username = "tester123";
-exec("/usr/local/bin/send-telegram.sh '$username instagram account --> 400 error'  /dev/null 2>/dev/null &");
+exec("/usr/local/bin/send-telegram.sh '$username --> fail to send message'  /dev/null 2>/dev/null &");
 
 //  /dev/null 2>/dev/null &
 

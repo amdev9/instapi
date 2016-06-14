@@ -508,7 +508,11 @@ class Instagram
         curl_close($ch);
 
          
-        // echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
+        if ($this->debug) {
+            echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
+        }
+
+        
          // $respres = var_export($upload);
          // echo $respres;
 

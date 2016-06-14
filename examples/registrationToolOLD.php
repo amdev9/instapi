@@ -400,8 +400,9 @@ while ( $redis->scard("proxy") > 0 )
 		 			 if ($answer == "ok") {
 		 			$redis->rpush("recieved",  $message_recipient); 
 		 			} else {
-		 				sleep(100);
-		 				// $username
+		 				exec("/usr/local/bin/send-telegram.sh '$username --> fail to send message'  /dev/null 2>/dev/null &");
+		 				sleep(500);
+		 			 
 		 			}
 
 				} catch (Exception $e) {
