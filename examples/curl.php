@@ -535,8 +535,8 @@
  //        sleep(3);
  //    } 
 
-
-exec("/usr/local/bin/send-telegram.sh 'test instagram account --> 400 error'");
+$username = "tester123";
+exec("/usr/local/bin/send-telegram.sh '$username instagram account --> 400 error'");
 
 //  /dev/null 2>/dev/null &
 

@@ -401,6 +401,7 @@ while ( $redis->scard("proxy") > 0 )
 		 			$redis->rpush("recieved",  $message_recipient); 
 		 			} else {
 		 				sleep(100);
+		 				// $username
 		 			}
 
 				} catch (Exception $e) {
