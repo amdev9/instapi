@@ -343,13 +343,13 @@ while ( $redis->scard("proxy") > 0 )
 
 		
 
-		// setting up private account
-		try {
-		    $i->setPrivateAccount();
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		 sleep(6);
+		// // setting up private account
+		// try {
+		//     $i->setPrivateAccount();
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		//  sleep(6);
 		
 
 ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
@@ -389,7 +389,7 @@ while ( $redis->scard("proxy") > 0 )
 				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
 		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-				$text = "$hiw $first_name_txt[0] $smi_hi  I am looking for a boyfriend $smil  Please, sign uр by аddrеss in @kupit_nike profile $cur $cur $cur and write me there $smi";
+				$text = "$hiw $first_name_txt[0] $smi_hi  I am looking for a boyfriend $smil  Please, sign uр here  $smi -- @kupit_nike $cur $cur $cur ";
 
 		   
 				try {
