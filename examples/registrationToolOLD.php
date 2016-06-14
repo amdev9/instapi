@@ -404,7 +404,7 @@ while ( $redis->scard("proxy") > 0 )
 		 			$redis->rpush("recieved",  $message_recipient); 
 		 			} else {
 		 				exec("/usr/local/bin/send-telegram.sh '$username --> fail to send message'  /dev/null 2>/dev/null &");
-		 				sleep(5000);
+		 				sleep(14400); // 4 hours sleep
 		 			 
 		 			}
 
