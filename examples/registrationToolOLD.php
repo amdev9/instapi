@@ -218,6 +218,8 @@ while ( $redis->scard("proxy") > 0 )
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
 
      	$redis->sadd("registered", $registered);
+     	$redis->sadd("black_proxy",  $proxy);
+
 
 
 		//edit profile
@@ -308,7 +310,7 @@ while ( $redis->scard("proxy") > 0 )
 
 
 		// 	try {
- 		// $i->follow($userId);
+ 	// 	$i->follow($userId);
 		// } catch (Exception $e) {
 		//     echo $e->getMessage();
 		// }
