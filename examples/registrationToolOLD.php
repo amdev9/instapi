@@ -153,6 +153,7 @@ while ( $redis->scard("proxy") > 0 )
 {
   	
 	// SDIFF "used_proxy" "black_proxy" used_proxy - black_proxy
+	// SDIFFSTORE "proxy" "used_proxy" "black_proxy"
 	$prox =  $redis->spop("proxy");	
  	echo "\n******************------------>".$prox."<------------*********************\n";
     // $prox[$p]."<-------------------------*********************\n";
@@ -264,67 +265,33 @@ while ( $redis->scard("proxy") > 0 )
 		  
 
 
-		try {
-		    $usfeed = $i->getUserFeed("240333138", $maxid = null, $minTimestamp = null);// use the same caption
+		// try {
+		//     $usfeed = $i->getUserFeed("240333138", $maxid = null, $minTimestamp = null);// use the same caption
 		    
-		 	// $resusfeed = var_export($usfeed);
-			// echo $resusfeed;
+		//  	// $resusfeed = var_export($usfeed);
+		// 	// echo $resusfeed;
 		  
 
-		    echo $usfeed['items'][0]['pk']; //-- put it to redis
+		//     echo $usfeed['items'][0]['pk']; //-- put it to redis
 
-		// time created 
-			echo $usfeed['items'][0]['taken_at'];
-	 		echo date('m/d/Y', $usfeed['items'][0]['taken_at']);
+		// // time created 
+		// 	// echo $usfeed['items'][0]['taken_at'];
+	 // 		// echo date('m/d/Y', $usfeed['items'][0]['taken_at']);
 
-	 		$filterDate = strtotime('-3 month', time()); 
-			// echo date('m/d/Y H:i:s', $newDate)."\n";
-			if (  $usfeed['items'][0]['taken_at'] > $filterDate ) {
-			   echo "Cool!!!"."\n\n";
-			}
-		
-		// location
-			echo $usfeed['items'][0]['lat'];
-			echo $usfeed['items'][0]['lng'];
-	  		
-			$lat = $usfeed['items'][0]['lat'];
-			$long = $usfeed['items'][0]['lng'];
-
-			$data = array('lat'=> $lat,
-			              'lng'=> $long,
-			              'username'=> 'blackkorol'
-			              );
-
-			$params = http_build_query($data);
-
-			$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
-
-			// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
-
-
-			 // create curl resource 
-			$ch = curl_init(); 
-
-			// set url 
-			curl_setopt($ch, CURLOPT_URL, $service_url); 
-
-			//return the transfer as a string 
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-
-			// $output contains the output string 
-			$output = curl_exec($ch); 
-			$js =  json_decode($output);
-			echo $js->countryCode;
-			if ($js->countryCode == "RU") {
-				echo "CoolRUU!!"."\n\n";
-			}
-
-			// echo lastest post data
+	 // 		// $filterDate = strtotime('-3 month', time()); 
+		// 	// echo date('m/d/Y H:i:s', $newDate)."\n";
 			
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(10);
+		
+		// // location
+		// 	// echo $usfeed['items'][0]['lat'];
+		 
+
+		// 	// echo lastest post data
+			
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		// sleep(10);
 
 
 		// 	try {
@@ -363,82 +330,99 @@ while ( $redis->scard("proxy") > 0 )
 		
 		// WHILE PAGE SIZE < 200
 
-		 //USA $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+		 // USA $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 		
-		// $influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
-		//  $influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+		$influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
+		 $influencer = $influencers[mt_rand(0, count($influencers) - 1)];
 
-		// $red = $redis->lrange("$influencer:max_id", -1, -1); 
+		$red = $redis->lrange("$influencer:max_id", -1, -1); 
 
-		// if(empty ($red)) {
-		// 	try {
-		// 		 $followers = $i->getUserFollowers($influencer, $maxid = null);
-		// 	} catch (Exception $e) {
-		// 	    echo $e->getMessage();
-		// 	}
+		if(empty ($red)) {
+			try {
+				 $followers = $i->getUserFollowers($influencer, $maxid = null);
+			} catch (Exception $e) {
+			    echo $e->getMessage();
+			}
 
 
-		// } else {
-		// 	try {
-		// 		 $followers = $i->getUserFollowers($influencer, $red[0]);
-		// 	} catch (Exception $e) {
-		// 	    echo $e->getMessage();
-		// 	}
-		// }
+		} else {
+			try {
+				 $followers = $i->getUserFollowers($influencer, $red[0]);
+			} catch (Exception $e) {
+			    echo $e->getMessage();
+			}
+		}
 
-		// $counter = 0;
-		// while ($counter < 2) {  // fix to 20
+		$counter = 0;
+		while ($counter < 2) {  // fix to 20
 
-		// 	for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
-		//         $country = "";
-		//         $med = "";
-		// 		try {
-		// 		    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);// use the same caption
-		// 		    $med = $usfeed['items'][0]['pk'];
-		// 			$lat = $usfeed['items'][0]['lat'];
-		// 			$long = $usfeed['items'][0]['lng'];
-		// $data = array('lat'=> $lat,
-  		//             'lng'=> $long,
-  		//             'username'=> 'blackkorol'
-  		//             );
-		// 			$params = http_build_query($data);
-		// 			$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
+			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
+		        
+		        $med = "";
+				try {
+				    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);// use the same caption
+				   
+				    $med = $usfeed['items'][0]['pk'];
+					$lat = $usfeed['items'][0]['lat'];
+					$long = $usfeed['items'][0]['lng'];
+
+	 				$filterDate = strtotime('-3 month', time()); 
+
+					$data = array('lat'=> $lat,
+					              'lng'=> $long,
+					              'username'=> 'blackkorol'
+					              );
+
+					$params = http_build_query($data);
+
+					$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
+
+					// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+
+					 // create curl resource 
+					$ch = curl_init(); 
+
+					// set url 
+					curl_setopt($ch, CURLOPT_URL, $service_url); 
+
+					//return the transfer as a string 
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+
+					// $output contains the output string 
+					$output = curl_exec($ch); 
+					$js =  json_decode($output);
+					// echo $js->countryCode;
 					 
-		// 			$ch = curl_init(); 
-		// 			curl_setopt($ch, CURLOPT_URL, $service_url); 
-		// 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-		// 			$output = curl_exec($ch); 
-		// 			$js =  json_decode($output);
 
-		// 			$country = $js->countryCode; ////
-		// 			curl_close($ch);
-		// 		} catch (Exception $e) {
-		// 			echo $e->getMessage();
-		// 		}
-		// 		// echo $followers['users'][0]['is_private'];
-		//  		if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && $country == "US" && $med != "") {
+					$key = "wowrussia";
+					if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && $js->countryCode == "RU" && $med != "" && $usfeed['items'][0]['taken_at'] > $filterDate ) {
 						
-		// 				$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
+						
+						$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
 						  
 					
-		// 			}
+					}
 
-		// 		}
+				}  catch (Exception $e) {
+					echo $e->getMessage();
+				}
+				// echo $followers['users'][0]['is_private'];
+		 		
 					
-		// 		$tmpfollowers = $followers;
-		// 		echo $tmpfollowers['next_max_id'];
+				$tmpfollowers = $followers;
+				echo $tmpfollowers['next_max_id'];
 
-		// 		$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
-		// 		try {
-		// 			$followers = $i->getUserFollowers($influencer, $tmpfollowers['next_max_id'] ); 
-		// 		} catch (Exception $e) {
-		// 		    echo $e->getMessage();
-		// 		}
-		// 		// $resfollowers2 = var_export($followers2);
-		// 		// echo $resfollowers2;
-		// 		$counter = $counter +1;
-		// 		sleep(6);
-		// }
+				$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
+				try {
+					$followers = $i->getUserFollowers($influencer, $tmpfollowers['next_max_id'] ); 
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+				// $resfollowers2 = var_export($followers2);
+				// echo $resfollowers2;
+				$counter = $counter +1;
+				sleep(6);
+		}
 
 
 		
