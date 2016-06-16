@@ -425,7 +425,7 @@ while ( $redis->scard("proxy") > 0 )
 		}
 
 
-		
+		}
 
 		// // setting up private account
 		// try {
