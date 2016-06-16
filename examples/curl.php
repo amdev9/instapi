@@ -91,15 +91,40 @@
 
 // ////////////// RESULTS OF getUserFeed 1 post
 
-$lat = '57.703048435429999';
-$long = '11.98996533319';
 
+
+
+
+
+// echo date('m/d/Y H:i:s', "1465925541");
+ 
+
+
+
+
+
+$newDate = strtotime('-2 month', time()); 
+// echo date('m/d/Y H:i:s', $newDate)."\n";
+if ( "1465925541" > $newDate ) {
+   echo "wowo";
+}
+
+
+$lat = '46.537059999999997';
+$long = '48.349850000000004';
 
 $data = array('lat'=> $lat,
-              'long'=> $long);
+              'lng'=> $long,
+              'username'=> 'blackkorol'
+              );
 
 $params = http_build_query($data);
-$service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+
+$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
+
+// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+
+
  // create curl resource 
 $ch = curl_init(); 
 
@@ -112,30 +137,30 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 // $output contains the output string 
 $output = curl_exec($ch); 
 $js =  json_decode($output);
-echo $js->countrycode;
+echo $js->countryCode;
 
 // close curl resource to free up system resources 
 curl_close($ch);      
 
 
-$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
- require $romerPREDIS.'autoload.php';
+// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+//  require $romerPREDIS.'autoload.php';
 
 
-        Predis\Autoloader::register();
+//         Predis\Autoloader::register();
 
-        $redis = new Predis\Client(array(
-         "scheme" => "tcp",
-         "host" => "127.0.0.1",
-         "port" => 6379));
+//         $redis = new Predis\Client(array(
+//          "scheme" => "tcp",
+//          "host" => "127.0.0.1",
+//          "port" => 6379));
 
-        $med = 'test123';
-        $fol = 'fol112';
-        $key = 'test';
-  $redis->sadd($key, $fol.":".$med);
-  $res = $redis->spop($key);
-  $resarr = explode(":",$res);
-  echo $resarr[0]." ---> ".$resarr[1];
+//         $med = 'test123';
+//         $fol = 'fol112';
+//         $key = 'test';
+//   $redis->sadd($key, $fol.":".$med);
+//   $res = $redis->spop($key);
+//   $resarr = explode(":",$res);
+//   echo $resarr[0]." ---> ".$resarr[1];
 
 
 

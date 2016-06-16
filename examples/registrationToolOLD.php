@@ -261,103 +261,63 @@ while ( $redis->scard("proxy") > 0 )
 
 		// sleep(4);
 
-		 
-		// try {
-		// 	$usname = $i->searchUsername("alenavodonaeva");// alenavodonaeva -> 217566587
-		// 	$iduser = $usname['pk'];
-		// 	$resusname =  var_export($usname);
-		// 	echo "alenavodonaeva--->".$resusname."\n\n";
 		  
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
 
-		// sleep(4);
-		// try {
-		// 	$usname = $i->searchUsername("borodylia"); // borodylia -> 22288455
-		// 	$iduser = $usname['pk'];
-		// 	$resusname =  var_export($usname);
-		// 	echo "borodylia--->".$resusname."\n\n";
-		  
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
-		// sleep(4);
-		// try {
-		// 	$usname = $i->searchUsername("annakhilkevich");//annakhilkevich -> 7061024
-		// 	$iduser = $usname['pk'];
-		// 	$resusname =  var_export($usname);
-		// 	echo "annakhilkevich--->".$resusname."\n\n";
-		  
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
-		// sleep(4);
-		// try {
-		// 	$usname = $i->searchUsername("aglayatarasova");//aglayatarasova -> 240333138
-		// 	$iduser = $usname['pk'];
-		// 	$resusname =  var_export($usname);
-		// 	echo "aglayatarasova--->".$resusname."\n\n";
-		  
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
-		// sleep(4);
-		
-
-		 
-		// try {
-		// 	$usname = $i->searchUsername("asmuskristina");   // asmuskristina -> 253477742
-			 
-		// 	$resusname =  var_export($usname);
-		// 	echo "asmuskristina--->".$resusname."\n\n";
-		  
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
-		// sleep(4);
-		
-
-
-		
 
 		try {
-		    $usfeed = $i->getUserFeed( "240333138", $maxid = null, $minTimestamp = null);// use the same caption
+		    $usfeed = $i->getUserFeed("240333138", $maxid = null, $minTimestamp = null);// use the same caption
 		    
-		    $resusfeed = var_export($usfeed);
-			echo $resusfeed;
+		 	// $resusfeed = var_export($usfeed);
+			// echo $resusfeed;
+		  
 
-		    // echo $usfeed['items'][0]['pk']; //-- put it to redis
+		    echo $usfeed['items'][0]['pk']; //-- put it to redis
 
 		// time created 
-		// 	echo $usfeed['items'][0]['taken_at'];
-		// 	echo date('m/d/Y', 1299446702);
+			echo $usfeed['items'][0]['taken_at'];
+	 		echo date('m/d/Y', $usfeed['items'][0]['taken_at']);
+
+	 		$filterDate = strtotime('-3 month', time()); 
+			// echo date('m/d/Y H:i:s', $newDate)."\n";
+			if (  $usfeed['items'][0]['taken_at'] > $filterDate ) {
+			   echo "Cool!!!"."\n\n";
+			}
 		
-		// // location
-		// 	echo $usfeed['items'][0]['lat'];
-		// 	echo $usfeed['items'][0]['lng'];
-	  
-		 
-			// $lat = $usfeed['items'][0]['lat'];
-			// $long = $usfeed['items'][0]['lng'];
-			// $data = array('lat'=> $lat,
-			//               'long'=> $long);
-			// $params = http_build_query($data);
+		// location
+			echo $usfeed['items'][0]['lat'];
+			echo $usfeed['items'][0]['lng'];
+	  		
+			$lat = $usfeed['items'][0]['lat'];
+			$long = $usfeed['items'][0]['lng'];
+
+			$data = array('lat'=> $lat,
+			              'lng'=> $long,
+			              'username'=> 'blackkorol'
+			              );
+
+			$params = http_build_query($data);
+
+			$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
+
 			// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
-			 
-			// $ch = curl_init(); 
-			// curl_setopt($ch, CURLOPT_URL, $service_url); 
-			// curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-			// $output = curl_exec($ch); 
-			// $js =  json_decode($output);
-
-			// $country = $js->countrycode; ////
-			// echo $country;
-			// curl_close($ch);      
 
 
+			 // create curl resource 
+			$ch = curl_init(); 
 
+			// set url 
+			curl_setopt($ch, CURLOPT_URL, $service_url); 
 
+			//return the transfer as a string 
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+
+			// $output contains the output string 
+			$output = curl_exec($ch); 
+			$js =  json_decode($output);
+			echo $js->countryCode;
+			if ($js->countryCode == "RU") {
+				echo "CoolRUU!!"."\n\n";
+			}
 
 			// echo lastest post data
 			
@@ -401,9 +361,11 @@ while ( $redis->scard("proxy") > 0 )
 
 	
 		
-		/// WHILE PAGE SIZE < 200
+		// WHILE PAGE SIZE < 200
 
-		//  $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+		 //USA $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+		
+		// $influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
 		//  $influencer = $influencers[mt_rand(0, count($influencers) - 1)];
 
 		// $red = $redis->lrange("$influencer:max_id", -1, -1); 
@@ -435,10 +397,12 @@ while ( $redis->scard("proxy") > 0 )
 		// 		    $med = $usfeed['items'][0]['pk'];
 		// 			$lat = $usfeed['items'][0]['lat'];
 		// 			$long = $usfeed['items'][0]['lng'];
-		// 			$data = array('lat'=> $lat,
-		// 			              'long'=> $long);
+		// $data = array('lat'=> $lat,
+  		//             'lng'=> $long,
+  		//             'username'=> 'blackkorol'
+  		//             );
 		// 			$params = http_build_query($data);
-		// 			$service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+		// 			$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
 					 
 		// 			$ch = curl_init(); 
 		// 			curl_setopt($ch, CURLOPT_URL, $service_url); 
@@ -446,7 +410,7 @@ while ( $redis->scard("proxy") > 0 )
 		// 			$output = curl_exec($ch); 
 		// 			$js =  json_decode($output);
 
-		// 			$country = $js->countrycode; ////
+		// 			$country = $js->countryCode; ////
 		// 			curl_close($ch);
 		// 		} catch (Exception $e) {
 		// 			echo $e->getMessage();
