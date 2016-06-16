@@ -202,7 +202,7 @@ while ( $redis->scard("proxy") > 0 )
 		echo "\n\n PROX ---------->".$prox. "\n\n";
 		$GLOBALS["proxy"] = $prox;		 
 		// echo "\n _proxy_------>".$proxy."\n";
-		$debug = true; // why our connect closed?????
+		$debug = false;  
 
 
 		$i = new Instagram($username, $password, $proxy, $debug);
@@ -249,96 +249,85 @@ while ( $redis->scard("proxy") > 0 )
 		echo "photo downloaded!\n";
 		 
 		 
-		try {
-			$usname = $i->searchUsername("buzova86");
-			$iduser = $usname['pk'];
-			$resusname =  var_export($usname);
-			echo "buzova--->".$resusname."\n\n";
+		// try {
+		// 	$usname = $i->searchUsername("buzova86"); // buzova86 -> 267685466
+		// 	$iduser = $usname['pk'];
+		// 	$resusname =  var_export($usname);
+		// 	echo "buzova--->".$resusname."\n\n";
 		  
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
 
-		sleep(4);
+		// sleep(4);
 
-		try {
-			$usname = $i->searchUsername("alenavodonaeva");
-			$iduser = $usname['pk'];
-			$resusname =  var_export($usname);
-			echo "buzova--->".$resusname."\n\n";
+		 
+		// try {
+		// 	$usname = $i->searchUsername("alenavodonaeva");// alenavodonaeva -> 217566587
+		// 	$iduser = $usname['pk'];
+		// 	$resusname =  var_export($usname);
+		// 	echo "alenavodonaeva--->".$resusname."\n\n";
 		  
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
 
-		sleep(4);
-
-		try {
-			$usname = $i->searchUsername("alenavodonaeva");
-			$iduser = $usname['pk'];
-			$resusname =  var_export($usname);
-			echo "alenavodonaeva--->".$resusname."\n\n";
+		// sleep(4);
+		// try {
+		// 	$usname = $i->searchUsername("borodylia"); // borodylia -> 22288455
+		// 	$iduser = $usname['pk'];
+		// 	$resusname =  var_export($usname);
+		// 	echo "borodylia--->".$resusname."\n\n";
 		  
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-
-		sleep(4);
-		try {
-			$usname = $i->searchUsername("borodylia");
-			$iduser = $usname['pk'];
-			$resusname =  var_export($usname);
-			echo "borodylia--->".$resusname."\n\n";
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		// sleep(4);
+		// try {
+		// 	$usname = $i->searchUsername("annakhilkevich");//annakhilkevich -> 7061024
+		// 	$iduser = $usname['pk'];
+		// 	$resusname =  var_export($usname);
+		// 	echo "annakhilkevich--->".$resusname."\n\n";
 		  
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(4);
-		try {
-			$usname = $i->searchUsername("annakhilkevich");
-			$iduser = $usname['pk'];
-			$resusname =  var_export($usname);
-			echo "annakhilkevich--->".$resusname."\n\n";
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		// sleep(4);
+		// try {
+		// 	$usname = $i->searchUsername("aglayatarasova");//aglayatarasova -> 240333138
+		// 	$iduser = $usname['pk'];
+		// 	$resusname =  var_export($usname);
+		// 	echo "aglayatarasova--->".$resusname."\n\n";
 		  
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(4);
-		try {
-			$usname = $i->searchUsername("aglayatarasova");
-			$iduser = $usname['pk'];
-			$resusname =  var_export($usname);
-			echo "aglayatarasova--->".$resusname."\n\n";
-		  
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(4);
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		// sleep(4);
 		
 
-		$iduserr = "";
-		try {
-			$usname = $i->searchUsername("asmuskristina");
-			$iduserr = $usname['pk'];
-			$resusname =  var_export($usname);
-			echo "asmuskristina--->".$resusname."\n\n";
+		 
+		// try {
+		// 	$usname = $i->searchUsername("asmuskristina");   // asmuskristina -> 253477742
+			 
+		// 	$resusname =  var_export($usname);
+		// 	echo "asmuskristina--->".$resusname."\n\n";
 		  
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(4);
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		// sleep(4);
 		
 
 
 		
 
 		try {
-		    $usfeed = $i->getUserFeed($iduserr , $maxid = null, $minTimestamp = null);// use the same caption
+		    $usfeed = $i->getUserFeed( "240333138", $maxid = null, $minTimestamp = null);// use the same caption
 		    
 		    $resusfeed = var_export($usfeed);
 			echo $resusfeed;
 
-		    echo $usfeed['items'][0]['pk']; //-- put it to redis
+		    // echo $usfeed['items'][0]['pk']; //-- put it to redis
 
 		// time created 
 		// 	echo $usfeed['items'][0]['taken_at'];
