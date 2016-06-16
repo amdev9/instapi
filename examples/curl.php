@@ -91,6 +91,58 @@
 
 // ////////////// RESULTS OF getUserFeed 1 post
 
+$lat = '57.703048435429999';
+$long = '11.98996533319';
+
+
+$data = array('lat'=> $lat,
+              'long'=> $long);
+
+$params = http_build_query($data);
+$service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+ // create curl resource 
+$ch = curl_init(); 
+
+// set url 
+curl_setopt($ch, CURLOPT_URL, $service_url); 
+
+//return the transfer as a string 
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+
+// $output contains the output string 
+$output = curl_exec($ch); 
+$js =  json_decode($output);
+echo $js->countrycode;
+
+// close curl resource to free up system resources 
+curl_close($ch);      
+
+
+$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+ require $romerPREDIS.'autoload.php';
+
+
+        Predis\Autoloader::register();
+
+        $redis = new Predis\Client(array(
+         "scheme" => "tcp",
+         "host" => "127.0.0.1",
+         "port" => 6379));
+
+        $med = 'test123';
+        $fol = 'fol112';
+        $key = 'test';
+  $redis->sadd($key, $fol.":".$med);
+  $res = $redis->spop($key);
+  $resarr = explode(":",$res);
+  echo $resarr[0]." ---> ".$resarr[1];
+
+
+
+// lat=57.703048435429999&long=11.98996533319  
+
+
+
 // ['items'][0]['pk']   -  latest media_id
 
 // array (
@@ -494,16 +546,7 @@
         //  echo $result;
         //  curl_close ($ch); 
         // } 
- // $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
- // require $romerPREDIS.'autoload.php';
-
-
- //        Predis\Autoloader::register();
-
- //        $redis = new Predis\Client(array(
- //         "scheme" => "tcp",
- //         "host" => "127.0.0.1",
- //         "port" => 6379));
+ 
 
 
  //         $key = "names";
@@ -533,10 +576,10 @@
  //        echo $redis->spop($key). "\n";
  
  //        sleep(3);
- //    } 
+//  //    } 
 
-$username = "tester123";
-exec("/usr/local/bin/send-telegram.sh '$username --> fail to send message'  /dev/null 2>/dev/null &");
+// $username = "tester123";
+// exec("/usr/local/bin/send-telegram.sh '$username --> fail to send message'  /dev/null 2>/dev/null &");
 
 //  /dev/null 2>/dev/null &
 

@@ -264,10 +264,39 @@ while ( $redis->scard("proxy") > 0 )
 		// try {
 		//     $usfeed = $i->getUserFeed("3153242478", $maxid = null, $minTimestamp = null);// use the same caption
 		    
-		//     $resusfeed = var_export($usfeed);
-		// 	echo $resusfeed;
+		//     // $resusfeed = var_export($usfeed);
+		// 	// echo $resusfeed;
 
-		//     echo $usfeed['items'][0]['pk'];
+		//     // echo $usfeed['items'][0]['pk']; //-- put it to redis
+
+		// // time created 
+		// // 	echo $usfeed['items'][0]['taken_at'];
+		// // 	echo date('m/d/Y', 1299446702);
+		
+		// // // location
+		// // 	echo $usfeed['items'][0]['lat'];
+		// // 	echo $usfeed['items'][0]['lng'];
+	  
+		 
+		// 	$lat = $usfeed['items'][0]['lat'];
+		// 	$long = $usfeed['items'][0]['lng'];
+		// 	$data = array('lat'=> $lat,
+		// 	              'long'=> $long);
+		// 	$params = http_build_query($data);
+		// 	$service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+			 
+		// 	$ch = curl_init(); 
+		// 	curl_setopt($ch, CURLOPT_URL, $service_url); 
+		// 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+		// 	$output = curl_exec($ch); 
+		// 	$js =  json_decode($output);
+
+		// 	$country = $js->countrycode; ////
+		// 	echo $country;
+		// 	curl_close($ch);      
+
+
+
 
 
 		// 	// echo lastest post data
@@ -277,9 +306,37 @@ while ( $redis->scard("proxy") > 0 )
 		// }
 		// sleep(10);
 
- 
+
+		// 	try {
+ 		// $i->follow($userId);
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		// sleep(6);
 
 
+
+		try {
+ 			 
+ 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
+		   	$i->like("1270615353921552313");
+		    
+
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(6);
+
+	// 			COMMENTS NEED TO ADD REDIS 
+ 		try {
+ 			// $commentText = $redis->spop($key = "comment");  // generate and put to redis
+ 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
+		    $i->comment("1270615353921552313", "Like that)"); 
+
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(10);
 		
 
 	
@@ -308,23 +365,42 @@ while ( $redis->scard("proxy") > 0 )
 		// }
 
 		// $counter = 0;
-		// while ($counter < 20) {  // fix to 20
+		// while ($counter < 2) {  // fix to 20
 
-				
+		// 	for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
+		//         $country = "";
+		//         $med = "";
+		// 		try {
+		// 		    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);// use the same caption
+		// 		    $med = $usfeed['items'][0]['pk'];
+		// 			$lat = $usfeed['items'][0]['lat'];
+		// 			$long = $usfeed['items'][0]['lng'];
+		// 			$data = array('lat'=> $lat,
+		// 			              'long'=> $long);
+		// 			$params = http_build_query($data);
+		// 			$service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+					 
+		// 			$ch = curl_init(); 
+		// 			curl_setopt($ch, CURLOPT_URL, $service_url); 
+		// 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+		// 			$output = curl_exec($ch); 
+		// 			$js =  json_decode($output);
 
-		// for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
-		        
-
-		// 		// echo $followers['users'][0]['is_private'];
-	 // if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false) {
-			
-		// 			$redis->sadd($key, $followers['users'][$iter]['pk']);
-		// 			// echo $followers['users'][$i]['pk'];
-				
+		// 			$country = $js->countrycode; ////
+		// 			curl_close($ch);
+		// 		} catch (Exception $e) {
+		// 			echo $e->getMessage();
 		// 		}
+		// 		// echo $followers['users'][0]['is_private'];
+		//  		if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && $country == "US" && $med != "") {
+						
+		// 				$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
+						  
+					
+		// 			}
 
-		// 	}
-				
+		// 		}
+					
 		// 		$tmpfollowers = $followers;
 		// 		echo $tmpfollowers['next_max_id'];
 
@@ -337,8 +413,8 @@ while ( $redis->scard("proxy") > 0 )
 		// 		// $resfollowers2 = var_export($followers2);
 		// 		// echo $resfollowers2;
 		// 		$counter = $counter +1;
-		// 		 sleep(6);
-		// 	 }
+		// 		sleep(6);
+		// }
 
 
 		
@@ -354,71 +430,76 @@ while ( $redis->scard("proxy") > 0 )
 
 ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
 		
-		$time_in_day = 24*60*60;
-		$posts_per_day = 500;
-		$delay =  $time_in_day /  $posts_per_day;
-			$next_iteration_time = time() + $delay; 
+		// $time_in_day = 24*60*60;
+		// $posts_per_day = 300; //400 -> 60 500->50 700->34
+		// $delay =  $time_in_day /  $posts_per_day;
+		// 	$next_iteration_time = time() + $delay; 
 
 		
 	   
-		// $outarray = array_slice($prox, $p+1);
-		// $GLOBALS["proxy_list"] = $outarray;
-		// file_put_contents($romerINSTA."email_proxy/proxy_list", "");
-		// file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
-     	$key = "adult";
-		while (true) {
-			if (time() >  $next_iteration_time) {
+		// // $outarray = array_slice($prox, $p+1);
+		// // $GLOBALS["proxy_list"] = $outarray;
+		// // file_put_contents($romerINSTA."email_proxy/proxy_list", "");
+		// // file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
+  //    	$key = "adult";
+		// while (true) {
+		// 	if (time() >  $next_iteration_time) {
 				
-				$message_recipient = $redis->spop($key);
+		// 		$message_recipient = $redis->spop($key);
 			 
-				$ad_media_id  = "1270615353921552313";
+		// 		$ad_media_id  = "1270615353921552313";
 
 				
-		    	// $ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
-				// $message_recipient = $redis->spop($key);   /// return user ID 
+		//     	// $ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
+		// 		
+					// $followlike  = $redis->spop($key);   
+				 //    $resarr = explode(":",$followlike);
+  			// 		$message_recipient = $resarr[0];
+  	 
+  		/// return user ID 
 
-				$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
-				$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
-				$smiles =  ["\u{1F609}", "\u{1F60C}", "\u{1F46B}" ];	
-				$cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
-			    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
-			    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
-			    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
-			    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
-				$first_name_txt = explode(" ",$first_name);
-				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
-		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+		// 		$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
+		// 		$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+		// 		$smiles =  ["\u{1F609}", "\u{1F60C}", "\u{1F46B}" ];	
+		// 		$cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+		// 	    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+		// 	    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+		// 	    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+		// 	    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+		// 		$first_name_txt = explode(" ",$first_name);
+		// 		$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+		//  		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-				$text = "$hiw $first_name_txt[0] $smi_hi  I am looking for a boyfriend $smil  Please, sign uр here  $smi -- @kupit_nike $cur $cur $cur ";
+		// 		$text = "$hiw $first_name_txt[0] $smi_hi  I am looking for a boyfriend $smil  Please, check this profile  @kupit_nike  $smi $cur $cur $cur ";
 
 		   
-				try {
-				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
-				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
+		// 		try {
+		// 		//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
+		// 		//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
 		 			
-		 			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
+		//  			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
 
-		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
-		 			 echo "\n\n**SEND**\n\n";
-		 			 if ($answer == "ok") {
-		 			$redis->rpush("recieved",  $message_recipient); 
-		 			} else {
-		 				exec("/usr/local/bin/send-telegram.sh '$username --> fail to send message'  /dev/null 2>/dev/null &");
-		 				sleep(14400); // 4 hours sleep
+		//  			 // $i->direct_share($ad_media_id, "1009845355", $text );    
+		//  			 echo "\n\n**SEND**\n\n";
+		//  			 if ($answer == "ok") {
+		//  			$redis->rpush("recieved",  $message_recipient); 
+		//  			} else {
+		//  				exec("/usr/local/bin/send-telegram.sh '$username --> fail to send message'  /dev/null 2>/dev/null &");
+		//  				sleep(14400); // 4 hours sleep
 		 			 
-		 			}
+		//  			}
 
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
+		// 		} catch (Exception $e) {
+		// 		    echo $e->getMessage();
+		// 		}
 
 
-				$next_iteration_time = timer($delay);
+		// 		$next_iteration_time = timer($delay);
 			
-			}	
-			sleep(2);
+		// 	}	
+		// 	sleep(2);
 		
-		}
+		 // }
 
 		
 
