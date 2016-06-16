@@ -149,11 +149,11 @@ $first_name = "";
 
 // while ($p < count($prox)) 
 
-
 while ( $redis->scard("proxy") > 0 ) 
 {
-  
-	$prox =  $redis->spop("proxy");
+  	
+	// SDIFF "used_proxy" "black_proxy" used_proxy - black_proxy
+	$prox =  $redis->spop("proxy");	
  	echo "\n******************------------>".$prox."<------------*********************\n";
     // $prox[$p]."<-------------------------*********************\n";
 	
@@ -249,64 +249,133 @@ while ( $redis->scard("proxy") > 0 )
 		echo "photo downloaded!\n";
 		 
 		 
-		// try {
-		// 	$usname = $i->searchUsername("kupit_nike");
-		// 	$iduser = $usname['pk'];
-		// 	$resusname =  var_export($usname);
-		// 	echo $resusname;
+		try {
+			$usname = $i->searchUsername("buzova86");
+			$iduser = $usname['pk'];
+			$resusname =  var_export($usname);
+			echo "buzova--->".$resusname."\n\n";
 		  
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
 
-		// sleep(4);
+		sleep(4);
+
+		try {
+			$usname = $i->searchUsername("alenavodonaeva");
+			$iduser = $usname['pk'];
+			$resusname =  var_export($usname);
+			echo "buzova--->".$resusname."\n\n";
+		  
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+
+		sleep(4);
+
+		try {
+			$usname = $i->searchUsername("alenavodonaeva");
+			$iduser = $usname['pk'];
+			$resusname =  var_export($usname);
+			echo "alenavodonaeva--->".$resusname."\n\n";
+		  
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+
+		sleep(4);
+		try {
+			$usname = $i->searchUsername("borodylia");
+			$iduser = $usname['pk'];
+			$resusname =  var_export($usname);
+			echo "borodylia--->".$resusname."\n\n";
+		  
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(4);
+		try {
+			$usname = $i->searchUsername("annakhilkevich");
+			$iduser = $usname['pk'];
+			$resusname =  var_export($usname);
+			echo "annakhilkevich--->".$resusname."\n\n";
+		  
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(4);
+		try {
+			$usname = $i->searchUsername("aglayatarasova");
+			$iduser = $usname['pk'];
+			$resusname =  var_export($usname);
+			echo "aglayatarasova--->".$resusname."\n\n";
+		  
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(4);
 		
-	 	 
 
-		// try {
-		//     $usfeed = $i->getUserFeed("3153242478", $maxid = null, $minTimestamp = null);// use the same caption
+		$iduserr = "";
+		try {
+			$usname = $i->searchUsername("asmuskristina");
+			$iduserr = $usname['pk'];
+			$resusname =  var_export($usname);
+			echo "asmuskristina--->".$resusname."\n\n";
+		  
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(4);
+		
+
+
+		
+
+		try {
+		    $usfeed = $i->getUserFeed($iduserr , $maxid = null, $minTimestamp = null);// use the same caption
 		    
-		//     // $resusfeed = var_export($usfeed);
-		// 	// echo $resusfeed;
+		    $resusfeed = var_export($usfeed);
+			echo $resusfeed;
 
-		//     // echo $usfeed['items'][0]['pk']; //-- put it to redis
+		    echo $usfeed['items'][0]['pk']; //-- put it to redis
 
-		// // time created 
-		// // 	echo $usfeed['items'][0]['taken_at'];
-		// // 	echo date('m/d/Y', 1299446702);
+		// time created 
+		// 	echo $usfeed['items'][0]['taken_at'];
+		// 	echo date('m/d/Y', 1299446702);
 		
-		// // // location
-		// // 	echo $usfeed['items'][0]['lat'];
-		// // 	echo $usfeed['items'][0]['lng'];
+		// // location
+		// 	echo $usfeed['items'][0]['lat'];
+		// 	echo $usfeed['items'][0]['lng'];
 	  
 		 
-		// 	$lat = $usfeed['items'][0]['lat'];
-		// 	$long = $usfeed['items'][0]['lng'];
-		// 	$data = array('lat'=> $lat,
-		// 	              'long'=> $long);
-		// 	$params = http_build_query($data);
-		// 	$service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+			// $lat = $usfeed['items'][0]['lat'];
+			// $long = $usfeed['items'][0]['lng'];
+			// $data = array('lat'=> $lat,
+			//               'long'=> $long);
+			// $params = http_build_query($data);
+			// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
 			 
-		// 	$ch = curl_init(); 
-		// 	curl_setopt($ch, CURLOPT_URL, $service_url); 
-		// 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-		// 	$output = curl_exec($ch); 
-		// 	$js =  json_decode($output);
+			// $ch = curl_init(); 
+			// curl_setopt($ch, CURLOPT_URL, $service_url); 
+			// curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+			// $output = curl_exec($ch); 
+			// $js =  json_decode($output);
 
-		// 	$country = $js->countrycode; ////
-		// 	echo $country;
-		// 	curl_close($ch);      
-
-
+			// $country = $js->countrycode; ////
+			// echo $country;
+			// curl_close($ch);      
 
 
 
-		// 	// echo lastest post data
+
+
+			// echo lastest post data
 			
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
-		// sleep(10);
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(10);
 
 
 		// 	try {
@@ -318,27 +387,27 @@ while ( $redis->scard("proxy") > 0 )
 
 
 
-		try {
+	// 	try {
  			 
- 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
-		   	$i->like("1270615353921552313");
+ // 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
+	// 	   	$i->like("1270615353921552313");
 		    
 
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(6);
+	// 	} catch (Exception $e) {
+	// 	    echo $e->getMessage();
+	// 	}
+	// 	sleep(6);
 
-	// 			COMMENTS NEED TO ADD REDIS 
- 		try {
- 			// $commentText = $redis->spop($key = "comment");  // generate and put to redis
- 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
-		    $i->comment("1270615353921552313", "Like that)"); 
+	// // 			COMMENTS NEED TO ADD REDIS 
+ // 		try {
+ // 			// $commentText = $redis->spop($key = "comment");  // generate and put to redis
+ // 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
+	// 	    $i->comment("1270615353921552313", "Like that)"); 
 
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(10);
+	// 	} catch (Exception $e) {
+	// 	    echo $e->getMessage();
+	// 	}
+	// 	sleep(10);
 		
 
 	
