@@ -333,7 +333,7 @@ while ( $redis->scard("proxy") > 0 )
 		 // USA $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 		
 		$influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
-		 $influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+		$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
 
 		$red = $redis->lrange("$influencer:max_id", -1, -1); 
 
@@ -359,10 +359,13 @@ while ( $redis->scard("proxy") > 0 )
 			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
 		        
 		        $med = "";
+		        echo $followers['users'][$iter]['pk'];
 				try {
+
 				    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);// use the same caption
-				   
+				   	if (!is_null($usfeed)) {
 				    $med = $usfeed['items'][0]['pk'];
+
 					$lat = $usfeed['items'][0]['lat'];
 					$long = $usfeed['items'][0]['lng'];
 
@@ -398,10 +401,11 @@ while ( $redis->scard("proxy") > 0 )
 					if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && $js->countryCode == "RU" && $med != "" && $usfeed['items'][0]['taken_at'] > $filterDate ) {
 						
 						
-						$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
+							$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
 						  
 					
 					}
+				}
 
 				}  catch (Exception $e) {
 					echo $e->getMessage();
