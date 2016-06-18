@@ -301,6 +301,10 @@ while ( $redis->scard("proxy") > 0 )
 			  echo $e->getMessage();
 			}		
 			 
+		if ($GLOBALS["followercount"] > 0) {
+
+			echo  "COOOOOOL--->".$GLOBALS["followercount"];
+		} 
 
 		 // setting up private account
 		// try {

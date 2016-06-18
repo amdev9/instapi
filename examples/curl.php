@@ -11,6 +11,7 @@ while ($a < 4) {
 	echo $a;
 
 	$a = $a + 1;
+	// echo  $volatile_seed = filemtime(__DIR__)."\n\n";
 	sleep(2);
 }
 
@@ -24,104 +25,110 @@ while ($t < 3) {
 }
 
  recurs();
-}
+}  
 
-recurs();
-
-
-array (
-  0 => 'HTTP/1.0 200 Connection established
-
-HTTP/1.1 200 OK
-Content-Language: en
-Expires: Sat, 01 Jan 2000 00:00:00 GMT
-Vary: Cookie, Accept-Language, Accept-Encoding
-Pragma: no-cache
-Cache-Control: private, no-cache, no-store, must-revalidate
-Date: Sat, 18 Jun 2016 10:24:20 GMT
-Content-Type: application/json
-Set-Cookie: csrftoken=d0a9150dcf35e3ada487197845da68e8; expires=Sat, 17-Jun-2017 10:24:20 GMT; Max-Age=31449600; Path=/
-Set-Cookie: s_network=; expires=Sat, 18-Jun-2016 11:24:20 GMT; Max-Age=3600; Path=/
-Set-Cookie: sessionid=IGSCecaf8148631c1e558a926cd04626773521450fb7e04ac61465a10205d59e718b%3ASX06fGRITIBw0GlzAMhGSbWxHtrHRLrP%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A3427510552%2C%22_token%22%3A%223427510552%3AZ6Kl2auQgNxFuVop2t2JExFsh6xd93nQ%3Af6ce77e14dc09e003f87daa661c473e5e312f933f2161c3d5340106cf78d5057%22%2C%22asns%22%3A%7B%222001%3A19f0%3Aac00%3Ae9%3A7efd%3A7c0%3Ac272%3A2523%22%3A20473%2C%22time%22%3A1466245459%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1466245460.528285%2C%22_platform%22%3A1%7D; expires=Fri, 16-Sep-2016 10:24:20 GMT; httponly; Max-Age=7776000; Path=/
-Set-Cookie: ds_user_id=3427510552; expires=Fri, 16-Sep-2016 10:24:20 GMT; Max-Age=7776000; Path=/
-Connection: keep-alive
-Content-Length: 527
-
-',
+// echo __DIR__;
+echo time();
+echo  $volatile_seed = filemtime(__DIR__)."\n\n";
+// recurs();
 
 
 
-  1 => 
-  array (
-    'status' => 'ok',
-    'created_user' => 
-    array (
-      'username' => 'mashaprivalova89',
-      'has_anonymous_profile_picture' => true,
-      'nux_private_first_page' => false,
-      'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/11906329_960233084022564_1448528159_a.jpg',
-      'full_name' => '',
-      'pk' => 3427510552,
-      'hd_profile_pic_url_info' => 
-      array (
-        'url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/11906329_960233084022564_1448528159_a.jpg',
-        'width' => 150,
-        'height' => 150,
-      ),
-      'nux_private_enabled' => false,
-      'is_private' => false,
-    ),
-    'account_created' => true,
-  ),
-)
 
-array (
-  'status' => 'ok',
-  'user' => 
-  array (
-    'usertags_count' => 0,
-    'has_anonymous_profile_picture' => false,
-    'hd_profile_pic_versions' => 
-    array (
-      0 => 
-      array (
-        'url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s320x320/13398826_765994626875523_2011463998_a.jpg',
-        'width' => 320,
-        'height' => 320,
-      ),
-    ),
-    'following_count' => 0,
-    'usertag_review_enabled' => false,
-    'can_boost_post' => false,
-    'full_name' => 'Masha Privalova',
-    'biography' => 'Счастливая',
-    'is_profile_action_needed' => false,
-    'has_chaining' => true,
-    'media_count' => 3,
-    'auto_expand_chaining' => false,
-    'include_direct_blacklist_status' => true,
-    'follower_count' => 0,
-    'pk' => 3427510552,
-    'is_verified' => false,
-    'username' => 'mashaprivalova89',
-    'geo_media_count' => 0,
-    'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s150x150/13398826_765994626875523_2011463998_a.jpg',
-    'profile_pic_id' => '1275281840374589405_3427510552',
-    'can_see_organic_insights' => false,
-    'can_convert_to_business' => false,
-    'is_private' => false,
-    'is_business' => false,
-    'show_insights_terms' => false,
-    'hd_profile_pic_url_info' => 
-    array (
-      'url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/13398826_765994626875523_2011463998_a.jpg',
-      'width' => 400,
-      'height' => 400,
-    ),
-    'is_needy' => true,
-    'external_url' => '',
-  ),
-)%                     
+
+// array (
+//   0 => 'HTTP/1.0 200 Connection established
+
+// HTTP/1.1 200 OK
+// Content-Language: en
+// Expires: Sat, 01 Jan 2000 00:00:00 GMT
+// Vary: Cookie, Accept-Language, Accept-Encoding
+// Pragma: no-cache
+// Cache-Control: private, no-cache, no-store, must-revalidate
+// Date: Sat, 18 Jun 2016 10:24:20 GMT
+// Content-Type: application/json
+// Set-Cookie: csrftoken=d0a9150dcf35e3ada487197845da68e8; expires=Sat, 17-Jun-2017 10:24:20 GMT; Max-Age=31449600; Path=/
+// Set-Cookie: s_network=; expires=Sat, 18-Jun-2016 11:24:20 GMT; Max-Age=3600; Path=/
+// Set-Cookie: sessionid=IGSCecaf8148631c1e558a926cd04626773521450fb7e04ac61465a10205d59e718b%3ASX06fGRITIBw0GlzAMhGSbWxHtrHRLrP%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A3427510552%2C%22_token%22%3A%223427510552%3AZ6Kl2auQgNxFuVop2t2JExFsh6xd93nQ%3Af6ce77e14dc09e003f87daa661c473e5e312f933f2161c3d5340106cf78d5057%22%2C%22asns%22%3A%7B%222001%3A19f0%3Aac00%3Ae9%3A7efd%3A7c0%3Ac272%3A2523%22%3A20473%2C%22time%22%3A1466245459%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1466245460.528285%2C%22_platform%22%3A1%7D; expires=Fri, 16-Sep-2016 10:24:20 GMT; httponly; Max-Age=7776000; Path=/
+// Set-Cookie: ds_user_id=3427510552; expires=Fri, 16-Sep-2016 10:24:20 GMT; Max-Age=7776000; Path=/
+// Connection: keep-alive
+// Content-Length: 527
+
+// ',
+
+
+
+//   1 => 
+//   array (
+//     'status' => 'ok',
+//     'created_user' => 
+//     array (
+//       'username' => 'mashaprivalova89',
+//       'has_anonymous_profile_picture' => true,
+//       'nux_private_first_page' => false,
+//       'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/11906329_960233084022564_1448528159_a.jpg',
+//       'full_name' => '',
+//       'pk' => 3427510552,
+//       'hd_profile_pic_url_info' => 
+//       array (
+//         'url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/11906329_960233084022564_1448528159_a.jpg',
+//         'width' => 150,
+//         'height' => 150,
+//       ),
+//       'nux_private_enabled' => false,
+//       'is_private' => false,
+//     ),
+//     'account_created' => true,
+//   ),
+// )
+
+// array (
+//   'status' => 'ok',
+//   'user' => 
+//   array (
+//     'usertags_count' => 0,
+//     'has_anonymous_profile_picture' => false,
+//     'hd_profile_pic_versions' => 
+//     array (
+//       0 => 
+//       array (
+//         'url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s320x320/13398826_765994626875523_2011463998_a.jpg',
+//         'width' => 320,
+//         'height' => 320,
+//       ),
+//     ),
+//     'following_count' => 0,
+//     'usertag_review_enabled' => false,
+//     'can_boost_post' => false,
+//     'full_name' => 'Masha Privalova',
+//     'biography' => 'Счастливая',
+//     'is_profile_action_needed' => false,
+//     'has_chaining' => true,
+//     'media_count' => 3,
+//     'auto_expand_chaining' => false,
+//     'include_direct_blacklist_status' => true,
+//     'follower_count' => 0,
+//     'pk' => 3427510552,
+//     'is_verified' => false,
+//     'username' => 'mashaprivalova89',
+//     'geo_media_count' => 0,
+//     'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s150x150/13398826_765994626875523_2011463998_a.jpg',
+//     'profile_pic_id' => '1275281840374589405_3427510552',
+//     'can_see_organic_insights' => false,
+//     'can_convert_to_business' => false,
+//     'is_private' => false,
+//     'is_business' => false,
+//     'show_insights_terms' => false,
+//     'hd_profile_pic_url_info' => 
+//     array (
+//       'url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/13398826_765994626875523_2011463998_a.jpg',
+//       'width' => 400,
+//       'height' => 400,
+//     ),
+//     'is_needy' => true,
+//     'external_url' => '',
+//   ),
+// )%                     
 
 
   // $influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];

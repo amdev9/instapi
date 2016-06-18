@@ -1628,9 +1628,11 @@ class Instagram
 
     public function generateDeviceId($seed)
     {
-        // Neutralize username/password -> device correlation
-        $volatile_seed = filemtime(__DIR__);
 
+      // //old
+      //   // Neutralize username/password -> device correlation
+      //   $volatile_seed = filemtime(__DIR__);
+        $volatile_seed = time();
         return 'android-'.substr(md5($seed.$volatile_seed), 16);
     }
 
