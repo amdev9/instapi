@@ -7,14 +7,14 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/root/instapi/';
-$romerPREDIS = '/root/predis/';
+// $romerINSTAPI = '/root/instapi/';
+// $romerPREDIS = '/root/predis/';
 
-$romerINSTA = '/root/insta/';
+// $romerINSTA = '/root/insta/';
 
-	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -203,7 +203,7 @@ while ( $redis->scard("proxy") > 0 )
 		echo "\n\n PROX ---------->".$prox. "\n\n";
 		$GLOBALS["proxy"] = $prox;		 
 		// echo "\n _proxy_------>".$proxy."\n";
-		$debug = false;  
+		$debug = true;  
 
 
 		$i = new Instagram($username, $password, $proxy, $debug);
@@ -248,7 +248,15 @@ while ( $redis->scard("proxy") > 0 )
 		}
 
 		echo "photo downloaded!\n";
-		 
+		 // setting up private account
+		// try {
+		//     $i->setPrivateAccount();
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		//  sleep(6);
+		
+
 		 
 		// try {
 		// 	$usname = $i->searchUsername("buzova86"); // buzova86 -> 267685466
@@ -314,141 +322,178 @@ while ( $redis->scard("proxy") > 0 )
 	// 	}
 	// 	sleep(6);
 
-	// // 			COMMENTS NEED TO ADD REDIS 
- // 		try {
- // 			// $commentText = $redis->spop($key = "comment");  // generate and put to redis
- // 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
-	// 	    $i->comment("1270615353921552313", "Like that)"); 
 
-	// 	} catch (Exception $e) {
-	// 	    echo $e->getMessage();
-	// 	}
-	// 	sleep(10);
-		
-
-	
-		
-		// WHILE PAGE SIZE < 200
-
-		 // USA $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
-		
+	//  LATEST POSTS MONITORING OF influencers
+// wow russia influencers
 		$influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
-		$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+		
+ 		foreach ($influencers as $influencer) {
 
-		$red = $redis->lrange("$influencer:max_id", -1, -1); 
-
-		if(empty ($red)) {
-			try {
-				 $followers = $i->getUserFollowers($influencer, $maxid = null);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
+			$usfeedforcom = $i->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
+			$medcom = $usfeedforcom['items'][0]['pk'];
+			if ($redis->scard("infpost_$influencer") > 0) {
+				$redis->spop("infpost_$influencer");
 			}
-
-
-		} else {
-			try {
-				 $followers = $i->getUserFollowers($influencer, $red[0]);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
+			$redis->sadd("infpost_$influencer",$medcom);
+ 
 		}
 
-		$counter = 0;
-		while ($counter < 2) {  // fix to 20
+	// 	COMMENTS OF influencers
+ 		try {
+ 			// $commentText = $redis->spop($key = "comment");  // generate and put to redis
+ 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
+ 			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+ 			$mediatocomment = $redis->spop("infpost_$influencer");
 
-			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
+ 			$commenttex = ["Спасибо за рекомендацию масочки для лица это просто суперский эффект, заказывала тут \u{1F449} @kupit_blackmask ", "Девочки, хотите иметь молодое лицо с нежной как у младенца кожей и, избавиться от мелких морщинок? Тогда можете попробовать сделать маску для лица Black Mask в домашних условиях. Эффект – потрясающий! Затмевает применение дорогущих косметических средств, заказывала тут  \u{2757} @kupit_blackmask", "Хотела сказать спасибо за рекомендацию масочки для лица Black Mask. После первого же применения маски кожа буквально напиталась влагой! Как только смыла маску, сразу почувствовала свежесть, легкость, как будто каждая пора дышит! И такое стойкое ощущение продержалось несколько часов. После пары-тройки применений кожа приобрела тонус, подтянулась, лицо приобрело такие красивые, четкие очертания. Буду покупать еще здесь \u{27A1} @kupit_blackmask и советовать коллегам"];
+
+			   $smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
+     		   $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+
+      		   $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
+      		   $messageFinal = "$hiw $smil";
+
+
+		    $i->comment($mediatocomment, $messageFinal); 
+		    echo "comment sent!---->$influencer-->$messageFinal\n";
+
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(10);
+		
+		
+		// //WHILE PAGE SIZE < 200
+
+		// // USA $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+		// wow russia influencers
+		// $influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
+		// $influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+
+		// $red = $redis->lrange("$influencer:max_id", -1, -1); 
+
+		// if(empty ($red)) {
+		// 	try {
+		// 		 $followers = $i->getUserFollowers($influencer, $maxid = null);
+		// 	} catch (Exception $e) {
+		// 	    echo $e->getMessage();
+		// 	}
+
+		// } else {
+		// 	try {
+		// 		 $followers = $i->getUserFollowers($influencer, $red[0]);
+		// 	} catch (Exception $e) {
+		// 	    echo $e->getMessage();
+		// 	}
+		// }
+
+		// $counter = 0;
+		// while ($counter < 2) {  // fix to 20
+
+		// 	for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
 		        
-		        $med = "";
-		        echo $followers['users'][$iter]['pk'];
-				try {
+		        
+		//         echo $followers['users'][$iter]['pk'];
 
-				    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);// use the same caption
-				   	if (!is_null($usfeed)) {
-				    $med = $usfeed['items'][0]['pk'];
+		// 		try {
+		// 			if ($followers['users'][$iter]['is_private'] == false) {
+		// 			    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
 
-					$lat = $usfeed['items'][0]['lat'];
-					$long = $usfeed['items'][0]['lng'];
+		// 			    if (isset($usfeed['items'][0]['pk'])) {
+		// 				    $med = $usfeed['items'][0]['pk'];
+		// 				    echo $med.":med\n";// use the same caption
+		// 				    if (isset($usfeed['items'][0]['lat']) && isset($usfeed['items'][0]['lng'])) {
+		// 						$lat = $usfeed['items'][0]['lat'];
+		// 						$long = $usfeed['items'][0]['lng'];
 
-	 				$filterDate = strtotime('-3 month', time()); 
+	 // 							$filterDate = strtotime('-3 month', time()); 
 
-					$data = array('lat'=> $lat,
-					              'lng'=> $long,
-					              'username'=> 'blackkorol'
-					              );
+		// 						$data = array('lat'=> $lat,
+		// 			              'lng'=> $long,
+		// 			              'username'=> 'blackkorol'
+		// 			              );
 
-					$params = http_build_query($data);
+		// 						$params = http_build_query($data);
 
-					$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
+		// 						$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
 
-					// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+		// 						// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
 
-					 // create curl resource 
-					$ch = curl_init(); 
+		// 						 // create curl resource 
+		// 						$ch = curl_init(); 
 
-					// set url 
-					curl_setopt($ch, CURLOPT_URL, $service_url); 
+		// 						// set url 
+		// 						curl_setopt($ch, CURLOPT_URL, $service_url); 
 
-					//return the transfer as a string 
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+		// 						//return the transfer as a string 
+		// 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 
-					// $output contains the output string 
-					$output = curl_exec($ch); 
-					$js =  json_decode($output);
-					// echo $js->countryCode;
-					 
+		// 						// $output contains the output string 
+		// 						$output = curl_exec($ch); 
+		// 						$js =  json_decode($output);
+		// 						// echo $js->countryCode;
+		// 			 			$country = $js->countryCode;
 
-					$key = "wowrussia";
-					if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && $js->countryCode == "RU" && $med != "" && $usfeed['items'][0]['taken_at'] > $filterDate ) {
+		// 						$key = "wowrussia";
+		// 						if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && isset($country) && $country == "RU" && $usfeed['items'][0]['taken_at'] > $filterDate ) {
 						
 						
-							$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
+		// 							$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
 						  
 					
-					}
-				}
+		// 						}
+		// 					} else {
 
-				}  catch (Exception $e) {
-					echo $e->getMessage();
-				}
-				// echo $followers['users'][0]['is_private'];
-		 		
+		// 						$filterDate = strtotime('-3 month', time()); 
+
+		// 						$key = "wowrussia";
+		// 						if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && $usfeed['items'][0]['taken_at'] > $filterDate ) {
+						
+						
+		// 							$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
+						  
+		// 				 		}
+		// 				 	}
+		// 				} else {
+		// 					echo "no media yet:med\n";
+		// 				}
+		// 			} else {
+		// 				$key = "wowrussia";
+		// 				echo "private:med\n";
+		// 				if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false ) {
+		// 					$redis->sadd($key, $followers['users'][$iter]['pk'].":private");
+		// 				}
+		// 			}
+				
+		// 		} catch (Exception $e) {
+		// 			echo $e->getMessage();
+		// 		}
+		// 	}
 					
-				$tmpfollowers = $followers;
-				echo $tmpfollowers['next_max_id'];
+		// 	$tmpfollowers = $followers;
+		// 	echo $tmpfollowers['next_max_id'];
 
-				$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
-				try {
-					$followers = $i->getUserFollowers($influencer, $tmpfollowers['next_max_id'] ); 
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
-				// $resfollowers2 = var_export($followers2);
-				// echo $resfollowers2;
-				$counter = $counter +1;
-				sleep(6);
-		}
-
-
-		}
-
-		// // setting up private account
-		// try {
-		//     $i->setPrivateAccount();
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
+		// 	$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
+		// 	try {
+		// 		$followers = $i->getUserFollowers($influencer, $tmpfollowers['next_max_id'] ); 
+		// 	} catch (Exception $e) {
+		// 	    echo $e->getMessage();
+		// 	}
+			 				
+		// 	$counter = $counter + 1;
+		// 	sleep(6);
 		// }
-		//  sleep(6);
-		
 
+		
 ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
 		
 		// $time_in_day = 24*60*60;
-		// $posts_per_day = 300; //400 -> 60 500->50 700->34
-		// $delay =  $time_in_day /  $posts_per_day;
-		// 	$next_iteration_time = time() + $delay; 
+		// $posts_per_day = 300; 		//400 -> 60 500->50 700->34
+		// $delay = $time_in_day / $posts_per_day;
+		// $next_iteration_time = time() + $delay; 
 
 		
-	   
+
 		// // $outarray = array_slice($prox, $p+1);
 		// // $GLOBALS["proxy_list"] = $outarray;
 		// // file_put_contents($romerINSTA."email_proxy/proxy_list", "");
@@ -460,15 +505,14 @@ while ( $redis->scard("proxy") > 0 )
 		// 		$message_recipient = $redis->spop($key);
 			 
 		// 		$ad_media_id  = "1270615353921552313";
-
 				
 		//     	// $ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
-		// 		
-					// $followlike  = $redis->spop($key);   
-				 //    $resarr = explode(":",$followlike);
-  			// 		$message_recipient = $resarr[0];
+				
+		// 			$followlike  = $redis->spop($key);   
+		// 		    $resarr = explode(":",$followlike);
+  // 					$message_recipient = $resarr[0];
   	 
-  		/// return user ID 
+  // 		// return user ID 
 
 		// 		$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
 		// 		$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
@@ -511,29 +555,13 @@ while ( $redis->scard("proxy") > 0 )
 		// 	}	
 		// 	sleep(2);
 		
-		 // }
+		//  }
 
-		
-
-
-
+	
 	    break;
 	}
-	// $p  = $p + 1;
 	sleep(6);
 }     
    
 
-
-
-
-
-
-	
-	 
-
-
-// if (isset($result[1]["account_created"]) && ($result[1]["account_created"] == true)) {
-//     echo "Your account was successfully created! :)";
-// }
 

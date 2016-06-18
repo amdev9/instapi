@@ -2,6 +2,29 @@
 
 
 
+
+  // $influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
+     
+      // $influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+      // $mediatocomment = $redis->spop("infpost_$influencer");
+
+      $commenttex = ["Спасибо за рекомендацию масочки для лица, это просто суперский эффект, заказывала тут \u{1F449} @kupit_blackmask ", "Девочки, хотите иметь молодое лицо с нежной как у младенца кожей и, избавиться от мелких морщинок? Тогда можете попробовать сделать маску для лица Black Mask в домашних условиях. Эффект – потрясающий! Затмевает применение дорогущих косметических средств. Что-то подобное с кремнием когда-то делала в салоне, отдала 2000 рублей за сеанс!!! А тут \u{27A1} @kupit_blackmask по акции всего 990 рублей. И хватает на долго!!!", "Хотела сказать спасибо за рекомендацию масочки для лица Black Mask. После первого же применения маски кожа буквально напиталась влагой! Как только смыла маску, сразу почувствовала свежесть, легкость, как будто каждая пора дышит! И такое стойкое ощущение продержалось несколько часов. После пары-тройки применений кожа приобрела тонус, подтянулась, лицо приобрело такие красивые, четкие очертания. Буду покупать еще здесь \u{2757} @kupit_blackmask и советовать коллегам"];
+
+      $smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
+      $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+
+      $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
+
+
+
+      echo $messageFinal = "$hiw $smil";
+
+
+        // $i->comment($mediatocomment, $messageFinal); 
+        
+
+
+
 // print_r(      $lines);
 //  print_r ($prox);
 
@@ -99,266 +122,324 @@
 // echo date('m/d/Y H:i:s', "1465925541");
  
 
+// irst_name":"Kylie Gross","biography":"Just look at me)","email":"kingfas.terdaimon123dqwewokmmas@gmail.com","gender":2}photo downloaded!
+// 20755788521274087865860240658:med
+// 15916167611273122359953034060:med
+// 3517390191273509702881169961:med
+// 12909814521273857097659233897:med
+// 15776753861273852715323493731:med
+// 33037197521265849748347831403:med
+// 1323018077Not authorized to view user
+// 15803091131259579925048871427:med
+// 452491119735454076603564550:med
+// 34212955921273979006379181121:med
+// 34063715081274114063489012946:med
+// 19086778171266010533290313944:med
+// 15901242081271119403643160117:med
+// 2613189841273224320230770135:med
+// 31689265501272735796253179231:med
+// 465494480Not authorized to view user
+// 30180615341266838112719862830:med
+// 26201174271271875487201095873:med
+// 16334474161270518561129219534:med
+// 3422005396PHP Notice:  Undefined offset: 0 in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 367
+
+// Notice: Undefined offset: 0 in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 367
+// :med
+// 1795454626Not authorized to view user
+// 7917601541273531506622623399:med
+// 34219445711274108248534249845:med
+// 34066777901274107925336136962:med
+// 12366195721273217005876901517:med
+// 34218915571274085907185031645:med
+// 14543539451274027274927974657:med
+// 1537260668Not authorized to view user
+// 3421996837PHP Notice:  Undefined offset: 0 in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 367
+
+// Notice: Undefined offset: 0 in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 367
+// :med
+// 3419967247PHP Notice:  Undefined offset: 0 in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 367
+
+// Notice: Undefined offset: 0 in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 367
+// :med
+// 3401011491271005887125911908:med
+// 29907377751274110896396526550:med
+// 3421911700Not authorized to view user
+// 16990908371273348858886036079:med
+// 14962705731189253681666128724:med
+// 20277081281273810423982909046:med
+// 18026709961268092496707032843:med
+// 21309223901274022908563644082:med
+// 34220116921274112840497263750:med
+// 3422055541PHP Notice:  Undefined offset: 0 in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 367
+
+// Notice: Undefined offset: 0 in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 367
+// :med
+// 24112652321264224224403498759:med
+// 16902706821273946824986242377:med
+// 21038687641273915714603504863:med
+// 29303879681274095339563804181:med
+// 9089782171273347042209581651:med
+// 4464826951269428185467593025:med
 
 
 
-
-$newDate = strtotime('-2 month', time()); 
-// echo date('m/d/Y H:i:s', $newDate)."\n";
-if ( "1465925541" > $newDate ) {
-   echo "wowo";
-}
-
-
-$lat = '46.537059999999997';
-$long = '48.349850000000004';
-
-$data = array('lat'=> $lat,
-              'lng'=> $long,
-              'username'=> 'blackkorol'
-              );
-
-$params = http_build_query($data);
-
-$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
-
-// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+// $newDate = strtotime('-2 month', time()); 
+// // echo date('m/d/Y H:i:s', $newDate)."\n";
+// if ( "1465925541" > $newDate ) {
+//    echo "wowo";
+// }
 
 
- // create curl resource 
-$ch = curl_init(); 
+// $lat = '46.537059999999997';
+// $long = '48.349850000000004';
 
-// set url 
-curl_setopt($ch, CURLOPT_URL, $service_url); 
+// $data = array('lat'=> $lat,
+//               'lng'=> $long,
+//               'username'=> 'blackkorol'
+//               );
 
-//return the transfer as a string 
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+// $params = http_build_query($data);
 
-// $output contains the output string 
-$output = curl_exec($ch); 
-$js =  json_decode($output);
-echo $js->countryCode;
+// $service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
 
-// close curl resource to free up system resources 
-curl_close($ch);      
+// // $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
 
 
-// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-//  require $romerPREDIS.'autoload.php';
+//  // create curl resource 
+// $ch = curl_init(); 
+
+// // set url 
+// curl_setopt($ch, CURLOPT_URL, $service_url); 
+
+// //return the transfer as a string 
+// curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+
+// // $output contains the output string 
+// $output = curl_exec($ch); 
+// $js =  json_decode($output);
+// echo $js->countryCode;
+
+// // close curl resource to free up system resources 
+// curl_close($ch);      
 
 
-//         Predis\Autoloader::register();
-
-//         $redis = new Predis\Client(array(
-//          "scheme" => "tcp",
-//          "host" => "127.0.0.1",
-//          "port" => 6379));
-
-//         $med = 'test123';
-//         $fol = 'fol112';
-//         $key = 'test';
-//   $redis->sadd($key, $fol.":".$med);
-//   $res = $redis->spop($key);
-//   $resarr = explode(":",$res);
-//   echo $resarr[0]." ---> ".$resarr[1];
+// // $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+// //  require $romerPREDIS.'autoload.php';
 
 
+// //         Predis\Autoloader::register();
 
-// lat=57.703048435429999&long=11.98996533319  
+// //         $redis = new Predis\Client(array(
+// //          "scheme" => "tcp",
+// //          "host" => "127.0.0.1",
+// //          "port" => 6379));
+
+// //         $med = 'test123';
+// //         $fol = 'fol112';
+// //         $key = 'test';
+// //   $redis->sadd($key, $fol.":".$med);
+// //   $res = $redis->spop($key);
+// //   $resarr = explode(":",$res);
+// //   echo $resarr[0]." ---> ".$resarr[1];
 
 
 
-// ['items'][0]['pk']   -  latest media_id
+// // lat=57.703048435429999&long=11.98996533319  
 
-// array (
-//   'status' => 'ok',
-//   'num_results' => 12,
-//   'auto_load_more_enabled' => true,
-//   'items' => 
-//   array (
-    0 => 
-    array (
-      'taken_at' => 1464631349,
-      'pk' => 1261741665116545564,
-      'id' => '1261741665116545564_13226335',
-      'device_timestamp' => 1464631284,
-      'media_type' => 1,
-      'code' => 'BGCm1wDlOIc',
-      'client_cache_key' => 'MTI2MTc0MTY2NTExNjU0NTU2NA==.2',
-      'filter_type' => 114,
-      'image_versions2' => 
-      array (
-        'candidates' => 
-        array (
-          // 0 => 
-          // array (
-          //   'url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-15/e35/13298276_1768752153369839_1270137232_n.jpg?se=7&ig_cache_key=MTI2MTc0MTY2NTExNjU0NTU2NA%3D%3D.2',
-          //   'width' => 1080,
-          //   'height' => 1298,
-          // ),
-          // 1 => 
-          // array (
-          //   'url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-15/sh0.08/e35/p750x750/13298276_1768752153369839_1270137232_n.jpg?ig_cache_key=MTI2MTc0MTY2NTExNjU0NTU2NA%3D%3D.2',
-          //   'width' => 750,
-          //   'height' => 901,
-        
-        ),
-      ),
-      'original_width' => 1080,
-      'original_height' => 1298,
-      'location' => 
-      array (
-        'external_source' => 'facebook_places',
-        'city' => '',
-        'name' => 'Summerburst Ullevi',
-        'facebook_places_id' => 200473116742411,
-        'address' => '',
-        'lat' => 57.703048435429999,
-        'pk' => 293185059,
-        'lng' => 11.98996533319,
-      ),
-      
-      'lat' => 57.7030484354,
-      'lng' => 11.989965333200001,
-      'user' => 
+
+
+// // ['items'][0]['pk']   -  latest media_id
+
+// // array (
+// //   'status' => 'ok',
+// //   'num_results' => 12,
+// //   'auto_load_more_enabled' => true,
+// //   'items' => 
+// //   array (
+//     0 => 
+//     array (
+//       'taken_at' => 1464631349,
+//       'pk' => 1261741665116545564,
+//       'id' => '1261741665116545564_13226335',
+//       'device_timestamp' => 1464631284,
+//       'media_type' => 1,
+//       'code' => 'BGCm1wDlOIc',
+//       'client_cache_key' => 'MTI2MTc0MTY2NTExNjU0NTU2NA==.2',
+//       'filter_type' => 114,
+//       'image_versions2' => 
 //       array (
-//         'username' => 'suzannesvanevik',
-//         'has_anonymous_profile_picture' => false,
-//         'is_unpublished' => false,
-//         'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s150x150/12145429_927730610635383_1307205056_a.jpg',
-//         'is_favorite' => false,
-//         'full_name' => 'S U Z A N N E  S V A N E V I K',
-//         'pk' => 13226335,
-//         'is_verified' => false,
-//         'is_private' => false,
-//       ),
-//       'organic_tracking_token' => 'eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjpmYWxzZSwidXVpZCI6IjIwZTU0ODhhZTA2MjRiMDBhYWNjYjc4MDlhNDU2NzQwMTI2MTc0MTY2NTExNjU0NTU2NCIsInNlcnZlcl90b2tlbiI6IjE0NjU0NzgzMTUwMDZ8MTI2MTc0MTY2NTExNjU0NTU2NHwzMzE4ODA2OTQyfDBmNjYyNzUwYTdiZDFmZGQ5ZDhmNTEzYjczZjczZjkxMzdmMzdiNjI5MTRhZjdmNDAzNGMxYWM5ZjJjZWVkNTIifSwic2lnbmF0dXJlIjoiIn0=',
-//       'like_count' => 3529,
-//       'has_liked' => false,
-//       'has_more_comments' => true,
-//       'next_max_id' => 17848061371099354,
-//       'max_num_visible_preview_comments' => 2,
-//       'comments' => 
-//       // array (
-//       //   0 => 
-//       //   array (
-//       //     'status' => 'Active',
-//       //     'user_id' => 13226335,
-//       //     'created_at_utc' => 1464679709,
-//       //     'created_at' => 1464679709,
-//       //     'bit_flags' => 0,
-//       //     'user' => 
-//       //     array (
-//       //       'username' => 'suzannesvanevik',
-//       //       'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s150x150/12145429_927730610635383_1307205056_a.jpg',
-//       //       'full_name' => 'S U Z A N N E  S V A N E V I K',
-//       //       'pk' => 13226335,
-//       //       'is_verified' => false,
-//       //       'is_private' => false,
-//       //     ),
-//       //     'content_type' => 'comment',
-//       //     'text' => '@amalieenilsen @borgevictoria ❤️😘',
-//       //     'media_id' => 1261741665116545564,
-//       //     'pk' => 17847952564099354,
-//       //     'type' => 0,
-//       //   ),
-//       //   1 => 
-//       //   array (
-//       //     'status' => 'Active',
-//       //     'user_id' => 371911901,
-//       //     'created_at_utc' => 1465024175,
-//       //     'created_at' => 1465024175,
-//       //     'bit_flags' => 0,
-//       //     'user' => 
-//       //     array (
-//       //       'username' => 'angelina_stay_fit',
-//       //       'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s150x150/12237317_978292562212302_1381679108_a.jpg',
-//       //       'full_name' => '💪💥 Mrs. ALPHA 🏆 󾓨➕󾓬',
-//       //       'pk' => 371911901,
-//       //       'is_verified' => false,
-//       //       'is_private' => false,
-//       //     ),
-//       //     'content_type' => 'comment',
-//       //     'text' => '💕🙇💪',
-//       //     'media_id' => 1261741665116545564,
-//       //     'pk' => 17848061371099354,
-//       //     'type' => 0,
-//       //   ),
-//       // ),
-//       'comment_count' => 15,
-//       'caption' => 
-// //       array (
-// //         'status' => 'Active',
-// //         'user_id' => 13226335,
-// //         'created_at_utc' => 1464631360,
-// //         'created_at' => 1464631360,
-// //         'bit_flags' => 0,
-// //         'user' => 
-// //         array (
-// //           'username' => 'suzannesvanevik',
-// //           'has_anonymous_profile_picture' => false,
-// //           'is_unpublished' => false,
-// //           'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s150x150/12145429_927730610635383_1307205056_a.jpg',
-// //           'is_favorite' => false,
-// //           'full_name' => 'S U Z A N N E  S V A N E V I K',
-// //           'pk' => 13226335,
-// //           'is_verified' => false,
-// //           'is_private' => false,
-// //         ),
-// //         'content_type' => 'comment',
-// //         'text' => 'What a weekend!! ❤️🎶👫 🇸🇪 🎉 
-// // #summerburst',
-// //         'media_id' => 1261741665116545564,
-// //         'pk' => 17847937411099354,
-// //         'type' => 1,
-// //       ),
-//       'caption_is_edited' => true,
-//       'usertags' => 
-//       array (
-//         'in' => 
+//         'candidates' => 
 //         array (
-//           0 => 
-//           array (
-//             'position' => 
-//             array (
-//               0 => 0.28933333333333328,
-//               1 => 0.52275249722530526,
-//             ),
-//             'user' => 
-//             array (
-//               'username' => 'alexanderhanseen',
-//               'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/11325067_1458641184432380_1125557864_a.jpg',
-//               'full_name' => 'A L E X A N D E R  H A N S E N',
-//               'pk' => 143733623,
-//               'is_verified' => false,
-//               'is_private' => false,
-//             ),
-//           ),
+//           // 0 => 
+//           // array (
+//           //   'url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-15/e35/13298276_1768752153369839_1270137232_n.jpg?se=7&ig_cache_key=MTI2MTc0MTY2NTExNjU0NTU2NA%3D%3D.2',
+//           //   'width' => 1080,
+//           //   'height' => 1298,
+//           // ),
+//           // 1 => 
+//           // array (
+//           //   'url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-15/sh0.08/e35/p750x750/13298276_1768752153369839_1270137232_n.jpg?ig_cache_key=MTI2MTc0MTY2NTExNjU0NTU2NA%3D%3D.2',
+//           //   'width' => 750,
+//           //   'height' => 901,
+        
 //         ),
 //       ),
-//       'photo_of_you' => false,
-//     ),
-//   ),
-//   'more_available' => true,
-//   'next_max_id' => '1234210888711725980_13226335',
-// )
+//       'original_width' => 1080,
+//       'original_height' => 1298,
+//       'location' => 
+//       array (
+//         'external_source' => 'facebook_places',
+//         'city' => '',
+//         'name' => 'Summerburst Ullevi',
+//         'facebook_places_id' => 200473116742411,
+//         'address' => '',
+//         'lat' => 57.703048435429999,
+//         'pk' => 293185059,
+//         'lng' => 11.98996533319,
+//       ),
+      
+//       'lat' => 57.7030484354,
+//       'lng' => 11.989965333200001,
+//       'user' => 
+// //       array (
+// //         'username' => 'suzannesvanevik',
+// //         'has_anonymous_profile_picture' => false,
+// //         'is_unpublished' => false,
+// //         'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s150x150/12145429_927730610635383_1307205056_a.jpg',
+// //         'is_favorite' => false,
+// //         'full_name' => 'S U Z A N N E  S V A N E V I K',
+// //         'pk' => 13226335,
+// //         'is_verified' => false,
+// //         'is_private' => false,
+// //       ),
+// //       'organic_tracking_token' => 'eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjpmYWxzZSwidXVpZCI6IjIwZTU0ODhhZTA2MjRiMDBhYWNjYjc4MDlhNDU2NzQwMTI2MTc0MTY2NTExNjU0NTU2NCIsInNlcnZlcl90b2tlbiI6IjE0NjU0NzgzMTUwMDZ8MTI2MTc0MTY2NTExNjU0NTU2NHwzMzE4ODA2OTQyfDBmNjYyNzUwYTdiZDFmZGQ5ZDhmNTEzYjczZjczZjkxMzdmMzdiNjI5MTRhZjdmNDAzNGMxYWM5ZjJjZWVkNTIifSwic2lnbmF0dXJlIjoiIn0=',
+// //       'like_count' => 3529,
+// //       'has_liked' => false,
+// //       'has_more_comments' => true,
+// //       'next_max_id' => 17848061371099354,
+// //       'max_num_visible_preview_comments' => 2,
+// //       'comments' => 
+// //       // array (
+// //       //   0 => 
+// //       //   array (
+// //       //     'status' => 'Active',
+// //       //     'user_id' => 13226335,
+// //       //     'created_at_utc' => 1464679709,
+// //       //     'created_at' => 1464679709,
+// //       //     'bit_flags' => 0,
+// //       //     'user' => 
+// //       //     array (
+// //       //       'username' => 'suzannesvanevik',
+// //       //       'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s150x150/12145429_927730610635383_1307205056_a.jpg',
+// //       //       'full_name' => 'S U Z A N N E  S V A N E V I K',
+// //       //       'pk' => 13226335,
+// //       //       'is_verified' => false,
+// //       //       'is_private' => false,
+// //       //     ),
+// //       //     'content_type' => 'comment',
+// //       //     'text' => '@amalieenilsen @borgevictoria ❤️😘',
+// //       //     'media_id' => 1261741665116545564,
+// //       //     'pk' => 17847952564099354,
+// //       //     'type' => 0,
+// //       //   ),
+// //       //   1 => 
+// //       //   array (
+// //       //     'status' => 'Active',
+// //       //     'user_id' => 371911901,
+// //       //     'created_at_utc' => 1465024175,
+// //       //     'created_at' => 1465024175,
+// //       //     'bit_flags' => 0,
+// //       //     'user' => 
+// //       //     array (
+// //       //       'username' => 'angelina_stay_fit',
+// //       //       'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s150x150/12237317_978292562212302_1381679108_a.jpg',
+// //       //       'full_name' => '💪💥 Mrs. ALPHA 🏆 󾓨➕󾓬',
+// //       //       'pk' => 371911901,
+// //       //       'is_verified' => false,
+// //       //       'is_private' => false,
+// //       //     ),
+// //       //     'content_type' => 'comment',
+// //       //     'text' => '💕🙇💪',
+// //       //     'media_id' => 1261741665116545564,
+// //       //     'pk' => 17848061371099354,
+// //       //     'type' => 0,
+// //       //   ),
+// //       // ),
+// //       'comment_count' => 15,
+// //       'caption' => 
+// // //       array (
+// // //         'status' => 'Active',
+// // //         'user_id' => 13226335,
+// // //         'created_at_utc' => 1464631360,
+// // //         'created_at' => 1464631360,
+// // //         'bit_flags' => 0,
+// // //         'user' => 
+// // //         array (
+// // //           'username' => 'suzannesvanevik',
+// // //           'has_anonymous_profile_picture' => false,
+// // //           'is_unpublished' => false,
+// // //           'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/s150x150/12145429_927730610635383_1307205056_a.jpg',
+// // //           'is_favorite' => false,
+// // //           'full_name' => 'S U Z A N N E  S V A N E V I K',
+// // //           'pk' => 13226335,
+// // //           'is_verified' => false,
+// // //           'is_private' => false,
+// // //         ),
+// // //         'content_type' => 'comment',
+// // //         'text' => 'What a weekend!! ❤️🎶👫 🇸🇪 🎉 
+// // // #summerburst',
+// // //         'media_id' => 1261741665116545564,
+// // //         'pk' => 17847937411099354,
+// // //         'type' => 1,
+// // //       ),
+// //       'caption_is_edited' => true,
+// //       'usertags' => 
+// //       array (
+// //         'in' => 
+// //         array (
+// //           0 => 
+// //           array (
+// //             'position' => 
+// //             array (
+// //               0 => 0.28933333333333328,
+// //               1 => 0.52275249722530526,
+// //             ),
+// //             'user' => 
+// //             array (
+// //               'username' => 'alexanderhanseen',
+// //               'profile_pic_url' => 'http://scontent-sjc2-1.cdninstagram.com/t51.2885-19/11325067_1458641184432380_1125557864_a.jpg',
+// //               'full_name' => 'A L E X A N D E R  H A N S E N',
+// //               'pk' => 143733623,
+// //               'is_verified' => false,
+// //               'is_private' => false,
+// //             ),
+// //           ),
+// //         ),
+// //       ),
+// //       'photo_of_you' => false,
+// //     ),
+// //   ),
+// //   'more_available' => true,
+// //   'next_max_id' => '1234210888711725980_13226335',
+// // )
 
  
-////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////////////////
+//             //////////////////////////////////////////////////////////////////////
+//             ///////////////////////////////////////////////////////////////////////////
 
 
 
-// $recipients = array("1009845355", "3299015045");
-// if (!is_array($recipients)) {
-//             $recipients = [$recipients];
-//         }
-//         $string = [];
-//         foreach ($recipients as $recipient) {
-//             $string[] = "\"$recipient\"";
-//         }
-//         $recipient_users = implode(',', $string);
+// // $recipients = array("1009845355", "3299015045");
+// // if (!is_array($recipients)) {
+// //             $recipients = [$recipients];
+// //         }
+// //         $string = [];
+// //         foreach ($recipients as $recipient) {
+// //             $string[] = "\"$recipient\"";
+// //         }
+// //         $recipient_users = implode(',', $string);
 
 // echo "[[$recipient_users]]";
 
