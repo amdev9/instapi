@@ -50,7 +50,7 @@ function functofollow($ilink, $usernamelink, $pkuser) {
 }
 
 
-function functocomment($ilink) {
+function functocomment($ilink, $usernamelink) {
 
 
 	try {
@@ -63,7 +63,7 @@ function functocomment($ilink) {
 		  echo $e->getMessage();
 		}		
 
-	if ($GLOBALS["followercount"] > 0) {
+	if ($GLOBALS["followercount"] > 0 && $GLOBALS["redis"]->sismember("comment_sent", $usernamelink) != true) {
 		$influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
 		
  		foreach ($influencers as $influencer) {
@@ -74,30 +74,51 @@ function functocomment($ilink) {
 				$GLOBALS["redis"]->spop("infpost_$influencer");
 			}
 			$GLOBALS["redis"]->sadd("infpost_$influencer",$medcom);
- 			sleep(2);
+ 			sleep(4);
 		}
+
+
 
 	// 	COMMENTS OF influencers
  		try {
  			// $commentText = $redis->spop($key = "comment");  // generate and put to redis
  			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
+ 			
+
  			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
  			$mediatocomment = $GLOBALS["redis"]->spop("infpost_$influencer");
 
- 			$commenttex = ["Спасибо за рекомендацию масочки для лица это просто суперский эффект, заказывала тут \u{1F449} @kupit_blackmask ", "Девочки, хотите иметь молодое лицо с нежной как у младенца кожей и, избавиться от мелких морщинок? Тогда можете попробовать сделать маску для лица Black Mask в домашних условиях. Эффект – потрясающий! Затмевает применение дорогущих косметических средств, заказывала тут  \u{2757} @kupit_blackmask", "Хотела сказать спасибо за рекомендацию масочки для лица Black Mask. После первого же применения маски кожа буквально напиталась влагой! Как только смыла маску, сразу почувствовала свежесть, легкость, как будто каждая пора дышит! И такое стойкое ощущение продержалось несколько часов. После пары-тройки применений кожа приобрела тонус, подтянулась, лицо приобрело такие красивые, четкие очертания. Брала здесь \u{27A1} @kupit_blackmask "];
 
-			   $smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
-     		   $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+ 			$commenttex = $GLOBALS["redis"]->spop("comment_text");
 
-      		   $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
-      		   $messageFinal = "$hiw $smil";
+
+//"Уже лето, а значит маска@__blackmask__ должна быть у каждой. Она на раз-два избавит вас от блеска на лице. Я пользовалась масками разных фирм, но эффект от Black Mask очень впечатлил!"
+
+//"Девочки хотела поделиться опытом! пару недель использования@__blackmask__ и моя кожа преобразилась. Перепробовав множество масок, в поисках подобной, я наконец-то нашла то, что искала! Цвет лица улучшился, поры сузились, кожа стала идеально гладкой и матовой. Маска полностью натуральная, подходит даже для чувствительной кожи, не раздражает и не пересушивает. Берите на заметку!"
+
+//"Видела множество хороших отзывов, но не верила до последнего, что абсолютно натуральное средство@__blackmask__ способно сделать кожу такой идеальной. Всего за неделю использования кожа преобразилась - стала гладкая и нежная, а поры глубоко очищены и ни следа от черных точек"
+
+//"Попробуйте мощное средство для глубокого очищения Вашей кожи@__blackmask__. Активные вещества проникают глубоко в поры кожи, очищая их от грязи и вредных веществ. Эффективно борется с чёрными точками и сальными железами"
+
+//"Я сейчас пользуюсь, советую всем@__blackmask__ . Эта маска нормализует работу сальных желёз, отбеливает и сужает поры, улучшает дренажные функции, а следовательно, препятствует образованию чёрных точек"
+
+//"Новая маска от Helen Gold прекрасно тонизирует, подтягивает, регенерирует, разглаживает морщины, смягчает, увлажняет, выравнивает рельеф кожи. Биологически активные вещества проростков пшеницы, которые входят в состав маски@__blackmask__  делают кожу лица гладкой и упругой, мягкой и бархатистой"			
+
+
+			$smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
+     		$smil = $smiles[mt_rand(0, count($smiles) - 1)];
+
+      		   // $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
+      		$messageFinal = "$commenttex $smil";
 
 
 		    $ilink->comment($mediatocomment, $messageFinal); 
+		    $GLOBALS["redis"]->sadd("comment_sent", $usernamelink);
+
 		    // need pause? may be comment the same person?
 		  
 		    echo "comment sent!---->$influencer-->$messageFinal\n";
-		    sleep(100);
+		     
 
 		} catch (Exception $e) {
 		    echo $e->getMessage();
@@ -113,7 +134,7 @@ function funcrecur($ilink, $usernamelink, $pkuser) {
 	// wow russia influencers
 
    	$followercount = 0;
-	functocomment($ilink);
+	functocomment($ilink, $usernamelink);
 	
 	sleep(60);
 	funcrecur($ilink, $usernamelink, $pkuser);
