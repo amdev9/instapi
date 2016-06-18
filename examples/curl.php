@@ -2,8 +2,9 @@
 
 
 
-// follow block
-function recurs() {
+
+function first() {
+
 
 $a = 0;	
 while ($a < 4) {
@@ -15,22 +16,39 @@ while ($a < 4) {
 	sleep(2);
 }
 
+}
 
-//check if followers are enough and send comments
-$t = 0;
+function second() {
+
+	$t = 0;
 while ($t < 3) {
 	echo $t;
 	$t = $t + 1;
 	sleep(2);
 }
 
+}
+// follow block
+function recurs() {
+
+
+first();
+second();
+//check if followers are enough and send comments
+
  recurs();
 }  
+
+
+
+
 
 // echo __DIR__;
 echo time();
 echo  $volatile_seed = filemtime(__DIR__)."\n\n";
 // recurs();
+
+recurs();
 
 
 

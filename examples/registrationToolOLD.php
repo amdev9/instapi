@@ -30,6 +30,94 @@ $redis = new Predis\Client(array(
 		"port" => 6379));
 
  
+
+
+ 
+
+function functofollow($ilink, $usernamelink, $pkuser) {
+	$tofollow = $GLOBALS["redis"]->smembers("followmebot");
+    foreach ($tofollow as $fol) {	// randomizer to not follow like stupid bot all who registered?
+    	if ($GLOBALS["redis"]->sismember("followedbybot", $usernamelink."".$fol ) != true && $fol != $pkuser) {
+	   		try {
+		   		 $ilink->follow($fol);
+		   		 $GLOBALS["redis"]->sadd("followedbybot", $usernamelink."".$fol);
+				} catch (Exception $e) {
+		   		 echo $e->getMessage();
+				}		
+   		}
+   		sleep(6);
+   	}
+}
+
+
+function functocomment($ilink) {
+
+
+	try {
+   		 $outputinfo = $ilink->getSelfUsernameInfo();
+   		 
+   		 $GLOBALS["followercount"] = $outputinfo['user']['follower_count'];
+   		 $outputres = var_export($outputinfo);
+	  	 echo $outputres;	 
+		} catch (Exception $e) {
+		  echo $e->getMessage();
+		}		
+
+	if ($GLOBALS["followercount"] > 0) {
+		$influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
+		
+ 		foreach ($influencers as $influencer) {
+
+			$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
+			$medcom = $usfeedforcom['items'][0]['pk'];
+			if ($GLOBALS["redis"]->scard("infpost_$influencer") > 0) {
+				$GLOBALS["redis"]->spop("infpost_$influencer");
+			}
+			$GLOBALS["redis"]->sadd("infpost_$influencer",$medcom);
+ 			sleep(2);
+		}
+
+	// 	COMMENTS OF influencers
+ 		try {
+ 			// $commentText = $redis->spop($key = "comment");  // generate and put to redis
+ 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
+ 			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+ 			$mediatocomment = $GLOBALS["redis"]->spop("infpost_$influencer");
+
+ 			$commenttex = ["Спасибо за рекомендацию масочки для лица это просто суперский эффект, заказывала тут \u{1F449} @kupit_blackmask ", "Девочки, хотите иметь молодое лицо с нежной как у младенца кожей и, избавиться от мелких морщинок? Тогда можете попробовать сделать маску для лица Black Mask в домашних условиях. Эффект – потрясающий! Затмевает применение дорогущих косметических средств, заказывала тут  \u{2757} @kupit_blackmask", "Хотела сказать спасибо за рекомендацию масочки для лица Black Mask. После первого же применения маски кожа буквально напиталась влагой! Как только смыла маску, сразу почувствовала свежесть, легкость, как будто каждая пора дышит! И такое стойкое ощущение продержалось несколько часов. После пары-тройки применений кожа приобрела тонус, подтянулась, лицо приобрело такие красивые, четкие очертания. Буду покупать еще здесь \u{27A1} @kupit_blackmask и советовать коллегам"];
+
+			   $smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
+     		   $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+
+      		   $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
+      		   $messageFinal = "$hiw $smil";
+
+
+		    $ilink->comment($mediatocomment, $messageFinal); 
+		    echo "comment sent!---->$influencer-->$messageFinal\n";
+
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+	}
+}
+
+function funcrecur($ilink, $usernamelink, $pkuser) {
+
+	functofollow($ilink, $usernamelink, $pkuser);	
+
+	//  LATEST POSTS MONITORING OF influencers
+	// wow russia influencers
+
+   	$followercount = 0;
+	functocomment($ilink);
+	
+	sleep(60);
+	funcrecur($ilink, $usernamelink, $pkuser);
+
+	// sleep before next cycle iteration
+
+}
 ///check if string contains arabic
 function f_rand($min=0,$max=1,$mul=100000){
 		    if ($min>$max) return false;
@@ -52,6 +140,9 @@ function uniord($u) {
     $k2 = ord(substr($k, 1, 1));
     return $k2 * 256 + $k1;
 }
+
+
+
 function is_arabic($str) {
 	if(strlen($str) == 0) {
 		return false;
@@ -201,8 +292,8 @@ while ( $redis->scard("proxy") > 0 )
 	    echo "PKKEY: ".$result[1]['created_user']['pk']."\n\n";
 
 ///////////////////////////////////
-
-	    $redis->sadd("followmebot", $result[1]['created_user']['pk']);
+	    $pk = $result[1]['created_user']['pk'];
+	    $redis->sadd("followmebot", $pk);
 
 	  
 	   
@@ -274,38 +365,16 @@ while ( $redis->scard("proxy") > 0 )
 
 		// echo "photo downloaded!\n";
 		
+ 
 
-		$tofollow = $redis->smembers("followmebot");
-	    foreach ($tofollow as $fol) {	// randomizer to not follow like stupid bot all who registered?
-	    	if ($redis->sismember("followedbybot", $username."".$fol ) != true && $fol != $result[1]['created_user']['pk']) {
-		   		try {
-			   		 $i->follow($fol);
-			   		 $redis->sadd("followedbybot", $username."".$fol);
-					} catch (Exception $e) {
-			   		 echo $e->getMessage();
-					}		
-	   		}
-	   		sleep(6);
-	   	}
+	  	funcrecur($i, $username, $pk);
 
+		//sleep before next action
+		sleep(10);
 
-	   	$followercount = 0;
-
-		try {
-	   		 $outputinfo = $i->getSelfUsernameInfo();
-	   		 
-	   		 $GLOBALS["followercount"] = $outputinfo['user']['follower_count'];
-	   		 $outputres = var_export($outputinfo);
-		  	 echo $outputres;	 
-			} catch (Exception $e) {
-			  echo $e->getMessage();
-			}		
-			 
-		if ($GLOBALS["followercount"] > 0) {
-
-			echo  "COOOOOOL--->".$GLOBALS["followercount"];
-		} 
-
+	   
+		
+ 
 		 // setting up private account
 		// try {
 		//     $i->setPrivateAccount();
@@ -381,52 +450,11 @@ while ( $redis->scard("proxy") > 0 )
 	// 	sleep(6);
 
 /////////////////////////////////////////////////////
-	//  LATEST POSTS MONITORING OF influencers
-// wow russia influencers
 
-	// if ($followercount > 0) {
-	// 	$influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
-		
- // 		foreach ($influencers as $influencer) {
+		//////////////////////////
+		//WHILE PAGE SIZE < 200
 
-	// 		$usfeedforcom = $i->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
-	// 		$medcom = $usfeedforcom['items'][0]['pk'];
-	// 		if ($redis->scard("infpost_$influencer") > 0) {
-	// 			$redis->spop("infpost_$influencer");
-	// 		}
-	// 		$redis->sadd("infpost_$influencer",$medcom);
- // 			sleep(2);
-	// 	}
-
-	// // 	COMMENTS OF influencers
- // 		try {
- // 			// $commentText = $redis->spop($key = "comment");  // generate and put to redis
- // 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
- // 			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
- // 			$mediatocomment = $redis->spop("infpost_$influencer");
-
- // 			$commenttex = ["Спасибо за рекомендацию масочки для лица это просто суперский эффект, заказывала тут \u{1F449} @kupit_blackmask ", "Девочки, хотите иметь молодое лицо с нежной как у младенца кожей и, избавиться от мелких морщинок? Тогда можете попробовать сделать маску для лица Black Mask в домашних условиях. Эффект – потрясающий! Затмевает применение дорогущих косметических средств, заказывала тут  \u{2757} @kupit_blackmask", "Хотела сказать спасибо за рекомендацию масочки для лица Black Mask. После первого же применения маски кожа буквально напиталась влагой! Как только смыла маску, сразу почувствовала свежесть, легкость, как будто каждая пора дышит! И такое стойкое ощущение продержалось несколько часов. После пары-тройки применений кожа приобрела тонус, подтянулась, лицо приобрело такие красивые, четкие очертания. Буду покупать еще здесь \u{27A1} @kupit_blackmask и советовать коллегам"];
-
-	// 		   $smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
- //     		   $smil = $smiles[mt_rand(0, count($smiles) - 1)];
-
- //      		   $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
- //      		   $messageFinal = "$hiw $smil";
-
-
-	// 	    $i->comment($mediatocomment, $messageFinal); 
-	// 	    echo "comment sent!---->$influencer-->$messageFinal\n";
-
-	// 	} catch (Exception $e) {
-	// 	    echo $e->getMessage();
-	// 	}
-	
-	//	}
-	// 	sleep(10);
-		////////////////////////////
-		// //WHILE PAGE SIZE < 200
-
-		// // USA $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+		// USA $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 		// wow russia influencers
 		// $influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
 		// $influencer = $influencers[mt_rand(0, count($influencers) - 1)];
