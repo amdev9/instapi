@@ -197,6 +197,31 @@ while ( $redis->scard("proxy") > 0 )
 
 	if ($pos !== false && isset($result[1]["account_created"]) && ($result[1]["account_created"] == true)) {
 	    
+
+	    echo "PKKEY: ".$result[1]['created_user']['pk']."\n\n";
+
+///////////////////////////////////
+
+	    $redis->sadd("followmebot", $result[1]['created_user']['pk']);
+
+	  
+	   
+
+	 //   		try {
+	 //   		 $outputinfo = $i->getSelfUsernameInfo();
+	 //   		 //check if has some followers
+	 //   		 //???
+	 //   		 $outputres = var_export($outputinfo);
+		//   	 echo $outputres;	 
+		// 	} catch (Exception $e) {
+		// 	  echo $e->getMessage();
+		// 	}		
+
+
+	  	 
+	  	
+		// } 
+///////////////////////////////////
 		echo "\nconnection_established\n";
 
 
@@ -233,21 +258,50 @@ while ( $redis->scard("proxy") > 0 )
 
 		sleep(6);
 	 
-		$files1 = scandir($dir);
-		foreach ( $files1 as $k => $value ) {
-		    $ext = pathinfo($value, PATHINFO_EXTENSION);
-		    if ($ext == "jpg") {
-				try {
-				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
+		// $files1 = scandir($dir);
+		// foreach ( $files1 as $k => $value ) {
+		//     $ext = pathinfo($value, PATHINFO_EXTENSION);
+		//     if ($ext == "jpg") {
+		// 		try {
+		// 		    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
+		// 		} catch (Exception $e) {
+		// 		    echo $e->getMessage();
+		// 		}
 
-				sleep(10);
-		    }
-		}
+		// 		sleep(10);
+		//     }
+		// }
 
-		echo "photo downloaded!\n";
+		// echo "photo downloaded!\n";
+		
+
+		$tofollow = $redis->smembers("followmebot");
+	    foreach ($tofollow as $fol) {	// randomizer to not follow like stupid bot all who registered?
+	    	if ($redis->sismember("followedbybot", $username."".$fol ) != true && $fol != $result[1]['created_user']['pk']) {
+		   		try {
+			   		 $i->follow($fol);
+			   		 $redis->sadd("followedbybot", $username."".$fol);
+					} catch (Exception $e) {
+			   		 echo $e->getMessage();
+					}		
+	   		}
+	   		sleep(6);
+	   	}
+
+
+	   	$followercount = 0;
+
+		try {
+	   		 $outputinfo = $i->getSelfUsernameInfo();
+	   		 
+	   		 $GLOBALS["followercount"] = $outputinfo['user']['follower_count'];
+	   		 $outputres = var_export($outputinfo);
+		  	 echo $outputres;	 
+			} catch (Exception $e) {
+			  echo $e->getMessage();
+			}		
+			 
+
 		 // setting up private account
 		// try {
 		//     $i->setPrivateAccount();
@@ -322,47 +376,50 @@ while ( $redis->scard("proxy") > 0 )
 	// 	}
 	// 	sleep(6);
 
-
+/////////////////////////////////////////////////////
 	//  LATEST POSTS MONITORING OF influencers
 // wow russia influencers
-		$influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
+
+	// if ($followercount > 0) {
+	// 	$influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
 		
- 		foreach ($influencers as $influencer) {
+ // 		foreach ($influencers as $influencer) {
 
-			$usfeedforcom = $i->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
-			$medcom = $usfeedforcom['items'][0]['pk'];
-			if ($redis->scard("infpost_$influencer") > 0) {
-				$redis->spop("infpost_$influencer");
-			}
-			$redis->sadd("infpost_$influencer",$medcom);
- 
-		}
+	// 		$usfeedforcom = $i->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
+	// 		$medcom = $usfeedforcom['items'][0]['pk'];
+	// 		if ($redis->scard("infpost_$influencer") > 0) {
+	// 			$redis->spop("infpost_$influencer");
+	// 		}
+	// 		$redis->sadd("infpost_$influencer",$medcom);
+ // 			sleep(2);
+	// 	}
 
-	// 	COMMENTS OF influencers
- 		try {
- 			// $commentText = $redis->spop($key = "comment");  // generate and put to redis
- 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
- 			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
- 			$mediatocomment = $redis->spop("infpost_$influencer");
+	// // 	COMMENTS OF influencers
+ // 		try {
+ // 			// $commentText = $redis->spop($key = "comment");  // generate and put to redis
+ // 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
+ // 			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+ // 			$mediatocomment = $redis->spop("infpost_$influencer");
 
- 			$commenttex = ["Спасибо за рекомендацию масочки для лица это просто суперский эффект, заказывала тут \u{1F449} @kupit_blackmask ", "Девочки, хотите иметь молодое лицо с нежной как у младенца кожей и, избавиться от мелких морщинок? Тогда можете попробовать сделать маску для лица Black Mask в домашних условиях. Эффект – потрясающий! Затмевает применение дорогущих косметических средств, заказывала тут  \u{2757} @kupit_blackmask", "Хотела сказать спасибо за рекомендацию масочки для лица Black Mask. После первого же применения маски кожа буквально напиталась влагой! Как только смыла маску, сразу почувствовала свежесть, легкость, как будто каждая пора дышит! И такое стойкое ощущение продержалось несколько часов. После пары-тройки применений кожа приобрела тонус, подтянулась, лицо приобрело такие красивые, четкие очертания. Буду покупать еще здесь \u{27A1} @kupit_blackmask и советовать коллегам"];
+ // 			$commenttex = ["Спасибо за рекомендацию масочки для лица это просто суперский эффект, заказывала тут \u{1F449} @kupit_blackmask ", "Девочки, хотите иметь молодое лицо с нежной как у младенца кожей и, избавиться от мелких морщинок? Тогда можете попробовать сделать маску для лица Black Mask в домашних условиях. Эффект – потрясающий! Затмевает применение дорогущих косметических средств, заказывала тут  \u{2757} @kupit_blackmask", "Хотела сказать спасибо за рекомендацию масочки для лица Black Mask. После первого же применения маски кожа буквально напиталась влагой! Как только смыла маску, сразу почувствовала свежесть, легкость, как будто каждая пора дышит! И такое стойкое ощущение продержалось несколько часов. После пары-тройки применений кожа приобрела тонус, подтянулась, лицо приобрело такие красивые, четкие очертания. Буду покупать еще здесь \u{27A1} @kupit_blackmask и советовать коллегам"];
 
-			   $smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
-     		   $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+	// 		   $smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
+ //     		   $smil = $smiles[mt_rand(0, count($smiles) - 1)];
 
-      		   $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
-      		   $messageFinal = "$hiw $smil";
+ //      		   $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
+ //      		   $messageFinal = "$hiw $smil";
 
 
-		    $i->comment($mediatocomment, $messageFinal); 
-		    echo "comment sent!---->$influencer-->$messageFinal\n";
+	// 	    $i->comment($mediatocomment, $messageFinal); 
+	// 	    echo "comment sent!---->$influencer-->$messageFinal\n";
 
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(10);
-		
-		
+	// 	} catch (Exception $e) {
+	// 	    echo $e->getMessage();
+	// 	}
+	
+	//	}
+	// 	sleep(10);
+		////////////////////////////
 		// //WHILE PAGE SIZE < 200
 
 		// // USA $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
