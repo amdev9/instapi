@@ -3,52 +3,52 @@
 
 
 
-function first() {
+// function first() {
 
 
-$a = 0;	
-while ($a < 4) {
+// $a = 0;	
+// while ($a < 4) {
 
-	echo $a;
+// 	echo $a;
 
-	$a = $a + 1;
-	// echo  $volatile_seed = filemtime(__DIR__)."\n\n";
-	sleep(2);
-}
+// 	$a = $a + 1;
+// 	// echo  $volatile_seed = filemtime(__DIR__)."\n\n";
+// 	sleep(2);
+// }
 
-}
+// }
 
-function second() {
+// function second() {
 
-	$t = 0;
-while ($t < 3) {
-	echo $t;
-	$t = $t + 1;
-	sleep(2);
-}
+// 	$t = 0;
+// while ($t < 3) {
+// 	echo $t;
+// 	$t = $t + 1;
+// 	sleep(2);
+// }
 
-}
-// follow block
-function recurs() {
-
-
-first();
-second();
-//check if followers are enough and send comments
-
- recurs();
-}  
+// }
+// // follow block
+// function recurs() {
 
 
+// first();
+// second();
+// //check if followers are enough and send comments
+
+//  recurs();
+// }  
 
 
 
-// echo __DIR__;
-echo time();
-echo  $volatile_seed = filemtime(__DIR__)."\n\n";
+
+
+// // echo __DIR__;
+// echo time();
+// echo  $volatile_seed = filemtime(__DIR__)."\n\n";
+// // recurs();
+
 // recurs();
-
-recurs();
 
 
 
@@ -370,24 +370,29 @@ recurs();
 // curl_close($ch);      
 
 
-// // $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-// //  require $romerPREDIS.'autoload.php';
+$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+ require $romerPREDIS.'autoload.php';
 
 
-// //         Predis\Autoloader::register();
+        Predis\Autoloader::register();
 
-// //         $redis = new Predis\Client(array(
-// //          "scheme" => "tcp",
-// //          "host" => "127.0.0.1",
-// //          "port" => 6379));
+        $redis = new Predis\Client(array(
+         "scheme" => "tcp",
+         "host" => "127.0.0.1",
+         "port" => 6379));
 
-// //         $med = 'test123';
-// //         $fol = 'fol112';
-// //         $key = 'test';
-// //   $redis->sadd($key, $fol.":".$med);
-// //   $res = $redis->spop($key);
-// //   $resarr = explode(":",$res);
-// //   echo $resarr[0]." ---> ".$resarr[1];
+
+
+
+
+
+  //       $med = 'test123';
+  //       $fol = 'fol112';
+  //       $key = 'test';
+  // $redis->sadd($key, $fol.":".$med);
+  // $res = $redis->spop($key);
+  // $resarr = explode(":",$res);
+  // echo $resarr[0]." ---> ".$resarr[1];
 
 
 

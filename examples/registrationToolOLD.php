@@ -63,9 +63,11 @@ function functocomment($ilink, $usernamelink) {
 		  echo $e->getMessage();
 		}		
 
-	if ($GLOBALS["followercount"] > 0 && $GLOBALS["redis"]->sismember("comment_sent", $usernamelink) != true) {
-		$influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
-		
+
+//$GLOBALS["redis"]->sismember("comment_sent", $usernamelink) != true
+	if ($GLOBALS["followercount"] > 0  && $GLOBALS["redis"]->scard("comment_sent") > 0 ) {
+		$influencers = ["253477742", "240333138", "7061024","22288455","217566587"];
+		// --byzova  , "267685466"
  		foreach ($influencers as $influencer) {
 
 			$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
@@ -74,35 +76,38 @@ function functocomment($ilink, $usernamelink) {
 				$GLOBALS["redis"]->spop("infpost_$influencer");
 			}
 			$GLOBALS["redis"]->sadd("infpost_$influencer",$medcom);
- 			sleep(4);
+ 			sleep(6);
 		}
 
 
-
 	// 	COMMENTS OF influencers
+		 
  		try {
- 			// $commentText = $redis->spop($key = "comment");  // generate and put to redis
- 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
- 			
+ 		 
 
  			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
- 			$mediatocomment = $GLOBALS["redis"]->spop("infpost_$influencer");
+			$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");		 // get  index of comment here
+			$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; // make it RANDOM
+
+ 			if ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex."_".$influencer)!= true )
+ 			{
+ 				sleep(400);
+ 				$mediatocomment = $GLOBALS["redis"]->spop("infpost_$influencer");
+				$commenttex = $GLOBALS["redis"]->hget("comment_text", $commentindex);	// change get from hash by commentindex
+ 			
 
 
- 			$commenttex = $GLOBALS["redis"]->spop("comment_text");
+//"Девчонки, уже лето, а значит маска@__blackmask__ должна быть у каждой. Она на раз-два избавит вас от блеска на лице. Я пользовалась масками разных фирм, но эффект от Black Mask очень впечатлил!"
 
+//+"Девочки хотела поделиться опытом! пару недель использования@__blackmask__ и моя кожа преобразилась. Перепробовав множество масок, в поисках подобной, я наконец-то нашла то, что искала! Цвет лица улучшился, поры сузились, кожа стала идеально гладкой и матовой. Маска полностью натуральная, подходит даже для чувствительной кожи, не раздражает и не пересушивает. Берите на заметку!"
 
-//"Уже лето, а значит маска@__blackmask__ должна быть у каждой. Она на раз-два избавит вас от блеска на лице. Я пользовалась масками разных фирм, но эффект от Black Mask очень впечатлил!"
+//+"Видела множество хороших отзывов, но не верила до последнего, что абсолютно натуральное средство@__blackmask__ способно сделать кожу такой идеальной. Всего за неделю использования кожа преобразилась - стала гладкая и нежная, а поры глубоко очищены и ни следа от черных точек"
 
-//"Девочки хотела поделиться опытом! пару недель использования@__blackmask__ и моя кожа преобразилась. Перепробовав множество масок, в поисках подобной, я наконец-то нашла то, что искала! Цвет лица улучшился, поры сузились, кожа стала идеально гладкой и матовой. Маска полностью натуральная, подходит даже для чувствительной кожи, не раздражает и не пересушивает. Берите на заметку!"
-
-//"Видела множество хороших отзывов, но не верила до последнего, что абсолютно натуральное средство@__blackmask__ способно сделать кожу такой идеальной. Всего за неделю использования кожа преобразилась - стала гладкая и нежная, а поры глубоко очищены и ни следа от черных точек"
-
-//"Попробуйте мощное средство для глубокого очищения Вашей кожи@__blackmask__. Активные вещества проникают глубоко в поры кожи, очищая их от грязи и вредных веществ. Эффективно борется с чёрными точками и сальными железами"
+//+"Попробуйте мощное средство для глубокого очищения Вашей кожи@__blackmask__. Активные вещества проникают глубоко в поры кожи, очищая их от грязи и вредных веществ. Эффективно борется с чёрными точками и сальными железами"
 
 //"Я сейчас пользуюсь, советую всем@__blackmask__ . Эта маска нормализует работу сальных желёз, отбеливает и сужает поры, улучшает дренажные функции, а следовательно, препятствует образованию чёрных точек"
 
-//"Новая маска от Helen Gold прекрасно тонизирует, подтягивает, регенерирует, разглаживает морщины, смягчает, увлажняет, выравнивает рельеф кожи. Биологически активные вещества проростков пшеницы, которые входят в состав маски@__blackmask__  делают кожу лица гладкой и упругой, мягкой и бархатистой"			
+//"Девочки, кто еще не пользуется, новая маска от Helen Gold прекрасно тонизирует, подтягивает, регенерирует, разглаживает морщины, смягчает, увлажняет, выравнивает рельеф кожи. Биологически активные вещества проростков пшеницы, которые входят в состав маски@__blackmask__  делают кожу лица гладкой и упругой, мягкой и бархатистой"			
 
 
 			$smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
@@ -113,13 +118,15 @@ function functocomment($ilink, $usernamelink) {
 
 
 		    $ilink->comment($mediatocomment, $messageFinal); 
-		    $GLOBALS["redis"]->sadd("comment_sent", $usernamelink);
+		    $GLOBALS["redis"]->sadd("comment_sent", $usernamelink."_".$commentindex."_".$influencer);
 
 		    // need pause? may be comment the same person?
 		  
 		    echo "comment sent!---->$influencer-->$messageFinal\n";
-		     
 
+
+			}
+		     
 		} catch (Exception $e) {
 		    echo $e->getMessage();
 		}
@@ -136,7 +143,7 @@ function funcrecur($ilink, $usernamelink, $pkuser) {
    	$followercount = 0;
 	functocomment($ilink, $usernamelink);
 	
-	sleep(60);
+	sleep(10);
 	funcrecur($ilink, $usernamelink, $pkuser);
 
 	// sleep before next cycle iteration
