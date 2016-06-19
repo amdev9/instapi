@@ -82,13 +82,18 @@ function functocomment($ilink, $usernamelink) {
 
 	// 	COMMENTS OF influencers
 		 
+
  		try {
  		 
 
  			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
 			$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");		 // get  index of comment here
 			$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; // make it RANDOM
-
+			while ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex."_".$influencer) == true) {
+				$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+				$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");
+				$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; 
+			}
  			if ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex."_".$influencer)!= true )
  			{
  				sleep(400);
@@ -126,6 +131,8 @@ function functocomment($ilink, $usernamelink) {
 
 
 			}
+
+
 		     
 		} catch (Exception $e) {
 		    echo $e->getMessage();
