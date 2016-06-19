@@ -93,7 +93,7 @@ function functocomment($ilink, $usernamelink) {
  			{
  				sleep(400);
  				$mediatocomment = $GLOBALS["redis"]->spop("infpost_$influencer");
-				$commenttex = $GLOBALS["redis"]->hget("comment_text", $commentindex);	// change get from hash by commentindex
+				$commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);	// change get from hash by commentindex
  			
 
 
