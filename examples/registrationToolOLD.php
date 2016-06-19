@@ -102,7 +102,7 @@ function functocomment($ilink, $usernamelink) {
  			if ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex."_".$influencer)!= true )
  			{
  			
- 				$mediatocomment = $GLOBALS["redis"]->lrange("infpost_$influencer", -1, -1);
+ 				$mediatocomment = $GLOBALS["redis"]->lrange("infpost_$influencer", -1, -1)[0];
 				$commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);	// change get from hash by commentindex
  	
 
@@ -505,7 +505,7 @@ while ( $redis->scard("proxy") > 0 )
 	// 	} catch (Exception $e) {
 	// 	    echo $e->getMessage();
 	// 	}
-	// 	sleep(6);
+	// 	sleep(6);	
 
 /////////////////////////////////////////////////////
 

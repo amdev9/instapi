@@ -381,13 +381,14 @@ $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
          "host" => "127.0.0.1",
          "port" => 6379));
 
+$mediatocomment = $GLOBALS["redis"]->lrange("infpost_240333138", -1, -1);
+echo var_export($mediatocomment);
+// $commentindexkeys = $GLOBALS["redis"]->hkeys("comments");    // get  index of comment here
 
-$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");    // get  index of comment here
 
-
-      $commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; // make it RANDOM
-   echo $commentindex; 
-echo $commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);
+//       $commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; // make it RANDOM
+//    echo $commentindex; 
+// echo $commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);
 
 
 
