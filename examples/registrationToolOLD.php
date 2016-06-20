@@ -660,7 +660,11 @@ while ( $redis->scard("proxy") > 0 )
 		// file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
      	$key = "adultus";
 		while (true) {
-			if (time() >  $next_iteration_time) {
+			$followlike  = $redis->spop($key);   
+		    $resarr = explode(":",$followlike);
+  			$message_recipient = $resarr[0];
+  			if (!is_null($message_recipient)) {
+				if (time() >  $next_iteration_time) {
 				
 			 
 			 
@@ -668,9 +672,11 @@ while ( $redis->scard("proxy") > 0 )
 				
 		    	 $ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
 				
-					$followlike  = $redis->spop($key);   
-				    $resarr = explode(":",$followlike);
-  					$message_recipient = $resarr[0];
+					// $followlike  = $redis->spop($key);   
+				 //    $resarr = explode(":",$followlike);
+  			// 		$message_recipient = $resarr[0];
+
+  						   //check if message_recipient is NULL!!!!!!!!!!!!
   	 
   		// return user ID 
 
@@ -688,7 +694,7 @@ while ( $redis->scard("proxy") > 0 )
 
 				$text = "$hiw $first_name_txt[0] $smi_hi  I am looking for a boyfriend $smil  Please, check this profile @girlshothere  $smi $cur $cur $cur ";
 
-		   
+	
 				try {
 				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
 				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
@@ -712,7 +718,8 @@ while ( $redis->scard("proxy") > 0 )
 
 				$next_iteration_time = timer($delay);
 			
-			}	
+				}	
+			}
 			sleep(2);
 		
 		 }
