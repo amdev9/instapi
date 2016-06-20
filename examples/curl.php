@@ -370,19 +370,41 @@
 // curl_close($ch);      
 
 
-$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
- require $romerPREDIS.'autoload.php';
+// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+//  require $romerPREDIS.'autoload.php';
 
 
-        Predis\Autoloader::register();
+//         Predis\Autoloader::register();
 
-        $redis = new Predis\Client(array(
-         "scheme" => "tcp",
-         "host" => "127.0.0.1",
-         "port" => 6379));
+//         $redis = new Predis\Client(array(
+//          "scheme" => "tcp",
+//          "host" => "127.0.0.1",
+//          "port" => 6379));
 
-$mediatocomment = $GLOBALS["redis"]->lrange("infpost_240333138", -1, -1);
-echo var_export($mediatocomment);
+// $mediatocomment = $GLOBALS["redis"]->lrange("infpost_240333138", -1, -1);
+// echo var_export($mediatocomment);
+
+
+echo sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x'."\n\n", 
+      mt_rand(0, 65535), 
+      mt_rand(0, 65535), 
+      mt_rand(0, 65535), 
+      mt_rand(16384, 20479), 
+      mt_rand(32768, 49151), 
+      mt_rand(0, 65535), 
+      mt_rand(0, 65535), 
+      mt_rand(0, 65535));
+
+$username = 'marie.claire12';
+$password = 'PASS123';
+
+$seed = md5($username.$password);
+ $volatile_seed = filemtime(__DIR__);
+        // $volatile_seed = time();
+ echo substr(md5($seed.$volatile_seed), 16);
+
+
+
 // $commentindexkeys = $GLOBALS["redis"]->hkeys("comments");    // get  index of comment here
 
 

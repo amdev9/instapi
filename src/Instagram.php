@@ -1634,6 +1634,21 @@ class Instagram
         $volatile_seed = filemtime(__DIR__);
         // $volatile_seed = time();
         return 'android-'.substr(md5($seed.$volatile_seed), 16);
+
+
+      //     return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', 
+      // mt_rand(0, 65535), 
+      // mt_rand(0, 65535), 
+      // mt_rand(0, 65535), 
+      // mt_rand(16384, 20479), 
+      // mt_rand(32768, 49151), 
+      // mt_rand(0, 65535), 
+      // mt_rand(0, 65535), 
+      // mt_rand(0, 65535));
+
+
+
+
     }
 
     public function generateUUID($type)

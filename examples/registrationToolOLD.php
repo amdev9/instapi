@@ -405,6 +405,17 @@ while ( $redis->scard("proxy") > 0 )
 		}
 
 		sleep(6);
+
+		try { 
+		    $locationdata = $i->searchLocation("Los Angeles");
+		    $loc = var_export($locationdata);
+		    echo $loc;
+
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		
+
 	 
 		// $files1 = scandir($dir);
 		// foreach ( $files1 as $k => $value ) {
