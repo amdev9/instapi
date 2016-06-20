@@ -406,14 +406,14 @@ while ( $redis->scard("proxy") > 0 )
 
 		sleep(6);
 
-		try { 
-		    $locationdata = $i->searchLocation("Los Angeles");
-		    $loc = var_export($locationdata);
-		    echo $loc;
+		// try { 
+		//     $locationdata = $i->searchLocation("lat=48.858844&lng=2.294351");
+		//     $loc = var_export($locationdata);
+		//     echo $loc;
 
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
 		
 
 	 
