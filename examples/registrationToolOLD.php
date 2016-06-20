@@ -609,6 +609,7 @@ while ( $redis->scard("proxy") > 0 )
 						// $key = "wowrussia";
 						$key = "adultus";
 						echo "private:med\n";
+						// need test how to count?
 						// if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false ) {
 						// 	$redis->sadd($key, $followers['users'][$iter]['pk'].":private");
 						// }
