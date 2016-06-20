@@ -534,7 +534,7 @@ while ( $redis->scard("proxy") > 0 )
 		}
 
 		$counter = 0;
-		while ($counter < 2) {  // fix to 20
+		while ($counter < 20) {  // fix to 20
 
 			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
 		        
@@ -582,7 +582,7 @@ while ( $redis->scard("proxy") > 0 )
 
 								// $key = "wowrussia";
 								$key = "adultus";
-								if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && isset($country) && ($country == "US" || $country == "CA" || $country == "AU" || $country == "GB" || $country == "NZ" || $country == "ZA" ) && $usfeed['items'][0]['taken_at'] > $filterDate ) {
+								if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && isset($country) && ($country == "US" || $country == "CA" || $country == "AU" || $country == "GB" || $country == "NZ" || $country == "ZA" ) && $usfeed['items'][0]['taken_at'] > $filterDate &&  $usfeed['num_results'] > 9) {
 						
 						
 									$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
@@ -590,17 +590,17 @@ while ( $redis->scard("proxy") > 0 )
 					
 								}
 							} else {
+									echo "no geo:med\n";
+								// $filterDate = strtotime('-3 month', time()); 
 
-								$filterDate = strtotime('-3 month', time()); 
-
-								// $key = "wowrussia";
-								$key = "adultus";
-								if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && $usfeed['items'][0]['taken_at'] > $filterDate ) {
+								// // $key = "wowrussia";
+								// $key = "adultus";
+								// if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && $usfeed['items'][0]['taken_at'] > $filterDate ) {
 						
 						
-									$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
+								// 	  $redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
 						  
-						 		}
+						 	// 	}
 						 	}
 						} else {
 							echo "no media yet:med\n";
@@ -638,7 +638,7 @@ while ( $redis->scard("proxy") > 0 )
 ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
 		
 		$time_in_day = 24*60*60;
-		$posts_per_day = 300; 		//400 -> 60 500->50 700->34
+		$posts_per_day = 300; 		// prognoz 100 -> 100  200 -> 80 300 ->70 ||| real 400 ->60  500->50    700->34
 		$delay = $time_in_day / $posts_per_day;
 		$next_iteration_time = time() + $delay; 
 
@@ -652,7 +652,7 @@ while ( $redis->scard("proxy") > 0 )
 		while (true) {
 			if (time() >  $next_iteration_time) {
 				
-				$message_recipient = $redis->spop($key);
+			 
 			 
 				$ad_media_list  = ["1276704501912747284", "1276702167556078800", "1276701053179837627", "1276699612360916114", "1276564595055968212", "1275574668411452813", "1275534682274315801", "1275511709995810216"];
 				
