@@ -544,7 +544,7 @@ while ( $redis->scard("proxy") > 0 )
 		}
 
 		$counter = 0;
-		while ($counter < 20) {  // fix to 20
+		while ($counter < 30) {  // fix to 20
 
 			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
 		        
