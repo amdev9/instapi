@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/root/instapi/';
-$romerPREDIS = '/root/predis/';
-$romerINSTA = '/root/insta/';
+// $romerINSTAPI = '/root/instapi/';
+// $romerPREDIS = '/root/predis/';
+// $romerINSTA = '/root/insta/';
 
-	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -237,6 +237,111 @@ function is_arabic($str) {
 	}
 }
 
+
+
+function funcparse($followers, $i, $redis, $influencer) {
+
+		$counter = 0;
+		while ($counter < 20) {  // fix to 20
+
+			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
+		        
+		        
+		        echo $followers['users'][$iter]['pk'];
+
+				try {
+					if ($followers['users'][$iter]['is_private'] == false) {
+					    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
+
+					    if (isset($usfeed['items'][0]['pk'])) {
+						    $med = $usfeed['items'][0]['pk'];
+						    echo $med.":med\n";// use the same caption
+						    if (isset($usfeed['items'][0]['lat']) && isset($usfeed['items'][0]['lng'])) {
+								$lat = $usfeed['items'][0]['lat'];
+								$long = $usfeed['items'][0]['lng'];
+
+	 							$filterDate = strtotime('-3 month', time()); 
+
+								$data = array('lat'=> $lat,
+					              'lng'=> $long,
+					              'username'=> 'blackkorol'
+					              );
+
+								$params = http_build_query($data);
+
+								$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
+
+								// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+
+								 // create curl resource 
+								$ch = curl_init(); 
+
+								// set url 
+								curl_setopt($ch, CURLOPT_URL, $service_url); 
+
+								//return the transfer as a string 
+								curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+
+								// $output contains the output string 
+								$output = curl_exec($ch); 
+								$js =  json_decode($output);
+								// echo $js->countryCode;
+					 			$country = $js->countryCode;
+
+								// $key = "wowrussia";
+								$key = "adultus";
+								if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && isset($country) && ($country == "US" || $country == "CA" || $country == "AU" || $country == "GB" || $country == "NZ" || $country == "ZA" ) && $usfeed['items'][0]['taken_at'] > $filterDate &&  $usfeed['num_results'] > 9) {
+						
+						
+									$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
+						  
+					
+								}
+							} else {
+									echo "no geo:med\n";
+								// $filterDate = strtotime('-3 month', time()); 
+
+								// // $key = "wowrussia";
+								// $key = "adultus";
+								// if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && $usfeed['items'][0]['taken_at'] > $filterDate ) {
+						
+						
+								// 	  $redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
+						  
+						 	// 	}
+						 	}
+						} else {
+							echo "no media yet:med\n";
+						}
+					} else {
+						// $key = "wowrussia";
+						$key = "adultus";
+						echo "private:med\n";
+						// need test how to count?
+						// if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false ) {
+						// 	$redis->sadd($key, $followers['users'][$iter]['pk'].":private");
+						// }
+					}
+				
+				} catch (Exception $e) {
+					echo $e->getMessage();
+				}
+			}
+					
+			$tmpfollowers = $followers;
+			echo $tmpfollowers['next_max_id'];
+
+			$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
+			try {
+				$followers = $i->getUserFollowers($influencer, $tmpfollowers['next_max_id'] ); 
+			} catch (Exception $e) {
+			    echo $e->getMessage();
+			}
+			 				
+			$counter = $counter + 1;
+			sleep(6);
+		}
+}
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
  
@@ -474,20 +579,20 @@ while ( $redis->scard("proxy") > 0 )
 		// 	 echo $resusfeed;
 		  
 
-		//     echo $usfeed['items'][0]['pk']; //-- put it to redis
+		// //     echo $usfeed['items'][0]['pk']; //-- put it to redis
 
-		// // time created 
-		// 	// echo $usfeed['items'][0]['taken_at'];
-	 // 		// echo date('m/d/Y', $usfeed['items'][0]['taken_at']);
+		// // // time created 
+		// // 	// echo $usfeed['items'][0]['taken_at'];
+	 // // 		// echo date('m/d/Y', $usfeed['items'][0]['taken_at']);
 
-	 // 		// $filterDate = strtotime('-3 month', time()); 
-		// 	// echo date('m/d/Y H:i:s', $newDate)."\n";
+	 // // 		// $filterDate = strtotime('-3 month', time()); 
+		// // 	// echo date('m/d/Y H:i:s', $newDate)."\n";
 			
 		
-		// // location
-		// 	// echo $usfeed['items'][0]['lat'];
+		// // // location
+		// // 	// echo $usfeed['items'][0]['lat'];
 		 
-		// 	// echo lastest post data
+		// // 	// echo lastest post data
 			
 		// } catch (Exception $e) {
 		//     echo $e->getMessage();
@@ -517,10 +622,10 @@ while ( $redis->scard("proxy") > 0 )
 
 /////////////////////////////////////////////////////
 
-		//////////////////////////
+		////////////////////////
 		//WHILE PAGE SIZE < 200
 
-		// USA 
+		//USA 
 		 $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 		// wow russia influencers
 		// $influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
@@ -542,113 +647,13 @@ while ( $redis->scard("proxy") > 0 )
 			    echo $e->getMessage();
 			}
 		}
-
-		$counter = 0;
-		while ($counter < 30) {  // fix to 20
-
-			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
-		        
-		        
-		        echo $followers['users'][$iter]['pk'];
-
-				try {
-					if ($followers['users'][$iter]['is_private'] == false) {
-					    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
-
-					    if (isset($usfeed['items'][0]['pk'])) {
-						    $med = $usfeed['items'][0]['pk'];
-						    echo $med.":med\n";// use the same caption
-						    if (isset($usfeed['items'][0]['lat']) && isset($usfeed['items'][0]['lng'])) {
-								$lat = $usfeed['items'][0]['lat'];
-								$long = $usfeed['items'][0]['lng'];
-
-	 							$filterDate = strtotime('-3 month', time()); 
-
-								$data = array('lat'=> $lat,
-					              'lng'=> $long,
-					              'username'=> 'blackkorol'
-					              );
-
-								$params = http_build_query($data);
-
-								$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
-
-								// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
-
-								 // create curl resource 
-								$ch = curl_init(); 
-
-								// set url 
-								curl_setopt($ch, CURLOPT_URL, $service_url); 
-
-								//return the transfer as a string 
-								curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-
-								// $output contains the output string 
-								$output = curl_exec($ch); 
-								$js =  json_decode($output);
-								// echo $js->countryCode;
-					 			$country = $js->countryCode;
-
-								// $key = "wowrussia";
-								$key = "adultus";
-								if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && isset($country) && ($country == "US" || $country == "CA" || $country == "AU" || $country == "GB" || $country == "NZ" || $country == "ZA" ) && $usfeed['items'][0]['taken_at'] > $filterDate &&  $usfeed['num_results'] > 9) {
-						
-						
-									$redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
-						  
-					
-								}
-							} else {
-									echo "no geo:med\n";
-								// $filterDate = strtotime('-3 month', time()); 
-
-								// // $key = "wowrussia";
-								// $key = "adultus";
-								// if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && $usfeed['items'][0]['taken_at'] > $filterDate ) {
-						
-						
-								// 	  $redis->sadd($key, $followers['users'][$iter]['pk'].":".$med);
-						  
-						 	// 	}
-						 	}
-						} else {
-							echo "no media yet:med\n";
-						}
-					} else {
-						// $key = "wowrussia";
-						$key = "adultus";
-						echo "private:med\n";
-						// need test how to count?
-						// if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false ) {
-						// 	$redis->sadd($key, $followers['users'][$iter]['pk'].":private");
-						// }
-					}
-				
-				} catch (Exception $e) {
-					echo $e->getMessage();
-				}
-			}
-					
-			$tmpfollowers = $followers;
-			echo $tmpfollowers['next_max_id'];
-
-			$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
-			try {
-				$followers = $i->getUserFollowers($influencer, $tmpfollowers['next_max_id'] ); 
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
-			 				
-			$counter = $counter + 1;
-			sleep(6);
-		}
+		funcparse($followers, $i, $redis, $influencer);
 
 		
 ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
 		
 		$time_in_day = 24*60*60;
-		$posts_per_day = 300; 		// prognoz 100 -> 100  200 -> 80 300 ->70 ||| real 400 ->60  500->50    700->34
+		$posts_per_day = 300; 		//    400 ->60  500->50    700->34
 		$delay = $time_in_day / $posts_per_day;
 		$next_iteration_time = time() + $delay; 
 
@@ -668,7 +673,7 @@ while ( $redis->scard("proxy") > 0 )
 				
 			 
 			 
-				$ad_media_list  = ["1276704501912747284", "1276702167556078800", "1276701053179837627", "1276699612360916114", "1276564595055968212", "1275574668411452813", "1275534682274315801", "1275511709995810216"];
+	$ad_media_list  = ["1277470816705363477", "1277466307392355679", "1277436633060654628", "1277425043150126380", "1277422432296549618", "1276704501912747284", "1276702167556078800", "1276701053179837627", "1276700215979981984", "1276699612360916114"];
 				
 		    	 $ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
 				
@@ -682,7 +687,7 @@ while ( $redis->scard("proxy") > 0 )
 
 				$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
 				$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
-				$smiles =  ["\u{1F609}", "\u{1F60C}", "\u{1F46B}" ];	
+				 $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
 				$cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
 			    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
 			    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
@@ -692,9 +697,9 @@ while ( $redis->scard("proxy") > 0 )
 				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
 		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-				$text = "$hiw $first_name_txt[0] $smi_hi  I am looking for a boyfriend $smil  Please, check this profile @girlshothere  $smi $cur $cur $cur ";
+				$text = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil  I'm online here @girlshothere                @girlshothere                @girlshothere $smi $cur $cur $cur";
 
-	
+              
 				try {
 				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
 				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
@@ -719,6 +724,8 @@ while ( $redis->scard("proxy") > 0 )
 				$next_iteration_time = timer($delay);
 			
 				}	
+			} else {
+				funcparse($followers, $i, $redis, $influencer);
 			}
 			sleep(2);
 		
