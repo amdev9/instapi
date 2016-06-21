@@ -496,6 +496,7 @@ while ( $redis->scard("proxy") > 0 )
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
 
      	$redis->sadd("registered", $registered);
+     	$redis->sadd("blacklist_email",  $email);
      	$redis->sadd("black_proxy",  $proxy);
 
 
@@ -647,7 +648,7 @@ while ( $redis->scard("proxy") > 0 )
 			    echo $e->getMessage();
 			}
 		}
-		funcparse($followers, $i, $redis, $influencer);
+	    funcparse($followers, $i, $redis, $influencer);
 
 		
 ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
