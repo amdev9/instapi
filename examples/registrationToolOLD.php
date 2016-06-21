@@ -480,7 +480,7 @@ while ( $redis->scard("proxy") > 0 )
 		echo "\n\n PROX ---------->".$prox. "\n\n";
 		$GLOBALS["proxy"] = $prox;		 
 		// echo "\n _proxy_------>".$proxy."\n";
-		$debug = false; // FOR VPS  
+		$debug = false; // false FOR VPS  
 
 
 		$i = new Instagram($username, $password, $proxy, $debug);
@@ -665,21 +665,22 @@ while ( $redis->scard("proxy") > 0 )
 		// file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
      	$key = "adultus";
 		while (true) {
-			$followlike  = $redis->spop($key);   
-		    $resarr = explode(":",$followlike);
-  			$message_recipient = $resarr[0];
-  			if (!is_null($message_recipient)) {
+				 if ($redis->scard($key) == 0)
+				{
+				 funcparse($followers, $i, $redis, $influencer);
+				}	
+  			
 				if (time() >  $next_iteration_time) {
-				
+
 			 
 			 
 	$ad_media_list  = ["1277470816705363477", "1277466307392355679", "1277436633060654628", "1277425043150126380", "1277422432296549618", "1276704501912747284", "1276702167556078800", "1276701053179837627", "1276700215979981984", "1276699612360916114"];
 				
-		    	 $ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
+		    	$ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
 				
-					// $followlike  = $redis->spop($key);   
-				 //    $resarr = explode(":",$followlike);
-  			// 		$message_recipient = $resarr[0];
+				$followlike  = $redis->spop($key);   
+			    $resarr = explode(":",$followlike);
+				$message_recipient = $resarr[0];
 
   						   //check if message_recipient is NULL!!!!!!!!!!!!
   	 
@@ -724,9 +725,8 @@ while ( $redis->scard("proxy") > 0 )
 				$next_iteration_time = timer($delay);
 			
 				}	
-			} else {
-				funcparse($followers, $i, $redis, $influencer);
-			}
+			 
+
 			sleep(2);
 		
 		 }
