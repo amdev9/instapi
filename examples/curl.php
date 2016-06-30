@@ -385,7 +385,55 @@
 // echo var_export($mediatocomment);
 
 
-echo sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x'."\n\n", 
+// echo sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x'."\n\n", 
+//       mt_rand(0, 65535), 
+//       mt_rand(0, 65535), 
+//       mt_rand(0, 65535), 
+//       mt_rand(16384, 20479), 
+//       mt_rand(32768, 49151), 
+//       mt_rand(0, 65535), 
+//       mt_rand(0, 65535), 
+//       mt_rand(0, 65535));
+
+
+
+ 
+
+
+
+// echo "API registration:\n";
+// echo "device id:";
+
+// echo 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)]."\n";
+
+
+
+
+// echo "API login:\n";
+
+// $username = 'marie.claire12';
+// $password = 'PASS123';
+
+// echo "device id:";
+
+
+// $seed = md5($username.$password);
+//  $volatile_seed = filemtime(__DIR__);
+//         // $volatile_seed = time();
+//  echo 'android-'.substr(md5($seed.$volatile_seed), 16);
+
+
+
+// echo "\nAPI useragent:\n".'Instagram 8.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
+
+// echo "\n***script device id:\n";
+ 
+
+
+echo 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)]."\n";
+
+
+$guid = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', 
       mt_rand(0, 65535), 
       mt_rand(0, 65535), 
       mt_rand(0, 65535), 
@@ -395,30 +443,114 @@ echo sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x'."\n\n",
       mt_rand(0, 65535), 
       mt_rand(0, 65535));
 
-$username = 'marie.claire12';
-$password = 'PASS123';
+$device_id = "android-".$guid;
 
-$seed = md5($username.$password);
- $volatile_seed = filemtime(__DIR__);
-        // $volatile_seed = time();
- echo substr(md5($seed.$volatile_seed), 16);
+echo $device_id ;
 
 
 
 
-        $smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
-        $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
-        $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
-        $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
-          $cur = $cursors[mt_rand(0, count($cursors) - 1)];
-          $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
-          $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
-          $smil = $smiles[mt_rand(0, count($smiles) - 1)];
-        $first_name_txt = explode(" ",$first_name);
-        $hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
-        $hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+// function GenerateUserAgent() {  
+//   $resolutions = ['720x1280', '320x480', '480x800', '1024x768', '1280x720', '768x1024', '480x320'];
+//   $versions = ['GT-N7000', 'SM-N9000', 'GT-I9220', 'GT-I9100'];
+//   $dpis = [ '320', '240'];
 
-       echo $text = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil  I'm online here @girlshothere                @girlshothere                @girlshothere    $smi $cur $cur $cur";
+//   $ver = $versions[array_rand($versions)];
+//   $dpi = $dpis[array_rand($dpis)];
+//   $res = $resolutions[array_rand($resolutions)];
+  
+//   return 'Instagram 8.2.0'.' Android ('.'18/4.3'.'; '.$dpi.'dpi; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
+// }
+
+// echo "\n\n".$agent = GenerateUserAgent();
+
+// $uuid = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+//       mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+//       mt_rand(0, 0xffff),
+//       mt_rand(0, 0x0fff) | 0x4000,
+//       mt_rand(0, 0x3fff) | 0x8000,
+//       mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+//     );
+
+// echo 'UUID:'.$uuid;
+
+ 
+
+
+
+
+
+
+// echo urlencode('New York')."\n\n\n";
+
+
+// $a =  'Another account is using aaaaaaaaaaaaaaaaaaaaaaaaaaa.aaa@gmail.com.';
+// // check if 
+// if (strpos($a, 'Another account is using') !== false) {
+//     echo 'contains!';
+// }
+
+
+
+// array (
+//   'has_more' => true,
+//   'items' => 
+//   array (
+//     0 => 
+//     array (
+//       'media_bundles' => 
+//       array (
+//       ),
+//       'subtitle' => '',
+//       'location' => 
+//       array (
+//         'external_source' => 'facebook_places',
+//         'city' => '',
+//         'name' => 'New York, New York',
+//         'facebook_places_id' => 108424279189115,
+//         'address' => '',
+//         'lat' => 40.714199999999998,
+//         'pk' => 212988663,
+//         'lng' => -74.006399999999999,
+//       ),
+//       'title' => 'New York, New York',
+//     ),
+//     1 => 
+//     array (
+//       'media_bundles' => 
+//       array (
+//       ),
+//       'subtitle' => 'New York, NY',
+//       'location' => 
+//       array (
+//         'external_source' => 'facebook_places',
+//         'city' => 'New York, NY',
+//         'name' => 'New York University',
+//         'facebook_places_id' => 103256838688,
+//         'address' => '',
+//         'lat' => 40.729796595308997,
+//         'pk' => 6768,
+//         'lng' => -73.996120570667003,
+//       ),
+//       'title' => 'New York University',
+//     ),
+//     2 => 
+
+
+
+       //  $smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
+       //  $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+       //  $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
+       //  $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+       //    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+       //    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+       //    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+       //    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+       //  $first_name_txt = explode(" ",$first_name);
+       //  $hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+       //  $hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+
+       // echo $text = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil  I'm online here @girlshothere                @girlshothere                @girlshothere    $smi $cur $cur $cur";
 
 
 

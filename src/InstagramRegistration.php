@@ -10,12 +10,17 @@ class InstagramRegistration
     protected $username;
     protected $uuid;
     protected $proxy;
+    protected $token;
+    protected $UA;
+
 
     public function __construct($proxy, $debug = false, $IGDataPath = null)
     {
         $this->proxy = $proxy;
         $this->debug = $debug;
         $this->uuid = $this->generateUUID(true);
+        $this->UA = $this->GenerateUserAgent();
+
         if (!is_null($IGDataPath)) {
             $this->IGDataPath = $IGDataPath;
         } else {
@@ -31,15 +36,46 @@ class InstagramRegistration
    * @return array
    *   Username availability data
    */
+
+
+  public function checkEmail($email)
+  {
+    
+      $data = json_encode([
+          '_uuid'      => $this->uuid,
+          'email'   => $email,
+          '_csrftoken' => $this->token, //before 'missing',
+      ]);
+
+      return  $this->request('users/check_email/', $this->generateSignature($data))[1];    
+  }
+
   public function checkUsername($username)
   {
+    
       $data = json_encode([
           '_uuid'      => $this->uuid,
           'username'   => $username,
-          '_csrftoken' => 'missing',
+          '_csrftoken' => $this->token, //before 'missing',
       ]);
 
-      return $this->request('users/check_username/', $this->generateSignature($data))[1];
+       return  $this->request('users/check_username/', $this->generateSignature($data))[1];
+        
+  }
+
+
+  public function fetchHeaders()
+  {
+
+    //   return  $this->request('si/fetch_headers/?challenge_type=signup&guid='.$this->generateUUID(false), null);
+    // return  $this->request('si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null);
+    $outputs = $this->request('si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null);
+    preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
+   $this->token = $matcht[1];
+      
+    return $outputs;
+    
+
   }
 
   /**
@@ -52,18 +88,20 @@ class InstagramRegistration
    * @return array
    *   Registration data
    */
-  public function createAccount($username, $password, $email)
+  public function createAccount($username, $password, $email, $qs_stamp)
   {
       $data = json_encode([
           'phone_id'           => $this->uuid,
-          '_csrftoken'         => 'missing',
+          '_csrftoken'         => $this->token, //'missing', //
           'username'           => $username,
           'first_name'         => '',
           'guid'               => $this->uuid,
-          'device_id'          => 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)],
+          // 'device_id'          => 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)],  //worked but too many already registered
+          'device_id'          => 'android-'.$this->generateUUID(true), //need test
+          // 'device_id'          => 'android-'.$this->uuid,
           'email'              => $email,
           'force_sign_up_code' => '',
-          'qs_stamp'           => '',
+          'qs_stamp'           => $qs_stamp, //before ''
           'password'           => $password,
       ]);
 
@@ -88,8 +126,25 @@ class InstagramRegistration
         return 'ig_sig_key_version='.Constants::SIG_KEY_VERSION.'&signed_body='.$hash.'.'.urlencode($data);
     }
 
+
+    public function GenerateUserAgent() {  
+          $resolutions = ['720x1280', '320x480', '480x800', '1024x768', '1280x720', '768x1024', '480x320'];
+          $versions = ['GT-N7000', 'SM-N9000', 'GT-I9220', 'GT-I9100'];
+          $dpis = ['120', '160', '320', '240'];
+           
+          $ver = $versions[array_rand($versions)];
+          $dpi = $dpis[array_rand($dpis)];
+          $res = $resolutions[array_rand($resolutions)];
+          
+          // return 'Instagram 4.'.mt_rand(1,2).'.'.mt_rand(0,2).' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
+
+          return 'Instagram 8.2.0'.' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
+        }
+
+
     public function generateUUID($type)
     {
+
         $uuid = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
       mt_rand(0, 0xffff), mt_rand(0, 0xffff),
       mt_rand(0, 0xffff),
@@ -98,15 +153,28 @@ class InstagramRegistration
       mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
     );
 
+      // //need test
+      //    $uuid =  sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', 
+      // mt_rand(0, 65535), 
+      // mt_rand(0, 65535), 
+      // mt_rand(0, 65535), 
+      // mt_rand(16384, 20479), 
+      // mt_rand(32768, 49151), 
+      // mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+  
+
         return $type ? $uuid : str_replace('-', '', $uuid);
     }
 
     public function request($endpoint, $post = null)
     {
+
+        
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
-        curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA ); // Constants::USER_AGENT);
+      
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
          curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);

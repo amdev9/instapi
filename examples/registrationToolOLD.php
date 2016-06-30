@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/root/instapi/'; // FOR VPS
-$romerPREDIS = '/root/predis/';
-$romerINSTA = '/root/insta/';
+// $romerINSTAPI = '/root/instapi/'; // FOR VPS
+// $romerPREDIS = '/root/predis/';
+// $romerINSTA = '/root/insta/';
 
-	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -28,10 +28,6 @@ $redis = new Predis\Client(array(
 		"host" => "127.0.0.1",
 		"port" => 6379));
 
- 
-
-
- 
 
 function functofollow($ilink, $usernamelink, $pkuser) {
 	$tofollow = $GLOBALS["redis"]->smembers("followmebot");
@@ -90,48 +86,23 @@ function functocomment($ilink, $usernamelink) {
  		 
 
  			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+
+
 			$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");		 // get  index of comment here
 			$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; // make it RANDOM
-			while ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex."_".$influencer) == true) {
+
+			while ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex) == true) {
+				//."_".$influencer
 				$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
 				$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");
 				$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; 
 			}
- 			if ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex."_".$influencer)!= true )
+ 			if ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex)!= true )
  			{
- 			
+ 				//."_".$influencer
  				$mediatocomment = $GLOBALS["redis"]->lrange("infpost_$influencer", -1, -1)[0];
 				$commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);	// change get from hash by commentindex
  	
-
-
-
-//  		"А я уже третий раз заказываю эту маску@__blackmask__, ведь не врут , когда говорят о её чудо-действии! Я пользовалась масками разных фирм, но эффект от Black Mask очень впечатлил"
-
-// "Новая маска от Helen Gold прекрасно тонизирует, подтягивает, регенерирует, разглаживает морщины, смягчает, увлажняет, выравнивает рельеф кожи @__blackmask__ способно сделать кожу такой идеальной"
-
-
-//+"Девчонки, я уже третий раз заказываю эту маску@__blackmask__ ! Ведь не врут , когда говорят о её чудо-действии! В первую очередь хочу отметить её состав - белая глина , дрожжевой комплекс и витамин Е- полностью натуральная"
-
-
-//+"Девочки, решила попробовать этот скраб@__blackmask__ год назад, увидев заманчивую акцию) весь инстаграм пестрил записями о нем и о его чудодействии) не сильно верилось, но попробовать решила) После первого же применения я влюбилась в этот продукт!"
-
-
-//+"Думаю, уже многие слышали об этом скрабе и всех продуктах Helen Gold. Вот и я решила вставить свои 5 копеек Очень люблю уходовую косметику, не спец конечно, но перепробовала многое. В итоге останавилась на@__blackmask__. Всем советую!" 
-
-
-//+"Девчонки, уже лето, а значит маска@__blackmask__ должна быть у каждой. Она на раз-два избавит вас от блеска на лице. Я пользовалась масками разных фирм, но эффект от Black Mask очень впечатлил!"
-
-//+"Девочки хотела поделиться опытом! пару недель использования@__blackmask__ и моя кожа преобразилась. Перепробовав множество масок, в поисках подобной, я наконец-то нашла то, что искала! Цвет лица улучшился, поры сузились, кожа стала идеально гладкой и матовой. Маска полностью натуральная, подходит даже для чувствительной кожи, не раздражает и не пересушивает. Берите на заметку!"
-
-//+"Видела множество хороших отзывов, но не верила до последнего, что абсолютно натуральное средство@__blackmask__ способно сделать кожу такой идеальной. Всего за неделю использования кожа преобразилась - стала гладкая и нежная, а поры глубоко очищены и ни следа от черных точек"
-
-//+"Попробуйте мощное средство для глубокого очищения Вашей кожи@__blackmask__. Активные вещества проникают глубоко в поры кожи, очищая их от грязи и вредных веществ. Эффективно борется с чёрными точками и сальными железами"
-
-//+"Я сейчас пользуюсь, советую всем@__blackmask__ . Эта маска нормализует работу сальных желёз, отбеливает и сужает поры, улучшает дренажные функции, а следовательно, препятствует образованию чёрных точек"
-
-//+"Девочки, кто еще не пользуется, новая маска от Helen Gold прекрасно тонизирует, подтягивает, регенерирует, разглаживает морщины, смягчает, увлажняет, выравнивает рельеф кожи. Биологически активные вещества проростков пшеницы, которые входят в состав маски@__blackmask__  делают кожу лица гладкой и упругой, мягкой и бархатистой"			
-
 
 			$smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
      		$smil = $smiles[mt_rand(0, count($smiles) - 1)];
@@ -141,17 +112,25 @@ function functocomment($ilink, $usernamelink) {
 
 
 		    $ilink->comment($mediatocomment, $messageFinal); 
-		    $GLOBALS["redis"]->sadd("comment_sent", $usernamelink."_".$commentindex."_".$influencer);
+
+
+
+		    if ($link['status']== "ok") { 
+		    	$GLOBALS["redis"]->sadd("comment_sent", $usernamelink."_".$commentindex);//."_".$influencer
+			}
+			else 
+			{
+				$GLOBALS["redis"]->sadd("comment_fail", $usernamelink."_".$commentindex);//."_".$influencer
+			}
 
 		    // need pause? may be comment the same person?
 		  
 		    echo "comment sent!---->$influencer-->$messageFinal\n";
-		    	sleep(400);
-
+		     	sleep(14400);  
+		    	
 			}
 
-
-		     
+			// add status
 		} catch (Exception $e) {
 		    echo $e->getMessage();
 		}
@@ -396,6 +375,7 @@ $proxy = "";
 $username = "";
 $first_name = "";
 
+$qs_stamp = "";
 
 // $p = 0; 
 
@@ -414,38 +394,59 @@ while ( $redis->scard("proxy") > 0 )
 
 	$r = new InstagramRegistration($prox, $debug);
 	 
-	
-	// $ii = 0; 
-	// while ($ii < count($lines)){
+	$outputs = $r->fetchHeaders();
+	 
+
+	 if ($outputs[1]['status'] == 'ok') {
+		$iterations =   $outputs[1]['iterations'];
+		$size = $outputs[1]['size']; 
+		$edges= $outputs[1]['edges'];
+		$shift = $outputs[1]['shift']; 
+		$header = $outputs[1]['header'];
+
+		exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		echo $qsstamper[0];	
+		$GLOBALS["qs_stamp"] = $qsstamper[0];
+		 
+	}	
+      
+       $check = $r->checkEmail($email);
+ 
+       if ($check['available'] == false) {
+	    	$redis->sadd("blacklist_email",  $email);
+	        break;
+	    }     
+
 
     while ( $redis->scard("names") > 0 ) {  
     	$pieces = explode(" ",  $redis->spop("names"));
-        $check = $r->checkUsername($pieces[0]);
-	 //    $pieces = explode(" ", $lines[$ii]);
-		// $check = $r->checkUsername($pieces[0]);
+        $check = $r->checkUsername($pieces[0] );
+	  
 	    if ($check['available'] == true) {
 	    	$GLOBALS["username"] = $pieces[0];
 	    	$GLOBALS["first_name"] = $pieces[1]." ".$pieces[2];
-	    	// $outar = array_slice($lines, $ii+1);
-	    	// $GLOBALS["lines"] = $outar;
-	    	// file_put_contents($romerINSTA."email_proxy/login_names", "");
-	    	// file_put_contents($romerINSTA."email_proxy/login_names", implode("\n",$outar));
-	    	
+
 	        break;
 	    }     
-	    // $ii  = $ii + 1;
 	    sleep(3);
 	} 
 	 
-
-	$result = $r->createAccount($username, $password, $email);
+	
+	// echo "OUTPUTS--->";
+ 
+	
+	$result = $r->createAccount($username, $password, $email, $qs_stamp );
 
 	$resToPrint =  var_export($result);
 	echo $resToPrint;
 	$findme = 'HTTP/1.1 200 OK';
 	$pos = strpos($result[0], $findme);
-
-
+ 
+	  if (isset($result[1]['errors']) &&  isset($result[1]['errors']['email'][0]) && strpos($result[1]['errors']['email'][0], 'Another account is using') !== false) {
+    	echo 'Another account is using email: $email';
+    	$redis->sadd("blacklist_email",  $email);
+    	break;
+	}
 
 	if ($pos !== false && isset($result[1]["account_created"]) && ($result[1]["account_created"] == true)) {
 	    
@@ -480,7 +481,7 @@ while ( $redis->scard("proxy") > 0 )
 		echo "\n\n PROX ---------->".$prox. "\n\n";
 		$GLOBALS["proxy"] = $prox;		 
 		// echo "\n _proxy_------>".$proxy."\n";
-		$debug = false; // false FOR VPS  
+		$debug = true; // false FOR VPS  
 
 
 		$i = new Instagram($username, $password, $proxy, $debug);
@@ -500,7 +501,6 @@ while ( $redis->scard("proxy") > 0 )
      	$redis->sadd("black_proxy",  $proxy);
 
 
-
 		//edit profile
 		try { 
 
@@ -511,15 +511,37 @@ while ( $redis->scard("proxy") > 0 )
 
 		sleep(6);
 
+		// PARSE PK BY LOCATION
 		// try { 
-		//     $locationdata = $i->searchLocation("lat=48.858844&lng=2.294351");
-		//     $loc = var_export($locationdata);
-		//     echo $loc;
 
+		// 	// https://www.facebook.com/places/ 
+		//     $locationdata = $i->searchLocation(urlencode('New York')); // New%20York  New+York - test
+		//     // $locationdata['items'][0..94]
+		//     //	has_more = true
+
+		//     $loc = var_export($locationdata);
+		//     echo $loc."\n\n";
+
+
+
+		// 	// $next_max_id = 'J0HV2ui3AAAAF0HV2uaQgAAAFmYA';
+		//      $getl = $i->getLocationFeed( $locationdata['items'][0]['location']['pk']);
+		//      	// , $next_max_id );
+		//      echo $getl['ranked_items'][0]['user']['pk']."<----user\n";//['ranked_items']
+		//      $lc = var_export($getl);
+		//      echo $lc;
+
+		//      if ($getl['more_available'] ==true) {
+		//      	$next_next_max_id = $getl['next_max_id'];
+		//      	echo $next_next_max_id."<---next_max_id\n";
+		//      	 $getnewl = $i->getLocationFeed( $locationdata['items'][0]['location']['pk'], $next_next_max_id);
+ 	// 			echo $getnewl['items'][0]['user']['pk']."<----user\n";
+
+		//      }
 		// } catch (Exception $e) {
 		//     echo $e->getMessage();
 		// }
-		
+		//  sleep(6);
 
 	 
 		// $files1 = scandir($dir);
@@ -538,23 +560,23 @@ while ( $redis->scard("proxy") > 0 )
 
 		// echo "photo downloaded!\n";
 		
- 
+ //////////// //////////// //////////// //////////// //////////// //////////// ////////////
 
-	  	// funcrecur($i, $username, $pk);
+	  	// funcrecur($i, $username, $pk); ///-------------<--------
+
+ ////////////  //////////// //////////// //////////// //////////// ////////////
 
 		//sleep before next action
 		// sleep(10);
 
-	   
-		
- 
+	    
 		 // setting up private account
-		try {
-		    $i->setPrivateAccount();
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		 sleep(6);
+		// try {
+		//     $i->setPrivateAccount();
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		//  sleep(6);
 		
 
 		 
@@ -623,114 +645,130 @@ while ( $redis->scard("proxy") > 0 )
 
 /////////////////////////////////////////////////////
 
-		////////////////////////
-		//WHILE PAGE SIZE < 200
+// 		////////////////////////
+// 		//WHILE PAGE SIZE < 200
 
-		//USA 
-		 $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
-		// wow russia influencers
-		// $influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
-		$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+// 		//USA 
+// 		 $influencers = ["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+// // 		// wow russia influencers
+// // 		// $influencers = ["253477742", "240333138", "7061024","22288455","217566587", "267685466"];
+// 		$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
 
-		$red = $redis->lrange("$influencer:max_id", -1, -1); 
+// 		$red = $redis->lrange("$influencer:max_id", -1, -1); 
 
-		if(empty ($red)) {
-			try {
-				 $followers = $i->getUserFollowers($influencer, $maxid = null);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
+// 		if(empty ($red)) {
+// 			try {
+// 				 $followers = $i->getUserFollowers($influencer, $maxid = null);
+// 			} catch (Exception $e) {
+// 			    echo $e->getMessage();
+// 			}
 
-		} else {
-			try {
-				 $followers = $i->getUserFollowers($influencer, $red[0]);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
-		}
-	    funcparse($followers, $i, $redis, $influencer);
-
-		
-///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
-		
-		$time_in_day = 24*60*60;
-		$posts_per_day = 300; 		//    400 ->60  500->50    700->34
-		$delay = $time_in_day / $posts_per_day;
-		$next_iteration_time = time() + $delay; 
+// 		} else {
+// 			try {
+// 				 $followers = $i->getUserFollowers($influencer, $red[0]);
+// 			} catch (Exception $e) {
+// 			    echo $e->getMessage();
+// 			}
+// 		}
+// 	    funcparse($followers, $i, $redis, $influencer);
 
 		
+// // ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
+		
+// 		$time_in_day = 24*60*60;
+// 		$posts_per_day = 200; 		// 300 - 60?   400 ->60  500->50    700->34
+// 		$delay = $time_in_day / $posts_per_day;
+// 		$next_iteration_time = time() + $delay; 
 
-		// $outarray = array_slice($prox, $p+1);
-		// $GLOBALS["proxy_list"] = $outarray;
-		// file_put_contents($romerINSTA."email_proxy/proxy_list", "");
-		// file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
-     	$key = "adultus";
-		while (true) {
-				 if ($redis->scard($key) == 0)
-				{
-				 funcparse($followers, $i, $redis, $influencer);
-				}	
+		
+
+// 		// $outarray = array_slice($prox, $p+1);
+// 		// $GLOBALS["proxy_list"] = $outarray;
+// 		// file_put_contents($romerINSTA."email_proxy/proxy_list", "");
+// 		// file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
+//      	$key = "adultus";
+// 		while (true) {
+// 				 if ($redis->scard($key) == 0)
+// 				{
+// 				 funcparse($followers, $i, $redis, $influencer);
+// 				}	
   			
-				if (time() >  $next_iteration_time) {
+// 				if (time() >  $next_iteration_time) {
 
 			 
 			 
-	$ad_media_list  = ["1277470816705363477", "1277466307392355679", "1277436633060654628", "1277425043150126380", "1277422432296549618", "1276704501912747284", "1276702167556078800", "1276701053179837627", "1276700215979981984", "1276699612360916114"];
+// 	$ad_media_list  = ["1277470816705363477", "1277466307392355679", "1277436633060654628", "1277425043150126380", "1277422432296549618", "1276704501912747284", "1276702167556078800", "1276701053179837627", "1276700215979981984", "1276699612360916114"];
 				
-		    	$ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
+// 		    	$ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
 				
-				$followlike  = $redis->spop($key);   
-			    $resarr = explode(":",$followlike);
-				$message_recipient = $resarr[0];
+// 				$followlike  = $redis->spop($key);   
+// 			    $resarr = explode(":",$followlike);
+// 				$message_recipient = $resarr[0];
 
-  						   //check if message_recipient is NULL!!!!!!!!!!!!
+
+// 				try {	
+// 					$i->follow($resarr[0]);
+// 				} catch (Exception $e) {
+// 				    echo $e->getMessage();
+// 				}
+// 				sleep(6);
+// 				try {	
+// 					$i->like($resarr[1]);
+// 				} catch (Exception $e) {
+// 				    echo $e->getMessage();
+// 				}
+// 				sleep(6);
+
+//   						   //check if message_recipient is NULL!!!!!!!!!!!!
   	 
-  		// return user ID 
+//   		// return user ID 
 
-				$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
-				$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
-				 $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
-				$cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
-			    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
-			    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
-			    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
-			    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
-				$first_name_txt = explode(" ",$first_name);
-				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
-		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+// 				$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
+// 				$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+// 				 $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
+// 				$cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+// 			    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+// 			    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+// 			    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+// 			    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+// 				$first_name_txt = explode(" ",$first_name);
+// 				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+// 		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-				$text = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil  I'm online here @girlshothere                @girlshothere                @girlshothere $smi $cur $cur $cur";
+// 				$text = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil  I'm online here @girlshothere                @girlshothere                @girlshothere $smi $cur $cur $cur";
 
               
-				try {
-				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
-				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
+// 				try {
+// 				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
+// 				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
 		 			
-		 			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
+// 		 			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
 
-		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
-		 			 echo "\n\n**SEND**\n\n";
-		 			 if ($answer == "ok") {
-		 			$redis->rpush("recieved",  $message_recipient); 
-		 			} else {
-		 				exec("/usr/local/bin/send-telegram.sh '$username --> fail to send message'  /dev/null 2>/dev/null &");
-		 				sleep(14400); // 4 hours sleep
+// 		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
+// 		 			 echo "\n\n**SEND**\n\n";
+// 		 			 if ($answer == "ok") {
+// 		 			$redis->rpush("recieved",  $message_recipient); 
+// 		 			} else {
+
+// 		 				$redis->rpush("not_recieved",  $message_recipient);  // track not sended messages
+
+// 		 				sleep(14400); // 4 hours sleep
 		 			 
-		 			}
+// 		 			}
 
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
+// 				} catch (Exception $e) {
+// 				    echo $e->getMessage();
+// 				}
 
 
-				$next_iteration_time = timer($delay);
+// 				$next_iteration_time = timer($delay);
 			
-				}	
+// 				}	
 			 
 
-			sleep(2);
+// 			sleep(2);
 		
-		 }
+// 		 }
 
 	
 	    break;
