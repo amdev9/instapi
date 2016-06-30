@@ -329,7 +329,7 @@ $debug = true;
 
 $password = $argv[1]; 
 $email= $argv[2]; 
-$url = $argv[3];  
+$url = $argv[3]; 
 $biography = $argv[4];  
 $caption = $argv[5];  
 $gender = 2;
@@ -374,7 +374,6 @@ $dir    = $romerINSTAPI.'src/'.$profileSetter;
 $proxy = "";
 $username = "";
 $first_name = "";
-
 $qs_stamp = "";
 
 // $p = 0; 
