@@ -42,9 +42,9 @@ class InstagramRegistration
   {
     
       $data = json_encode([
-          '_uuid'      => $this->uuid,
+          '_uuid'      => $this->uuid,      ///SNIFFER do not need  
           'email'   => $email,
-          '_csrftoken' => $this->token, //before 'missing',
+          '_csrftoken' => $this->token, //before 'missing',   ///SNIFFER do not need  
       ]);
 
       return  $this->request('users/check_email/', $this->generateSignature($data))[1];    
@@ -53,10 +53,10 @@ class InstagramRegistration
   public function checkUsername($username)
   {
     
-      $data = json_encode([
-          '_uuid'      => $this->uuid,
+      $data = json_encode([           
+          '_uuid'      => $this->uuid,          ///SNIFFER do not need  
           'username'   => $username,
-          '_csrftoken' => $this->token, //before 'missing',
+          '_csrftoken' => $this->token, //before 'missing',    ///SNIFFER do not need
       ]);
 
        return  $this->request('users/check_username/', $this->generateSignature($data))[1];
@@ -77,6 +77,69 @@ class InstagramRegistration
     
 
   }
+
+
+
+// IPHONE FIRST REQUEST
+// POST https://i.instagram.com/api/v1/qe/sync/ HTTP/1.1
+
+// signed_body=86006ef8ada949e385c53d42268f16ebcf35838720fa72b158ea8b5188edb8ea.{
+// "id":"F30F7D45-024B-478A-A1FC-75EC32B2F629",
+// "experiments":"ig_ios_one_click_login_universe_2,ig_ios_disk_analytics,ig_ios_one_click_login_tab_design_universe,ig_ios_registration_phone_default_universe,ig_ios_analytics_compress_file,ig_ios_multiple_accounts_badging_universe,ig_ios_whiteout_kill_switch,ig_ios_password_less_registration_universe,ig_ios_use_family_device_id_universe,ig_ios_one_password_extension,enable_nux_language,ig_nonfb_sso_universe,ig_ios_branding_refresh,ig_ios_registration_robo_call_time,ig_ios_whiteout_dogfooding,ig_ios_white_camera_dogfooding_universe"}
+// &ig_sig_key_version=5
+
+
+//IPHONE CHECK MAIL https://i.instagram.com/api/v1/users/check_email/ 
+// signed_body=e8c24cf5e1300e7246354e9acfee53759e3f2bebca34febd1ee098fc4a191c9b.{
+// "email":"blackkor.ol@gmail.com",
+// "qe_id":"F30F7D45-024B-478A-A1FC-75EC32B2F629",
+// "_csrftoken":"b6a1980012719e40f632959733aa70a5"}
+// &ig_sig_key_version=5
+
+
+// IPHONE CREATE ACC
+// signed_body=0e4c38cbd5d74f75fecf0f1263ab1479023bb9e894d6c23c233d94581f822468.{
+// "email":"blackkor.ol@gmail.com",
+// "username":"blackkor.ol",
+// "password":"qweqwe123",
+// "device_id": "F30F7D45-024B-478A-A1FC-75EC32B2F629",
+// "_csrftoken": "b6a1980012719e40f632959733aa70a5",
+// "waterfall_id": "aab6e73e80dc43bf84dba0acb734de72"} //waterfall_id = UUID.randomUUID().toString(); //without '-'
+// &ig_sig_key_version=5
+
+
+// WINDOWS PHONE CHECK USERNAME POST https://i.instagram.com/api/v1/users/check_username/ HTTP/1.1
+// signed_body=c5bc1d54a43ff4359a510529888f51f9293ca482e8a053071c216efe0986e837.{
+// "username":"anna+ja"
+// }&ig_sig_key_version=99
+
+
+ // WINDOWS PHONE CREATE ACC
+ // signed_body=ac77bce16de7243d77f22d5d5ca32bc6571cdf6c2b319a9d480ca090e65abd55.{
+ // "email":"black.korol@gmail.com",
+ // "username": "annasuperkool",
+ // "password":"qweqwe123",
+ // "device_id":"android-c7188bae-8663-4345-b784-81efc751457f",
+ // "guid":"c7188bae-8663-4345-b784-81efc751457f",
+ // "first_name":null}
+ // &ig_sig_key_version=99
+    
+  //WINDOWS PHONE NEXT GET https://i.instagram.com/api/v1/friendships/autocomplete_user_list/ HTTP/1.1
+  //WINDOWS PHONE NEXT  PUSH REGISTER POST https://i.instagram.com/api/v1/push/register/ HTTP/1.1
+  //   device_type=windowsphone
+  // &device_token=http://a.notify.live.net/u/1/hk2/H2QAAADVoJHgwXvZZBGVm_Px9jwM_0sESg-S_R-MNFog8YUs9te_ZYCbyofMKcqiTb0ntnVP3oFRT5xtel3AotWAVQH306nNK14sGT3vRbXxPkVAvYRamzCVpDIyoJxDBF0SJSQ/d2luZG93c3Bob25lZGVmYXVsdA/JqEiMiB_c0KrShYRILIa6g/dZckeawzYM_7TCIRZWQgmcdlp7g
+
+  // WINDOWS PHONE EDIT POST https://i.instagram.com/api/v1/accounts/edit_profile/ HTTP/1.1
+  //   signed_body=9905916104527319e4115acde851bb74803d8f00134a416d113542c86577678c.{
+  // "gender":"3",
+  // "username":"annasuperkool",
+  // "first_name":"",
+  // "phone_number":"",
+  // "email":"black.korol@gmail.com",
+  // "external_url":"",
+  // "biography":""}
+  // &ig_sig_key_version=99
+
 
   /**
    * Register account.
