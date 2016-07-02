@@ -60,9 +60,10 @@ class InstagramRegistration
           'waterfall_id' => $this->waterfall_id, 
       ]);
 
-      $response =   $this->request('users/check_email/', $this->generateSignature($data))[1];  
-      preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matchresult);
-     $this->token = $matchresult[1];
+      $response =   $this->request('users/check_email/', $this->generateSignature($data));//[1];
+      echo var_export($response);  
+       preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matchresult);
+      $this->token = $matchresult[1];
      return $response;
   }
 
@@ -72,12 +73,16 @@ class InstagramRegistration
       //need test
     //expires time do not need ?
     $data = json_encode([
-          'username'   => $email,
+          'username'   => $username,
           'qe_id'   => $this->uuid,        
           'waterfall_id' => $this->waterfall_id, 
       ]);
 
       $response =   $this->request('users/check_username/', $this->generateSignature($data))[1];  
+
+     //  preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matchresult);
+     // $this->token = $matchresult[1];
+
      return $response;
 
 
