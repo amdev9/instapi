@@ -363,7 +363,7 @@ class InstagramRegistration
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
-        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA ); // Constants::USER_AGENT);
+        curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT); //$this->UA ); // 
       
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
          curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);

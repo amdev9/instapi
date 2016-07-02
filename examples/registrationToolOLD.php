@@ -410,7 +410,7 @@ while ( $redis->scard("proxy") > 0 )
 
 	 $check = $r->checkEmail($email);
  
-       if ($check['available'] == false) {
+       if ($check[1]['available'] == false) {
 	    	$redis->sadd("blacklist_email",  $email);
 	        break;
 	    }     
