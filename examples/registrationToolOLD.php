@@ -393,6 +393,28 @@ while ( $redis->scard("proxy") > 0 )
 
 	$r = new InstagramRegistration($prox, $debug);
 	 
+//+1) check email qe_id = guid = uuid ; //android waterfall_id = UUID.randomUUID().toString(); //with '-'
+	//+2)fetch headers with crstoken
+	//3) username suggestions with same cookie
+	//+4) check username with same cookie
+	//+5) create acc and set new cookie ===> need device_id correct generator
+	//6) sync
+	//7) friendships autocompete user 
+
+	// POST https://android.clients.google.com/c2dm/register3 HTTP/1.1
+
+	//8) api/v1/push/register/   with phone_id newly before acc create  
+	//9) v1/direct_share/recent_recipients/
+	//10) again push
+
+
+	 $check = $r->checkEmail($email);
+ 
+       if ($check['available'] == false) {
+	    	$redis->sadd("blacklist_email",  $email);
+	        break;
+	    }     
+
 	$outputs = $r->fetchHeaders();
 	 
 
@@ -409,12 +431,7 @@ while ( $redis->scard("proxy") > 0 )
 		 
 	}	
       
-       $check = $r->checkEmail($email);
- 
-       if ($check['available'] == false) {
-	    	$redis->sadd("blacklist_email",  $email);
-	        break;
-	    }     
+      
 
 
     while ( $redis->scard("names") > 0 ) {  

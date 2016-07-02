@@ -430,22 +430,28 @@
  
 
 
+
+echo str_split(md5(mt_rand(1000, 9999)),17)[0]."\n\n";
+echo str_split(md5(mt_rand(1000, 9999)),17)[1]."\n\n";
+
 echo 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)]."\n";
 
 
-$guid = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', 
-      mt_rand(0, 65535), 
-      mt_rand(0, 65535), 
-      mt_rand(0, 65535), 
-      mt_rand(16384, 20479), 
-      mt_rand(32768, 49151), 
-      mt_rand(0, 65535), 
-      mt_rand(0, 65535), 
-      mt_rand(0, 65535));
+// $guid = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', 
+//       mt_rand(0, 65535), 
+//       mt_rand(0, 65535), 
+//       mt_rand(0, 65535), 
+//       mt_rand(16384, 20479), 
+//       mt_rand(32768, 49151), 
+//       mt_rand(0, 65535), 
+//       mt_rand(0, 65535), 
+//       mt_rand(0, 65535));
 
-$device_id = "android-".$guid;
+// $device_id = "android-".$guid;
 
-echo $device_id ;
+// echo $device_id ;
+
+
 
 
 
