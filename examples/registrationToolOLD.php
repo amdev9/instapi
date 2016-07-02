@@ -397,7 +397,7 @@ while ( $redis->scard("proxy") > 0 )
 	//+2)fetch headers with crstoken
 	//3) username suggestions with same cookie
 	//+4) check username with same cookie
-	//+5) create acc and set new cookie ===> need device_id correct generator
+	//+5) create acc and set new cookie  
 	//6) sync
 	//7) friendships autocompete user 
 

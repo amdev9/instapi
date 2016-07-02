@@ -285,7 +285,8 @@ class InstagramRegistration
           'username'           => $username,
           'first_name'         => '',
           'guid'               => $this->uuid,
-          'device_id'          => 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)],  //worked but too many already registered
+          //'device_id'          => 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)],  //worked but too many already registered
+           'device_id'          => 'android-'.str_split(md5(mt_rand(0, 99999999)), 17)[mt_rand(0, 1)],
           // 'device_id'          => 'android-'.$this->generateUUID(true), //need fix!!
           // 'device_id'          => 'android-'.$this->uuid,
           'email'              => $email,

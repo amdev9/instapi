@@ -410,18 +410,18 @@
 
 
 // echo "API login:\n";
-
-// $username = 'marie.claire12';
-// $password = 'PASS123';
+ $username = 'marie.claire12';
+$password = 'PASS123';
 
 // echo "device id:";
 
 
-// $seed = md5($username.$password);
+$seed = md5($username.$password);
 //  $volatile_seed = filemtime(__DIR__);
 //         // $volatile_seed = time();
 //  echo 'android-'.substr(md5($seed.$volatile_seed), 16);
 
+echo $seed."\n\n";
 
 
 // echo "\nAPI useragent:\n".'Instagram 8.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
@@ -429,12 +429,13 @@
 // echo "\n***script device id:\n";
  
 
+echo mt_rand(1000, 9999);
 
 
 echo str_split(md5(mt_rand(1000, 9999)),17)[0]."\n\n";
 echo str_split(md5(mt_rand(1000, 9999)),17)[1]."\n\n";
 
-echo 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)]."\n";
+echo 'android-'.str_split(md5(mt_rand(0, 999999999)), 17)[mt_rand(0, 1)]."\n";
 
 
 // $guid = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', 
