@@ -5,6 +5,11 @@ class Constants
     /**
      * Constant declarations.
      */
+
+    //Instagram 8.3.0 Android (19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; ru_RU)
+    //Instagram 8.3.0 (iPhone6,1; iPhone OS 9_3; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
+    //Instagram 5.0.0 Windows Phone (8.10.14219.0; 480x800; NOKIA; RM-846_apac_hong_kong_220; ru_RU)
+    
     const API_URL = 'https://i.instagram.com/api/v1/';
     const USER_AGENT = 'Instagram 8.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
     const IG_SIG_KEY = '55e91155636eaa89ba5ed619eb4645a4daf1103f2161dbfe6fd94d5ea7716095';

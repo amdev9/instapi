@@ -15,7 +15,7 @@ class InstagramRegistration
     protected $UA;
     protected $phone_id;
     protected $waterfall_id;
-
+    protected $device_id;
 
     public function __construct($proxy, $debug = false, $IGDataPath = null)
     {
@@ -27,6 +27,9 @@ class InstagramRegistration
          $this->phone_id = $this->generateUUID(true);
         $this->waterfall_id =  $this->generateUUID(true);
         $this->UA = $this->GenerateUserAgent();
+
+        $this->device_id = 'android-'.str_split(md5(mt_rand(0, 999999999999)), 17)[mt_rand(0, 1)]; //99999999
+
 
         if (!is_null($IGDataPath)) {
             $this->IGDataPath = $IGDataPath;
@@ -43,6 +46,22 @@ class InstagramRegistration
    * @return array
    *   Username availability data
    */
+
+
+ public function returnUUID()
+  {
+     return $this->uuid;
+  }
+
+ public function returnDeviceId()
+  {
+     return $this->device_id;
+  }
+
+ public function returnPhoneId()
+  {
+     return $this->phone_id;
+  }
 
 
   public function checkEmail($email)
@@ -71,7 +90,7 @@ class InstagramRegistration
   {
     
       //need test
-    //expires time do not need ?
+    //expires time do not need ? ADD _csrstoken
     $data = json_encode([
           'username'   => $username,
           'qe_id'   => $this->uuid,        
@@ -109,8 +128,22 @@ class InstagramRegistration
       
     return $outputs;
     
-
   }
+
+public function usernameSuggestions()
+  {
+    $data = json_encode([
+      '_csrftoken'   => $this->token,
+      'name'         => '',                     //need fix to name
+      'email'        => $this->email,
+      'waterfall_id' => $this->waterfall_id,    
+      ]);
+
+      $response =   $this->request('accounts/username_suggestions/', $this->generateSignature($data))[1];
+     return $response;
+    
+  }
+
 
 // User-Agent: Instagram 8.3.0 Android (19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; ru_RU)
 
@@ -190,6 +223,19 @@ class InstagramRegistration
 // &user_ids=451573056,247944034,460563723,12281817,11830955,232192182,18428658,237074561,6860189,6380930,208560325,194697262,7719696,333052291,6590609,5697152,145821237,25945306,267685466,22288455,189003872,19343908,787132,1516824713,336735088,25025320,363632546,21965519,5510916,638144925,294251525,54305422,19769622,325732271,462752227,16363404,13864937,306227985,672417959,33647687,1821019,13384265,2242640123,24599245,666908117,16085990,1292592968,9281904,18478314,206022012,32973926,55260131,1153515988,28817713,1328701983,5484832,9766379,173974522,239727980,192355789,3532778,19596899,1564117978,231402544,8873242,1574083,24239929,12095217,195734327,625833324,173715345,55795588,1338968500,9902057,261272262,519673397,12246775,276192188,218374838,1097866395,7732613,21193118,1275031695,6359592,627934998,19359711,244942700,144646783,192417402,50326174,17557170,12335461,363285930,1274152083,49014950,52142935,29883180,1125136179,44534314,2336468
 // &_uuid=70079fbe-8663-4984-a564-f4e021f762de
 
+//ANDROID EDIT PROFILE POST https://i.instagram.com/api/v1/accounts/edit_profile/ HTTP/1.1
+  //signed_body=cec9d8958d6b46d1ceed31cb57c4574ff0681430c210107567ad305faaa57795.{
+// "external_url"="http=%2F%2Fpornohub.com",
+// "gender"="3",
+// "phone_number"="",
+// "_csrftoken"="QxwM1rDI5rb9tge8pfD85sUWZqy18sUq",
+// "username"="blackkorol84567",
+// "first_name"="",
+// "_uid"="3491584929",
+// "biography"="%5Cn",
+// "_uuid"="70079fbe-8663-4984-a564-f4e021f762de",
+// "email"="blackkoro.l@gmail.com"}
+// &ig_sig_key_version=4
 
 
 // User-Agent: Instagram 8.3.0 (iPhone6,1; iPhone OS 9_3; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
@@ -291,12 +337,13 @@ class InstagramRegistration
           'first_name'         => '',
           'guid'               => $this->uuid,
           //'device_id'          => 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)],  //worked but too many already registered
-           'device_id'          => 'android-'.str_split(md5(mt_rand(0, 99999999)), 17)[mt_rand(0, 1)],
+           'device_id'          => $this->device_id,
           // 'device_id'          => 'android-'.$this->generateUUID(true), //need fix!!
           // 'device_id'          => 'android-'.$this->uuid,
           'email'              => $email,
           'force_sign_up_code' => '',
-          'qs_stamp'           => $qs_stamp, //before ''
+          'waterfall_id'       => $this->waterfall_id,
+          'qs_stamp'           => $qs_stamp, 
           'password'           => $password,
       ]);
 

@@ -18,6 +18,8 @@ class Instagram
   protected $rank_token;          // Rank token
   protected $IGDataPath;          // Data storage path
 
+  protected $phone_id;
+
   /**
    * Default class constructor.
    *
@@ -30,10 +32,13 @@ class Instagram
    * @param $IGDataPath
    *  Default folder to store data, you can change it.
    */
-  public function __construct($username, $password, $proxy ,$debug = false, $IGDataPath = null)
+
+  public function __construct($username, $password, $proxy , $genuuid, $gendeviceid , $genphoneid, $debug = false, $IGDataPath = null)
   {
       $this->debug = $debug;
-      $this->device_id = $this->generateDeviceId(md5($username.$password));
+      $this->device_id = $gendeviceid; //$this->generateDeviceId(md5($username.$password)); //change to generated in InstagramRegistration
+      $this->uuid = $genuuid;
+      $this->phone_id = $genphoneid;
  $this->proxy = $proxy;
       if (!is_null($IGDataPath)) {
           $this->IGDataPath = $IGDataPath;
@@ -42,6 +47,19 @@ class Instagram
       }
 
       $this->setUser($username, $password);
+
+  /////////////////////////////// for just created accounts ///////////////
+
+      $this->syncFeatures();
+      $this->autoCompleteUserList();
+      $this->directRecentRecipients();
+      $this->discoverAyml();
+
+
+      //$this->timelineFeed();
+      //$this->getv2Inbox();
+      //$this->getRecentActivity();
+
   }
 
   /**
@@ -58,7 +76,7 @@ class Instagram
       $this->password = $password;
 
 
-      $this->uuid = $this->generateUUID(true);
+      // $this->uuid = $this->generateUUID(true); ////change to generated in InstagramRegistration
 
       if ((file_exists($this->IGDataPath."$this->username-cookies.dat")) && (file_exists($this->IGDataPath."$this->username-userId.dat"))
     && (file_exists($this->IGDataPath."$this->username-token.dat"))) {
@@ -81,11 +99,12 @@ class Instagram
   public function login($force = false)
   {
       if (!$this->isLoggedIn || $force) {
-          $fetch = $this->request('si/fetch_headers/?challenge_type=signup&guid='.$this->generateUUID(false), null, true);
+          $fetch = $this->request('si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null, true);
+            //$this->generateUUID(false), null, true);
           preg_match('#Set-Cookie: csrftoken=([^;]+)#', $fetch[0], $token);
 
           $data = [
-          'phone_id'            => $this->generateUUID(true),
+          'phone_id'            => $this->phone_id, //generateUUID(true),
           '_csrftoken'          => $token[0],
           'username'            => $this->username,
           'guid'                => $this->uuid,
@@ -130,21 +149,48 @@ class Instagram
 
     public function syncFeatures()
     {
-        $data = json_encode([
-        '_uuid'         => $this->uuid,
-        '_uid'          => $this->username_id,
-        'id'            => $this->username_id,
+      $data = json_encode([
         '_csrftoken'    => $this->token,
+        'id'            => $this->username_id,
+        '_uid'          => $this->username_id,
+        '_uuid'         => $this->uuid,
         'experiments'   => Constants::EXPERIMENTS,
-    ]);
+      ]);
 
         return $this->request('qe/sync/', $this->generateSignature($data))[1];
     }
 
     protected function autoCompleteUserList()
     {
-        return $this->request('friendships/autocomplete_user_list/')[1];
+        return $this->request('friendships/autocomplete_user_list/?followinfo=True&version=2')[1];//added /?followinfo=True&version=2  for ANDROID
     }
+
+     protected function directRecentRecipients()
+    {
+        return $this->request('direct_share/recent_recipients/')[1];//added /?followinfo=True&version=2  for ANDROID
+    }
+
+     protected function discoverAyml()
+    {
+       $data = json_encode([
+        'phone_id'    => $this->phone_id,
+        'module'      => 'ayml_recommended_users',
+        'in_signup'   => true,
+        '_csrftoken'  => $this->token,
+        '_uuid'       => $this->uuid,
+        'num_media'   => 3
+      ]);
+        return $this->request('discover/ayml/', $data)[1]; 
+    }
+
+//ANDROID POST https://i.instagram.com/api/v1/discover/ayml/ HTTP/1.1
+//   phone_id=913d5b20-c76a-42d9-8132-ece7432fb11c
+// &module=ayml_recommended_users
+// &in_signup=true
+// &_csrftoken=QxwM1rDI5rb9tge8pfD85sUWZqy18sUq
+// &_uuid=70079fbe-8663-4984-a564-f4e021f762de
+// &num_media=3
+
 
     protected function timelineFeed()
     {

@@ -432,7 +432,7 @@ while ( $redis->scard("proxy") > 0 )
 	}	
       
       
-
+	$r->usernameSuggestions();			// for full emulation
 
     while ( $redis->scard("names") > 0 ) {  
     	$pieces = explode(" ",  $redis->spop("names"));
@@ -449,7 +449,6 @@ while ( $redis->scard("proxy") > 0 )
 	 
 	
 	// echo "OUTPUTS--->";
- 
 	
 	$result = $r->createAccount($username, $password, $email, $qs_stamp );
 
@@ -499,9 +498,22 @@ while ( $redis->scard("proxy") > 0 )
 		// echo "\n _proxy_------>".$proxy."\n";
 		$debug = true; // false FOR VPS  
 
+		$regUuid = $r->returnUUID();
+		$regDeviceId = $r->returnDeviceId();
+		$regPhoneId = $r->returnPhoneId();
 
-		$i = new Instagram($username, $password, $proxy, $debug);
+		//need test WOULD IT BE BETTER TO COMBINE TWO CLASSES - NO NEED REQUEST BELOW
+		$i = new Instagram($username, $password, $proxy, $regUuid, $regDeviceId, $regPhoneId, $debug );
 		//set profile picture
+		sleep(3);
+
+		try {
+		    $i->changeProfilePicture($photo);
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(3);
+
 		try {
 		    $i->changeProfilePicture($photo);
 		} catch (Exception $e) {
