@@ -36,7 +36,7 @@ class Instagram
   public function __construct($username, $password, $proxy , $genuuid, $gendeviceid , $genphoneid, $debug = false, $IGDataPath = null)
   {
       $this->debug = $debug;
-      $this->device_id = $gendeviceid; //$this->generateDeviceId(md5($username.$password)); //change to generated in InstagramRegistration
+      $this->device_id = $gendeviceid; //$this->generateDeviceId(md5($username.$password));  
       $this->uuid = $genuuid;
       $this->phone_id = $genphoneid;
  $this->proxy = $proxy;
@@ -76,7 +76,7 @@ class Instagram
       $this->password = $password;
 
 
-      // $this->uuid = $this->generateUUID(true); ////change to generated in InstagramRegistration
+      // $this->uuid = $this->generateUUID(true);  
 
       if ((file_exists($this->IGDataPath."$this->username-cookies.dat")) && (file_exists($this->IGDataPath."$this->username-userId.dat"))
     && (file_exists($this->IGDataPath."$this->username-token.dat"))) {

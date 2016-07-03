@@ -514,13 +514,6 @@ while ( $redis->scard("proxy") > 0 )
 		}
 		sleep(3);
 
-		try {
-		    $i->changeProfilePicture($photo);
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(6);
-
 		$registered = $proxy." ".$username." ".$email." ".$password." ".$first_name;
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
 
