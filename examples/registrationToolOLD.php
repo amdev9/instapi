@@ -432,7 +432,7 @@ while ( $redis->scard("proxy") > 0 )
 	}	
       
       
-	$r->usernameSuggestions();			// for full emulation
+	$r->usernameSuggestions($email);			// for full emulation
 
     while ( $redis->scard("names") > 0 ) {  
     	$pieces = explode(" ",  $redis->spop("names"));

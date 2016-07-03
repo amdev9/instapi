@@ -130,7 +130,7 @@ class InstagramRegistration
     
   }
 
-public function usernameSuggestions()
+public function usernameSuggestions($email)
   {
     $data = json_encode([
       '_csrftoken'   => $this->token,
