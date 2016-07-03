@@ -135,7 +135,7 @@ public function usernameSuggestions()
     $data = json_encode([
       '_csrftoken'   => $this->token,
       'name'         => '',                     //need fix to name
-      'email'        => $this->email,
+      'email'        => $email,
       'waterfall_id' => $this->waterfall_id,    
       ]);
 
