@@ -600,10 +600,15 @@ while ( $redis->scard("proxy") > 0 )
 				$locpk = $redis->spop($a[0].":".$b[0]);
 				$getl = $i->getLocationFeed($locpk);
 
-				echo $getl['ranked_items'][0]['user']['pk']."<----user\n";//['ranked_items']
-				$redis->sadd("userpk".$a[0].":".$b[0], $getl['ranked_items'][0]['user']['pk'] );
-				$lc = var_export($getl);
-				echo $lc;
+				$num_rank_results =0;
+				while ($num_rank_results < $getl['num_results']) {
+					echo $getl['items'][$num_rank_results]['user']['pk']."<----user\n";//['ranked_items']
+					$redis->sadd("userpk".$a[0].":".$b[0], $getl['items'][$num_rank_results]['user']['pk'] );
+
+					$num_rank_results++;
+				}	
+				// $lc = var_export($getl);
+				// echo $lc;
 
 				$countertrue = 0;
 				while ($getl['more_available'] ==true && $countertrue < 4) {
@@ -611,10 +616,14 @@ while ( $redis->scard("proxy") > 0 )
 					 echo $next_next_max_id."<---next_max_id\n";
 					$getnewl = $i->getLocationFeed( $locpk, $next_next_max_id);
 
-					 echo $getnewl['items'][0]['user']['pk']."<----user\n";
+					$num_results = 0;
+					while ($num_results < $getnewl['num_results']) {
+					 echo $getnewl['items'][$num_results]['user']['pk']."<----user\n";
 
-					 $redis->sadd("userpk".$a[0].":".$b[0], $getnewl['items'][0]['user']['pk'] );
-					$countertrue = $countertrue + 1;
+					 $redis->sadd("userpk".$a[0].":".$b[0], $getnewl['items'][$num_results]['user']['pk'] );
+					 $num_results++;
+					}
+					$countertrue++;
 			     }
 
 			} catch (Exception $e) {

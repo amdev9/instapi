@@ -344,7 +344,7 @@ public function usernameSuggestions($email)
           'phone_id'           => $this->phone_id,
           '_csrftoken'         => $this->token, //'missing', //
           'username'           => $username,
-          'first_name'         => '',
+          'first_name'         => '',           //need test add this
           'guid'               => $this->uuid,
           //'device_id'          => 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)],  //worked but too many already registered
            'device_id'          => $this->device_id,
