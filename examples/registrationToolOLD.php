@@ -317,7 +317,7 @@ function funcparse($followers, $i, $redis, $influencer) {
 			    echo $e->getMessage();
 			}
 			 				
-			$counter = $counter + 1;
+			$counter++;
 			sleep(6);
 		}
 }
@@ -593,7 +593,7 @@ while ( $redis->scard("proxy") > 0 )
 		// echo $loc."\n\n";
 
 		$aaaa = 0;
-		while ($aaaa < 3) {
+		while ($aaaa < 3) { //$redis->scard("$a[0].":".$b[0]") > 0
 			try { 
 			    // $getl = $i->getLocationFeed( $nnnames['items'][0]['location']['pk']);
 
@@ -610,12 +610,18 @@ while ( $redis->scard("proxy") > 0 )
 				// $lc = var_export($getl);
 				// echo $lc;
 
-				$countertrue = 0;
-				while ($getl['more_available'] ==true && $countertrue < 4) {
+			
+				if ($getl['more_available'] ==true ) {
 					$next_next_max_id = $getl['next_max_id'];
-					 echo $next_next_max_id."<---next_max_id\n";
-					$getnewl = $i->getLocationFeed( $locpk, $next_next_max_id);
+				}
+				$getnewl = $i->getLocationFeed( $locpk, $next_next_max_id);
 
+				$countertrue = 0;
+				while ( $countertrue < 4) { //$getnewl['more_available'] ==true
+						
+					$tmpgetnewl = $getnewl;
+
+					//parse users pk
 					$num_results = 0;
 					while ($num_results < $getnewl['num_results']) {
 					 echo $getnewl['items'][$num_results]['user']['pk']."<----user\n";
@@ -623,6 +629,11 @@ while ( $redis->scard("proxy") > 0 )
 					 $redis->sadd("userpk".$a[0].":".$b[0], $getnewl['items'][$num_results]['user']['pk'] );
 					 $num_results++;
 					}
+
+					$getnewl = $i->getLocationFeed( $locpk, $tmpgetnewl['next_max_id']);
+
+					$redis->rpush($locpk.":geomax_id",  $tmpgetnewl['next_max_id'] ); 
+
 					$countertrue++;
 			     }
 
