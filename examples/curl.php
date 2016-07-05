@@ -2,33 +2,32 @@
 
 
 
-$approxer = 5;
+$approxer = 3;
  
 $a =  [55.880088, 37.368901];
 $b =  [55.608911, 37.917495];
 
-echo  explode('.',$a[0])[0];
+ 
+$lengthY = abs($a[0]-$b[0]);
+$lengthX = abs($a[1]-$b[1]);
 
-// $lengthY = abs($a[0]-$b[0]);
-// $lengthX = abs($a[1]-$b[1]);
-
-// if ($lengthX > $lengthY) {
-// 	$sq_a = $lengthY/$approxer;
-// }
-// else {
-// 	$sq_a = $lengthX/$approxer;
-// }
+if ($lengthX > $lengthY) {
+	$sq_a = $lengthY/$approxer;
+}
+else {
+	$sq_a = $lengthX/$approxer;
+}
 
  
-// for ($m =0; $m < 1000; $m++)
-//  	for ($n =0; $n < 1000; $n++)
-//  		if ($a[0]-$m*$sq_a > $b[0]) { 
-//  			if ($a[1]+$n*$sq_a < $b[1]) {
+for ($m =0; $m < 1000; $m++)
+ 	for ($n =0; $n < 1000; $n++)
+ 		if ($a[0]-$m*$sq_a > $b[0]) { 
+ 			if ($a[1]+$n*$sq_a < $b[1]) {
  
-// 				echo "(".sprintf( "%0.06f", ($a[0] + $m*$sq_a)).",".sprintf( "%0.06f", ($a[1] + $n*$sq_a)).")\n";
-// 				# puts n.to_s + "=" + m.to_s
-//  			}
-//  		 }
+				echo "(".sprintf( "%0.06f", ($a[0] + $m*$sq_a)).",".sprintf( "%0.06f", ($a[1] + $n*$sq_a)).")\n";
+				# puts n.to_s + "=" + m.to_s
+ 			}
+ 		 }
  	
 
 

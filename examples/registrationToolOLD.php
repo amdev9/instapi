@@ -592,26 +592,38 @@ while ( $redis->scard("proxy") > 0 )
  		// $loc = var_export($nnnames);
 		// echo $loc."\n\n";
 
-		// try { 
-		//     // $locationdata = $i->searchLocationByQuery('New York'); // New%20York  New+York - test
-		 
-		//      $getl = $i->getLocationFeed( $nnnames['items'][0]['location']['pk']);
-		//      echo $getl['ranked_items'][0]['user']['pk']."<----user\n";//['ranked_items']
-		//      $lc = var_export($getl);
-		//      echo $lc;
+		$aaaa = 0;
+		while ($aaaa < 3) {
+			try { 
+			    // $getl = $i->getLocationFeed( $nnnames['items'][0]['location']['pk']);
 
-		//      $countertrue = 0;
-		//      while ($getl['more_available'] ==true && $countertrue < 4) {
-		//      	$next_next_max_id = $getl['next_max_id'];
-		//      	echo $next_next_max_id."<---next_max_id\n";
-		//      	 $getnewl = $i->getLocationFeed( $nnnames['items'][0]['location']['pk'], $next_next_max_id);
- 	// 			echo $getnewl['items'][0]['user']['pk']."<----user\n";
- 	// 			$countertrue = $countertrue + 1;
-		//      }
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
-		//  sleep(6);
+				$locpk = $redis->spop($a[0].":".$b[0]);
+				$getl = $i->getLocationFeed($locpk);
+
+				echo $getl['ranked_items'][0]['user']['pk']."<----user\n";//['ranked_items']
+				$redis->sadd("userpk".$a[0].":".$b[0], $getl['ranked_items'][0]['user']['pk'] );
+				$lc = var_export($getl);
+				echo $lc;
+
+				$countertrue = 0;
+				while ($getl['more_available'] ==true && $countertrue < 4) {
+					$next_next_max_id = $getl['next_max_id'];
+					 echo $next_next_max_id."<---next_max_id\n";
+					$getnewl = $i->getLocationFeed( $locpk, $next_next_max_id);
+
+					 echo $getnewl['items'][0]['user']['pk']."<----user\n";
+
+					 $redis->sadd("userpk".$a[0].":".$b[0], $getnewl['items'][0]['user']['pk'] );
+					$countertrue = $countertrue + 1;
+			     }
+
+			} catch (Exception $e) {
+			    echo $e->getMessage();
+			}
+		 sleep(2);
+		 $aaaa = $aaaa +1;
+		}
+
 
 /////////////////////////////////////////////
 	 
