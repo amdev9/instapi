@@ -329,9 +329,10 @@ $debug = true;
 
 $password = $argv[1]; 
 $email= $argv[2]; 
-$url = $argv[3]; 
+$url  = $argv[3]; 
 $biography = $argv[4];  
 $caption = $argv[5];  
+
 $gender = 2;
 $phone  = "";
 $photo = $romerINSTAPI."src/".$argv[6]; 
@@ -433,7 +434,7 @@ while ( $redis->scard("proxy") > 0 )
       
       
 	$r->usernameSuggestions($email);			// for full emulation
-
+	sleep(2);
     while ( $redis->scard("names") > 0 ) {  
     	$pieces = explode(" ",  $redis->spop("names"));
         $check = $r->checkUsername($pieces[0] );
@@ -532,38 +533,85 @@ while ( $redis->scard("proxy") > 0 )
 
 		sleep(6);
 
+
+	 
+
 		// PARSE PK BY LOCATION
+		// $lat = '56.759945';
+		// $long =  '37.1314441';
+		// $nnnames = $i->locationParser($lat, $long);//return venues[0..n][name] -> searchLocation(/\) -> getLocationFeed( $locationdata['items'][0]['location']['pk']);
+		//  echo "\n\n".$nnnames['venues'][0]['name'];
+		//  echo "\n\n".$nnnames['venues'][1]['name'];
+
+
+		$approxer = 3;//10
+		 
+		$a =  [55.880088, 37.368901];
+		$b =  [55.608911, 37.917495];
+
+		$lengthY = abs($a[0]-$b[0]);
+		$lengthX = abs($a[1]-$b[1]);
+
+		if ($lengthX > $lengthY) {
+			$sq_a = $lengthY/$approxer;
+		}
+		else {
+			$sq_a = $lengthX/$approxer;
+		}
+
+		 
+		for ($m =0; $m < 1000; $m++)
+		 	for ($n =0; $n < 1000; $n++)
+		 		if ($a[0]-$m*$sq_a > $b[0]) { 
+		 			if ($a[1]+$n*$sq_a < $b[1]) {
+						
+						echo "---->(".sprintf( "%0.06f", ($a[0] + $m*$sq_a)).",".sprintf( "%0.06f", ($a[1] + $n*$sq_a)).")\n";
+						
+
+				$nnnames = $i->searchLocation(sprintf( "%0.06f", ($a[0] + $m*$sq_a)), sprintf( "%0.06f", ($a[1] + $n*$sq_a)));
+
+					$itemsCount = 0;
+					while (isset($nnnames['items'][$itemsCount] == true) ) {
+					if (explode('.',$nnnames['items'][$itemsCount]['location']['lat'])[0]  == explode('.',sprintf( "%0.06f", ($a[0] + $m*$sq_a))) && explode('.',$nnnames['items'][$itemsCount]['location']['lng'])[0]  == explode('.',sprintf( "%0.06f", ($a[1] + $n*$sq_a)))[0]) {
+
+						     	$redis->sadd($a[0].":".$b[0], $nnnames['items'][$itemsCount]['location']['pk']);
+
+							}
+						 	$itemsCount = $itemsCount + 1;
+						 }
+
+						# puts n.to_s + "=" + m.to_s
+		 			}
+		 		 }
+		 	
+
+	
+		// $nnnames = $i->searchLocation('55.706440','37.577896');
+ 		// $loc = var_export($nnnames);
+		// echo $loc."\n\n";
+
 		// try { 
-
-		// 	// https://www.facebook.com/places/ 
-		//     $locationdata = $i->searchLocation(urlencode('New York')); // New%20York  New+York - test
-		//     // $locationdata['items'][0..94]
-		//     //	has_more = true
-
-		//     $loc = var_export($locationdata);
-		//     echo $loc."\n\n";
-
-
-
-		// 	// $next_max_id = 'J0HV2ui3AAAAF0HV2uaQgAAAFmYA';
-		//      $getl = $i->getLocationFeed( $locationdata['items'][0]['location']['pk']);
-		//      	// , $next_max_id );
+		//     // $locationdata = $i->searchLocationByQuery('New York'); // New%20York  New+York - test
+		 
+		//      $getl = $i->getLocationFeed( $nnnames['items'][0]['location']['pk']);
 		//      echo $getl['ranked_items'][0]['user']['pk']."<----user\n";//['ranked_items']
 		//      $lc = var_export($getl);
 		//      echo $lc;
 
-		//      if ($getl['more_available'] ==true) {
+		//      $countertrue = 0;
+		//      while ($getl['more_available'] ==true && $countertrue < 4) {
 		//      	$next_next_max_id = $getl['next_max_id'];
 		//      	echo $next_next_max_id."<---next_max_id\n";
-		//      	 $getnewl = $i->getLocationFeed( $locationdata['items'][0]['location']['pk'], $next_next_max_id);
+		//      	 $getnewl = $i->getLocationFeed( $nnnames['items'][0]['location']['pk'], $next_next_max_id);
  	// 			echo $getnewl['items'][0]['user']['pk']."<----user\n";
-
+ 	// 			$countertrue = $countertrue + 1;
 		//      }
 		// } catch (Exception $e) {
 		//     echo $e->getMessage();
 		// }
 		//  sleep(6);
 
+/////////////////////////////////////////////
 	 
 		// $files1 = scandir($dir);
 		// foreach ( $files1 as $k => $value ) {

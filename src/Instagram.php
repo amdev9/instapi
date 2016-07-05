@@ -82,7 +82,8 @@ class Instagram
     && (file_exists($this->IGDataPath."$this->username-token.dat"))) {
           $this->isLoggedIn = true;
           $this->username_id = trim(file_get_contents($this->IGDataPath."$username-userId.dat"));
-          $this->rank_token = $this->username_id.'_'.$this->uuid;
+          //$this->rank_token = $this->username_id.'_'.$this->uuid;
+          $this->rank_token = $this->username_id.'_'.$this->generateUUID(true);
           $this->token = trim(file_get_contents($this->IGDataPath."$username-token.dat"));
       }
   }
@@ -124,7 +125,8 @@ class Instagram
           $this->isLoggedIn = true;
           $this->username_id = $login[1]['logged_in_user']['pk'];
           file_put_contents($this->IGDataPath.$this->username.'-userId.dat', $this->username_id);
-          $this->rank_token = $this->username_id.'_'.$this->uuid;
+          // $this->rank_token = $this->username_id.'_'.$this->uuid;
+          $this->rank_token = $this->username_id.'_'.$this->generateUUID(true);
           preg_match('#Set-Cookie: csrftoken=([^;]+)#', $login[0], $match);
           $this->token = $match[1];
           file_put_contents($this->IGDataPath.$this->username.'-token.dat', $this->token);
@@ -1153,6 +1155,7 @@ class Instagram
    */
   public function fbUserSearch($query)
   {
+      $query = rawurlencode($query);
       $query = $this->request("fbsearch/topsearch/?context=blended&query=$query&rank_token=$this->rank_token")[1];
 
       if ($query['status'] != 'ok') {
@@ -1317,6 +1320,46 @@ class Instagram
       return $hashtagFeed;
   }
 
+
+
+
+
+  /**
+
+  signed_body=3f9153ee63d3395151babb5028821b08758a0827c36adfc57402218105614587.%7B%22_csrftoken%22%3A%22IjKRj5NGejIAQNSqrmvjWNyziJYNRKCd%22%2C%22email%22%3A%22mat.veev.alexander.vladimirovi4%40gmail.com%22%2C%22qe_id%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%2C%22waterfall_id%22%3A%22ed596800-1f15-40b0-ad4d-42cd41017dc7%22%7D&ig_sig_key_version=4
+ 
+   */
+
+   
+  public function locationParser($latitude, $longitude)
+  {   
+      $timestamp = 1329426118000; //with miliseconds //need test
+        $locationParser = $this->request('location_search?latitude='.$latitude.'&timestamp='.$timestamp.'&longitude='.$longitude.'&rank_token='.$this->rank_token, null)[1];
+ 
+      if ($locationParser['status'] != 'ok') {
+          throw new InstagramException($locationParser['message']."\n");
+
+          return;
+      }
+      return $locationParser;
+  }
+
+ //GET https://i.instagram.com/api/v1/fbsearch/places/?lat=55.706440&lng=37.577896&timezone_offset=10800 HTTP/1.1
+
+ public function searchLocation($latitude, $longitude)
+  {   
+
+      $locationParser = $this->request('fbsearch/places/?lat='.$latitude.'&lng='.$longitude.'&timezone_offset=10800')[1];
+      if ($locationParser['status'] != 'ok') {
+          throw new InstagramException($locationParser['message']."\n");
+
+          return;
+      }
+      return $locationParser;
+  }
+
+
+//////////
   /**
    * Get locations.
    *
@@ -1326,8 +1369,11 @@ class Instagram
    * @return array
    *   Location location data
    */
-  public function searchLocation($query)
+
+  public function searchLocationByQuery($query)
   {
+
+      // $query = rawurlencode($query);
       $endpoint = "fbsearch/places/?rank_token=$this->rank_token&query=".$query;
 
       $locationFeed = $this->request($endpoint)[1];
@@ -1349,6 +1395,9 @@ class Instagram
    *
    * @return array
    *   Location feed data
+
+   GET https://i.instagram.com/api/v1/feed/location/214426443/?max_id=J0HV3qjmQAAAF0HV3VpSQAAAFpALAA%253D%253D  
+   
    */
   public function getLocationFeed($locationId, $maxid = null)
   {

@@ -2,6 +2,61 @@
 
 
 
+$approxer = 5;
+ 
+$a =  [55.880088, 37.368901];
+$b =  [55.608911, 37.917495];
+
+echo  explode('.',$a[0])[0];
+
+// $lengthY = abs($a[0]-$b[0]);
+// $lengthX = abs($a[1]-$b[1]);
+
+// if ($lengthX > $lengthY) {
+// 	$sq_a = $lengthY/$approxer;
+// }
+// else {
+// 	$sq_a = $lengthX/$approxer;
+// }
+
+ 
+// for ($m =0; $m < 1000; $m++)
+//  	for ($n =0; $n < 1000; $n++)
+//  		if ($a[0]-$m*$sq_a > $b[0]) { 
+//  			if ($a[1]+$n*$sq_a < $b[1]) {
+ 
+// 				echo "(".sprintf( "%0.06f", ($a[0] + $m*$sq_a)).",".sprintf( "%0.06f", ($a[1] + $n*$sq_a)).")\n";
+// 				# puts n.to_s + "=" + m.to_s
+//  			}
+//  		 }
+ 	
+
+
+
+
+
+// // echo "API registration:\n";
+// echo "device id:";
+
+// echo 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)]."\n";
+// echo str_split(md5(mt_rand(1000, 9999)), 17)[0]."\n";
+// echo strlen(str_split(md5(mt_rand(1000, 9999)), 17)[0])."\n";
+// echo str_split(md5(mt_rand(1000, 9999)), 17)[1]."\n"; //strlen
+// echo strlen(str_split(md5(mt_rand(1000, 9999)), 17)[1])."\n\n";
+
+// echo "-- final --\n";
+// $test = 'android-'.bin2hex(openssl_random_pseudo_bytes(8));
+//  echo $test;
+// echo "\n___________\n";
+// echo strlen(bin2hex(openssl_random_pseudo_bytes(8)));
+// // // echo "API login:\n";
+// //  $username = 'marie.claire12';
+// // $password = 'PASS123';
+
+// // // echo "device id:";
+
+
+
 
 // function first() {
 
@@ -401,41 +456,26 @@
 
 
 
-// echo "API registration:\n";
-// echo "device id:";
+// $seed = md5($username.$password);
+// //  $volatile_seed = filemtime(__DIR__);
+// //         // $volatile_seed = time();
+// //  echo 'android-'.substr(md5($seed.$volatile_seed), 16);
 
-// echo 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)]."\n";
-
-
-
-
-// echo "API login:\n";
- $username = 'marie.claire12';
-$password = 'PASS123';
-
-// echo "device id:";
+// echo $seed."\n\n";
 
 
-$seed = md5($username.$password);
-//  $volatile_seed = filemtime(__DIR__);
-//         // $volatile_seed = time();
-//  echo 'android-'.substr(md5($seed.$volatile_seed), 16);
+// // echo "\nAPI useragent:\n".'Instagram 8.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
 
-echo $seed."\n\n";
-
-
-// echo "\nAPI useragent:\n".'Instagram 8.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
-
-// echo "\n***script device id:\n";
+// // echo "\n***script device id:\n";
  
 
-echo mt_rand(1000, 9999);
+// echo mt_rand(1000, 9999);
 
 
-echo str_split(md5(mt_rand(1000, 9999)),17)[0]."\n\n";
-echo str_split(md5(mt_rand(1000, 9999)),17)[1]."\n\n";
+// echo str_split(md5(mt_rand(1000, 9999)),17)[0]."\n\n";
+// echo str_split(md5(mt_rand(1000, 9999)),17)[1]."\n\n";
 
-echo 'android-'.str_split(md5(mt_rand(0, 999999999)), 17)[mt_rand(0, 1)]."\n";
+// echo 'android-'.str_split(md5(mt_rand(0, 999999999)), 17)[mt_rand(0, 1)]."\n";
 
 
 // $guid = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', 

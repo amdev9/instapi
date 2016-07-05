@@ -28,8 +28,11 @@ class InstagramRegistration
         $this->waterfall_id =  $this->generateUUID(true);
         $this->UA = $this->GenerateUserAgent();
 
-        $this->device_id = 'android-'.str_split(md5(mt_rand(0, 999999999999)), 17)[mt_rand(0, 1)]; //99999999
+        $this->device_id = 'android-'.bin2hex(openssl_random_pseudo_bytes(8));
+        // str_split(md5(mt_rand(9999, 999999999999)), 16)[mt_rand(0, 1)]; 
+        //
 
+        // str_split(md5(mt_rand(9999, 999999999999)), 17)[mt_rand(0, 1)]; //99999999
 
         if (!is_null($IGDataPath)) {
             $this->IGDataPath = $IGDataPath;
@@ -94,7 +97,8 @@ class InstagramRegistration
     $data = json_encode([
           'username'   => $username,
           'qe_id'   => $this->uuid,        
-          'waterfall_id' => $this->waterfall_id, 
+          'waterfall_id' => $this->waterfall_id,
+          '_csrftoken' => $this->token, 
       ]);
 
       $response =   $this->request('users/check_username/', $this->generateSignature($data))[1];  
@@ -236,6 +240,12 @@ public function usernameSuggestions($email)
 // "_uuid"="70079fbe-8663-4984-a564-f4e021f762de",
 // "email"="blackkoro.l@gmail.com"}
 // &ig_sig_key_version=4
+
+
+//ANDROID2 GET https://i.instagram.com/api/v1/location_search/?latitude=56.759945&timestamp=1329426118000&longitude=37.1314441&search_query=n HTTP
+  //Instagram 8.4.0 Android (17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; ru_RU)
+
+//getLocationFeed then
 
 
 // User-Agent: Instagram 8.3.0 (iPhone6,1; iPhone OS 9_3; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
