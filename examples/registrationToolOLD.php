@@ -593,7 +593,7 @@ while ( $redis->scard("proxy") > 0 )
 		// echo $loc."\n\n";
 
 		$aaaa = 0;
-		while ($aaaa < 3) { //$redis->scard("$a[0].":".$b[0]") > 0
+		while ($aaaa < 1) { //$redis->scard("$a[0].":".$b[0]") > 0
 			try { 
 			    // $getl = $i->getLocationFeed( $nnnames['items'][0]['location']['pk']);
 
@@ -617,7 +617,7 @@ while ( $redis->scard("proxy") > 0 )
 				$getnewl = $i->getLocationFeed( $locpk, $next_next_max_id);
 
 				$countertrue = 0;
-				while ( $countertrue < 4) { //$getnewl['more_available'] ==true
+				while (isset($getnewl['more_available']) && $getnewl['more_available'] ==true) { // $countertrue < 4
 						
 					$tmpgetnewl = $getnewl;
 
