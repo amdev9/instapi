@@ -321,6 +321,167 @@ function funcparse($followers, $i, $redis, $influencer) {
 			sleep(6);
 		}
 }
+
+
+
+function funcgeocoordparse($i, $redis) 
+{
+
+		// PARSE PK BY LOCATION
+		// $lat = '56.759945';
+		// $long =  '37.1314441';
+		// $nnnames = $i->locationParser($lat, $long);//return venues[0..n][name] -> searchLocation(/\) -> getLocationFeed( $locationdata['items'][0]['location']['pk']);
+		//  echo "\n\n".$nnnames['venues'][0]['name'];
+		//  echo "\n\n".$nnnames['venues'][1]['name'];
+
+		$approxer = 3;//10
+		 
+		$a =  [55.880088, 37.368901];
+		$b =  [55.608911, 37.917495];
+
+		$lengthY = abs($a[0]-$b[0]);
+		$lengthX = abs($a[1]-$b[1]);
+
+		if ($lengthX > $lengthY) {
+			$sq_a = $lengthY/$approxer;
+		}
+		else {
+			$sq_a = $lengthX/$approxer;
+		}
+
+		 
+		for ($m =0; $m < 1000; $m++)
+		 	for ($n =0; $n < 1000; $n++)
+		 		if ($a[0]-$m*$sq_a > $b[0]) { 
+		 			if ($a[1]+$n*$sq_a < $b[1]) {
+						
+						echo "---->(".sprintf( "%0.06f", ($a[0] + $m*$sq_a)).",".sprintf( "%0.06f", ($a[1] + $n*$sq_a)).")\n";
+						
+
+				$nnnames = $i->searchLocation(sprintf( "%0.06f", ($a[0] + $m*$sq_a)), sprintf( "%0.06f", ($a[1] + $n*$sq_a)));
+
+					$itemsCount = 0;
+					while (isset($nnnames['items'][$itemsCount]) == true ) {
+						 
+					if (explode('.',$nnnames['items'][$itemsCount]['location']['lat'])[0]  == explode('.',sprintf( "%0.06f", ($a[0] + $m*$sq_a)))[0] && explode('.',$nnnames['items'][$itemsCount]['location']['lng'])[0]  == explode('.',sprintf( "%0.06f", ($a[1] + $n*$sq_a)))[0]) {
+							 
+
+						     	$redis->sadd($a[0].":".$b[0], $nnnames['items'][$itemsCount]['location']['pk']);
+
+							}
+						 	$itemsCount++;
+						 }
+
+						# puts n.to_s + "=" + m.to_s
+		 			}
+		 		 }
+		 	
+
+	
+		// $nnnames = $i->searchLocation('55.706440','37.577896');
+ 		// $loc = var_export($nnnames);
+		// echo $loc."\n\n";
+
+		// $aaaa = 0;
+		// while ($aaaa < 1) { //$redis->scard("$a[0].":".$b[0]") > 0
+
+
+			try { 
+			    // $getl = $i->getLocationFeed( $nnnames['items'][0]['location']['pk']);
+
+				$locpk = $redis->spop($a[0].":".$b[0]);
+				$getl = $i->getLocationFeed($locpk);
+
+				$num_rank_results =0;
+				while ($num_rank_results < $getl['num_results']) {
+					// echo $getl['items'][$num_rank_results]['user']['pk']."<----user\n";//['ranked_items']
+
+					if($getl['items'][$num_rank_results]['user']['has_anonymous_profile_picture'] == false) 
+					  {
+
+					  $txt=$getl['items'][$num_rank_results]['user']['full_name'];
+					  $re1='.*?';	# Non-greedy match on filler
+					  $re2='((?:[a-z][a-z]+))';	# Word 1
+					  $word1 = "";
+					  if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
+					  {
+					      $word1=$matches[1][0];
+					  }
+
+					 $redis->sadd("detection", $getl['items'][$num_rank_results]['user']['pk'].":".$word1);
+
+					// $redis->sadd("userpk".$a[0].":".$b[0], $getl['items'][$num_rank_results]['user']['pk'] );
+					}
+
+					///need add not runked items
+
+					$num_rank_results++;
+				}	
+				// $lc = var_export($getl);
+				// echo $lc;
+
+			
+				if ($getl['more_available'] ==true ) {
+					$next_next_max_id = $getl['next_max_id'];
+					$getnewl = $i->getLocationFeed( $locpk, $next_next_max_id);
+				} else {
+
+					echo "------>NO more\n";
+				}
+				
+
+				$countertrue = 0;
+				while (isset($getnewl['more_available']) && $getnewl['more_available'] ==true) { // $countertrue < 4
+						
+					$tmpgetnewl = $getnewl;
+
+					//parse users pk
+					$num_results = 0;
+					while ($num_results < $getnewl['num_results']) {
+					 // echo $getnewl['items'][$num_results]['user']['pk'].
+						echo "<----user\n";
+
+
+					  if($getnewl['items'][$num_results]['user']['has_anonymous_profile_picture'] == false) 
+					  {
+					  	// $getnewl['items'][$num_results]['user']['is_private'] == false
+					    // $usfeed['items'][0]['taken_at'] > $filterDate &&  $usfeed['num_results'] > 9
+						
+
+					  $txt=$getnewl['items'][$num_results]['user']['full_name'];
+					  $re1='.*?';	# Non-greedy match on filler
+					  $re2='((?:[a-z][a-z]+))';	# Word 1
+					  $word1 = "";
+					  if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
+					  {
+					      $word1=$matches[1][0];
+					  }
+
+
+
+					 $redis->sadd("detection", $getnewl['items'][$num_results]['user']['pk'].":".$word1);
+
+
+				     }
+			
+
+					 $num_results++;
+					}
+
+					$getnewl = $i->getLocationFeed( $locpk, $tmpgetnewl['next_max_id']);
+
+					$redis->rpush($locpk.":geomax_id",  $tmpgetnewl['next_max_id'] ); 
+
+					$countertrue++;
+			     }
+
+			} catch (Exception $e) {
+			    echo $e->getMessage();
+			}
+		 sleep(6);
+}
+
+
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
  
@@ -343,32 +504,6 @@ $dir    = $romerINSTAPI.'src/'.$profileSetter;
 // $filePhoto2 = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/16.jpg";
 // $caption = "Cool!";
 // $caption2 = "Cool!";
-
-
-// READ LOGINS AND FIRST NAMES FROM FILE
-// $login_names = @fopen( $romerINSTA."email_proxy/login_names", "r");
-// $lines=array();
-// if ($login_names) {
-//     while (($buffer = fgets($login_names, 4096)) !== false) {
-//     	$lines[]=trim($buffer); 
-//     }
-//     if (!feof($login_names)) {
-//         echo "Error: unexpected fgets() fail\n";
-//     }
-//     fclose($login_names);
-// }
-// READ PROXIES FROM FILE
-// $proxy_list = @fopen($romerINSTA."email_proxy/proxy_list", "r");
-// $prox=array();
-// if ($proxy_list) {
-//     while (($buffer = fgets($proxy_list, 4096)) !== false) {
-//     	$prox[]=trim($buffer); 
-//     }
-//     if (!feof($proxy_list)) {
-//         echo "Error: unexpected fgets() fail\n";
-//     }
-//     fclose($proxy_list);
-// }
  
 
 
@@ -377,9 +512,7 @@ $username = "";
 $first_name = "";
 $qs_stamp = "";
 
-// $p = 0; 
-
-// while ($p < count($prox)) 
+ 
 
 while ( $redis->scard("proxy") > 0 ) 
 {
@@ -393,28 +526,13 @@ while ( $redis->scard("proxy") > 0 )
 	$redis->sadd("used_proxy", $prox);
 
 	$r = new InstagramRegistration($prox, $debug);
-	 
-//+1) check email qe_id = guid = uuid ; //android waterfall_id = UUID.randomUUID().toString(); //with '-'
-	//+2)fetch headers with crstoken
-	//3) username suggestions with same cookie
-	//+4) check username with same cookie
-	//+5) create acc and set new cookie  
-	//6) sync
-	//7) friendships autocompete user 
-
-	// POST https://android.clients.google.com/c2dm/register3 HTTP/1.1
-
-	//8) api/v1/push/register/   with phone_id newly before acc create  
-	//9) v1/direct_share/recent_recipients/
-	//10) again push
-
-
-	 $check = $r->checkEmail($email);
+	sleep(7);
+	$check = $r->checkEmail($email);
  
-       if ($check[1]['available'] == false) {
-	    	$redis->sadd("blacklist_email",  $email);
-	        break;
-	    }     
+    if ($check[1]['available'] == false) {
+    	$redis->sadd("blacklist_email",  $email);
+	    break;
+	}     
 
 	$outputs = $r->fetchHeaders();
 	 
@@ -434,7 +552,7 @@ while ( $redis->scard("proxy") > 0 )
       
       
 	$r->usernameSuggestions($email);			// for full emulation
-	sleep(2);
+	sleep(4);
     while ( $redis->scard("names") > 0 ) {  
     	$pieces = explode(" ",  $redis->spop("names"));
         $check = $r->checkUsername($pieces[0] );
@@ -445,13 +563,12 @@ while ( $redis->scard("proxy") > 0 )
 
 	        break;
 	    }     
-	    sleep(3);
+	    sleep(5);
 	} 
+	 sleep(4);
+	
 	 
-	
-	// echo "OUTPUTS--->";
-	
-	$result = $r->createAccount($username, $password, $email, $qs_stamp );
+	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
 
 	$resToPrint =  var_export($result);
 	echo $resToPrint;
@@ -533,116 +650,8 @@ while ( $redis->scard("proxy") > 0 )
 
 		sleep(6);
 
-
-	 
-
-		// PARSE PK BY LOCATION
-		// $lat = '56.759945';
-		// $long =  '37.1314441';
-		// $nnnames = $i->locationParser($lat, $long);//return venues[0..n][name] -> searchLocation(/\) -> getLocationFeed( $locationdata['items'][0]['location']['pk']);
-		//  echo "\n\n".$nnnames['venues'][0]['name'];
-		//  echo "\n\n".$nnnames['venues'][1]['name'];
-
-
-		$approxer = 3;//10
-		 
-		$a =  [55.880088, 37.368901];
-		$b =  [55.608911, 37.917495];
-
-		$lengthY = abs($a[0]-$b[0]);
-		$lengthX = abs($a[1]-$b[1]);
-
-		if ($lengthX > $lengthY) {
-			$sq_a = $lengthY/$approxer;
-		}
-		else {
-			$sq_a = $lengthX/$approxer;
-		}
-
-		 
-		for ($m =0; $m < 1000; $m++)
-		 	for ($n =0; $n < 1000; $n++)
-		 		if ($a[0]-$m*$sq_a > $b[0]) { 
-		 			if ($a[1]+$n*$sq_a < $b[1]) {
-						
-						echo "---->(".sprintf( "%0.06f", ($a[0] + $m*$sq_a)).",".sprintf( "%0.06f", ($a[1] + $n*$sq_a)).")\n";
-						
-
-				$nnnames = $i->searchLocation(sprintf( "%0.06f", ($a[0] + $m*$sq_a)), sprintf( "%0.06f", ($a[1] + $n*$sq_a)));
-
-					$itemsCount = 0;
-					while (isset($nnnames['items'][$itemsCount]) == true ) {
-						 
-					if (explode('.',$nnnames['items'][$itemsCount]['location']['lat'])[0]  == explode('.',sprintf( "%0.06f", ($a[0] + $m*$sq_a)))[0] && explode('.',$nnnames['items'][$itemsCount]['location']['lng'])[0]  == explode('.',sprintf( "%0.06f", ($a[1] + $n*$sq_a)))[0]) {
-							 
-
-						     	$redis->sadd($a[0].":".$b[0], $nnnames['items'][$itemsCount]['location']['pk']);
-
-							}
-						 	$itemsCount = $itemsCount + 1;
-						 }
-
-						# puts n.to_s + "=" + m.to_s
-		 			}
-		 		 }
-		 	
-
-	
-		// $nnnames = $i->searchLocation('55.706440','37.577896');
- 		// $loc = var_export($nnnames);
-		// echo $loc."\n\n";
-
-		$aaaa = 0;
-		while ($aaaa < 1) { //$redis->scard("$a[0].":".$b[0]") > 0
-			try { 
-			    // $getl = $i->getLocationFeed( $nnnames['items'][0]['location']['pk']);
-
-				$locpk = $redis->spop($a[0].":".$b[0]);
-				$getl = $i->getLocationFeed($locpk);
-
-				$num_rank_results =0;
-				while ($num_rank_results < $getl['num_results']) {
-					echo $getl['items'][$num_rank_results]['user']['pk']."<----user\n";//['ranked_items']
-					$redis->sadd("userpk".$a[0].":".$b[0], $getl['items'][$num_rank_results]['user']['pk'] );
-
-					$num_rank_results++;
-				}	
-				// $lc = var_export($getl);
-				// echo $lc;
-
-			
-				if ($getl['more_available'] ==true ) {
-					$next_next_max_id = $getl['next_max_id'];
-				}
-				$getnewl = $i->getLocationFeed( $locpk, $next_next_max_id);
-
-				$countertrue = 0;
-				while (isset($getnewl['more_available']) && $getnewl['more_available'] ==true) { // $countertrue < 4
-						
-					$tmpgetnewl = $getnewl;
-
-					//parse users pk
-					$num_results = 0;
-					while ($num_results < $getnewl['num_results']) {
-					 echo $getnewl['items'][$num_results]['user']['pk']."<----user\n";
-
-					 $redis->sadd("userpk".$a[0].":".$b[0], $getnewl['items'][$num_results]['user']['pk'] );
-					 $num_results++;
-					}
-
-					$getnewl = $i->getLocationFeed( $locpk, $tmpgetnewl['next_max_id']);
-
-					$redis->rpush($locpk.":geomax_id",  $tmpgetnewl['next_max_id'] ); 
-
-					$countertrue++;
-			     }
-
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
-		 sleep(2);
-		 $aaaa = $aaaa +1;
-		}
+		 // funcgeocoordparse($i, $redis);
+ 
 
 
 /////////////////////////////////////////////

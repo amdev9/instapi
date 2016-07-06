@@ -324,7 +324,7 @@ public function usernameSuggestions($email)
    * @return array
    *   Registration data
    */
-  public function createAccount($username, $password, $email, $qs_stamp)
+  public function createAccount($username, $password, $email, $qs_stamp, $full_name)
   {
 
     // signed_body=60e9c6b1eead6e6ebbb606d1505e50e3a4b6e606580f97e3e174fb6919e4904e.{
@@ -344,12 +344,14 @@ public function usernameSuggestions($email)
           'phone_id'           => $this->phone_id,
           '_csrftoken'         => $this->token, //'missing', //
           'username'           => $username,
-          'first_name'         => '',           //need test add this
+          'first_name'         => $full_name,          //before ''
           'guid'               => $this->uuid,
           //'device_id'          => 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)],  //worked but too many already registered
-           'device_id'          => $this->device_id,
           // 'device_id'          => 'android-'.$this->generateUUID(true), //need fix!!
           // 'device_id'          => 'android-'.$this->uuid,
+
+          'device_id'          => $this->device_id,
+          
           'email'              => $email,
           'force_sign_up_code' => '',
           'waterfall_id'       => $this->waterfall_id,
