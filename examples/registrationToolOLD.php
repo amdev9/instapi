@@ -150,21 +150,22 @@ function funcrecur($ilink, $usernamelink, $pkuser) {
 	    funcgeocoordparse($ilink, $GLOBALS["redis"]);
 	}
 	functofollow($ilink, $usernamelink, $pkuser);	 
- 	sleep(4);
+ 	
+ 	sleep(6);
+	
 	// functocomment($ilink, $usernamelink);
 	
-	$actioner = $GLOBALS["redis"]->spop("foraction");
-	$resarr = explode(":", $actioner);
+	$actioner = $GLOBALS["redis"]->spop("foractionM");
+	// $resarr = explode(":", $actioner);
 
 	try {	
-		$fres = $ilink->follow($resarr[0]);
+		$fres = $ilink->follow($resarr);
 		echo var_export($fres); //need to test res code
 
 	} catch (Exception $e) {
 	    echo $e->getMessage();
 	}
 	 
-
 	// try {	
 	// 	$lres =$ilink->like($resarr[1]);
 	// 	echo var_export($lres); //need to test res code
@@ -174,13 +175,11 @@ function funcrecur($ilink, $usernamelink, $pkuser) {
 	// sleep(6);
 	
 	// if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink)) {
-	//    functiondirectshare($usernamelink, $resarr[0]);
+	//    functiondirectshare($usernamelink, $resarr[0], $ilink);
 	// }
 	 
-	echo $next_iteration_time = add_time($delay);//timer
-
+	echo $next_iteration_time = add_time($delay); //timer
 	sleep($next_iteration_time);
-
 	funcrecur($ilink, $usernamelink, $pkuser);
 
 }
@@ -367,8 +366,12 @@ function funcgeocoordparse($i, $redis)
 
 		$approxer = 3;//10
 		 
-		$a =  [55.880088, 37.368901];
-		$b =  [55.608911, 37.917495];
+		 //sent pol USA
+		 $a = [45.147617,-93.535346];
+		 $b = [44.741903,-92.903632];
+
+		// $a =  [55.880088, 37.368901];
+		// $b =  [55.608911, 37.917495];
 
 		$lengthY = abs($a[0]-$b[0]);
 		$lengthX = abs($a[1]-$b[1]);
@@ -513,8 +516,12 @@ function funcgeocoordparse($i, $redis)
 }
 
 
-function functiondirectshare($username, $message_recipient)
+function functiondirectshare($username, $message_recipient, $i)
 {	 
+
+			$feedres = $i->getSelfUserFeed();
+			$ad_media_id  = $feedres['items'][0]['pk'];
+
 				// $ad_media_list  = [ ];
 				
 		  //   	$ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
@@ -550,12 +557,12 @@ function functiondirectshare($username, $message_recipient)
 		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
 		 			 echo "\n\n**SEND**\n\n";
 		 			 if ($answer == "ok") {
-		 				$redis->rpush("recieved",  $message_recipient); 
+		 				$GLOBALS["redis"]->rpush("recieved",  $message_recipient); 
 		 			} else {
 
-		 				$redis->rpush("not_recieved",  $message_recipient);  // track not sended messages
+		 				$GLOBALS["redis"]->rpush("not_recieved",  $message_recipient);  // track not sended messages
 		 				//del this --> sleep
-		 				$redis->sadd("disabled", "direct_".$username );
+		 				$GLOBALS["redis"]->sadd("disabled", "direct_".$username );
 		 				// sleep(14400); // 4 hours sleep
 		 			 
 		 			}
