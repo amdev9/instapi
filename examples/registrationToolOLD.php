@@ -31,19 +31,26 @@ $redis = new Predis\Client(array(
 
 function functofollow($ilink, $usernamelink, $pkuser) {
 	$tofollow = $GLOBALS["redis"]->smembers("followmebot");
-    foreach ($tofollow as $fol) {	// randomizer to not follow like stupid bot all who registered?
-    	if ($GLOBALS["redis"]->sismember("followedbybot", $usernamelink."".$fol ) != true && $fol != $pkuser) {
+
+	if ($GLOBALS["redis"]->scard("followedbybot_".$usernamelink) < 10 ) {
+
+    foreach ($tofollow as $fol) {	 
+    	if ($GLOBALS["redis"]->sismember("followedbybot", $usernamelink."".$fol ) != true && $fol != $pkuser ) {
+
 	   		try {
 		   		 $ilink->follow($fol);
 		   		 $GLOBALS["redis"]->sadd("followedbybot", $usernamelink."".$fol);
+		   		 
+		   		 $GLOBALS["redis"]->sadd("followedbybot_".$usernamelink , $fol);
+
 				} catch (Exception $e) {
 		   		 echo $e->getMessage();
 				}		
+   			}
+   			sleep(30);
    		}
-   		sleep(30);
-   	}
+	}	
 }
-
 
 function functocomment($ilink, $usernamelink) {
 
@@ -60,6 +67,8 @@ function functocomment($ilink, $usernamelink) {
 
 //$GLOBALS["redis"]->sismember("comment_sent", $usernamelink) != true
 	if ($GLOBALS["followercount"] > 0 ) {
+
+		//////
 		$influencers = ["253477742", "240333138", "7061024", "217566587"];
 		// --byzova  , "267685466" --borodilya "22288455",
  		foreach ($influencers as $influencer) {
@@ -78,16 +87,9 @@ function functocomment($ilink, $usernamelink) {
  			sleep(10);
 		}
 
-
-	// 	COMMENTS OF influencers
-		 
-
  		try {
- 		 
 
  			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
-
-
 			$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");		 // get  index of comment here
 			$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; // make it RANDOM
 
@@ -139,21 +141,50 @@ function functocomment($ilink, $usernamelink) {
 
 function funcrecur($ilink, $usernamelink, $pkuser) {
 
-	functofollow($ilink, $usernamelink, $pkuser);	
-
-	//  LATEST POSTS MONITORING OF influencers
-	// wow russia influencers
-
-   	$followercount = 0;
-	functocomment($ilink, $usernamelink);
+	$time_in_day = 24*60*60;
+	$posts_per_day = 600; 		//  direct 500->50    700->34
+	$delay = $time_in_day / $posts_per_day;
+ 
+	if ($GLOBALS["redis"]->scard("foraction") == 0)
+	{
+	    funcgeocoordparse($ilink, $GLOBALS["redis"]);
+	}
+	functofollow($ilink, $usernamelink, $pkuser);	 
+ 	sleep(4);
+	// functocomment($ilink, $usernamelink);
 	
-	sleep(10);
+	$actioner = $GLOBALS["redis"]->spop("foraction");
+	$resarr = explode(":", $actioner);
+
+	try {	
+		$fres = $ilink->follow($resarr[0]);
+		echo var_export($fres); //need to test res code
+
+	} catch (Exception $e) {
+	    echo $e->getMessage();
+	}
+	 
+
+	// try {	
+	// 	$lres =$ilink->like($resarr[1]);
+	// 	echo var_export($lres); //need to test res code
+	// } catch (Exception $e) {
+	//     echo $e->getMessage();
+	// }
+	// sleep(6);
+	
+	// if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink)) {
+	//    functiondirectshare($usernamelink, $resarr[0]);
+	// }
+	 
+	echo $next_iteration_time = add_time($delay);//timer
+
+	sleep($next_iteration_time);
+
 	funcrecur($ilink, $usernamelink, $pkuser);
 
-	// sleep before next cycle iteration
-
 }
-///check if string contains arabic
+ 
 function f_rand($min=0,$max=1,$mul=100000){
 		    if ($min>$max) return false;
 		    return mt_rand($min*$mul,$max*$mul)/$mul;
@@ -482,6 +513,59 @@ function funcgeocoordparse($i, $redis)
 }
 
 
+function functiondirectshare($username, $message_recipient)
+{	 
+				// $ad_media_list  = [ ];
+				
+		  //   	$ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
+				
+				// $followlike  = $redis->spop($key);   
+			 //    $resarr = explode(":",$followlike);
+				// $message_recipient = $resarr[0];
+
+  	 
+  		// return user ID 
+
+				$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
+				$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+				 $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
+				$cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+			    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+			    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+			    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+			    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+				$first_name_txt = explode(" ",$first_name);
+				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+
+				$text = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil  I'm online here @girlshothere                @girlshothere                @girlshothere $smi $cur $cur $cur";
+
+              
+				try {
+				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
+				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
+		 			
+		 			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
+
+		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
+		 			 echo "\n\n**SEND**\n\n";
+		 			 if ($answer == "ok") {
+		 				$redis->rpush("recieved",  $message_recipient); 
+		 			} else {
+
+		 				$redis->rpush("not_recieved",  $message_recipient);  // track not sended messages
+		 				//del this --> sleep
+		 				$redis->sadd("disabled", "direct_".$username );
+		 				// sleep(14400); // 4 hours sleep
+		 			 
+		 			}
+
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+	 
+}
+
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
  
@@ -648,10 +732,10 @@ while ( $redis->scard("proxy") > 0 )
 		}
 
 		sleep(6);
-
-		// funcgeocoordparse($i, $redis);
+		
+		// funcgeocoordparse($i, $redis);  // geo coordinates with gender done
  
-
+		 funcrecur($i, $username, $pk); 
 
 /////////////////////////////////////////////
 	 
@@ -707,48 +791,32 @@ while ( $redis->scard("proxy") > 0 )
 
 
 		// try {
-		//     $usfeed = $i->getUserFeed("3153242478", $maxid = null, $minTimestamp = null);// use the same caption
-		    
+		//     $usfeed = $i->getUserFeed("3153242478", $maxid = null, $minTimestamp = null);// use the same caption 
 		//    $resusfeed = var_export($usfeed);
 		// 	 echo $resusfeed;
-		  
-
 		// //     echo $usfeed['items'][0]['pk']; //-- put it to redis
-
 		// // // time created 
 		// // 	// echo $usfeed['items'][0]['taken_at'];
-	 // // 		// echo date('m/d/Y', $usfeed['items'][0]['taken_at']);
-
-	 // // 		// $filterDate = strtotime('-3 month', time()); 
+	    // 		// echo date('m/d/Y', $usfeed['items'][0]['taken_at']);
+	    // 		// $filterDate = strtotime('-3 month', time()); 
 		// // 	// echo date('m/d/Y H:i:s', $newDate)."\n";
-			
-		
 		// // // location
 		// // 	// echo $usfeed['items'][0]['lat'];
-		 
 		// // 	// echo lastest post data
-			
 		// } catch (Exception $e) {
 		//     echo $e->getMessage();
 		// }
 		// sleep(10);
-
-
 		// 	try {
- 	// 	$i->follow($userId);
+ 		// 	$i->follow($userId);
 		// } catch (Exception $e) {
 		//     echo $e->getMessage();
 		// }
 		// sleep(6);
 
-
-
 	// 	try {
- 			 
- // 			// $mediaId = $redis->spop($key = "media"); 		// media id from redis
+    // $mediaId = $redis->spop($key = "media"); 		// media id from redis
 	// 	   	$i->like("1270615353921552313");
-		    
-
 	// 	} catch (Exception $e) {
 	// 	    echo $e->getMessage();
 	// 	}
@@ -786,100 +854,106 @@ while ( $redis->scard("proxy") > 0 )
 		
 // // ///////////////////////////// DIRECT SHARE MAX 15 people in group  4ewir: 1009845355 ; blac.kkorol: 3299015045
 		
-// 		$time_in_day = 24*60*60;
-// 		$posts_per_day = 200; 		// 300 - 60?   400 ->60  500->50    700->34
-// 		$delay = $time_in_day / $posts_per_day;
-// 		$next_iteration_time = time() + $delay; 
+	// 	$time_in_day = 24*60*60;
+	// 	$posts_per_day = 200; 		// 300 - 60?   400 ->60  500->50    700->34
+	// 	$delay = $time_in_day / $posts_per_day;
+	// 	$next_iteration_time = time() + $delay; 
 
 		
 
-// 		// $outarray = array_slice($prox, $p+1);
-// 		// $GLOBALS["proxy_list"] = $outarray;
-// 		// file_put_contents($romerINSTA."email_proxy/proxy_list", "");
-// 		// file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
-//      	$key = "adultus";
-// 		while (true) {
-// 				 if ($redis->scard($key) == 0)
-// 				{
-// 				 funcparse($followers, $i, $redis, $influencer);
-// 				}	
+	// 	// $outarray = array_slice($prox, $p+1);
+	// 	// $GLOBALS["proxy_list"] = $outarray;
+	// 	// file_put_contents($romerINSTA."email_proxy/proxy_list", "");
+	// 	// file_put_contents($romerINSTA."email_proxy/proxy_list", implode("\n",$outarray));
+ //     	$key = "adultus";
+	// 	while (true) {
+	// 			 if ($redis->scard($key) == 0)
+	// 			{
+	// 			 funcparse($followers, $i, $redis, $influencer);
+
+	// 			 //funcgeoparse add need test
+
+	// 			}	
   			
-// 				if (time() >  $next_iteration_time) {
+	// 			if (time() >  $next_iteration_time) {
 
 			 
 			 
-// 	$ad_media_list  = ["1277470816705363477", "1277466307392355679", "1277436633060654628", "1277425043150126380", "1277422432296549618", "1276704501912747284", "1276702167556078800", "1276701053179837627", "1276700215979981984", "1276699612360916114"];
+	// $ad_media_list  = ["1277470816705363477", "1277466307392355679", "1277436633060654628", "1277425043150126380", "1277422432296549618", "1276704501912747284", "1276702167556078800", "1276701053179837627", "1276700215979981984", "1276699612360916114"];
 				
-// 		    	$ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
+	// 	    	$ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
 				
-// 				$followlike  = $redis->spop($key);   
-// 			    $resarr = explode(":",$followlike);
-// 				$message_recipient = $resarr[0];
+	// 			$followlike  = $redis->spop($key);   
+	// 		    $resarr = explode(":",$followlike);
+	// 			$message_recipient = $resarr[0];
 
 
-// 				try {	
-// 					$i->follow($resarr[0]);
-// 				} catch (Exception $e) {
-// 				    echo $e->getMessage();
-// 				}
-// 				sleep(6);
-// 				try {	
-// 					$i->like($resarr[1]);
-// 				} catch (Exception $e) {
-// 				    echo $e->getMessage();
-// 				}
-// 				sleep(6);
+	// 			try {	
+	// 				$fres = $i->follow($resarr[0]);
+	// 				echo var_export($fres); //need to test res code
 
-//   						   //check if message_recipient is NULL!!!!!!!!!!!!
+	// 			} catch (Exception $e) {
+	// 			    echo $e->getMessage();
+	// 			}
+	// 			sleep(6);
+	// 			try {	
+	// 				$lres =$i->like($resarr[1]);
+	// 				echo var_export($lres); //need to test res code
+	// 			} catch (Exception $e) {
+	// 			    echo $e->getMessage();
+	// 			}
+	// 			sleep(6);
+
+ //  						   //check if message_recipient is NULL!!!!!!!!!!!!
   	 
-//   		// return user ID 
+ //  		// return user ID 
 
-// 				$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
-// 				$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
-// 				 $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
-// 				$cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
-// 			    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
-// 			    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
-// 			    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
-// 			    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
-// 				$first_name_txt = explode(" ",$first_name);
-// 				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
-// 		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+	// 			$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
+	// 			$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+	// 			 $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
+	// 			$cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+	// 		    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+	// 		    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+	// 		    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+	// 		    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+	// 			$first_name_txt = explode(" ",$first_name);
+	// 			$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+	// 	 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-// 				$text = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil  I'm online here @girlshothere                @girlshothere                @girlshothere $smi $cur $cur $cur";
+	// 			$text = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil  I'm online here @girlshothere                @girlshothere                @girlshothere $smi $cur $cur $cur";
 
               
-// 				try {
-// 				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
-// 				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
+	// 			try {
+	// 			//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
+	// 			//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
 		 			
-// 		 			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
+	// 	 			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
 
-// 		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
-// 		 			 echo "\n\n**SEND**\n\n";
-// 		 			 if ($answer == "ok") {
-// 		 			$redis->rpush("recieved",  $message_recipient); 
-// 		 			} else {
+	// 	 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
+	// 	 			 echo "\n\n**SEND**\n\n";
+	// 	 			 if ($answer == "ok") {
+	// 	 			$redis->rpush("recieved",  $message_recipient); 
+	// 	 			} else {
 
-// 		 				$redis->rpush("not_recieved",  $message_recipient);  // track not sended messages
-
-// 		 				sleep(14400); // 4 hours sleep
+	// 	 				$redis->rpush("not_recieved",  $message_recipient);  // track not sended messages
+	// 	 				//del this --> sleep
+	// 	 				sleep(14400); // 4 hours sleep
 		 			 
-// 		 			}
+	// 	 			}
 
-// 				} catch (Exception $e) {
-// 				    echo $e->getMessage();
-// 				}
+	// 			} catch (Exception $e) {
+	// 			    echo $e->getMessage();
+	// 			}
 
 
-// 				$next_iteration_time = timer($delay);
+	// 			$next_iteration_time = timer($delay);
 			
-// 				}	
+	// 			}	
 			 
 
-// 			sleep(2);
+	// 		sleep(2);
 		
-// 		 }
+	// 	 }
 
 	
 	    break;

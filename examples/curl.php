@@ -44,8 +44,8 @@
 // echo strlen(str_split(md5(mt_rand(1000, 9999)), 17)[1])."\n\n";
 
 // echo "-- final --\n";
- $test = 'android-'.bin2hex(openssl_random_pseudo_bytes(8));
-echo $test;
+//  $test = 'android-'.bin2hex(openssl_random_pseudo_bytes(8));
+// echo $test;
 // echo "\n___________\n";
 // echo strlen(bin2hex(openssl_random_pseudo_bytes(8)));
 // // // echo "API login:\n";
@@ -424,16 +424,26 @@ echo $test;
 // curl_close($ch);      
 
 
-// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-//  require $romerPREDIS.'autoload.php';
+ $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+require $romerPREDIS.'autoload.php';
 
 
-//         Predis\Autoloader::register();
+        Predis\Autoloader::register();
 
-//         $redis = new Predis\Client(array(
-//          "scheme" => "tcp",
-//          "host" => "127.0.0.1",
-//          "port" => 6379));
+        $redis = new Predis\Client(array(
+         "scheme" => "tcp",
+         "host" => "127.0.0.1",
+         "port" => 6379));
+
+
+
+if ($GLOBALS["redis"]->scard("foraction") == 0)
+{
+
+
+
+}
+
 
 // $mediatocomment = $GLOBALS["redis"]->lrange("infpost_240333138", -1, -1);
 // echo var_export($mediatocomment);

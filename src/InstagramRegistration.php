@@ -332,31 +332,13 @@ public function usernameSuggestions($email) //not use for now
   public function createAccount($username, $password, $email, $qs_stamp, $full_name)
   {
 
-    // signed_body=60e9c6b1eead6e6ebbb606d1505e50e3a4b6e606580f97e3e174fb6919e4904e.{
-// "phone_id"="913d5b20-c76a-42d9-8132-ece7432fb11c",
-// "_csrftoken"="Gg24HfCNOJnER7ymHEKaAlVuVwEVBgL3",
-// "username"="blackkorol84567",
-// "first_name"="",
-// "guid"="70079fbe-8663-4984-a564-f4e021f762de",
-// "device_id"="android-73fbaaf053107d8e",
-// "email"="blackkoro.l@gmail.com",
-// "force_sign_up_code"="",
-// "waterfall_id"="62a9bd9a-5a24-4cee-9d11-e33512de449d",
-// "qs_stamp"
-
-
       $data = json_encode([
           'phone_id'           => $this->phone_id,
           '_csrftoken'         => $this->token, //'missing', //
           'username'           => $username,
           'first_name'         => $full_name,          //before ''
           'guid'               => $this->uuid,
-          //'device_id'          => 'android-'.str_split(md5(mt_rand(1000, 9999)), 17)[mt_rand(0, 1)],  //worked but too many already registered
-          // 'device_id'          => 'android-'.$this->generateUUID(true), //need fix!!
-          // 'device_id'          => 'android-'.$this->uuid,
-
           'device_id'          => $this->device_id,
-          
           'email'              => $email,
           'force_sign_up_code' => '',
           'waterfall_id'       => $this->waterfall_id,
@@ -429,6 +411,10 @@ public function usernameSuggestions($email) //not use for now
     public function request($endpoint, $post = null)
     {
  
+
+ //X-IG-Connection-Type: WIFI
+ //X-IG-Capabilities: 3Q==
+
      $headers = [
         'Connection: close',
         'Accept: */*',
