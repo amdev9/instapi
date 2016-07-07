@@ -154,18 +154,18 @@ function funcrecur($ilink, $usernamelink, $pkuser) {
  	sleep(6);
 	
 	// functocomment($ilink, $usernamelink);
-	
+	if 	($GLOBALS["redis"]->scard("foractionM") > 0 ) {
 	$actioner = $GLOBALS["redis"]->spop("foractionM");
 	// $resarr = explode(":", $actioner);
 
 	try {	
-		$fres = $ilink->follow($resarr);
+		$fres = $ilink->follow($actioner);
 		echo var_export($fres); //need to test res code
 
 	} catch (Exception $e) {
 	    echo $e->getMessage();
 	}
-	 
+	 }
 	// try {	
 	// 	$lres =$ilink->like($resarr[1]);
 	// 	echo var_export($lres); //need to test res code
@@ -640,24 +640,28 @@ while ( $redis->scard("proxy") > 0 )
 		 
 	}	
       
-      
-	// $r->usernameSuggestions($email);			// for full emulation
-	 
-    while ( $redis->scard("names") > 0 ) {  
-    	$pieces = explode(" ",  $redis->spop("names"));
-        $check = $r->checkUsername($pieces[0] );
-	  
-	    if ($check['available'] == true) {
-	    	$GLOBALS["username"] = $pieces[0];
-	    	$GLOBALS["first_name"] = $pieces[1]." ".$pieces[2];
+    sleep(4);  
+    $pieces = explode(" ", $redis->spop("names"));
+    $sugger = $r->usernameSuggestions($email,$pieces[1]." ".$pieces[2] );
+   	$GLOBALS["username"] = $sugger['suggestions'][0];
+	$GLOBALS["first_name"] = $pieces[1]." ".$pieces[2];
 
-	        break;
-	    }     
-	    sleep(3);
-	} 
+	 
+ //    while ( $redis->scard("names") > 0 ) {  
+ //    	$pieces = explode(" ",  $redis->spop("names"));
+ //        $check = $r->checkUsername($pieces[0] );
+	  
+	//     if ($check['available'] == true) {
+	//     	$GLOBALS["username"] = $pieces[0];
+	//     	$GLOBALS["first_name"] = $pieces[1]." ".$pieces[2];
+
+	//         break;
+	//     }     
+	//     sleep(3);
+	// } 
 	 
 	
-	 
+	  sleep(4);  
 	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
 
 	$resToPrint =  var_export($result);
@@ -963,8 +967,8 @@ while ( $redis->scard("proxy") > 0 )
 	// 	 }
 
 	
-	    break;
-	}
+	     break;
+    }
 	sleep(6);
 }     
    

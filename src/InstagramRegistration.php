@@ -91,6 +91,7 @@ class InstagramRegistration
       echo var_export($response);  
        preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matchresult);
       $this->token = $matchresult[1];
+      // echo "TOKEN:=====> ".$this->token;
      return $response;
   }
 
@@ -139,16 +140,16 @@ class InstagramRegistration
     
   }
 
-public function usernameSuggestions($email) //not use for now
+public function usernameSuggestions($email ,$full_name) //not use for now
   {
     $data = json_encode([
       '_csrftoken'   => $this->token,
-      'name'         => '',                     //need fix to name
+      'name'         => $full_name,                     //need fix to name
       'email'        => $email,
       'waterfall_id' => $this->waterfall_id,    
       ]);
 
-      $response =   $this->request('accounts/username_suggestions/', $this->generateSignature($data))[1];
+     $response =   $this->request('accounts/username_suggestions/', $this->generateSignature($data))[1];
      return $response;
     
   }
@@ -363,7 +364,7 @@ public function usernameSuggestions($email) //not use for now
 
     public function generateSignature($data)
     {
-        $hash = hash_hmac('sha256', $data, Constants::IG_SIG_KEY);
+        $hash = hash_hmac('sha256', $data, Constants::IG_SIG_KEY );
 
         return 'ig_sig_key_version='.Constants::SIG_KEY_VERSION.'&signed_body='.$hash.'.'.urlencode($data);
     }
@@ -412,28 +413,63 @@ public function usernameSuggestions($email) //not use for now
     {
  
 
- //X-IG-Connection-Type: WIFI
- //X-IG-Capabilities: 3Q==
+
+// $cookies = '{"sessionid":"IGSC2d21fe066d8bd33fbcb2f0638781e46916e03bb0cbae349abbc917a9b95299d2%3AdrdXOAZa1ElnS9usbIdwcdxdTnDtIXFe%3A%7B%22_token_ver%22%3A1%2C%22_auth_user_id%22%3A1816140160%2C%22_token%22%3A%221816140160%3AAkIkmHmEG4Fk0YelkAEAmJ2UyOM6GZWI%3A2a44bf749c4426b939fc9759182ebcb32e25f9e6ac6cb6e98766d3a9155d2e09%22%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1443409080.451618%2C%22_platform%22%3A1%7D","csrftoken":"e2c2c22af61d7717e8e607d685aa517f","ds_user_id":"1816140160","ds_user":"developer_account_1"}';
+// $headers = '{"X-IG-Capabilities":"HQ\u003d\u003d","X-IG-Connection-Type":"WIFI","Accept-Language":"en-NZ, en-US","User-Agent":"Instagram 7.7.0 Android (19/4.4.2; 480dpi; 1080x1920; samsung; SM-G900I; klte; qcom; en_NZ)"}';
+ 
+// $url = "https://i...content-available-to-author-only...m.com/api/v1/accounts/current_user/?edit=true";
+ 
+// $cookies = json_decode($cookies, true);
+// $cookies_string = http_build_query($cookies, null, ";");
+ 
+// $headers = json_decode($headers, true);
+ 
+// $ch = curl_init();
+// curl_setopt($ch, CURLOPT_URL, $url);
+// curl_setopt($ch, CURLINFO_HEADER_OUT, TRUE);
+// curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+// curl_setopt($ch, CURLOPT_HEADER, FALSE);
+// curl_setopt($ch, CURLOPT_COOKIE, $cookies_string);
+// curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+// curl_setopt($ch, CURLOPT_ENCODING, "gzip");
+// curl_setopt($ch, CURLOPT_TIMEOUT_MS, 5000);
+// curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, 3500);
+// $response = curl_exec($ch);
+// $info = curl_getinfo($ch);
+// curl_close($ch);
+ 
+// echo $response;
+ 
+ 
 
      $headers = [
-        'Connection: close',
-        'Accept: */*',
-        'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
-        'Cookie2: $Version=1',
-        'Accept-Language: en-US',          
+      'Host: i.instagram.com',
+      'Connection: keep-alive',
+      'Content-Length:'.strlen($post),
+      'X-IG-Connection-Type: WIFI',
+      'X-IG-Capabilities: 3Q==',
+      'Accept-Language: en-US', 
+      'Accept-Encoding: gzip, deflate',
+      'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
+      'Cookie2: $Version=1',
+                 
      ];
 
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
+        // curl_setopt($ch, CURLINFO_HEADER_OUT, TRUE);
         curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT); //$this->UA ); // 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_HEADER, true); 
+        curl_setopt($ch, CURLOPT_HEADER, true);//true 
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); //need test
+        //new
+        curl_setopt($ch, CURLOPT_ENCODING, "gzip");
+        // new
         curl_setopt($ch, CURLOPT_VERBOSE, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //need test added
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //need test added
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //need test added
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //need test added
 
         curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
         curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
@@ -452,6 +488,11 @@ public function usernameSuggestions($email) //not use for now
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         }
+
+
+       $information = curl_getinfo($ch);
+       echo var_export( $information);
+
 
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
