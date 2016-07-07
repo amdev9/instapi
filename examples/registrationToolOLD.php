@@ -506,7 +506,6 @@ $dir    = $romerINSTAPI.'src/'.$profileSetter;
 // $caption2 = "Cool!";
  
 
-
 $proxy = "";
 $username = "";
 $first_name = "";
@@ -526,7 +525,7 @@ while ( $redis->scard("proxy") > 0 )
 	$redis->sadd("used_proxy", $prox);
 
 	$r = new InstagramRegistration($prox, $debug);
-	sleep(7);
+	 
 	$check = $r->checkEmail($email);
  
     if ($check[1]['available'] == false) {
@@ -551,8 +550,8 @@ while ( $redis->scard("proxy") > 0 )
 	}	
       
       
-	$r->usernameSuggestions($email);			// for full emulation
-	sleep(4);
+	// $r->usernameSuggestions($email);			// for full emulation
+	 
     while ( $redis->scard("names") > 0 ) {  
     	$pieces = explode(" ",  $redis->spop("names"));
         $check = $r->checkUsername($pieces[0] );
@@ -563,9 +562,9 @@ while ( $redis->scard("proxy") > 0 )
 
 	        break;
 	    }     
-	    sleep(5);
+	    sleep(3);
 	} 
-	 sleep(4);
+	 
 	
 	 
 	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
@@ -650,7 +649,7 @@ while ( $redis->scard("proxy") > 0 )
 
 		sleep(6);
 
-		 // funcgeocoordparse($i, $redis);
+		// funcgeocoordparse($i, $redis);
  
 
 

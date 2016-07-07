@@ -52,9 +52,9 @@ class InstagramRegistration
 
 
  public function returnUUID()
-  {
+{
      return $this->uuid;
-  }
+}
 
  public function returnDeviceId()
   {
@@ -76,7 +76,12 @@ class InstagramRegistration
       //     '_csrftoken' => $this->token, //before 'missing',   ///SNIFFER do not need  
       // ]);
 
+  // csrftoken=IjKRj5NGejIAQNSqrmvjWNyziJYNRKCd
+  // mid=V3jbkwABAAEOM1k5BegeySOA_0OP
+
+
       $data = json_encode([
+        // '_csrftoken'      // need test
           'email'   => $email,
           'qe_id'   => $this->uuid,        
           'waterfall_id' => $this->waterfall_id, 
@@ -134,7 +139,7 @@ class InstagramRegistration
     
   }
 
-public function usernameSuggestions($email)
+public function usernameSuggestions($email) //not use for now
   {
     $data = json_encode([
       '_csrftoken'   => $this->token,
@@ -360,6 +365,7 @@ public function usernameSuggestions($email)
       ]);
 
       $result = $this->request('accounts/create/', $this->generateSignature($data));
+     
       if (isset($result[1]['account_created']) && ($result[1]['account_created'] == true)) {
           $this->username_id = $result[1]['created_user']['pk'];
           file_put_contents($this->IGDataPath."$username-userId.dat", $this->username_id);
@@ -422,17 +428,27 @@ public function usernameSuggestions($email)
 
     public function request($endpoint, $post = null)
     {
+ 
+     $headers = [
+        'Connection: close',
+        'Accept: */*',
+        'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
+        'Cookie2: $Version=1',
+        'Accept-Language: en-US',          
+     ];
 
-        
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
         curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT); //$this->UA ); // 
-      
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HEADER, true); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); //need test
         curl_setopt($ch, CURLOPT_VERBOSE, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //need test added
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //need test added
+
         curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
         curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
