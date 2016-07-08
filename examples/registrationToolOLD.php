@@ -366,6 +366,8 @@ function funcgeocoordparse($i, $redis)
 
 		$approxer = 10;//10
 		 
+		 if ($redis->scard($a[0].":".$b[0]) == 0) {
+
 		 //sent pol USA
 		 $a = [45.147617,-93.535346];
 		 $b = [44.741903,-92.903632];
@@ -409,7 +411,7 @@ function funcgeocoordparse($i, $redis)
 						# puts n.to_s + "=" + m.to_s
 		 			}
 		 		 }
-		 	
+		 	}
 
 	
 		// $nnnames = $i->searchLocation('55.706440','37.577896');
