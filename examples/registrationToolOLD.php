@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-// $romerINSTAPI = '/root/instapi/'; // FOR VPS
-// $romerPREDIS = '/root/predis/';
-// $romerINSTA = '/root/insta/';
+$romerINSTAPI = '/root/instapi/'; // FOR VPS
+$romerPREDIS = '/root/predis/';
+$romerINSTA = '/root/insta/';
 
-	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
