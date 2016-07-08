@@ -424,25 +424,23 @@
 // curl_close($ch);      
 
 
- $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-require $romerPREDIS.'autoload.php';
+//  $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+// require $romerPREDIS.'autoload.php';
 
 
-        Predis\Autoloader::register();
+//         Predis\Autoloader::register();
 
-        $redis = new Predis\Client(array(
-         "scheme" => "tcp",
-         "host" => "127.0.0.1",
-         "port" => 6379));
+//         $redis = new Predis\Client(array(
+//          "scheme" => "tcp",
+//          "host" => "127.0.0.1",
+//          "port" => 6379));
 
-
-
-if ($GLOBALS["redis"]->scard("foraction") == 0)
-{
+// if ($GLOBALS["redis"]->scard("foraction") == 0)
+// {
 
 
 
-}
+// }
 
 
 // $mediatocomment = $GLOBALS["redis"]->lrange("infpost_240333138", -1, -1);
@@ -1019,26 +1017,27 @@ if ($GLOBALS["redis"]->scard("foraction") == 0)
  
         //error_reporting(E_ALL);
 
-        // if( $ch = curl_init ())
-        // {            
-        //  curl_setopt ($ch, CURLOPT_URL, 'http://whatismyv6.com/'); 
-        //  // curl_setopt ($ch, CURLOPT_TIMEOUT, 60); 
-        //   curl_setopt($ch, CURLOPT_USERAGENT, 'Instagram 8.0.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)');
-        //  curl_setopt ($ch, CURLOPT_PROXY, "104.156.229.189:30610"); 
-        //  curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-        // curl_setopt($ch, CURLOPT_VERBOSE, false);
-        //  curl_setopt ($ch, CURLOPT_RETURNTRANSFER, TRUE); 
-        //  curl_setopt ($ch, CURLOPT_FAILONERROR, true); 
-        //  curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1); 
-        //  curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-         
-        //  $result = curl_exec($ch); 
-        //  //print curl_errno ($ch); 
-        //  //print $result; 
-        //  echo $result;
-        //  curl_close ($ch); 
-        // } 
- 
+     // Script to test if the CURL extension is installed on this server
+
+// Define function to test
+function _is_curl_installed() {
+  if  (in_array  ('curl', get_loaded_extensions())) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+// Ouput text to user based on test
+if (_is_curl_installed()) {
+  echo "cURL is <span style='color:blue'>installed</span> on this server";
+} else {
+  echo "cURL is NOT <span style='color:red'>installed</span> on this server";
+}
+
+
+ _is_curl_installed();
 
 
  //         $key = "names";
