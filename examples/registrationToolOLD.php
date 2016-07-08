@@ -145,7 +145,7 @@ function funcrecur($ilink, $usernamelink, $pkuser) {
 	$posts_per_day = 600; 		//  direct 500->50    700->34
 	$delay = $time_in_day / $posts_per_day;
  
-	if ($GLOBALS["redis"]->scard("foraction") == 0)
+	if ($GLOBALS["redis"]->scard("foractionM") == 0)
 	{
 	    funcgeocoordparse($ilink, $GLOBALS["redis"]);
 	}
@@ -364,7 +364,7 @@ function funcgeocoordparse($i, $redis)
 		//  echo "\n\n".$nnnames['venues'][0]['name'];
 		//  echo "\n\n".$nnnames['venues'][1]['name'];
 
-		$approxer = 3;//10
+		$approxer = 10;//10
 		 
 		 //sent pol USA
 		 $a = [45.147617,-93.535346];
@@ -582,7 +582,7 @@ $debug = true;
 $password = $argv[1]; 
 $email= $argv[2]; 
 $url  = $argv[3]; 
-$biography = $argv[4];  
+$biography = "\u{1F4A6}".$argv[4]."\u{1F47B}";  
 $caption = $argv[5];  
 
 $gender = 2;
@@ -918,6 +918,8 @@ while ( $redis->scard("proxy") > 0 )
  //  						   //check if message_recipient is NULL!!!!!!!!!!!!
   	 
  //  		// return user ID 
+
+
 
 	// 			$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
 	// 			$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
