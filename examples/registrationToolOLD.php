@@ -634,7 +634,9 @@ while ( $redis->scard("proxy") > 0 )
 		$shift = $outputs[1]['shift']; 
 		$header = $outputs[1]['header'];
 
-		exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		// exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		exec("/root/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		
 		echo $qsstamper[0];	
 		$GLOBALS["qs_stamp"] = $qsstamper[0];
 		 
