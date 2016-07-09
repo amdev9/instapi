@@ -366,7 +366,7 @@ function funcgeocoordparse($i, $redis)
 
 		$approxer = 10;//10
 		 
-
+		// "45.147617:44.741903"
 		 //sent pol USA
 		 $a = [45.147617,-93.535346];
 		 $b = [44.741903,-92.903632];
