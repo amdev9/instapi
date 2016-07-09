@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/root/instapi/'; // FOR VPS
-$romerPREDIS = '/root/predis/';
-$romerINSTA = '/root/insta/';
+// $romerINSTAPI = '/root/instapi/'; // FOR VPS
+// $romerPREDIS = '/root/predis/';
+// $romerINSTA = '/root/insta/';
 
-	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -52,7 +52,7 @@ function functofollow($ilink, $usernamelink, $pkuser) {
 	}	
 }
 
-function functocomment($ilink, $usernamelink) {
+function functocomment($ilink, $usernamelink,$pktocom) { //, $pktocom = null
 
 	try {
    		 $outputinfo = $ilink->getSelfUsernameInfo();
@@ -66,83 +66,124 @@ function functocomment($ilink, $usernamelink) {
 
 
 //$GLOBALS["redis"]->sismember("comment_sent", $usernamelink) != true
-	if ($GLOBALS["followercount"] > 0 ) {
+	// if ($GLOBALS["followercount"] > 0 ) {
 
-		//////
-		$influencers = ["253477742", "240333138", "7061024", "217566587"];
-		// --byzova  , "267685466" --borodilya "22288455",
- 		foreach ($influencers as $influencer) {
-
-			$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
-			$medcom = $usfeedforcom['items'][0]['pk'];
-
-			if ($GLOBALS["redis"]->lrange("infpost_$influencer", -1,-1) != $medcom) {
-				$GLOBALS["redis"]->rpush("infpost_$influencer",  $medcom); 
-			}
-			
-			// if ($GLOBALS["redis"]->scard("infpost_$influencer") > 0) {
-			// 	$GLOBALS["redis"]->spop("infpost_$influencer");
-			// }
-			// $GLOBALS["redis"]->sadd("infpost_$influencer",$medcom);
- 			sleep(10);
-		}
-
- 		try {
-
- 			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
-			$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");		 // get  index of comment here
-			$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; // make it RANDOM
-
-			while ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex) == true) {
-				//."_".$influencer
-				$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
-				$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");
-				$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; 
-			}
- 			if ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex)!= true )
- 			{
- 				//."_".$influencer
- 				$mediatocomment = $GLOBALS["redis"]->lrange("infpost_$influencer", -1, -1)[0];
-				$commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);	// change get from hash by commentindex
- 	
-
-			$smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
-     		$smil = $smiles[mt_rand(0, count($smiles) - 1)];
-
-      		   // $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
-      		$messageFinal = "$commenttex $smil";
-
-
-		    $ilink->comment($mediatocomment, $messageFinal); 
-
-
-
-		    if ($link['status']== "ok") { 
-		    	$GLOBALS["redis"]->sadd("comment_sent", $usernamelink."_".$commentindex);//."_".$influencer
-			}
-			else 
-			{
-				$GLOBALS["redis"]->sadd("comment_fail", $usernamelink."_".$commentindex);//."_".$influencer
-			}
-
-		    // need pause? may be comment the same person?
-		  
-		    echo "comment sent!---->$influencer-->$messageFinal\n";
-		     	sleep(14400);  
-		    	
-			}
-
-			// add status
+		$usfeedforcom = $ilink->getUserFeed($pktocom, $maxid = null, $minTimestamp = null);
+		$medcom = $usfeedforcom['items'][0]['pk'];
+		 
+		try {	
+			$lres =$ilink->like($medcom);
+			echo var_export($lres); //need to test res code
 		} catch (Exception $e) {
 		    echo $e->getMessage();
 		}
-	}
+		sleep(6);
+
+		$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
+		$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+		 $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
+		$cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+	    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+	    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+	    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+	    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+		$first_name_txt = explode(" ",$GLOBALS["first_name"]);
+		$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+ 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+
+		$commenttex = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil $smi";
+
+              
+
+		$link = $ilink->comment($medcom, $commenttex); 
+			if ($link['status']== "ok") { 
+					echo "\ncomment sent!\n";
+			} else {
+
+				$GLOBALS["redis"]->sadd("disabled", "comment_".$usernamelink); 
+
+			}
+
+
+		// //////
+		// $influencers = ["253477742", "240333138", "7061024", "217566587"];
+		// // --byzova  , "267685466" --borodilya "22288455",
+ 	// 	foreach ($influencers as $influencer) {
+
+		// 	$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
+		// 	$medcom = $usfeedforcom['items'][0]['pk'];
+
+		// 	if ($GLOBALS["redis"]->lrange("infpost_$influencer", -1,-1) != $medcom) {
+		// 		$GLOBALS["redis"]->rpush("infpost_$influencer",  $medcom); 
+		// 	}
+			
+		// 	// if ($GLOBALS["redis"]->scard("infpost_$influencer") > 0) {
+		// 	// 	$GLOBALS["redis"]->spop("infpost_$influencer");
+		// 	// }
+		// 	// $GLOBALS["redis"]->sadd("infpost_$influencer",$medcom);
+ 	// 		sleep(10);
+		// }
+
+		
+
+ 	// 	try {
+
+ 	// 		$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+		// 	$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");		 // get  index of comment here
+		// 	$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; // make it RANDOM
+
+		// 	while ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex) == true) {
+		// 		//."_".$influencer
+		// 		$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+		// 		$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");
+		// 		$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; 
+		// 	}
+ 	// 		if ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex)!= true )
+ 	// 		{
+ 	// 			//."_".$influencer
+ 	// 			$mediatocomment = $GLOBALS["redis"]->lrange("infpost_$influencer", -1, -1)[0];
+		// 		$commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);	// change get from hash by commentindex
+ 	
+
+		// 	$smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
+  //    		$smil = $smiles[mt_rand(0, count($smiles) - 1)];
+
+  //     		   // $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
+  //     		$messageFinal = "$commenttex $smil";
+
+
+		//     $ilink->comment($mediatocomment, $messageFinal); 
+
+
+
+		//     if ($link['status']== "ok") { 
+		//     	$GLOBALS["redis"]->sadd("comment_sent", $usernamelink."_".$commentindex);//."_".$influencer
+		// 	}
+		// 	else 
+		// 	{
+		// 		$GLOBALS["redis"]->sadd("comment_fail", $usernamelink."_".$commentindex);//."_".$influencer
+		// 	}
+
+		//     // need pause? may be comment the same person?
+		  
+		//     echo "comment sent!---->$influencer-->$messageFinal\n";
+		//      	sleep(14400);  
+		    	
+		// 	}
+
+		// 	// add status
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+	// }
+
 }
 
-function funcrecur($ilink, $usernamelink, $pkuser) {
+function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id) {
+
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 600; 		//  direct 500->50    700->34
+	$posts_per_day = 500; 		//  direct 500->50    700->34
 	$delay = $time_in_day / $posts_per_day;
  
 	if ($GLOBALS["redis"]->scard("foractionM") == 0)
@@ -153,11 +194,11 @@ function funcrecur($ilink, $usernamelink, $pkuser) {
  	
  	sleep(6);
 	
-	// functocomment($ilink, $usernamelink);
+
+			// like combine with comment
 	if 	($GLOBALS["redis"]->scard("foractionM") > 0 ) {
 	$actioner = $GLOBALS["redis"]->spop("foractionM");
-	// $resarr = explode(":", $actioner);
-
+	 
 	try {	
 		$fres = $ilink->follow($actioner);
 		echo var_export($fres); //need to test res code
@@ -165,22 +206,23 @@ function funcrecur($ilink, $usernamelink, $pkuser) {
 	} catch (Exception $e) {
 	    echo $e->getMessage();
 	}
-	 }
-	// try {	
-	// 	$lres =$ilink->like($resarr[1]);
-	// 	echo var_export($lres); //need to test res code
-	// } catch (Exception $e) {
-	//     echo $e->getMessage();
-	// }
-	// sleep(6);
+
+	if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
+
+	functocomment($ilink, $usernamelink, $actioner);       	
+	}
+	 
 	
-	// if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink)) {
-	//    functiondirectshare($usernamelink, $resarr[0], $ilink);
-	// }
+	if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
+	   functiondirectshare($usernamelink, $actioner, $ilink, $ad_media_id);
+	}
+	 
+  }
 	 
 	echo $next_iteration_time = add_time($delay); //timer
 	sleep($next_iteration_time);
-	funcrecur($ilink, $usernamelink, $pkuser);
+	
+	funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id);
 
 }
  
@@ -522,11 +564,10 @@ function funcgeocoordparse($i, $redis)
 }
 
 
-function functiondirectshare($username, $message_recipient, $i)
+function functiondirectshare($username, $message_recipient, $i,$ad_media_id)
 {	 
 
-			$feedres = $i->getSelfUserFeed();
-			$ad_media_id  = $feedres['items'][0]['pk'];
+			
 
 				// $ad_media_list  = [ ];
 				
@@ -547,11 +588,11 @@ function functiondirectshare($username, $message_recipient, $i)
 			    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
 			    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
 			    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
-				$first_name_txt = explode(" ",$first_name);
+				$first_name_txt = explode(" ",$GLOBALS["first_name"]);
 				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
 		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-				$text = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil  I'm online here @girlshothere                @girlshothere                @girlshothere $smi $cur $cur $cur";
+				$text = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil $smi $cur $cur $cur";
 
               
 				try {
@@ -588,7 +629,7 @@ $debug = true;
 $password = $argv[1]; 
 $email= $argv[2]; 
 $url  = $argv[3]; 
-$biography = "\u{1F4A6}".$argv[4]."\u{1F47B}";  
+$biography = "\u{1F4A6}".$argv[4]."\u{1F47B}"."\u{1F447}"."\u{1F447}";    
 $caption = $argv[5];  
 
 $gender = 2;
@@ -640,8 +681,8 @@ while ( $redis->scard("proxy") > 0 )
 		$shift = $outputs[1]['shift']; 
 		$header = $outputs[1]['header'];
 
-		 // exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		exec("/root/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		 exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		// exec("/root/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 		
 		echo $qsstamper[0];	
 		$GLOBALS["qs_stamp"] = $qsstamper[0];
@@ -744,7 +785,7 @@ while ( $redis->scard("proxy") > 0 )
 
 		//edit profile
 		try { 
-
+			
 		    $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 		} catch (Exception $e) {
 		    echo $e->getMessage();
@@ -754,25 +795,30 @@ while ( $redis->scard("proxy") > 0 )
 		
 		// funcgeocoordparse($i, $redis);  // geo coordinates with gender done
  
-		 funcrecur($i, $username, $pk); 
+		 
 
 /////////////////////////////////////////////
 	 
-		// $files1 = scandir($dir);
-		// foreach ( $files1 as $k => $value ) {
-		//     $ext = pathinfo($value, PATHINFO_EXTENSION);
-		//     if ($ext == "jpg") {
-		// 		try {
-		// 		    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
-		// 		} catch (Exception $e) {
-		// 		    echo $e->getMessage();
-		// 		}
+		$files1 = scandir($dir);
+		foreach ( $files1 as $k => $value ) {
+		    $ext = pathinfo($value, PATHINFO_EXTENSION);
+		    if ($ext == "jpg") {
+				try {
+				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
 
-		// 		sleep(10);
-		//     }
-		// }
+				sleep(10);
+		    }
+		}
 
-		// echo "photo downloaded!\n";
+		echo "photo downloaded!\n";
+
+		$feedres = $i->getSelfUserFeed();
+		$ad_media_id  = $feedres['items'][0]['pk'];
+
+		funcrecur($i, $username, $pk, $ad_media_id); 
 		
  //////////// //////////// //////////// //////////// //////////// //////////// ////////////
 
