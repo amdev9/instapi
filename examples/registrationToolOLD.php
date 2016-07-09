@@ -364,7 +364,7 @@ function funcgeocoordparse($i, $redis)
 		//  echo "\n\n".$nnnames['venues'][0]['name'];
 		//  echo "\n\n".$nnnames['venues'][1]['name'];
 
-		$approxer = 10;//10
+		$approxer = 7;//10
 		 
 		// "45.147617:44.741903"
 		 //sent pol USA
