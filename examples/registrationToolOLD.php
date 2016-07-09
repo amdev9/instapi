@@ -458,7 +458,8 @@ function funcgeocoordparse($i, $redis)
 				// $lc = var_export($getl);
 				// echo $lc;
 
-			
+				sleep(7);
+
 				if ($getl['more_available'] ==true ) {
 					$next_next_max_id = $getl['next_max_id'];
 					$getnewl = $i->getLocationFeed( $locpk, $next_next_max_id);
@@ -506,6 +507,7 @@ function funcgeocoordparse($i, $redis)
 					 $num_results++;
 					}
 
+					sleep(7);
 					$getnewl = $i->getLocationFeed( $locpk, $tmpgetnewl['next_max_id']);
 
 					$redis->rpush($locpk.":geomax_id",  $tmpgetnewl['next_max_id'] ); 
