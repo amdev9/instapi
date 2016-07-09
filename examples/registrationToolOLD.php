@@ -91,8 +91,8 @@ function functocomment($ilink, $usernamelink,$pktocom) { //, $pktocom = null
 		$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
  		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-		$commenttex = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil $smi";
-
+		//$commenttex = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil $smi";
+ 		$commenttex = "Hi!";
               
 
 		$link = $ilink->comment($medcom, $commenttex); 
@@ -183,7 +183,7 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id) {
 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 500; 		//  direct 500->50    700->34
+	$posts_per_day = 800; 		//  direct 500->50    700->34
 	$delay = $time_in_day / $posts_per_day;
  
 	if ($GLOBALS["redis"]->scard("foractionM") == 0)
