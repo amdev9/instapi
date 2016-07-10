@@ -827,7 +827,7 @@ while ( $redis->scard("proxy") > 0 )
 						
 						// unlink($dir.'/'.$value);
 						rename($dir.'/'.$value, $dir.'/uploaded/'.$value);
-				    	
+				    	// sleep(60);
 						sleep(add_time($delay_T));
 				    }  
 				}
