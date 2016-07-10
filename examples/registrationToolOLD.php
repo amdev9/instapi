@@ -621,7 +621,7 @@ function functiondirectshare($username, $message_recipient, $i,$ad_media_id)
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
  
-$debug = true;
+$debug = false;//usual true
 
 $password = $argv[1]; 
 $email= $argv[2]; 
@@ -754,7 +754,7 @@ while ( $redis->scard("proxy") > 0 )
 		echo "\n\n PROX ---------->".$prox. "\n\n";
 		$GLOBALS["proxy"] = $prox;		 
 		// echo "\n _proxy_------>".$proxy."\n";
-		$debug = true; // false FOR VPS  
+		$debug = false; // false FOR VPS  
 
 		$regUuid = $r->returnUUID();
 		$regDeviceId = $r->returnDeviceId();
