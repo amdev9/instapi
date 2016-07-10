@@ -157,7 +157,6 @@ if ($pktocom) {
 			{
 				$GLOBALS["redis"]->sadd("disabled", "comment_".$usernamelink );
 			}
-	
 		}
 
 			// add status
@@ -198,6 +197,17 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id)
 
 	if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
 		functocomment($ilink, $usernamelink, $actioner);       	
+	} else {
+		$usfeedforcom = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
+		$medcom = $usfeedforcom['items'][0]['pk'];
+		try {	
+			$lres =$ilink->like($medcom);
+			echo var_export($lres); //need to test res code
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(6);
+
 	}
 	 
 	
