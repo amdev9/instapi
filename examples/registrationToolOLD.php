@@ -623,7 +623,6 @@ function functiondirectshare($username, $message_recipient, $i,$ad_media_id)
  
 $debug = true;
 
-
 $password = $argv[1]; 
 $email= $argv[2]; 
 $url  = $argv[3]; 
@@ -797,6 +796,48 @@ while ( $redis->scard("proxy") > 0 )
 
 /////////////////////////////////////////////
 	 
+
+
+		$checkIfTematic = preg_replace('/[^0-9]/', '', $profileSetter);
+		if ($checkIfTematic == '') {
+
+			$time_in_day_T = 24*60*60;
+			$posts_per_day_T = 3; 		//  direct 500->50    700->34
+			$delay_T = $time_in_day_T / $posts_per_day_T;
+
+				
+	 		while(true) {
+	 			$files1 = scandir($dir);
+
+				foreach ( $files1 as $k => $value ) {
+				    $ext = pathinfo($value, PATHINFO_EXTENSION);
+				    if ($ext == "jpg") {
+
+				    	echo $value."\n";
+
+						try {
+						    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
+						} catch (Exception $e) {
+						    echo $e->getMessage();
+						}
+				    	echo "photo downloaded!\n";
+				    	if (!file_exists($dir.'/uploaded')) {
+	   						mkdir($dir.'/uploaded', 0777, true);
+						}
+						
+						// unlink($dir.'/'.$value);
+						rename($dir.'/'.$value, $dir.'/uploaded/'.$value);
+				    	
+						sleep(add_time($delay_T));
+				    }  
+				}
+				sleep(30);
+				echo "iteration cycle\n";
+			}
+			
+		} else {
+			//////// NON THEMATIC ////////
+
 		$files1 = scandir($dir);
 		foreach ( $files1 as $k => $value ) {
 		    $ext = pathinfo($value, PATHINFO_EXTENSION);
@@ -817,6 +858,9 @@ while ( $redis->scard("proxy") > 0 )
 		$ad_media_id  = $feedres['items'][0]['pk'];
 
 		funcrecur($i, $username, $pk, $ad_media_id); 
+	}
+
+		// check if 
 		
  //////////// //////////// //////////// //////////// //////////// //////////// ////////////
 
