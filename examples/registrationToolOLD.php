@@ -171,7 +171,7 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id)
 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 600; 		//  direct 500->50    700->34
+	$posts_per_day = 500; 		//  direct 500->50    700->34
 	$delay = $time_in_day / $posts_per_day;
  
 	if ($GLOBALS["redis"]->scard("foractionM") == 0)
