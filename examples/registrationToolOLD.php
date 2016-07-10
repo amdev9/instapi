@@ -590,7 +590,7 @@ function functiondirectshare($username, $message_recipient, $i,$ad_media_id)
 				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
 		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-				$text = "$hiw $first_name_txt[0] $smi_hi  Do you wanna play with me? $smil $smi $cur $cur $cur";
+				$text = "$hiw $first_name_txt[0] $smi_hi Follow this awesome profile with naughty girls @livecamshowtvonline $smil $smi $cur $cur $cur";
 
               
 				try {
@@ -626,7 +626,7 @@ $debug = true;
 $password = $argv[1]; 
 $email= $argv[2]; 
 $url  = $argv[3]; 
-$biography = "\u{1F4A6}".$argv[4]."\u{1F47B}"."\u{1F447}"."\u{1F447}";    
+$biography = $argv[4]."\u{1F4A6}"."\u{1F447}"."\u{1F447}";    
 $caption = $argv[5];  
 
 $gender = 2;
