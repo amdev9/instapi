@@ -52,22 +52,25 @@ function functofollow($ilink, $usernamelink, $pkuser) {
 	}	
 }
 
-function functocomment($ilink, $usernamelink,$pktocom) { //, $pktocom = null
+function functocomment($ilink, $usernamelink,$pktocom) { 
 
-	try {
-   		 $outputinfo = $ilink->getSelfUsernameInfo();
+
+//, $pktocom = null
+
+	// try {
+ //   		 $outputinfo = $ilink->getSelfUsernameInfo();
    		 
-   		 $GLOBALS["followercount"] = $outputinfo['user']['follower_count'];
-   		 $outputres = var_export($outputinfo);
-	  	 echo $outputres;	 
-		} catch (Exception $e) {
-		  echo $e->getMessage();
-		}		
-
-
+ //   		 $GLOBALS["followercount"] = $outputinfo['user']['follower_count'];
+ //   		 $outputres = var_export($outputinfo);
+	//   	 echo $outputres;	 
+	// 	} catch (Exception $e) {
+	// 	  echo $e->getMessage();
+	// 	}		
 //$GLOBALS["redis"]->sismember("comment_sent", $usernamelink) != true
 	// if ($GLOBALS["followercount"] > 0 ) {
 
+
+if ($pktocom) {
 		$usfeedforcom = $ilink->getUserFeed($pktocom, $maxid = null, $minTimestamp = null);
 		$medcom = $usfeedforcom['items'][0]['pk'];
 		 
@@ -104,86 +107,72 @@ function functocomment($ilink, $usernamelink,$pktocom) { //, $pktocom = null
 
 			}
 
+		} else {
 
-		// //////
-		// $influencers = ["253477742", "240333138", "7061024", "217566587"];
-		// // --byzova  , "267685466" --borodilya "22288455",
- 	// 	foreach ($influencers as $influencer) {
+	 
+		$influencers = ["253477742", "240333138", "7061024", "217566587"]; 
+		// --byzova  , "267685466" --borodilya "22288455",
+ 		foreach ($influencers as $influencer) {					//iterate all influencers and add latest media
+			$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
+			$medcom = $usfeedforcom['items'][0]['pk'];
+			if ($GLOBALS["redis"]->lrange("infpost_$influencer", -1,-1) != $medcom) {
+				$GLOBALS["redis"]->rpush("infpost_$influencer",  $medcom); 
+			}
+ 			sleep(10);
+		}
 
-		// 	$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
-		// 	$medcom = $usfeedforcom['items'][0]['pk'];
+ 		try {
 
-		// 	if ($GLOBALS["redis"]->lrange("infpost_$influencer", -1,-1) != $medcom) {
-		// 		$GLOBALS["redis"]->rpush("infpost_$influencer",  $medcom); 
-		// 	}
-			
-		// 	// if ($GLOBALS["redis"]->scard("infpost_$influencer") > 0) {
-		// 	// 	$GLOBALS["redis"]->spop("infpost_$influencer");
-		// 	// }
-		// 	// $GLOBALS["redis"]->sadd("infpost_$influencer",$medcom);
- 	// 		sleep(10);
-		// }
+ 			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+			$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");		 // get  index of comment here
+			$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; // make it RANDOM
 
-		
+			// while ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex) == true) {
+			// 	//."_".$influencer
+			// 	$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+			// 	$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");
+			// 	$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; 
+			// }
 
- 	// 	try {
-
- 	// 		$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
-		// 	$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");		 // get  index of comment here
-		// 	$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; // make it RANDOM
-
-		// 	while ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex) == true) {
-		// 		//."_".$influencer
-		// 		$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
-		// 		$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");
-		// 		$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; 
-		// 	}
- 	// 		if ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex)!= true )
- 	// 		{
- 	// 			//."_".$influencer
- 	// 			$mediatocomment = $GLOBALS["redis"]->lrange("infpost_$influencer", -1, -1)[0];
-		// 		$commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);	// change get from hash by commentindex
+ 			if ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex)!= true ) {
+ 				//."_".$influencer
+ 				$mediatocomment = $GLOBALS["redis"]->lrange("infpost_$influencer", -1, -1)[0];
+				$commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);	// change get from hash by commentindex
  	
 
-		// 	$smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
-  //    		$smil = $smiles[mt_rand(0, count($smiles) - 1)];
+				$smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
+	     		$smil = $smiles[mt_rand(0, count($smiles) - 1)];
 
-  //     		   // $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
-  //     		$messageFinal = "$commenttex $smil";
-
-
-		//     $ilink->comment($mediatocomment, $messageFinal); 
+      		   	// $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
+	      		$messageFinal = "$commenttex $smil";
 
 
+			    $ilink->comment($mediatocomment, $messageFinal); 
 
-		//     if ($link['status']== "ok") { 
-		//     	$GLOBALS["redis"]->sadd("comment_sent", $usernamelink."_".$commentindex);//."_".$influencer
-		// 	}
-		// 	else 
-		// 	{
-		// 		$GLOBALS["redis"]->sadd("comment_fail", $usernamelink."_".$commentindex);//."_".$influencer
-		// 	}
 
-		//     // need pause? may be comment the same person?
-		  
-		//     echo "comment sent!---->$influencer-->$messageFinal\n";
-		//      	sleep(14400);  
-		    	
-		// 	}
+		    if ($link['status']== "ok") { 
+		    	$GLOBALS["redis"]->sadd("comment_sent", $usernamelink."_".$commentindex);//."_".$influencer
+			}
+			else 
+			{
+				$GLOBALS["redis"]->sadd("disabled", "comment_".$usernamelink );
+			}
+	
+		}
 
-		// 	// add status
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
-	// }
-
+			// add status
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+	}
 }
 
-function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id) {
+function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id)
+ {
 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 800; 		//  direct 500->50    700->34
+	$posts_per_day = 600; 		//  direct 500->50    700->34
 	$delay = $time_in_day / $posts_per_day;
  
 	if ($GLOBALS["redis"]->scard("foractionM") == 0)
@@ -208,8 +197,7 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id) {
 	}
 
 	if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
-
-	functocomment($ilink, $usernamelink, $actioner);       	
+		functocomment($ilink, $usernamelink, $actioner);       	
 	}
 	 
 	
@@ -222,7 +210,7 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id) {
 	echo $next_iteration_time = add_time($delay); //timer
 	sleep($next_iteration_time);
 	
-	funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id);
+	funcrecur($ilink, $usernamelink, $pkuser , $ad_media_id);
 
 }
  
