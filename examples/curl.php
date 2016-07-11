@@ -1,6 +1,16 @@
 <?php
 
 
+$commentindexkeys = [1,2,3,4,5];
+$availableComments = [];
+foreach ($commentindexkeys as $ind) {
+   if ( true ) {
+   		array_push($availableComments, "chlen "); 
+   }
+   echo var_export($availableComments)."\n";
+   sleep(3);
+}
+
 
 // $approxer = 3;
  

@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/root/instapi/'; // FOR VPS
-$romerPREDIS = '/root/predis/';
-$romerINSTA = '/root/insta/';
+// $romerINSTAPI = '/root/instapi/'; // FOR VPS
+// $romerPREDIS = '/root/predis/';
+// $romerINSTA = '/root/insta/';
 
-	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -125,7 +125,14 @@ if ($pktocom) {
 
  			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
 			$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");		 // get  index of comment here
-			$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; // make it RANDOM
+			$availableComments = [];
+			foreach ($commentindexkeys as $ind) {
+			   if ($GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$ind ) != true  ) {
+			   		array_push($availableComments, $ind); 
+			   }
+			}
+
+			$commentindex = $availableComments[mt_rand(0, count($availableComments) - 1)]; // make it RANDOM
 
 			// while ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex) == true) {
 			// 	//."_".$influencer
@@ -137,7 +144,7 @@ if ($pktocom) {
  			if ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex)!= true ) {
  				//."_".$influencer
  				$mediatocomment = $GLOBALS["redis"]->lrange("infpost_$influencer", -1, -1)[0];
-				$commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);	// change get from hash by commentindex
+				$commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);// change get from hash by commentindex
  	
 
 				$smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
@@ -147,10 +154,11 @@ if ($pktocom) {
 	      		$messageFinal = "$commenttex $smil";
 
 
-			    $ilink->comment($mediatocomment, $messageFinal); 
+			    $link = $ilink->comment($mediatocomment, $messageFinal); 
 
 
 		    if ($link['status']== "ok") { 
+		    	echo "\ncomment to influencer sent!---|||||->".$influencer."\n";
 		    	$GLOBALS["redis"]->sadd("comment_sent", $usernamelink."_".$commentindex);//."_".$influencer
 			}
 			else 
@@ -178,7 +186,7 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id)
 	{
 	    funcgeocoordparse($ilink, $GLOBALS["redis"]);
 	}
-	functofollow($ilink, $usernamelink, $pkuser);	 
+	// /functofollow($ilink, $usernamelink, $pkuser);	 
  	
  	sleep(6);
 	
@@ -196,7 +204,7 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id)
 	}
 
 	if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
-		functocomment($ilink, $usernamelink, $actioner);       	
+		functocomment($ilink, $usernamelink, null); //$actioner);       	
 	} else {
 		$usfeedforcom = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
 		$medcom = $usfeedforcom['items'][0]['pk'];
@@ -209,7 +217,6 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id)
 		sleep(6);
 
 	}
-	 
 	
 	if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
 	   functiondirectshare($usernamelink, $actioner, $ilink, $ad_media_id);
@@ -621,7 +628,7 @@ function functiondirectshare($username, $message_recipient, $i,$ad_media_id)
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
  
-$debug = false;//usual true
+$debug = true;//usual true
 
 $password = $argv[1]; 
 $email= $argv[2]; 
@@ -678,8 +685,8 @@ while ( $redis->scard("proxy") > 0 )
 		$shift = $outputs[1]['shift']; 
 		$header = $outputs[1]['header'];
 
-		 // exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		 exec("/root/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		 exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		 // exec("/root/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 		
 		echo $qsstamper[0];	
 		$GLOBALS["qs_stamp"] = $qsstamper[0];
@@ -754,7 +761,7 @@ while ( $redis->scard("proxy") > 0 )
 		echo "\n\n PROX ---------->".$prox. "\n\n";
 		$GLOBALS["proxy"] = $prox;		 
 		// echo "\n _proxy_------>".$proxy."\n";
-		$debug = false; // false FOR VPS  
+		$debug = true; // false FOR VPS  
 
 		$regUuid = $r->returnUUID();
 		$regDeviceId = $r->returnDeviceId();
