@@ -132,7 +132,7 @@ if ($pktocom) {
 			   }
 			}
 
-			$commentindex = $availableComments[mt_rand(0, count($availableComments) - 1)]; // make it RANDOM
+			
 
 			// while ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex) == true) {
 			// 	//."_".$influencer
@@ -141,7 +141,10 @@ if ($pktocom) {
 			// 	$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; 
 			// }
 
- 			if ( $GLOBALS["redis"]->sismember("comment_sent", $usernamelink."_".$commentindex)!= true ) {
+ 			if (  empty($availableComments) == false ) {
+
+ 				$commentindex = $availableComments[mt_rand(0, count($availableComments) - 1)]; // make it RANDOM
+
  				//."_".$influencer
  				$mediatocomment = $GLOBALS["redis"]->lrange("infpost_$influencer", -1, -1)[0];
 				$commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);// change get from hash by commentindex
