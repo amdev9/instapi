@@ -191,7 +191,7 @@ if ($pktocom) {
 	}
 }
 
-function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id)
+function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id,  $counter)
  {
 
 
@@ -222,8 +222,17 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id)
 
 	if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
 		functocomment($ilink, $usernamelink, null); //$actioner);       	
-	} 
+	} else {
 
+		$counter--;
+	}
+
+	if ($counter==0) {
+
+		$ilink->logout();
+		sleep(3);
+		break;
+	}
 
 
 	// else {
@@ -248,7 +257,7 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id)
 	echo $next_iteration_time = add_time($delay); //timer
 	sleep($next_iteration_time);
 	
-	funcrecur($ilink, $usernamelink, $pkuser , $ad_media_id);
+	funcrecur($ilink, $usernamelink, $pkuser , $ad_media_id , $counter);
 
 }
  
@@ -888,8 +897,8 @@ while ( $redis->scard("proxy") > 0 )
 /////////
 	 
 /////////
-
-		funcrecur($i, $username, $pk, $ad_media_id); 
+		$logoutCounter = 20;
+		funcrecur($i, $username, $pk, $ad_media_id, $logoutCounter  ); 
 	}
 
 		// check if 
