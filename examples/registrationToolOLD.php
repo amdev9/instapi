@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-// $romerINSTAPI = '/root/instapi/'; // FOR VPS
-// $romerPREDIS = '/root/predis/';
-// $romerINSTA = '/root/insta/';
+$romerINSTAPI = '/root/instapi/'; // FOR VPS
+$romerPREDIS = '/root/predis/';
+$romerINSTA = '/root/insta/';
 
-	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -110,20 +110,27 @@ if ($pktocom) {
 		} else {
 
 	 
-		$influencers = ["253477742", "240333138", "7061024", "217566587"]; 
-		// --byzova  , "267685466" --borodilya "22288455",
- 		foreach ($influencers as $influencer) {					//iterate all influencers and add latest media
-			$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
-			$medcom = $usfeedforcom['items'][0]['pk'];
-			if ($GLOBALS["redis"]->lrange("infpost_$influencer", -1,-1) != $medcom) {
-				$GLOBALS["redis"]->rpush("infpost_$influencer",  $medcom); 
-			}
- 			sleep(10);
-		}
+		$influencers = ["253477742", "240333138", "7061024", "217566587", "267685466", "22288455" , "256489055", "299207425", "256293874", "305007657", "544300908", "27133622", "223469204", "26468707", "190082554", "766088051", "377126836", "311630651", "22442174", "5510916", "260958616", "241024950", "804080917", "13115790", "20829767", "18070921", "265457536"];
+			//1449154611
+
+ 	// 	foreach ($influencers as $influencer) {					 
+		// 	$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
+		// 	$medcom = $usfeedforcom['items'][0]['pk'];
+			// if ($GLOBALS["redis"]->lrange("infpost_$influencer", -1,-1) != $medcom) {
+			// 	$GLOBALS["redis"]->rpush("infpost_$influencer",  $medcom); 
+			// }
+ 	// 		sleep(10);
+		// }
 
  		try {
 
  			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+ 			$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
+ 			$medcom = $usfeedforcom['items'][0]['pk'];
+ 			if ($GLOBALS["redis"]->lrange("infpost_$influencer", -1,-1) != $medcom) {
+				$GLOBALS["redis"]->rpush("infpost_$influencer",  $medcom); 
+			}
+
 			$commentindexkeys = $GLOBALS["redis"]->hkeys("comments");		 // get  index of comment here
 			$availableComments = [];
 			foreach ($commentindexkeys as $ind) {
@@ -148,13 +155,19 @@ if ($pktocom) {
  				//."_".$influencer
  				$mediatocomment = $GLOBALS["redis"]->lrange("infpost_$influencer", -1, -1)[0];
 				$commenttex = $GLOBALS["redis"]->hget("comments", $commentindex);// change get from hash by commentindex
- 	
+ 	 
+				 
+				// $commenttex =  str_replace("@__blackmask__", "\u{1F4A5}@__blackmask__\u{1F4A5}", $commenttex);
+ 
 
 				$smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
+				$attention = ["\u{2728}", "\u{2757}", "\u{270C}", "\u{1F64B}", "\u{2714}"];
 	     		$smil = $smiles[mt_rand(0, count($smiles) - 1)];
+	     		$att = $attention[mt_rand(0, count($smiles) - 1)];
+	     		$heart = "\u{1F49B} \u{1F49A} \u{1F49C} \u{1F49D}"; //colurful hearts      
 
       		   	// $hiw = $commenttex[mt_rand(0, count($commenttex) - 1)];
-	      		$messageFinal = "$commenttex $smil";
+	      		$messageFinal = "$heart $att $commenttex $smil $heart";
 
 
 			    $link = $ilink->comment($mediatocomment, $messageFinal); 
@@ -166,6 +179,7 @@ if ($pktocom) {
 			}
 			else 
 			{
+				echo "\ncomments disabled";
 				$GLOBALS["redis"]->sadd("disabled", "comment_".$usernamelink );
 			}
 		}
@@ -185,47 +199,51 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id)
 	$posts_per_day = 500; 		//  direct 500->50    700->34
 	$delay = $time_in_day / $posts_per_day;
  
-	if ($GLOBALS["redis"]->scard("foractionM") == 0)
-	{
-	    funcgeocoordparse($ilink, $GLOBALS["redis"]);
-	}
+	// if ($GLOBALS["redis"]->scard("foractionM") == 0)
+	// {
+	//     funcgeocoordparse($ilink, $GLOBALS["redis"]);
+	// }
 	// /functofollow($ilink, $usernamelink, $pkuser);	 
  	
  	sleep(6);
 	
 
 			// like combine with comment
-	if 	($GLOBALS["redis"]->scard("foractionM") > 0 ) {
-	$actioner = $GLOBALS["redis"]->spop("foractionM");
+	// if 	($GLOBALS["redis"]->scard("foractionM") > 0 ) {
+	// $actioner = $GLOBALS["redis"]->spop("foractionM");
 	 
-	try {	
-		$fres = $ilink->follow($actioner);
-		echo var_export($fres); //need to test res code
+	// try {	
+	// 	$fres = $ilink->follow($actioner);
+	// 	echo var_export($fres); //need to test res code
 
-	} catch (Exception $e) {
-	    echo $e->getMessage();
-	}
+	// } catch (Exception $e) {
+	//     echo $e->getMessage();
+	// }
 
 	if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
 		functocomment($ilink, $usernamelink, null); //$actioner);       	
-	} else {
-		$usfeedforcom = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
-		$medcom = $usfeedforcom['items'][0]['pk'];
-		try {	
-			$lres =$ilink->like($medcom);
-			echo var_export($lres); //need to test res code
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(6);
+	} 
 
-	}
+
+
+	// else {
+	// 	$usfeedforcom = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
+	// 	$medcom = $usfeedforcom['items'][0]['pk'];
+	// 	try {	
+	// 		$lres =$ilink->like($medcom);
+	// 		echo var_export($lres); //need to test res code
+	// 	} catch (Exception $e) {
+	// 	    echo $e->getMessage();
+	// 	}
+	// 	sleep(6);
+
+	// }
 	
-	if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
-	   functiondirectshare($usernamelink, $actioner, $ilink, $ad_media_id);
-	}
+	// if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
+	//    functiondirectshare($usernamelink, $actioner, $ilink, $ad_media_id);
+	// }
 	 
-  }
+  // }
 	 
 	echo $next_iteration_time = add_time($delay); //timer
 	sleep($next_iteration_time);
@@ -636,7 +654,7 @@ $debug = true;//usual true
 $password = $argv[1]; 
 $email= $argv[2]; 
 $url  = $argv[3]; 
-$biography = $argv[4]."\u{1F4A6}"."\u{1F447}"."\u{1F447}";    
+$biography = $argv[4];///."\u{1F4A6}"."\u{1F447}"."\u{1F447}";    
 $caption = $argv[5];  
 
 $gender = 2;
@@ -688,8 +706,8 @@ while ( $redis->scard("proxy") > 0 )
 		$shift = $outputs[1]['shift']; 
 		$header = $outputs[1]['header'];
 
-		 exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		 // exec("/root/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		 // exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		 exec("/root/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 		
 		echo $qsstamper[0];	
 		$GLOBALS["qs_stamp"] = $qsstamper[0];
@@ -867,6 +885,10 @@ while ( $redis->scard("proxy") > 0 )
 		$feedres = $i->getSelfUserFeed();
 		$ad_media_id  = $feedres['items'][0]['pk'];
 
+/////////
+	 
+/////////
+
 		funcrecur($i, $username, $pk, $ad_media_id); 
 	}
 
@@ -894,9 +916,9 @@ while ( $redis->scard("proxy") > 0 )
 		 
 		// try {
 		// 	$usname = $i->searchUsername("girlshothere"); // buzova86 -> 267685466
-		// 	$iduser = $usname['pk'];
+		// 	$iduser = $usname['user']['pk'];
 		// 	$resusname =  var_export($usname);
-		// 	echo "girlshothere--->".$resusname."\n\n";
+		// 	echo "girlshothere--->".$iduser."\n\n";
 		  
 		// } catch (Exception $e) {
 		//     echo $e->getMessage();

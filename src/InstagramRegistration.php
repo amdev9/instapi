@@ -356,7 +356,7 @@ public function usernameSuggestions($email ,$full_name) //not use for now
           $token = $match[1];
           $this->username = $username;
           file_put_contents($this->IGDataPath."$username-token.dat", $token);
-          rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat");
+          rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat"); //need fix  $this->device_id
       }
 
       return $result;
@@ -480,8 +480,8 @@ public function usernameSuggestions($email ,$full_name) //not use for now
             curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
             curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
         } else {
-            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat');
-            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat'); //need fix $this->device_id
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');   //need fix $this->device_id
         }
 
         if ($post) {

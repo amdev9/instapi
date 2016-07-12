@@ -1,15 +1,32 @@
 <?php
 
 
-$commentindexkeys = [1,2,3,4,5];
-$availableComments = [];
-foreach ($commentindexkeys as $ind) {
-   if ( true ) {
-   		array_push($availableComments, "chlen "); 
-   }
-   echo var_export($availableComments)."\n";
-   sleep(3);
-}
+$pizza  = "кусок1 кусок2@__blackmask__ кусок3 кусок4 кусок5@__blackmask__ кусок6";
+
+$pizza  = str_replace("@__blackmask__", "\u{1F4A5}@__blackmask__\u{1F4A5}", $pizza);
+
+echo $pizza ;
+
+// $pieces = explode("@__blackmask__", $pizza);
+// echo $pieces[0]."\u{1F4A5}"."@__blackmask__"."\u{1F4A5}".$pieces[1];
+
+// $influencers = ["253477742", "240333138", "7061024", "217566587", "267685466", "22288455" , "256489055", "299207425", "256293874", "305007657", "544300908", "27133622", "223469204", "1449154611", "26468707", "190082554", "766088051", "377126836", "311630651", "22442174", "5510916", "260958616", "241024950", "804080917", "13115790", "20829767", "18070921", "265457536"];
+
+// echo "\n\n".count($influencers);
+
+// choose random 10 from influencers
+// update latest comment 
+// comment!
+
+// $commentindexkeys = [1,2,3,4,5];
+// $availableComments = [];
+// foreach ($commentindexkeys as $ind) {
+//    if ( true ) {
+//    		array_push($availableComments, "chlen "); 
+//    }
+//    echo var_export($availableComments)."\n";
+//    sleep(3);
+// }
 
 
 // $approxer = 3;
