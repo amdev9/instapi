@@ -230,8 +230,7 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id,  $counter)
 	if ($counter==0) {
 
 		$ilink->logout();
-		sleep(3);
-		break;
+		return; 
 	}
 
 
