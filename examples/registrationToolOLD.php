@@ -110,7 +110,8 @@ if ($pktocom) {
 		} else {
 
 	 
-		$influencers = ["253477742", "240333138", "7061024", "217566587", "267685466", "22288455" , "256489055", "299207425", "256293874", "305007657", "544300908", "27133622", "223469204", "26468707", "190082554", "766088051", "377126836", "311630651", "22442174", "5510916", "260958616", "241024950", "804080917", "13115790", "20829767", "18070921", "265457536"];
+		$influencers = ["253477742", "240333138", "7061024", "217566587", "267685466", "256489055", "299207425", "256293874", "305007657", "544300908", "27133622", "223469204", "26468707", "190082554", "766088051", "377126836", "311630651", "22442174", "5510916", "260958616", "241024950", "804080917", "13115790", "20829767", "18070921", "265457536"];
+		//borod "22288455" , ??? missalena.92
 			//1449154611
 
  	// 	foreach ($influencers as $influencer) {					 
@@ -123,8 +124,17 @@ if ($pktocom) {
 		// }
 
  		try {
+ 			///need test
+ 			$availableINF = [];
+ 			foreach ($influencers as $influencer) {
+			   if ($GLOBALS["redis"]->sismember("comment_inf_sent", $usernamelink."_".$influencer) != true  ) {
+			   		array_push($availableINF, $influencer); 
+			   }
+			}
 
- 			$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
+		 	///
+
+ 			$influencer = $availableINF[mt_rand(0, count($availableINF) - 1)];
  			$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
  			$medcom = $usfeedforcom['items'][0]['pk'];
  			if ($GLOBALS["redis"]->lrange("infpost_$influencer", -1,-1) != $medcom) {
@@ -175,7 +185,8 @@ if ($pktocom) {
 
 		    if ($link['status']== "ok") { 
 		    	echo "\ncomment to influencer sent!---|||||->".$influencer."\n";
-		    	$GLOBALS["redis"]->sadd("comment_sent", $usernamelink."_".$commentindex);//."_".$influencer
+		    	$GLOBALS["redis"]->sadd("comment_sent", $usernamelink."_".$commentindex);//."_".
+		    	$GLOBALS["redis"]->sadd("comment_inf_sent", $usernamelink."_".$influencer);
 			}
 			else 
 			{
@@ -199,63 +210,69 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id,  $counter)
 	$posts_per_day = 500; 		//  direct 500->50    700->34
 	$delay = $time_in_day / $posts_per_day;
  
-	// if ($GLOBALS["redis"]->scard("foractionM") == 0)
-	// {
-	//     funcgeocoordparse($ilink, $GLOBALS["redis"]);
-	// }
+	if ($GLOBALS["redis"]->scard("foractionF") == 0)
+	{
+	    funcgeocoordparse($ilink, $GLOBALS["redis"]);
+	}
 	// /functofollow($ilink, $usernamelink, $pkuser);	 
  	
  	sleep(6);
 	
 
 			// like combine with comment
-	// if 	($GLOBALS["redis"]->scard("foractionM") > 0 ) {
-	// $actioner = $GLOBALS["redis"]->spop("foractionM");
+	if 	($GLOBALS["redis"]->scard("foractionF") > 0 ) {
+	$actioner = $GLOBALS["redis"]->spop("foractionF");
 	 
-	// try {	
-	// 	$fres = $ilink->follow($actioner);
-	// 	echo var_export($fres); //need to test res code
+	try {	
+		$fres = $ilink->follow($actioner);
+		echo var_export($fres); //need to test res code
 
-	// } catch (Exception $e) {
-	//     echo $e->getMessage();
-	// }
+	} catch (Exception $e) {
+	    echo $e->getMessage();
+	}
 
 	if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
 		functocomment($ilink, $usernamelink, null); //$actioner);       	
-	} else {
+	} 
+	else {
+		$usfeedforcom = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
+		$medcom = $usfeedforcom['items'][0]['pk'];
+		try {	
+			$lres =$ilink->like($medcom);
+			echo var_export($lres); //need to test res code
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(6);
 
-		$counter--;
 	}
-
-	if ($counter==0) {
-
-		$ilink->logout();
-		return; 
-	}
-
 
 	// else {
-	// 	$usfeedforcom = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
-	// 	$medcom = $usfeedforcom['items'][0]['pk'];
-	// 	try {	
-	// 		$lres =$ilink->like($medcom);
-	// 		echo var_export($lres); //need to test res code
-	// 	} catch (Exception $e) {
-	// 	    echo $e->getMessage();
-	// 	}
-	// 	sleep(6);
 
+	// 	$counter--;
 	// }
+
+	// if ($counter==0) {
+
+	// 	$ilink->logout();
+	// 	return; 
+	// }
+
+
 	
-	// if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
-	//    functiondirectshare($usernamelink, $actioner, $ilink, $ad_media_id);
-	// }
+	
+	if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
+	   functiondirectshare($usernamelink, $actioner, $ilink, $ad_media_id);
+	}
 	 
-  // }
+  }
 	 
 	echo $next_iteration_time = add_time($delay); //timer
 	sleep($next_iteration_time);
 	
+
+	
+
 	funcrecur($ilink, $usernamelink, $pkuser , $ad_media_id , $counter);
 
 }
@@ -440,12 +457,15 @@ function funcgeocoordparse($i, $redis)
 		//  echo "\n\n".$nnnames['venues'][0]['name'];
 		//  echo "\n\n".$nnnames['venues'][1]['name'];
 
-		$approxer = 7;//10
+		$approxer = 10;//10
 		 
 		// "45.147617:44.741903"
 		 //sent pol USA
-		 $a = [45.147617,-93.535346];
-		 $b = [44.741903,-92.903632];
+		 // $a = [45.147617,-93.535346];
+		 // $b = [44.741903,-92.903632];
+
+		 $a = [56.073183, 36.826896];
+		 $b = [55.435435, 38.502311];
 
 		if ($redis->scard($a[0].":".$b[0]) == 0) {
 
@@ -514,13 +534,23 @@ function funcgeocoordparse($i, $redis)
 					  {
 
 					  $txt=$getl['items'][$num_rank_results]['user']['full_name'];
-					  $re1='.*?';	# Non-greedy match on filler
-					  $re2='((?:[a-z][a-z]+))';	# Word 1
-					  $word1 = "";
-					  if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
-					  {
-					      $word1=$matches[1][0];
-					  }
+					  // $re1='.*?';	# Non-greedy match on filler
+					  // $re2='((?:[a-z][a-z]+))';	# Word 1
+					  // $word1 = "";
+					  // if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
+					  // {
+					  //     $word1=$matches[1][0];
+					  // }
+				  	$re1='.*?';	# Non-greedy match on filler
+					$re2='((?:[а-яa-z][a-яa-z]+))';	# Word 1
+					$word1 = "";
+					if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
+					{
+					  $word1=$matches[1][0];
+					}
+
+
+					
 
 					 $redis->sadd("detection", $getl['items'][$num_rank_results]['user']['pk'].":".$word1);
 
@@ -601,7 +631,6 @@ function funcgeocoordparse($i, $redis)
 function functiondirectshare($username, $message_recipient, $i,$ad_media_id)
 {	 
 
-			
 
 				// $ad_media_list  = [ ];
 				
@@ -614,25 +643,32 @@ function functiondirectshare($username, $message_recipient, $i,$ad_media_id)
   	 
   		// return user ID 
 
-				$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
-				$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
-				 $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
-				$cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
-			    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
-			    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
-			    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
-			    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
-				$first_name_txt = explode(" ",$GLOBALS["first_name"]);
-				$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
-		 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+				// $smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}", "\u{1F64C}"];
+				// $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+				//  $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
+				// $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+			 //    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+			 //    $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+			 //    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+			 //    $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+				// $first_name_txt = explode(" ",$GLOBALS["first_name"]);
+				// $hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+		 	// 	$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-				$text = "$hiw $first_name_txt[0] $smi_hi Follow this awesome profile with naughty girls @livecamshowtvonline $smil $smi $cur $cur $cur";
+				// $text = "$hiw $first_name_txt[0] $smi_hi Follow this awesome profile with naughty girls @livecamshowtvonline $smil $smi $cur $cur $cur";
+			     
+  		  $smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F60E}", "\u{270B}"];
+          $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+
+	$text = "Добрый день! $smi_hi\u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705}ГАРАНТИРОВАННЫЙ РЕЗУЛЬТАТ В ТЕЧЕНИЕ 2-Х НЕДЕЛЬ! УСПЕЙ ЗАКАЗАТЬ СЕГОДНЯ ПО АКЦИИ!\u{2029}\u{27A1} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
 
               
 				try {
 				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
 				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
 		 			
+
+		 			// $message_recipient = '1009845355'; 4ewir
 		 			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
 
 		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
@@ -890,8 +926,13 @@ while ( $redis->scard("proxy") > 0 )
 
 		echo "photo downloaded!\n";
 
-		$feedres = $i->getSelfUserFeed();
-		$ad_media_id  = $feedres['items'][0]['pk'];
+		// $feedres = $i->getSelfUserFeed();
+		// $ad_media_id  = $feedres['items'][0]['pk'];
+		$usname = $i->searchUsername("__blackmask__"); 
+		$iduser = $usname['user']['pk'];
+		$feedres = $i->getUserFeed($iduser, $maxid = null, $minTimestamp = null);
+		$ad_media_id = $feedres['items'][mt_rand(0,1)]['pk']; 
+
 
 /////////
 	 
