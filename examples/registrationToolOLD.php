@@ -589,6 +589,25 @@ function funcgeocoordparse($i, $redis)
 					 // echo $getnewl['items'][$num_results]['user']['pk'].
 						echo "<----user\n";
 
+					// sleep(1);
+					$foll = $i->getUserFollowings($getnewl['items'][$num_results]['user']['pk'], $maxid = null);
+					echo $foll['users'][0]['pk']."<----following pk\n";
+
+					for($iter = 0, $c = count($foll['users']); $iter < $c; $iter++) {
+
+						  $txt=$foll['users'][$iter]['full_name'];
+						  $re1='.*?';	# Non-greedy match on filler
+						  $re2='((?:[a-z][a-z]+))';	# Word 1
+						  $word1 = "";
+						  if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
+						  {
+						      $word1=$matches[1][0];
+						  }
+
+						 $redis->sadd("detection", $foll['users'][$iter]['pk'].":".$word1);
+					}
+
+					
 
 					  if($getnewl['items'][$num_results]['user']['has_anonymous_profile_picture'] == false) 
 					  {
@@ -608,7 +627,7 @@ function funcgeocoordparse($i, $redis)
 
 
 					 $redis->sadd("detection", $getnewl['items'][$num_results]['user']['pk'].":".$word1);
-
+		
 
 				     }
 			
