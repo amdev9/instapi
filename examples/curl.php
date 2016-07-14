@@ -1,6 +1,6 @@
 <?php
 
-// $txt = '123Angelica-Варум';
+// $txt = 'Алиса Варум';
 // $re1='.*?';	# Non-greedy match on filler
 // $re2='((?:[а-яa-z][a-яa-z]+))';	# Word 1
 // $word1 = "";
@@ -11,16 +11,19 @@
 
 // echo $word1;
 
+ $uagents = ['(19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; en_US)', '(17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; en_US)', '(18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)', '(17/4.2.2; 240dpi; 540x960; samsung; SM-C101; mproject3g; smdk4x12; en_US)', '(18/4.3; 480dpi; 1080x1920; samsung; SM-N9000Q; ha3g; universal5420; en_US)', '(19/4.4.2; 480dpi; 1080x1920; samsung; SM-N900; ha3g; universal5420; en_US)', '(17/4.2.2; 480dpi; 1080x1800; asus; K00G; K00G; redhookbay; en_US)', '(18/4.3; 320dpi; 720x1280; samsung; SGH-I747M; d2can; qcom; en_US)', '(18/4.3; 480dpi; 1080x1920; samsung/Verizon; SCH-I545; jfltevzw; qcom; en_US)'];
+
+          $uag = $uagents[array_rand($uagents)];
+          echo 'Instagram 8.4.0 Android '.$uag."\n";
 
 
 
 
-
-$array = [1,3,4,1];
-$ar = $array;
-echo var_export($ar);
+// $array = [1,3,4,1];
+// $ar = $array;
+// echo var_export($ar);
    
-//   $smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F60E}", "\u{270B}"];
+// //   $smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F60E}", "\u{270B}"];
     
 //           $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
            

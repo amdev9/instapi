@@ -33,12 +33,15 @@ class Instagram
    *  Default folder to store data, you can change it.
    */
 
-  public function __construct($username, $password, $proxy , $genuuid, $gendeviceid , $genphoneid, $debug = false, $IGDataPath = null)
+  public function __construct($username, $password, $proxy , $genuuid, $gendeviceid , $genphoneid, $genphoneua, $debug = false, $IGDataPath = null)
   {
       $this->debug = $debug;
       $this->device_id = $gendeviceid; //$this->generateDeviceId(md5($username.$password));  
       $this->uuid = $genuuid;
       $this->phone_id = $genphoneid;
+
+      $this->UA = $genphoneua;
+
  $this->proxy = $proxy;
       if (!is_null($IGDataPath)) {
           $this->IGDataPath = $IGDataPath;
@@ -303,7 +306,7 @@ class Instagram
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
-        curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);// Constants::USER_AGENT);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);
@@ -384,7 +387,7 @@ class Instagram
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
-        curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);//Constants::USER_AGENT);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);
@@ -431,7 +434,7 @@ class Instagram
           ];
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $uploadUrl);
-            curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT);
+            curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);//Constants::USER_AGENT);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -530,7 +533,7 @@ class Instagram
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
-        curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);//Constants::USER_AGENT);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);
@@ -831,7 +834,7 @@ class Instagram
 
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, $endpoint);
-      curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT);
+      curl_setopt($ch, CURLOPT_USERAGENT, $this->UA); //Constants::USER_AGENT);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
       curl_setopt($ch, CURLOPT_HEADER, true);
@@ -1735,23 +1738,7 @@ class Instagram
 
 
     }
-
-    //need test
-    // public function GenerateUserAgent() {  
-    //   $resolutions = ['720x1280', '320x480', '480x800', '1024x768', '1280x720', '768x1024', '480x320'];
-    //   $versions = ['GT-N7000', 'SM-N9000', 'GT-I9220', 'GT-I9100'];
-    //   $dpis = ['120', '160', '320', '240'];
-       
-    //   $ver = $versions[array_rand($versions)];
-    //   $dpi = $dpis[array_rand($dpis)];
-    //   $res = $resolutions[array_rand($resolutions)];
-      
-    //   // return 'Instagram 4.'.mt_rand(1,2).'.'.mt_rand(0,2).' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
-
-    //   return 'Instagram 8.2.0'.' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
-    // }
-
-
+ 
 
     public function generateUUID($type)
     {
@@ -1818,7 +1805,7 @@ class Instagram
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
-        curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);//Constants::USER_AGENT);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);

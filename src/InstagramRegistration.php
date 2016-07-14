@@ -23,11 +23,11 @@ class InstagramRegistration
         $this->debug = $debug;
         $this->uuid = $this->generateUUID(true);
 
-        //
+
          $this->phone_id = $this->generateUUID(true);
         $this->waterfall_id =  $this->generateUUID(true);
         $this->UA = $this->GenerateUserAgent();
-
+        echo $this->UA."-------UA\n\n";
         $this->device_id = 'android-'.bin2hex(openssl_random_pseudo_bytes(8));
         // str_split(md5(mt_rand(9999, 999999999999)), 16)[mt_rand(0, 1)]; 
         //
@@ -66,10 +66,23 @@ class InstagramRegistration
      return $this->phone_id;
   }
 
+public function returnPhoneUA() 
+{
+  return $this->UA;
+}
 
   public function checkEmail($email)
   {
     
+
+      //
+
+      // $DelFilePath =  $this->IGDataPath.'cookies.dat';
+      //  if (file_exists($DelFilePath)) { 
+      //   unlink ($DelFilePath);          //delete cookies.dat if exist
+      //  }
+       //
+       
       // $data = json_encode([ //before
       //     '_uuid'      => $this->uuid,      ///SNIFFER do not need  
       //     'email'   => $email,
@@ -89,6 +102,15 @@ class InstagramRegistration
 
       $response =   $this->request('users/check_email/', $this->generateSignature($data));//[1];
       echo var_export($response);  
+      if (isset($result[1]['status']) && $response[1]['status'] == fail) 
+      {
+        $DelFilePath =  $this->IGDataPath.'cookies.dat';
+        if (file_exists($DelFilePath)) { 
+           unlink ($DelFilePath);          //delete cookies.dat if exist
+        }
+        return;
+      } 
+
        preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matchresult);
       $this->token = $matchresult[1];
       // echo "TOKEN:=====> ".$this->token;
@@ -356,7 +378,9 @@ public function usernameSuggestions($email ,$full_name) //not use for now
           $token = $match[1];
           $this->username = $username;
           file_put_contents($this->IGDataPath."$username-token.dat", $token);
-          rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat"); //need fix  $this->device_id
+          copy($this->IGDataPath.'cookies.dat', $this->IGDataPath.'cookies2.dat'); //no need??
+          rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat");  
+          rename($this->IGDataPath.'cookies2.dat', $this->IGDataPath.'cookies.dat'); //no need?
       }
 
       return $result;
@@ -370,19 +394,36 @@ public function usernameSuggestions($email ,$full_name) //not use for now
     }
 
 
-    public function GenerateUserAgent() {  
-          $resolutions = ['720x1280', '320x480', '480x800', '1024x768', '1280x720', '768x1024', '480x320'];
-          $versions = ['GT-N7000', 'SM-N9000', 'GT-I9220', 'GT-I9100'];
-          $dpis = ['120', '160', '320', '240'];
-           
-          $ver = $versions[array_rand($versions)];
-          $dpi = $dpis[array_rand($dpis)];
-          $res = $resolutions[array_rand($resolutions)];
-          
-          // return 'Instagram 4.'.mt_rand(1,2).'.'.mt_rand(0,2).' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
+ 
+// Instagram 8.4.0 Android (19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; en_US)
+// Instagram 8.4.0 Android (17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; en_US)
+// Instagram 8.4.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)
+ 
+// Instagram 8.4.0 Android (17/4.2.2; 240dpi; 540x960; samsung; SM-C101; mproject3g; smdk4x12; en_US)  
+// Instagram 8.4.0 Android (18/4.3; 480dpi; 1080x1920; samsung; SM-N9000Q; ha3g; universal5420; en_US) 
+// Instagram 8.4.0 Android (19/4.4.2; 480dpi; 1080x1920; samsung; SM-N900; ha3g; universal5420; en_US) 
+// Instagram 8.4.0 Android (17/4.2.2; 480dpi; 1080x1800; asus; K00G; K00G; redhookbay; en_US) 
+// Instagram 8.4.0 Android (18/4.3; 320dpi; 720x1280; samsung; SGH-I747M; d2can; qcom; en_US) 
+// Instagram 8.4.0 Android (18/4.3; 480dpi; 1080x1920; samsung/Verizon; SCH-I545; jfltevzw; qcom; en_US) 
+ 
 
-          return 'Instagram 8.2.0'.' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
-        }
+    public function GenerateUserAgent() {  
+      //old realisation
+          // $resolutions = ['720x1280', '320x480', '480x800', '1024x768', '1280x720', '768x1024', '480x320'];
+          // $versions = ['GT-N7000', 'SM-N9000', 'GT-I9220', 'GT-I9100'];
+          // $dpis = ['160', '320', '240', '480'];
+           
+          // $ver = $versions[array_rand($versions)];
+          // $dpi = $dpis[array_rand($dpis)];
+          // $res = $resolutions[array_rand($resolutions)];
+          // return 'Instagram 4.'.mt_rand(1,2).'.'.mt_rand(0,2).' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
+           // return 'Instagram 8.4.0'.' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
+
+          $uagents = ['(19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; en_US)', '(17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; en_US)', '(18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)', '(17/4.2.2; 240dpi; 540x960; samsung; SM-C101; mproject3g; smdk4x12; en_US)', '(18/4.3; 480dpi; 1080x1920; samsung; SM-N9000Q; ha3g; universal5420; en_US)', '(19/4.4.2; 480dpi; 1080x1920; samsung; SM-N900; ha3g; universal5420; en_US)', '(17/4.2.2; 480dpi; 1080x1800; asus; K00G; K00G; redhookbay; en_US)', '(18/4.3; 320dpi; 720x1280; samsung; SGH-I747M; d2can; qcom; en_US)', '(18/4.3; 480dpi; 1080x1920; samsung/Verizon; SCH-I545; jfltevzw; qcom; en_US)'];
+
+          $uag = $uagents[array_rand($uagents)];
+          return 'Instagram 8.4.0 Android '.$uag;
+  }
 
 
     public function generateUUID($type)
@@ -459,7 +500,7 @@ public function usernameSuggestions($email ,$full_name) //not use for now
 
         curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
         // curl_setopt($ch, CURLINFO_HEADER_OUT, TRUE);
-        curl_setopt($ch, CURLOPT_USERAGENT, Constants::USER_AGENT); //$this->UA ); // 
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA ); //Constants::USER_AGENT); //// 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);//true 
