@@ -131,6 +131,9 @@ if ($pktocom) {
 			   		array_push($availableINF, $influencer); 
 			   }
 			}
+			if (empty($availableINF)){
+				$availableINF = $influencers;
+			}
 
 		 	///
 
@@ -932,7 +935,6 @@ while ( $redis->scard("proxy") > 0 )
 		$iduser = $usname['user']['pk'];
 		$feedres = $i->getUserFeed($iduser, $maxid = null, $minTimestamp = null);
 		$ad_media_id = $feedres['items'][mt_rand(0,1)]['pk']; 
-
 
 /////////
 	 
