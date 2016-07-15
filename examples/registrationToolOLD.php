@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-// $romerINSTAPI = '/root/instapi/'; // FOR VPS
-// $romerPREDIS = '/root/predis/';
-// $romerINSTA = '/root/insta/';
+$romerINSTAPI = '/root/instapi/'; // FOR VPS
+$romerPREDIS = '/root/predis/';
+$romerINSTA = '/root/insta/';
 
-	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -160,8 +160,10 @@ if ($pktocom) {
 			// 	$commentindex = $commentindexkeys[mt_rand(0, count($commentindexkeys) - 1)]; 
 			// }
 
- 			if (  empty($availableComments) == false ) {
+ 			if (  empty($availableComments) == true ) {
 
+ 				$availableComments = $commentindexkeys;
+ 			}
  				$commentindex = $availableComments[mt_rand(0, count($availableComments) - 1)]; // make it RANDOM
 
  				//."_".$influencer
@@ -195,7 +197,7 @@ if ($pktocom) {
 				echo "\ncomments disabled";
 				$GLOBALS["redis"]->sadd("disabled", "comment_".$usernamelink );
 			}
-		}
+		
 
 			// add status
 		} catch (Exception $e) {
@@ -777,8 +779,8 @@ while ( $redis->scard("proxy") > 0 )
 		$shift = $outputs[1]['shift']; 
 		$header = $outputs[1]['header'];
 
-		 exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		 // exec("/root/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		 // exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		 exec("/root/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 		
 		echo $qsstamper[0];	
 		$GLOBALS["qs_stamp"] = $qsstamper[0];
