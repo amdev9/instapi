@@ -762,12 +762,12 @@ while ( $redis->scard("proxy") > 0 )
 	 
 
 
-	$check = $r->checkEmail($email);
+	// $check = $r->checkEmail($email);
  
-    if ($check[1]['available'] == false) {
-    	$redis->sadd("blacklist_email",  $email);
-	    break;
-	}     
+ //    if (isset($check[1]['available']) && $check[1]['available'] == false) {
+ //    	$redis->sadd("blacklist_email",  $email);
+	//     break;
+	// }     
 
 	$outputs = $r->fetchHeaders();
 	 
