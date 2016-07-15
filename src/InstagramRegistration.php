@@ -102,9 +102,9 @@ public function returnPhoneUA()
 
       $response =   $this->request('users/check_email/', $this->generateSignature($data));//[1];
       echo var_export($response);  
-      if (isset($result[1]['status']) && $response[1]['status'] == fail) 
+      if (isset($result[1]['status']) && $response[1]['status'] == 'fail') 
       {
-        $DelFilePath =  $this->IGDataPath.'cookies.dat';
+        $DelFilePath =  $this->IGDataPath.'cookies.dat'; // need fix
         if (file_exists($DelFilePath)) { 
            unlink ($DelFilePath);          //delete cookies.dat if exist
         }
