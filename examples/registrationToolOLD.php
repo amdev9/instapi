@@ -227,17 +227,36 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id,  $counter)
 	if 	($GLOBALS["redis"]->scard("foractionF") > 0 ) {
 	$actioner = $GLOBALS["redis"]->spop("foractionF");
 	 
-	try {	
-		$fres = $ilink->follow($actioner);
-		echo var_export($fres); //need to test res code
+	// try {	
+	// 	$fres = $ilink->follow($actioner);
+	// 	echo var_export($fres); //need to test res code
 
-	} catch (Exception $e) {
-	    echo $e->getMessage();
-	}
 
-	if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
-		functocomment($ilink, $usernamelink, null); //$actioner);       	
-	} 
+	// 	if ($fres['status'] == 'fail' && $fres['message'] == 'login_required') {
+	// 		try {
+
+	// 		    $ilink->login();
+
+	// 		    $fres = $ilink->follow($actioner);
+	// 		    echo var_export($fres); 
+
+	// 		} catch (InstagramException $e) {
+	// 		    $e->getMessage();
+	// 		    exit();
+	// 		}
+	// 	}
+		
+
+	// } catch (Exception $e) {
+	//     echo $e->getMessage();
+	// }
+
+
+//test without
+	// if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
+	// 	functocomment($ilink, $usernamelink, null); //$actioner);       	
+	// }
+
 	// else { //need fix to check if private or not
 	// 	$usfeedforcom = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
 	// 	$medcom = $usfeedforcom['items'][0]['pk'];
@@ -684,7 +703,7 @@ function functiondirectshare($username, $message_recipient, $i,$ad_media_id)
 
 				// $text = "$hiw $first_name_txt[0] $smi_hi Follow this awesome profile with naughty girls @livecamshowtvonline $smil $smi $cur $cur $cur";
 			     
-  		  $smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F60E}", "\u{270B}"];
+  		  $smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{270B}"];
           $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
 
 	$text = "Добрый день! $smi_hi\u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705}ГАРАНТИРОВАННЫЙ РЕЗУЛЬТАТ В ТЕЧЕНИЕ 2-Х НЕДЕЛЬ! УСПЕЙ ЗАКАЗАТЬ СЕГОДНЯ ПО АКЦИИ!\u{2029}\u{27A1} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
@@ -699,8 +718,9 @@ function functiondirectshare($username, $message_recipient, $i,$ad_media_id)
 		 			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
 
 		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
-		 			 echo "\n\n**SEND**\n\n";
+		 			
 		 			 if ($answer == "ok") {
+		 			 	 echo "\n\n**SEND**\n\n";
 		 				$GLOBALS["redis"]->rpush("recieved",  $message_recipient); 
 		 			} else {
 
@@ -708,7 +728,7 @@ function functiondirectshare($username, $message_recipient, $i,$ad_media_id)
 		 				//del this --> sleep
 		 				$GLOBALS["redis"]->sadd("disabled", "direct_".$username );
 		 				// sleep(14400); // 4 hours sleep
-		 			 
+		 			 	 echo "\n\ndirect NOT send\n\n";
 		 			}
 
 				} catch (Exception $e) {
@@ -720,7 +740,7 @@ function functiondirectshare($username, $message_recipient, $i,$ad_media_id)
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
  
-$debug = true;//usual true
+$debug = false;//usual true
 
 $password = $argv[1]; 
 $email= $argv[2]; 
@@ -807,6 +827,7 @@ while ( $redis->scard("proxy") > 0 )
 	//     sleep(3);
 	// } 
 	 
+
 	
 	  sleep(4);  
 	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
@@ -819,6 +840,15 @@ while ( $redis->scard("proxy") > 0 )
 	  if (isset($result[1]['errors']) &&  isset($result[1]['errors']['email'][0]) && strpos($result[1]['errors']['email'][0], 'Another account is using') !== false) {
     	echo 'Another account is using email: $email';
     	$redis->sadd("blacklist_email",  $email);
+
+
+    	 $DelFilePath =  $r->returnIGDataPath().'cookies.dat';
+        if (file_exists($DelFilePath)) { 
+           unlink ($DelFilePath);          //delete cookies.dat if exist
+
+           echo "\n*****---FILE cookies.dat DELETED!--****\n";
+        }
+
     	break;
 	}
 
@@ -855,7 +885,7 @@ while ( $redis->scard("proxy") > 0 )
 		echo "\n\n PROX ---------->".$prox. "\n\n";
 		$GLOBALS["proxy"] = $prox;		 
 		// echo "\n _proxy_------>".$proxy."\n";
-		$debug = true; // false FOR VPS  
+		$debug = false; // false FOR VPS  
 
 		$regUuid = $r->returnUUID();
 		$regDeviceId = $r->returnDeviceId();
@@ -940,21 +970,21 @@ while ( $redis->scard("proxy") > 0 )
 		} else {
 			//////// NON THEMATIC ////////
 
-		$files1 = scandir($dir);
-		foreach ( $files1 as $k => $value ) {
-		    $ext = pathinfo($value, PATHINFO_EXTENSION);
-		    if ($ext == "jpg") {
-				try {
-				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
+		// $files1 = scandir($dir);
+		// foreach ( $files1 as $k => $value ) {
+		//     $ext = pathinfo($value, PATHINFO_EXTENSION);
+		//     if ($ext == "jpg") {
+		// 		try {
+		// 		    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
+		// 		} catch (Exception $e) {
+		// 		    echo $e->getMessage();
+		// 		}
 
-				sleep(10);
-		    }
-		}
+		// 		sleep(10);
+		//     }
+		// }
 
-		echo "photo downloaded!\n";
+		// echo "photo downloaded!\n";
 
 		// $feedres = $i->getSelfUserFeed();
 		// $ad_media_id  = $feedres['items'][0]['pk'];
@@ -965,13 +995,13 @@ while ( $redis->scard("proxy") > 0 )
  
 		$logoutCounter = 20;
 
-		 // setting up private account
-		try {
-		    $i->setPrivateAccount();
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		 sleep(6);
+		//  // setting up private account
+		// try {
+		//     $i->setPrivateAccount();
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		//  sleep(6);
 	 
 
 		funcrecur($i, $username, $pk, $ad_media_id, $logoutCounter  ); 

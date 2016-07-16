@@ -71,17 +71,18 @@ public function returnPhoneUA()
   return $this->UA;
 }
 
+public function returnIGDataPath() 
+{
+  return $this->IGDataPath;
+}
+
+
+
   public function checkEmail($email)
   {
     
 
-      //
-
-      // $DelFilePath =  $this->IGDataPath.'cookies.dat';
-      //  if (file_exists($DelFilePath)) { 
-      //   unlink ($DelFilePath);          //delete cookies.dat if exist
-      //  }
-       //
+      
        
       // $data = json_encode([ //before
       //     '_uuid'      => $this->uuid,      ///SNIFFER do not need  
@@ -102,14 +103,7 @@ public function returnPhoneUA()
 
       $response =   $this->request('users/check_email/', $this->generateSignature($data));//[1];
       echo var_export($response);  
-      if (isset($result[1]['status']) && $response[1]['status'] == 'fail') 
-      {
-        $DelFilePath =  $this->IGDataPath.'cookies.dat'; // need fix
-        if (file_exists($DelFilePath)) { 
-           unlink ($DelFilePath);          //delete cookies.dat if exist
-        }
-        return;
-      } 
+      
 
        preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matchresult);
       $this->token = $matchresult[1];
@@ -151,12 +145,25 @@ public function returnPhoneUA()
   public function fetchHeaders()
   {
 
+  
+        
+    // if (isset($outputs[1]['status']) && $outputs[1]['status'] == 'fail') 
+    //   {
+    //     $DelFilePath =  $this->IGDataPath.'cookies.dat'; // need fix
+    //     if (file_exists($DelFilePath)) { 
+    //        unlink ($DelFilePath);          //delete cookies.dat if exist
+    //     }
+    //     return;
+    //   } 
+
     //   return  $this->request('si/fetch_headers/?challenge_type=signup&guid='.$this->generateUUID(false), null);
     // return  $this->request('si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null);
     $outputs = $this->request('si/fetch_headers/?guid='.str_replace('-', '', $this->uuid).'&challenge_type=signup', null);
 
-   //  preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
-   // $this->token = $matcht[1];
+
+
+    preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
+    $this->token = $matcht[1];
       
     return $outputs;
     
@@ -371,6 +378,9 @@ public function usernameSuggestions($email ,$full_name) //not use for now
 
       $result = $this->request('accounts/create/', $this->generateSignature($data));
      
+
+ 
+      
       if (isset($result[1]['account_created']) && ($result[1]['account_created'] == true)) {
           $this->username_id = $result[1]['created_user']['pk'];
           file_put_contents($this->IGDataPath."$username-userId.dat", $this->username_id);
@@ -378,9 +388,9 @@ public function usernameSuggestions($email ,$full_name) //not use for now
           $token = $match[1];
           $this->username = $username;
           file_put_contents($this->IGDataPath."$username-token.dat", $token);
-          copy($this->IGDataPath.'cookies.dat', $this->IGDataPath.'cookies2.dat'); //no need??
+          // copy($this->IGDataPath.'cookies.dat', $this->IGDataPath.'cookies2.dat'); //no need??
           rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat");  
-          rename($this->IGDataPath.'cookies2.dat', $this->IGDataPath.'cookies.dat'); //no need?
+          // rename($this->IGDataPath.'cookies2.dat', $this->IGDataPath.'cookies.dat'); //no need?
       }
 
       return $result;
@@ -395,16 +405,18 @@ public function usernameSuggestions($email ,$full_name) //not use for now
 
 
  
-// Instagram 8.4.0 Android (19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; en_US)
-// Instagram 8.4.0 Android (17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; en_US)
-// Instagram 8.4.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)
- 
-// Instagram 8.4.0 Android (17/4.2.2; 240dpi; 540x960; samsung; SM-C101; mproject3g; smdk4x12; en_US)  
-// Instagram 8.4.0 Android (18/4.3; 480dpi; 1080x1920; samsung; SM-N9000Q; ha3g; universal5420; en_US) 
-// Instagram 8.4.0 Android (19/4.4.2; 480dpi; 1080x1920; samsung; SM-N900; ha3g; universal5420; en_US) 
-// Instagram 8.4.0 Android (17/4.2.2; 480dpi; 1080x1800; asus; K00G; K00G; redhookbay; en_US) 
-// Instagram 8.4.0 Android (18/4.3; 320dpi; 720x1280; samsung; SGH-I747M; d2can; qcom; en_US) 
-// Instagram 8.4.0 Android (18/4.3; 480dpi; 1080x1920; samsung/Verizon; SCH-I545; jfltevzw; qcom; en_US) 
+
+// Instagram 8.4.0 Android (17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; en_US)  ok!  -
+// Instagram 8.4.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)              ok!
+// Instagram 8.4.0 Android (17/4.2.2; 240dpi; 540x960; samsung; SM-C101; mproject3g; smdk4x12; en_US)    ok! +
+// Instagram 8.4.0 Android (19/4.4.2; 480dpi; 1080x1920; samsung; SM-N900; ha3g; universal5420; en_US)    ok!
+
+
+// Instagram 8.4.0 Android (18/4.3; 480dpi; 1080x1920; samsung; SM-N9000Q; ha3g; universal5420; en_US)   ok! --
+// Instagram 8.4.0 Android (19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; en_US)       ???checkpoint?
+// Instagram 8.4.0 Android (17/4.2.2; 480dpi; 1080x1800; asus; K00G; K00G; redhookbay; en_US)       ???checkpoint
+// Instagram 8.4.0 Android (18/4.3; 320dpi; 720x1280; samsung; SGH-I747M; d2can; qcom; en_US)        ??checkpoint
+// Instagram 8.4.0 Android (18/4.3; 480dpi; 1080x1920; samsung/Verizon; SCH-I545; jfltevzw; qcom; en_US)    ???
  
 
     public function GenerateUserAgent() {  
@@ -419,10 +431,17 @@ public function usernameSuggestions($email ,$full_name) //not use for now
           // return 'Instagram 4.'.mt_rand(1,2).'.'.mt_rand(0,2).' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
            // return 'Instagram 8.4.0'.' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
 
-          $uagents = ['(19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; en_US)', '(17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; en_US)', '(18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)', '(17/4.2.2; 240dpi; 540x960; samsung; SM-C101; mproject3g; smdk4x12; en_US)', '(18/4.3; 480dpi; 1080x1920; samsung; SM-N9000Q; ha3g; universal5420; en_US)', '(19/4.4.2; 480dpi; 1080x1920; samsung; SM-N900; ha3g; universal5420; en_US)', '(17/4.2.2; 480dpi; 1080x1800; asus; K00G; K00G; redhookbay; en_US)', '(18/4.3; 320dpi; 720x1280; samsung; SGH-I747M; d2can; qcom; en_US)', '(18/4.3; 480dpi; 1080x1920; samsung/Verizon; SCH-I545; jfltevzw; qcom; en_US)'];
+          $uagents = ['(17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; en_US)', '(18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)', '(17/4.2.2; 240dpi; 540x960; samsung; SM-C101; mproject3g; smdk4x12; en_US)', '(18/4.3; 480dpi; 1080x1920; samsung; SM-N9000Q; ha3g; universal5420; en_US)', '(19/4.4.2; 480dpi; 1080x1920; samsung; SM-N900; ha3g; universal5420; en_US)'];
+
+
+// '(19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; en_US)', ???
+          // , '(17/4.2.2; 480dpi; 1080x1800; asus; K00G; K00G; redhookbay; en_US)    checkpoint
+          // , '(18/4.3; 320dpi; 720x1280; samsung; SGH-I747M; d2can; qcom; en_US)'   checkpoint
+          //, '(18/4.3; 480dpi; 1080x1920; samsung/Verizon; SCH-I545; jfltevzw; qcom; en_US)' ???
 
           $uag = $uagents[array_rand($uagents)];
-          return 'Instagram 8.4.0 Android '.$uag;
+          // return 'Instagram 8.4.0 Android '.$uag;
+          return 'Instagram 8.4.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
   }
 
 
@@ -531,8 +550,8 @@ public function usernameSuggestions($email ,$full_name) //not use for now
         }
 
 
-       $information = curl_getinfo($ch);
-       echo var_export( $information);
+       // $information = curl_getinfo($ch);
+       // echo var_export( $information);
 
 
         $resp = curl_exec($ch);
