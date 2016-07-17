@@ -293,8 +293,9 @@ function funcrecur($ilink, $usernamelink, $pkuser, $ad_media_id,  $counter)
 	echo $next_iteration_time = add_time($delay); //timer
 	sleep($next_iteration_time);
 	
-if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true && $GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) == true) {
+if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) == true) {
 
+// $GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true && 
 			$ilink->logout();
 			return;
 	}
