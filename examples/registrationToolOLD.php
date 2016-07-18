@@ -105,7 +105,7 @@ function functocomment($ilink, $usernamelink)
 
 }
 
-function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id, $comtrue)
+function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
  {
 
 	$time_in_day = 24*60*60;
@@ -116,16 +116,16 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id, $comt
 	// /functofollow($ilink, $usernamelink, $pkuser);	 
  	
  	
-	if ($comtrue == true) {
-	 	for($t = 0; $t < 5; $t++) {  //expressive spam 12 OK no sleep
-			if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
-				functocomment($ilink, $usernamelink);   
-				$timetosleep = add_time($delay);      	
-			 	sleep($timetosleep);
-			}
-
+ 
+ 	for($t = 0; $t < 5; $t++) {  //expressive spam 12 OK no sleep
+		if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
+			functocomment($ilink, $usernamelink);   
+			$timetosleep = add_time($delay);      	
+		 	sleep($timetosleep);
 		}
+
 	}
+
 	$GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
 
 	if ($GLOBALS["redis"]->scard("foractionF") == 0) {
@@ -137,7 +137,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id, $comt
 
 		
 		if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
-		    for($t = 0; $t < 55; $t++) {
+		    for($t = 0; $t < 50; $t++) {
 			    functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
 			    if 	($GLOBALS["redis"]->scard("foractionF") == 0 ) {
 			    	funcgeocoordparse($ilink, $GLOBALS["redis"]);
@@ -223,7 +223,7 @@ if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true &
 	// echo $next_iteration_time = add_time($delay); //timer
 	// sleep($next_iteration_time);
 
-	funcrecur($ilink, $usernamelink, $pkuser  , $counter, $ad_media_id, false);
+	funcrecur($ilink, $usernamelink, $pkuser  , $counter, $ad_media_id);
 
 }
  
@@ -939,7 +939,7 @@ while ( $redis->scard("proxy") > 0 )
 sleep(6);
 	 
 
-		funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id , true ); 
+		funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
 		 
 
 	}
