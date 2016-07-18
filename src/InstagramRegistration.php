@@ -431,15 +431,15 @@ public function usernameSuggestions($email ,$full_name) //not use for now
           // return 'Instagram 4.'.mt_rand(1,2).'.'.mt_rand(0,2).' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
            // return 'Instagram 8.4.0'.' Android ('.mt_rand(10,11).'/'.mt_rand(1,3).'.'.mt_rand(3,5).'.'.mt_rand(0,5).'; '.$dpi.'; '.$res.'; samsung; '.$ver.'; '.$ver.'; smdkc210; en_US)';
 
-          $uagents = ['(17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; en_US)', '(18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)', '(17/4.2.2; 240dpi; 540x960; samsung; SM-C101; mproject3g; smdk4x12; en_US)', '(18/4.3; 480dpi; 1080x1920; samsung; SM-N9000Q; ha3g; universal5420; en_US)', '(19/4.4.2; 480dpi; 1080x1920; samsung; SM-N900; ha3g; universal5420; en_US)'];
+//           $uagents = ['(17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; en_US)', '(18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)', '(17/4.2.2; 240dpi; 540x960; samsung; SM-C101; mproject3g; smdk4x12; en_US)', '(18/4.3; 480dpi; 1080x1920; samsung; SM-N9000Q; ha3g; universal5420; en_US)', '(19/4.4.2; 480dpi; 1080x1920; samsung; SM-N900; ha3g; universal5420; en_US)'];
 
 
-// '(19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; en_US)', ???
-          // , '(17/4.2.2; 480dpi; 1080x1800; asus; K00G; K00G; redhookbay; en_US)    checkpoint
-          // , '(18/4.3; 320dpi; 720x1280; samsung; SGH-I747M; d2can; qcom; en_US)'   checkpoint
-          //, '(18/4.3; 480dpi; 1080x1920; samsung/Verizon; SCH-I545; jfltevzw; qcom; en_US)' ???
+// // '(19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; en_US)', ???
+//           // , '(17/4.2.2; 480dpi; 1080x1800; asus; K00G; K00G; redhookbay; en_US)    checkpoint
+//           // , '(18/4.3; 320dpi; 720x1280; samsung; SGH-I747M; d2can; qcom; en_US)'   checkpoint
+//           //, '(18/4.3; 480dpi; 1080x1920; samsung/Verizon; SCH-I545; jfltevzw; qcom; en_US)' ???
 
-          $uag = $uagents[array_rand($uagents)];
+//           $uag = $uagents[array_rand($uagents)];
           // return 'Instagram 8.4.0 Android '.$uag;
           return 'Instagram 8.4.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
   }
