@@ -1,15 +1,15 @@
 <?php
 
-// require_once '/root/instapi/src/InstagramRegistration.php';
+// require_once '/home/deployer/ins/instapi/src/InstagramRegistration.php';
 
-// require '/root/instapi/src/Instagram.php';
+// require '/home/deployer/ins/instapi/src/Instagram.php';
 
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/root/instapi/'; // FOR VPS
-$romerPREDIS = '/root/predis/';
-$romerINSTA = '/root/insta/';
+$romerINSTAPI = '/home/deployer/ins/instapi/'; // FOR VPS
+$romerPREDIS = '/home/deployer/ins/predis/';
+$romerINSTA = '/home/deployer/ins/insta/';
 
 	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
 	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
@@ -730,7 +730,7 @@ while ( $redis->scard("proxy") > 0 )
 		$header = $outputs[1]['header'];
 
 		 // exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		exec("/root/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 		
 		echo $qsstamper[0];	
 		$GLOBALS["qs_stamp"] = $qsstamper[0];
