@@ -220,8 +220,8 @@ if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true &
 			return;
 	}
 	
-	// echo $next_iteration_time = add_time($delay); //timer
-	// sleep($next_iteration_time);
+	echo $next_iteration_time = add_time($delay)*20 ; //timer
+	sleep($next_iteration_time);
 
 	funcrecur($ilink, $usernamelink, $pkuser  , $counter, $ad_media_id);
 
