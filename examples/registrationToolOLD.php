@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-// $romerINSTAPI = '/home/deployer/ins/instapi/'; // FOR VPS
-// $romerPREDIS = '/home/deployer/ins/predis/';
-// $romerINSTA = '/home/deployer/ins/insta/';
+$romerINSTAPI = '/home/deployer/ins/instapi/'; // FOR VPS
+$romerPREDIS = '/home/deployer/ins/predis/';
+$romerINSTA = '/home/deployer/ins/insta/';
 
-	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -107,17 +107,23 @@ function functocomment($ilink, $usernamelink)
 }
 
 function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
- {
+{
 
 	$time_in_day = 24*60*60;
 	$posts_per_day = 500;//400 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
- 	 
 
-	// /functofollow($ilink, $usernamelink, $pkuser);	 
- 	
- 	
- 
+////ADULT////////// 	 
+	// if ($GLOBALS["redis"]->scard("foractionM") == 0) {
+	// 	funcgeocoordparse($ilink, $GLOBALS["redis"]);
+	// }
+ // 	$actioner = $GLOBALS["redis"]->spop("foractionM");
+ // 	$fres = $ilink->follow($actioner);
+	// echo var_export($fres);  
+ 	// functofollow($ilink, $usernamelink, $actioner);	 
+////.......//////////
+
+//TOVARKA  *****///////// /////////////////////////////////// NEED TEST
  	for($t = 0; $t < 5; $t++) {  //expressive spam 12 OK no sleep
 		if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
 			functocomment($ilink, $usernamelink);   
@@ -134,11 +140,10 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	}
 			 
 	if 	($GLOBALS["redis"]->scard("foractionF") > 0 ) {
-	$actioner = $GLOBALS["redis"]->spop("foractionF");
-
-		
+	
 		if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
 		    for($t = 0; $t < 50; $t++) {
+		    	$actioner = $GLOBALS["redis"]->spop("foractionF");
 			    functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
 			    if 	($GLOBALS["redis"]->scard("foractionF") == 0 ) {
 			    	funcgeocoordparse($ilink, $GLOBALS["redis"]);
@@ -149,6 +154,18 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 		}
 	}
 	$GLOBALS["redis"]->sadd("track", "message".$usernamelink."_".date("Y-m-d_H:i:s"));
+	if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true && $GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) == true) {
+			$ilink->logout();
+			return;
+	}
+/////////////////////////	
+	
+	echo $next_iteration_time = add_time($delay); //timer
+	sleep($next_iteration_time);
+
+	funcrecur($ilink, $usernamelink, $pkuser , $counter, $ad_media_id);
+
+
 
 	// try {	
 	// 	$fres = $ilink->follow($actioner);
@@ -203,23 +220,9 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	
 	 
   // }
+ 
 
-
-
-	/////
-
-if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true && $GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) == true) {
-
-//  && 
-			$ilink->logout();
-			return;
-	}
 	
-	echo $next_iteration_time = add_time($delay)*20; //timer
-	sleep($next_iteration_time);
-
-	funcrecur($ilink, $usernamelink, $pkuser  , $counter, $ad_media_id);
-
 }
  
 function f_rand($min=0,$max=1,$mul=100000){
@@ -665,12 +668,12 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
  
-$debug = false;//usual true
+$debug = true;//usual true
 
 $password = $argv[1]; 
 $email= $argv[2]; 
 $url  = $argv[3]; 
-$biography = $argv[4];///."\u{1F4A6}"."\u{1F447}"."\u{1F447}";    
+$biography = $argv[4];    
 $caption = $argv[5];  
 
 $gender = 2;
@@ -724,8 +727,8 @@ while ( $redis->scard("proxy") > 0 )
 		$shift = $outputs[1]['shift']; 
 		$header = $outputs[1]['header'];
 
-		exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		// exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		// exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 		
 		echo $qsstamper[0];	
 		$GLOBALS["qs_stamp"] = $qsstamper[0];
@@ -810,7 +813,7 @@ while ( $redis->scard("proxy") > 0 )
 		echo "\n\n PROX ---------->".$prox. "\n\n";
 		$GLOBALS["proxy"] = $prox;		 
 		// echo "\n _proxy_------>".$proxy."\n";
-		$debug = false; // false FOR VPS  
+		$debug = true; // false FOR VPS  
 
 		$regUuid = $r->returnUUID();
 		$regDeviceId = $r->returnDeviceId();
@@ -919,13 +922,12 @@ while ( $redis->scard("proxy") > 0 )
  
 		$usname = $i->searchUsername("__blackmask__"); 
 		$iduser = $usname['user']['pk'];
- sleep(6);
+sleep(6);
 		$feedres = $i->getUserFeed($iduser, $maxid = null, $minTimestamp = null);
 		$ad_media_id = $feedres['items'][mt_rand(0,2)]['pk']; 
  
 		$logoutCounter = 20;
- sleep(6);
-		 // setting up private account
+sleep(6);
 		try {
 		    $i->setPrivateAccount();
 		} catch (Exception $e) {
@@ -933,10 +935,8 @@ while ( $redis->scard("proxy") > 0 )
 		}
 sleep(6);
 	 
-
 		funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
 		 
-
 	}
 
 		// check if 
