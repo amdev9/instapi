@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/home/deployer/ins/instapi/'; // FOR VPS
-$romerPREDIS = '/home/deployer/ins/predis/';
-$romerINSTA = '/home/deployer/ins/insta/';
+// $romerINSTAPI = '/home/deployer/ins/instapi/'; // FOR VPS
+// $romerPREDIS = '/home/deployer/ins/predis/';
+// $romerINSTA = '/home/deployer/ins/insta/';
 
-	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -665,7 +665,7 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
  
-$debug = true;//usual true
+$debug = false;//usual true
 
 $password = $argv[1]; 
 $email= $argv[2]; 
@@ -724,8 +724,8 @@ while ( $redis->scard("proxy") > 0 )
 		$shift = $outputs[1]['shift']; 
 		$header = $outputs[1]['header'];
 
-		// exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		// exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 		
 		echo $qsstamper[0];	
 		$GLOBALS["qs_stamp"] = $qsstamper[0];
@@ -810,7 +810,7 @@ while ( $redis->scard("proxy") > 0 )
 		echo "\n\n PROX ---------->".$prox. "\n\n";
 		$GLOBALS["proxy"] = $prox;		 
 		// echo "\n _proxy_------>".$proxy."\n";
-		$debug = true; // false FOR VPS  
+		$debug = false; // false FOR VPS  
 
 		$regUuid = $r->returnUUID();
 		$regDeviceId = $r->returnDeviceId();
@@ -921,7 +921,7 @@ while ( $redis->scard("proxy") > 0 )
 		$iduser = $usname['user']['pk'];
  sleep(6);
 		$feedres = $i->getUserFeed($iduser, $maxid = null, $minTimestamp = null);
-		$ad_media_id = $feedres['items'][mt_rand(0,1)]['pk']; 
+		$ad_media_id = $feedres['items'][mt_rand(0,2)]['pk']; 
  
 		$logoutCounter = 20;
  sleep(6);
