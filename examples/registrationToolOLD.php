@@ -130,7 +130,6 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 			$timetosleep = add_time($delay);      	
 		 	sleep($timetosleep);
 		}
-
 	}
 
 	$GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
@@ -160,7 +159,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	}
 /////////////////////////	
 	
-	echo $next_iteration_time = add_time($delay); //timer
+	echo $next_iteration_time = add_time(28800); //8*60*60
 	sleep($next_iteration_time);
 
 	funcrecur($ilink, $usernamelink, $pkuser , $counter, $ad_media_id);
