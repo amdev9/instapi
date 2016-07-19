@@ -441,7 +441,7 @@ public function usernameSuggestions($email ,$full_name) //not use for now
 
 //           $uag = $uagents[array_rand($uagents)];
           // return 'Instagram 8.4.0 Android '.$uag;
-          return 'Instagram 8.4.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
+          return 'Instagram 8.5.1 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
   }
 
 
