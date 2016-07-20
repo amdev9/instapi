@@ -29,10 +29,7 @@ class InstagramRegistration
         $this->UA = $this->GenerateUserAgent();
         echo $this->UA."-------UA\n\n";
         $this->device_id = 'android-'.bin2hex(openssl_random_pseudo_bytes(8));
-        // str_split(md5(mt_rand(9999, 999999999999)), 16)[mt_rand(0, 1)]; 
-        //
-
-        // str_split(md5(mt_rand(9999, 999999999999)), 17)[mt_rand(0, 1)]; //99999999
+         
 
         if (!is_null($IGDataPath)) {
             $this->IGDataPath = $IGDataPath;

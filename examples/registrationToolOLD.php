@@ -86,8 +86,9 @@ function functocomment($ilink, $usernamelink)
 			$attention = ["\u{2728}", "\u{2757}", "\u{270C}", "\u{1F64B}", "\u{2714}"];
 	 		$smil = $smiles[mt_rand(0, count($smiles) - 1)];
 	 		$att = $attention[mt_rand(0, count($smiles) - 1)];
-	 		$heart = "\u{1F49D} \u{1F49B} \u{1F49C}  \u{1F49A}"; //colurful hearts      
-	  		$messageFinal = "$heart $att $commenttex $smil $heart";
+	 		$hearts = ["\u{1F49D}","\u{1F49B}","\u{1F49C}","\u{1F49A}"];  
+	 		$heart = $hearts[mt_rand(0, count($hearts) - 1)];
+	  		$messageFinal = "$att $commenttex $smil $heart $heart $heart";
 
 
 			$link = $ilink->comment($medcom, $messageFinal); 
@@ -124,7 +125,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 ////.......//////////
 
 //TOVARKA  *****///////// /////////////////////////////////// NEED TEST
- 	for($t = 0; $t < 5; $t++) {  //expressive spam 12 OK no sleep
+ 	for($t = 0; $t < 6; $t++) {  //expressive spam 12 OK no sleep
 		if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
 			functocomment($ilink, $usernamelink);   
 			$timetosleep = add_time($delay);      	
@@ -141,7 +142,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	if 	($GLOBALS["redis"]->scard("foractionF") > 0 ) {
 	
 		if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
-		    for($t = 0; $t < 50; $t++) {
+		    for($t = 0; $t < 51; $t++) {
 		    	$actioner = $GLOBALS["redis"]->spop("foractionF");
 			    functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
 			    if 	($GLOBALS["redis"]->scard("foractionF") == 0 ) {
@@ -625,8 +626,8 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 			     
   		  $smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{270B}"];
           $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
-// $smi_hi
-	$text = "Добрый день! \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705}ГАРАНТИРОВАННЫЙ РЕЗУЛЬТАТ В ТЕЧЕНИЕ 2-Х НЕДЕЛЬ! УСПЕЙ ЗАКАЗАТЬ СЕГОДНЯ ПО АКЦИИ!\u{2029}\u{27A1} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
+//$smi_hi
+	$text = "Добрый день! \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705}ГАРАНТИРОВАННЫЙ РЕЗУЛЬТАТ В ТЕЧЕНИЕ 2-Х НЕДЕЛЬ! \u{2029}\u{27A1} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
 
               
 				try {
@@ -667,7 +668,7 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
  
-$debug = true;//usual true
+$debug = false;//usual true
 
 $password = $argv[1]; 
 $email= $argv[2]; 
@@ -812,7 +813,7 @@ while ( $redis->scard("proxy") > 0 )
 		echo "\n\n PROX ---------->".$prox. "\n\n";
 		$GLOBALS["proxy"] = $prox;		 
 		// echo "\n _proxy_------>".$proxy."\n";
-		$debug = true; // false FOR VPS  
+		$debug = false; // false FOR VPS  
 
 		$regUuid = $r->returnUUID();
 		$regDeviceId = $r->returnDeviceId();
