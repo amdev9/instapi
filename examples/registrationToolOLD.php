@@ -447,6 +447,21 @@ function funcparse($followers, $i, $redis, $influencer) {
 					
 			$tmpfollowers = $followers;
 			echo $tmpfollowers['next_max_id'];
+//NEED FIX
+// 			1296734699675058367:med
+// no geo:med
+// 2367194649REQUEST: feed/user/2367194649/?rank_token=3570247882_578c4930-e0c4-456f-98c1-920e9f581a97&ranked_content=true
+// RESPONSE: {"auto_load_more_enabled": true, "items": [], "status": "ok", "num_results": 0, "more_available": false}
+
+// no media yet:med
+// PHP Notice:  Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 449
+
+// Notice: Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 449
+// PHP Notice:  Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 451
+
+// Notice: Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 451
+// PHP Notice:  Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 453
+
 
 			$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
 			try {
@@ -700,7 +715,7 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 
               //ADULT
           $uname = $GLOBALS["username"];
-          $text = "$hiw $first_name_txt[0] 19 years old $smi_hi PLEASE, Make Me COME! $smil Waiting for u NOW! my login $first_name_txt[0]Strip96 $smi \u{1F449} @$uname \u{1F448} Check out link in profile! \u{1F446}\u{1F446}\u{1F446}";
+          $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a hot chat $smil Waiting for u NOW! my ID there 12055 $smi \u{1F449} @$uname \u{1F448} Check out link in profile and find me online! \u{1F446}\u{1F446}\u{1F446}";
 
 				try {
 				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
@@ -745,7 +760,11 @@ $debug = true;//usual true
 $password = $argv[1]; 
 $email= $argv[2]; 
 $url  = $argv[3]; 
-$biography = $argv[4]."\u{1F4A6}\u{1F447}\u{1F447}\u{1F447}";    
+
+$biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_flower", "\u{1F339}", str_replace("_smi_video", "\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $argv[4])) ) ) ;
+
+ //."\u{1F4A6}\u{1F447}\u{1F447}\u{1F447}";    
+
 $caption = $argv[5];  
 
 $gender = 2;
