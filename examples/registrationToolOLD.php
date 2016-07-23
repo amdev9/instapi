@@ -92,13 +92,14 @@ function functocomment($ilink, $usernamelink)
  		// 	$commenttex = $commenttex_ADULT[mt_rand(0, count($commenttex_ADULT) - 1)];
 
 		    //  MESSAGE 
-			$smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
-			$attention = ["\u{2728}", "\u{2757}", "\u{270C}", "\u{1F64B}", "\u{2714}"];
+			// $smiles =  ["\u{1F44D}", "\u{1F44C}", "\u{1F478}" ];  
+			// $attention = ["\u{2728}", "\u{2757}", "\u{270C}", "\u{1F64B}", "\u{2714}"];
+			$smiles =  ["\u{1F609}", "\u{1F61A}", "\u{1F618}" ];  
 	 		$smil = $smiles[mt_rand(0, count($smiles) - 1)];
-	 		$att = $attention[mt_rand(0, count($smiles) - 1)];
-	 		$hearts = ["\u{1F49D}","\u{1F49B}","\u{1F49C}","\u{1F49A}"];  
-	 		$heart = $hearts[mt_rand(0, count($hearts) - 1)];
-	  		$messageFinal = "$att $commenttex $smil $heart $heart $heart";
+	 		// $att = $attention[mt_rand(0, count($smiles) - 1)];
+	 		// $hearts = ["\u{1F49D}","\u{1F49B}","\u{1F49C}","\u{1F49A}"];  
+	 		// $heart = $hearts[mt_rand(0, count($hearts) - 1)];
+	  		$messageFinal = "\u{1F48B}\u{1F48B}\u{1F48B} $commenttex $smil \u{1F4A6}\u{1F4A6}\u{1F4A6}"; //$heart $heart $heart";
 
 
 			$link = $ilink->comment($medcom, $messageFinal); 
@@ -129,14 +130,21 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	if ($GLOBALS["redis"]->scard("foractionM") == 0) {
 		// funcgeocoordparse($ilink, $GLOBALS["redis"]);
 		$influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318'];
-
 		//["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 
-
-		$influencer = $influencers[mt_rand(0, count($influencers) - 1)];
-
-		$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1); 
-
+ 		$availableInf = [];
+ 		foreach ($influencers as $ind) {
+		    if (	 $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1) != "0"  ) {
+		   		array_push($availableInf, $ind); 
+		    }
+		}
+ 		if ( empty($availableInf) == true ) {
+ 			$availableInf = $influencers;
+ 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
+ 		} else {
+ 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
+			$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
+ 		}
 		if(empty ($red)) {
 			try {
 				 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
@@ -151,15 +159,21 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 			    echo $e->getMessage();
 			}
 		}
+		sleep(10);
 	    funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
 
 	}
 
  	$actioner = $GLOBALS["redis"]->spop("foractionM");
- 	$fres = $ilink->follow($actioner);
 
-	echo var_export($fres);  
-	
+ 	if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true) {
+	 	$fres = $ilink->follow($actioner);
+	 	if ($fres['status'] == 'ok') {
+	 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+	 	}
+		echo var_export($fres);
+ 	}
+ 	
  	// functofollow($ilink, $usernamelink, $actioner);	 
 ////.......//////////
 
@@ -332,10 +346,11 @@ function is_arabic($str) {
 
 
 
-function funcparse($followers, $i, $redis, $influencer) {
+function funcparse($followers, $i, $redis, $influencer) 
+{
 
 		$counter = 0;
-		while ($counter < 20) {  // fix to 20
+		while ($counter < 20) {  
 
 			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
 		        
@@ -344,82 +359,96 @@ function funcparse($followers, $i, $redis, $influencer) {
 
 				try {
 					if ($followers['users'][$iter]['is_private'] == false) {
-					    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
 
-					    if (isset($usfeed['items'][0]['pk'])) {
-						    $med = $usfeed['items'][0]['pk'];
-						    echo $med.":med\n";// use the same caption
-						    if (isset($usfeed['items'][0]['lat']) && isset($usfeed['items'][0]['lng'])) {
-								$lat = $usfeed['items'][0]['lat'];
-								$long = $usfeed['items'][0]['lng'];
+					  $txt=$followers['users'][$iter]['full_name'];
+					  $re1='.*?';	# Non-greedy match on filler
+					  $re2='((?:[a-z][a-z]+))';	# Word 1
+					  $word1 = "";
+					  if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
+					  {
+					      $word1=$matches[1][0];
+					  }
+				      $redis->sadd("detection", $followers['users'][$iter]['pk'].":".$word1);
 
-	 							$filterDate = strtotime('-3 month', time()); 
 
-								$data = array('lat'=> $lat,
-					              'lng'=> $long,
-					              'username'=> 'blackkorol'
-					              );
+					 //    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
 
-								$params = http_build_query($data);
+					 //    if (isset($usfeed['items'][0]['pk'])) {
+						//     $med = $usfeed['items'][0]['pk'];
+						//     echo $med.":med\n";// use the same caption
+						//     if (isset($usfeed['items'][0]['lat']) && isset($usfeed['items'][0]['lng'])) {
+						// 		$lat = $usfeed['items'][0]['lat'];
+						// 		$long = $usfeed['items'][0]['lng'];
 
-								$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
+	 				// 			$filterDate = strtotime('-3 month', time()); 
 
-								// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
+						// 		$data = array('lat'=> $lat,
+					 //              'lng'=> $long,
+					 //              'username'=> 'blackkorol'
+					 //              );
 
-								 // create curl resource 
-								$ch = curl_init(); 
+						// 		$params = http_build_query($data);
 
-								// set url 
-								curl_setopt($ch, CURLOPT_URL, $service_url); 
+						// 		$service_url = 'http://api.geonames.org/countryCodeJSON?'.$params;
 
-								//return the transfer as a string 
-								curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+						// 		// $service_url = 'http://scatter-otl.rhcloud.com/location?'.$params;
 
-								// $output contains the output string 
-								$output = curl_exec($ch); 
-								$js =  json_decode($output);
-								// echo $js->countryCode;
-					 			$country = $js->countryCode;
+						// 		 // create curl resource 
+						// 		$ch = curl_init(); 
 
-								// $key = "wowrussia";
-								$key = "detection";
-								if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && isset($country) && ($country == "US" || $country == "CA" || $country == "AU" || $country == "GB" || $country == "NZ" || $country == "ZA" ) && $usfeed['items'][0]['taken_at'] > $filterDate &&  $usfeed['num_results'] > 9) {
+						// 		// set url 
+						// 		curl_setopt($ch, CURLOPT_URL, $service_url); 
+
+						// 		//return the transfer as a string 
+						// 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+
+						// 		// $output contains the output string 
+						// 		$output = curl_exec($ch); 
+						// 		$js =  json_decode($output);
+						// 		// echo $js->countryCode;
+					 // 			$country = $js->countryCode;
+
+						// 		// $key = "wowrussia";
+						// 		$key = "detection";
+						// 		if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false && is_arabic($followers['users'][$iter]['full_name']) == false && isset($country) && ($country == "US" || $country == "CA" || $country == "AU" || $country == "GB" || $country == "NZ" || $country == "ZA" ) && $usfeed['items'][0]['taken_at'] > $filterDate &&  $usfeed['num_results'] > 1) {
 						
-									  $txt=$followers['users'][$iter]['full_name'];
-									  $re1='.*?';	# Non-greedy match on filler
-									  $re2='((?:[a-z][a-z]+))';	# Word 1
-									  $word1 = "";
-									  if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
-									  {
-									      $word1=$matches[1][0];
-									  }
+						// 			  $txt=$followers['users'][$iter]['full_name'];
+						// 			  $re1='.*?';	# Non-greedy match on filler
+						// 			  $re2='((?:[a-z][a-z]+))';	# Word 1
+						// 			  $word1 = "";
+						// 			  if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
+						// 			  {
+						// 			      $word1=$matches[1][0];
+						// 			  }
 									  	 
-									$redis->sadd($key, $followers['users'][$iter]['pk'].":".$word1);
+						// 			$redis->sadd($key, $followers['users'][$iter]['pk'].":".$word1);
 						  
 					
-								}
-							} else {
-									echo "no geo:med\n";
+						// 		}
+						// 	} else {
+						// 			echo "no geo:med\n";
 								 
-								$key = "detection";
-								if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false) {
-									  $txt=$followers['users'][$iter]['full_name'];
-									  $re1='.*?';	# Non-greedy match on filler
-									  $re2='((?:[a-z][a-z]+))';	# Word 1
-									  $word1 = "";
-									  if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
-									  {
-									      $word1=$matches[1][0];
-									  }
+						// 		$key = "detection";
+						// 		if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false) {
+						// 			  $txt=$followers['users'][$iter]['full_name'];
+						// 			  $re1='.*?';	# Non-greedy match on filler
+						// 			  $re2='((?:[a-z][a-z]+))';	# Word 1
+						// 			  $word1 = "";
+						// 			  if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
+						// 			  {
+						// 			      $word1=$matches[1][0];
+						// 			  }
 									  	 
 						
-								     $redis->sadd($key, $followers['users'][$iter]['pk'].":".$word1);
+						// 		     $redis->sadd($key, $followers['users'][$iter]['pk'].":".$word1);
 						  
-						 	    	}
-						 	}
-						} else {
-							echo "no media yet:med\n";
-						}
+						//  	    	}
+						//  	}
+						// } else {
+						// 	echo "no media yet:med\n";
+						// }
+
+
 					} else {
 						// $key = "wowrussia";
 						$key = "detection";
@@ -446,7 +475,7 @@ function funcparse($followers, $i, $redis, $influencer) {
 			}
 					
 			$tmpfollowers = $followers;
-			echo $tmpfollowers['next_max_id'];
+			 
 //NEED FIX
 // 			1296734699675058367:med
 // no geo:med
@@ -462,16 +491,21 @@ function funcparse($followers, $i, $redis, $influencer) {
 // Notice: Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 451
 // PHP Notice:  Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 453
 
-
-			$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
-			try {
+			if (isset($tmpfollowers['next_max_id'])) {
+				$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
+				try {
 				$followers = $i->getUserFollowers($influencer, $tmpfollowers['next_max_id'] ); 
-			} catch (Exception $e) {
-			    echo $e->getMessage();
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+				 				
+				$counter++;
+			} else {
+				$redis->rpush("$influencer:max_id", "0");
+				break;
 			}
-			 				
-			$counter++;
-			sleep(6);
+			
+			sleep(10);
 		}
 }
 
@@ -695,7 +729,7 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 
 				$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}"];
 			    $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
-				  $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
+				  $smiles =  ["\u{1F609}", "\u{1F60D}" ];  
 				// $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
 			 //    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
 			     $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
@@ -715,7 +749,10 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 
               //ADULT
           $uname = $GLOBALS["username"];
-          $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a hot chat $smil Waiting for u NOW! my ID there 12055 $smi \u{1F449} @$uname \u{1F448} Check out link in profile and find me online! \u{1F446}\u{1F446}\u{1F446}";
+         $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap kik dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $unameStrip94 $smil I am ONLINE and WAITING..";
+
+
+ 
 
 				try {
 				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
@@ -763,9 +800,12 @@ $url  = $argv[3];
 
 $biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_flower", "\u{1F339}", str_replace("_smi_video", "\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $argv[4])) ) ) ;
 
- //."\u{1F4A6}\u{1F447}\u{1F447}\u{1F447}";    
 
-$caption = $argv[5];  
+ //."\u{1F4A6}\u{1F447}\u{1F447}\u{1F447}";    
+// $caption = $argv[5];  
+
+$caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029}\u{2029}\u{2029}\u{2029}\u{2029}\u{2029}\u{2029}", str_replace("_smi_video", "\u{1F4A6}",   $argv[5] ) ) );
+
 
 $gender = 2;
 $phone  = "";
@@ -933,7 +973,7 @@ while ( $redis->scard("proxy") > 0 )
 
 		//edit profile
 		try { 
-
+			$GLOBALS["biography"] = str_replace( "_username" , explode(" ",$first_name)[0]  , $GLOBALS["biography"] );  
 		    $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
 		} catch (Exception $e) {
