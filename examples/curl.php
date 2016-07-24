@@ -29,32 +29,34 @@
     
   
 
+
+
 // echo sprintf('Instagram %s Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)', '8.5.1', $deviceData[0], $deviceData[1], $deviceData[2]);
 
 
-  $smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}"];
-          $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
-          $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
-        // $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
-       //    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
-           $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
-          $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
-       $smil = $smiles[mt_rand(0, count($smiles) - 1)];
-        $first_name_txt = explode(" ","Anna Kas");
-         $hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
-        $hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+  // $smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}"];
+  //         $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+  //         $smiles =  ["\u{1F609}", "\u{1F60C}" ];  
+  //       // $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+  //      //    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+  //          $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+  //         $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+  //      $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+  //       $first_name_txt = explode(" ","Anna Kas");
+  //        $hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+  //       $hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 
-        // $text = "$hiw $first_name_txt[0] $smi_hi Follow this awesome profile with naughty girls @livecamshowtvonline $smil $smi $cur $cur $cur";
+  //       // $text = "$hiw $first_name_txt[0] $smi_hi Follow this awesome profile with naughty girls @livecamshowtvonline $smil $smi $cur $cur $cur";
            
-        $smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{270B}"];
-          $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+  //       $smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{270B}"];
+  //         $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
 //$smi_hi
           //////TOVARKA
   // $text = "Добрый день! \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705}ГАРАНТИРОВАННЫЙ РЕЗУЛЬТАТ В ТЕЧЕНИЕ 2-Х НЕДЕЛЬ! \u{2029}\u{27A1} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
 
               //ADULT
-          $uname = "anna123";
-          echo $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Want Make Me Come? $smil Waiting for u NOW! my login $first_name_txt[0]Strip96 $smi \u{1F449} @$uname \u{1F448} Check out link in profile! \u{1F446}\u{1F446}\u{1F446}";
+          // $uname = "anna123";
+          // echo $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Want Make Me Come? $smil Waiting for u NOW! my login $first_name_txt[0]Strip96 $smi \u{1F449} @$uname \u{1F448} Check out link in profile! \u{1F446}\u{1F446}\u{1F446}";
 
 
 

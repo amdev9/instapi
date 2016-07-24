@@ -440,3 +440,7 @@
 1725:M 24 Jul 18:42:58.013 * Background saving started by pid 47468
 47468:C 24 Jul 18:42:58.170 * DB saved on disk
 1725:M 24 Jul 18:42:58.217 * Background saving terminated with success
+1725:M 24 Jul 21:24:07.958 * 1 changes in 3600 seconds. Saving...
+1725:M 24 Jul 21:24:07.959 * Background saving started by pid 50100
+50100:C 24 Jul 21:24:08.005 * DB saved on disk
+1725:M 24 Jul 21:24:08.059 * Background saving terminated with success

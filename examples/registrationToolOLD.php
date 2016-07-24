@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-// $romerINSTAPI = '/home/deployer/ins/instapi/'; // FOR VPS
-// $romerPREDIS = '/home/deployer/ins/predis/';
-// $romerINSTA = '/home/deployer/ins/insta/';
+$romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
+$romerPREDIS = '/home/blackkorol/in/predis/';
+$romerINSTA = '/home/blackkorol/in/insta';
 
-	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -867,7 +867,9 @@ while ( $redis->scard("proxy") > 0 )
 		$shift = $outputs[1]['shift']; 
 		$header = $outputs[1]['header'];
 
-		exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		// exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+
 		// exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 		
 		echo $qsstamper[0];	
@@ -927,7 +929,7 @@ while ( $redis->scard("proxy") > 0 )
 
 ///////////////////////////////////
 	    $pk = $result[1]['created_user']['pk'];
-	    $redis->sadd("followmebot", $pk);
+	    // $redis->sadd("followmebot", $pk);
 
 	  
 	   
