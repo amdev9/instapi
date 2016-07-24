@@ -69,14 +69,14 @@ function functocomment($ilink, $usernamelink)
 	 		}
 
  			$influencer = $GLOBALS["redis"]->spop("influencers");
- 		   $uinfo =  $ilink->getUsernameInfo($influencer);
- 		   echo $uinfo['user']['is_private'];
-			 while ($uinfo['user']['is_private'] == true) {
+ 		    $uinfo =  $ilink->getUsernameInfo($influencer);
+ 		    echo $uinfo['user']['is_private'];
+			while ($uinfo['user']['is_private'] == true) {
 			 	$influencer = $GLOBALS["redis"]->spop("influencers");
 			 	$ilink->getUsernameInfo($influencer);
 			 	$uinfo = $ilink->getUsernameInfo($influencer);
 			 	sleep(4);
-			 }  
+			}
  			 
 
  			$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
