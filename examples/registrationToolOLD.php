@@ -813,7 +813,7 @@ $biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_flower", "\
  //."\u{1F4A6}\u{1F447}\u{1F447}\u{1F447}";    
 // $caption = $argv[5];  
 
-$caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029}\u{2029}\u{2029}\u{2029}\u{2029}\u{2029}\u{2029}", str_replace("_smi_video", "\u{1F4A6}",   $argv[5] ) ) );
+$caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} ", str_replace("_smi_video", "\u{1F4A6}",   $argv[5] ) ) );
 
 
 $gender = 2;
@@ -1008,7 +1008,7 @@ while ( $redis->scard("proxy") > 0 )
 			$posts_per_day_T = 3; 		//  direct 500->50    700->34
 			$delay_T = $time_in_day_T / $posts_per_day_T;
 
-				
+			 $caption = str_replace( "_username" , explode(" ",$first_name)[0]  ,  $caption );  
 	 		while(true) {
 	 			$files1 = scandir($dir);
 
