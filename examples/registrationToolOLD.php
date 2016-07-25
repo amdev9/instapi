@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
-$romerPREDIS = '/home/blackkorol/in/predis/';
-$romerINSTA = '/home/blackkorol/in/insta/';
+// $romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
+// $romerPREDIS = '/home/blackkorol/in/predis/';
+// $romerINSTA = '/home/blackkorol/in/insta/';
 
-	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -136,7 +136,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	$delay = $time_in_day / $posts_per_day;
 
 ////ADULT////////// 	 
-	if ($GLOBALS["redis"]->scard("foractionM") == 0) {
+	while ($GLOBALS["redis"]->scard("foractionM") == 0) {
 		// funcgeocoordparse($ilink, $GLOBALS["redis"]);
 		$influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318'];
 		//["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
@@ -175,7 +175,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 
  	$actioner = $GLOBALS["redis"]->spop("foractionM");
 
- 	if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true) {
+ 	if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  ) {
 	 	$fres = $ilink->follow($actioner);
 	 	if ($fres['status'] == 'ok') {
 	 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
@@ -869,8 +869,8 @@ while ( $redis->scard("proxy") > 0 )
 		$shift = $outputs[1]['shift']; 
 		$header = $outputs[1]['header'];
 
-		// exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		// exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 
 		// exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 		
