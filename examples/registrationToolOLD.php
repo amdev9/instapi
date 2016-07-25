@@ -9,7 +9,7 @@
 
 $romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
 $romerPREDIS = '/home/blackkorol/in/predis/';
-$romerINSTA = '/home/blackkorol/in/insta';
+$romerINSTA = '/home/blackkorol/in/insta/';
 
 	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
 	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
@@ -143,7 +143,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 
  		$availableInf = [];
  		foreach ($influencers as $ind) {
-		    if (	 $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1) != "0"  ) {
+		    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
 		   		array_push($availableInf, $ind); 
 		    }
 		}
@@ -879,7 +879,7 @@ while ( $redis->scard("proxy") > 0 )
 		 
 	}	
       
-    sleep(4);  
+    // sleep(4);  test without
     $pieces = $redis->spop("names");
     $sugger = $r->usernameSuggestions($email,$pieces );
    	$GLOBALS["username"] = $sugger['suggestions'][0];
