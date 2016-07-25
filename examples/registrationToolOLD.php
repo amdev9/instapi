@@ -179,6 +179,8 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	 	$fres = $ilink->follow($actioner);
 	 	if ($fres['status'] == 'ok') {
 	 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+	 	} elseif ($fres['status'] == 'fail' && isset($fres['message']) && $fres['message'] == 'login_required' ) {
+	 		$ilink->login(true);
 	 	}
 		echo var_export($fres);
  	}
