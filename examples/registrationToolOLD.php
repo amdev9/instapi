@@ -976,6 +976,7 @@ while ( $redis->scard("proxy") > 0 )
 
 		$registered = $proxy." ".$username." ".$email." ".$password." ".$first_name;
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
+         $caption = str_replace( "_username" , explode(" ",$first_name)[0]  ,  $caption );  
 
      	$redis->sadd("registered", $registered);
      	$redis->sadd("blacklist_email",  $email);
@@ -1008,7 +1009,7 @@ while ( $redis->scard("proxy") > 0 )
 			$posts_per_day_T = 3; 		//  direct 500->50    700->34
 			$delay_T = $time_in_day_T / $posts_per_day_T;
 
-			 $caption = str_replace( "_username" , explode(" ",$first_name)[0]  ,  $caption );  
+		
 	 		while(true) {
 	 			$files1 = scandir($dir);
 
