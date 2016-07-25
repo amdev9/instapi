@@ -203,21 +203,21 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	// 	    funcgeocoordparse($ilink, $GLOBALS["redis"]);
 	// }
 			 
-	  $timetosleep = add_time($delay);      	
-	  sleep($timetosleep);	 
-	  if ($GLOBALS["redis"]->scard("foractionM") > 0 ) {
-		if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
-		    // for($t = 0; $t < 51; $t++) {  //TOVARKA
-		    	// $actioner = $GLOBALS["redis"]->spop("foractionM");  //TOVARKA
-			    functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
-			    // if 	($GLOBALS["redis"]->scard("foractionM") == 0 ) {
-			    // 	funcgeocoordparse($ilink, $GLOBALS["redis"]);
-			    // }
-			    		// echo $next_iteration_time = add_time($delay); //timer
-			   			 // sleep($next_iteration_time);
-		    // }
-			}
-		}
+	 //  $timetosleep = add_time($delay);      	
+	 //  sleep($timetosleep);	 
+	 //  if ($GLOBALS["redis"]->scard("foractionM") > 0 ) {
+		// if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
+		//     // for($t = 0; $t < 51; $t++) {  //TOVARKA
+		//     	// $actioner = $GLOBALS["redis"]->spop("foractionM");  //TOVARKA
+		// 	    functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
+		// 	    // if 	($GLOBALS["redis"]->scard("foractionM") == 0 ) {
+		// 	    // 	funcgeocoordparse($ilink, $GLOBALS["redis"]);
+		// 	    // }
+		// 	    		// echo $next_iteration_time = add_time($delay); //timer
+		// 	   			 // sleep($next_iteration_time);
+		//     // }
+		// 	}
+		// }
 
 	// $GLOBALS["redis"]->sadd("track", "message".$usernamelink."_".date("Y-m-d_H:i:s"));
 	// if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true && $GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) == true) {
@@ -1042,24 +1042,24 @@ while ( $redis->scard("proxy") > 0 )
 		} else {
 			//////// NON THEMATIC ////////
 
-		$files1 = scandir($dir);
-		foreach ( $files1 as $k => $value ) {
-		    $ext = pathinfo($value, PATHINFO_EXTENSION);
-		    if ($ext == "jpg" && $value != "1.jpg") {
-				try {
-				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
+		// $files1 = scandir($dir);
+		// foreach ( $files1 as $k => $value ) {
+		//     $ext = pathinfo($value, PATHINFO_EXTENSION);
+		//     if ($ext == "jpg" && $value != "1.jpg") {
+		// 		try {
+		// 		    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
+		// 		} catch (Exception $e) {
+		// 		    echo $e->getMessage();
+		// 		}
 
-				sleep(10);
-		    }
-		}
+		// 		sleep(10);
+		//     }
+		// }
 
-		echo "photo downloaded!\n";
+		// echo "photo downloaded!\n";
 ////ADULT
-		$feedres = $i->getSelfUserFeed();
-		$ad_media_id  = $feedres['items'][0]['pk'];
+		// $feedres = $i->getSelfUserFeed();
+		// $ad_media_id  = $feedres['items'][0]['pk'];
 //////////
 
 ///TOVARKA
@@ -1071,18 +1071,18 @@ while ( $redis->scard("proxy") > 0 )
 //////
 		$logoutCounter = 20;
 sleep(6);
-// 		try {
-// 		    $i->setPrivateAccount();
-// 		} catch (Exception $e) {
-// 		    echo $e->getMessage();
-// 		}
-// sleep(6);
+		try {
+		    $i->setPrivateAccount();
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+sleep(6);
 	 	
 
 	 	 
  		 
 
-
+		$ad_media_id = 1;
 		funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
 		 
 	}
