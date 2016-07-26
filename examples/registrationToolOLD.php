@@ -361,7 +361,7 @@ function funcparse($followers, $i, $redis, $influencer)
 {
 
 		$counter = 0;
-		while ($counter < 20) {  
+		while ($counter < 15) {  
 
 			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
 		        
@@ -901,7 +901,7 @@ while ( $redis->scard("proxy") > 0 )
 	 
 
 	
-	  sleep(4);  
+	  // sleep(4);   test without
 	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
 
 	$resToPrint =  var_export($result);
@@ -1004,44 +1004,44 @@ while ( $redis->scard("proxy") > 0 )
 	 
 
 
-		$checkIfTematic = preg_replace('/[^0-9]/', '', $profileSetter);
-		if ($checkIfTematic == '') {
+		// $checkIfTematic = preg_replace('/[^0-9]/', '', $profileSetter);
+		// if ($checkIfTematic == '') {
 
-			$time_in_day_T = 24*60*60;
-			$posts_per_day_T = 3; 		//  direct 500->50    700->34
-			$delay_T = $time_in_day_T / $posts_per_day_T;
+		// 	$time_in_day_T = 24*60*60;
+		// 	$posts_per_day_T = 3; 		//  direct 500->50    700->34
+		// 	$delay_T = $time_in_day_T / $posts_per_day_T;
 
 		
-	 		while(true) {
-	 			$files1 = scandir($dir);
+	 // 		while(true) {
+	 // 			$files1 = scandir($dir);
 
-				foreach ( $files1 as $k => $value ) {
-				    $ext = pathinfo($value, PATHINFO_EXTENSION);
-				    if ($ext == "jpg") {
+		// 		foreach ( $files1 as $k => $value ) {
+		// 		    $ext = pathinfo($value, PATHINFO_EXTENSION);
+		// 		    if ($ext == "jpg") {
 
-				    	echo $value."\n";
+		// 		    	echo $value."\n";
 
-						try {
-						    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
-						} catch (Exception $e) {
-						    echo $e->getMessage();
-						}
-				    	echo "photo downloaded!\n";
-				    	if (!file_exists($dir.'/uploaded')) {
-	   						mkdir($dir.'/uploaded', 0777, true);
-						}
+		// 				try {
+		// 				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
+		// 				} catch (Exception $e) {
+		// 				    echo $e->getMessage();
+		// 				}
+		// 		    	echo "photo downloaded!\n";
+		// 		    	if (!file_exists($dir.'/uploaded')) {
+	 //   						mkdir($dir.'/uploaded', 0777, true);
+		// 				}
 						
-						// unlink($dir.'/'.$value);
-						rename($dir.'/'.$value, $dir.'/uploaded/'.$value);
-				    	// sleep(60);
-						sleep(add_time($delay_T));
-				    }  
-				}
-				sleep(30);
-				echo "iteration cycle\n";
-			}
+		// 				// unlink($dir.'/'.$value);
+		// 				rename($dir.'/'.$value, $dir.'/uploaded/'.$value);
+		// 		    	// sleep(60);
+		// 				sleep(add_time($delay_T));
+		// 		    }  
+		// 		}
+		// 		sleep(30);
+		// 		echo "iteration cycle\n";
+		// 	}
 			
-		} else {
+		// } else {
 			//////// NON THEMATIC ////////
 
 		// $files1 = scandir($dir);
@@ -1073,12 +1073,12 @@ while ( $redis->scard("proxy") > 0 )
 //////
 		$logoutCounter = 20;
 sleep(6);
-		try {
-		    $i->setPrivateAccount();
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-sleep(6);
+// 		try {
+// 		    $i->setPrivateAccount();
+// 		} catch (Exception $e) {
+// 		    echo $e->getMessage();
+// 		}
+// sleep(6);
 	 	
 
 	 	 
@@ -1087,7 +1087,7 @@ sleep(6);
 		$ad_media_id = 1;
 		funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
 		 
-	}
+	// }
 
 		// check if 
 		
