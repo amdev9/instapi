@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
-$romerPREDIS = '/home/blackkorol/in/predis/';
-$romerINSTA = '/home/blackkorol/in/insta/';
+// $romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
+// $romerPREDIS = '/home/blackkorol/in/predis/';
+// $romerINSTA = '/home/blackkorol/in/insta/';
 
-	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -863,19 +863,27 @@ while ( $redis->scard("proxy") > 0 )
 	 
 
 	 if ($outputs[1]['status'] == 'ok') {
-		$iterations =   $outputs[1]['iterations'];
-		$size = $outputs[1]['size']; 
-		$edges= $outputs[1]['edges'];
-		$shift = $outputs[1]['shift']; 
-		$header = $outputs[1]['header'];
 
-		// exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+
+	 	if (isset( $outputs[1]['iterations']) && isset( $outputs[1]['size']) && isset($outputs[1]['edges']) && isset($outputs[1]['shift']) && isset($outputs[1]['header']) ) {
+
+			$iterations = $outputs[1]['iterations'];
+			$size = $outputs[1]['size']; 
+			$edges= $outputs[1]['edges'];
+			$shift = $outputs[1]['shift']; 
+			$header = $outputs[1]['header'];
+			exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		// exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 
 		// exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		
-		echo $qsstamper[0];	
-		$GLOBALS["qs_stamp"] = $qsstamper[0];
+			echo $qsstamper[0];	
+			$GLOBALS["qs_stamp"] = $qsstamper[0];
+
+		}
+		else
+		{
+			$GLOBALS["qs_stamp"] = "";
+		}
 		 
 	}	
       
@@ -976,6 +984,13 @@ while ( $redis->scard("proxy") > 0 )
 		}
 		sleep(3);
 
+// 				try {
+// 		    $i->setPrivateAccount();
+// 		} catch (Exception $e) {
+// 		    echo $e->getMessage();
+// 		}
+// sleep(6);
+
 		$registered = $proxy." ".$username." ".$email." ".$password." ".$first_name;
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
          $caption = str_replace( "_username" , explode(" ",$first_name)[0]  ,  $caption );  
@@ -1073,12 +1088,7 @@ while ( $redis->scard("proxy") > 0 )
 //////
 		$logoutCounter = 20;
 sleep(6);
-// 		try {
-// 		    $i->setPrivateAccount();
-// 		} catch (Exception $e) {
-// 		    echo $e->getMessage();
-// 		}
-// sleep(6);
+
 	 	
 
 	 	 
