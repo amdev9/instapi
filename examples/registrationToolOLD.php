@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
-$romerPREDIS = '/home/blackkorol/in/predis/';
-$romerINSTA = '/home/blackkorol/in/insta/';
+// $romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
+// $romerPREDIS = '/home/blackkorol/in/predis/';
+// $romerINSTA = '/home/blackkorol/in/insta/';
 
-	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -521,6 +521,51 @@ function funcparse($followers, $i, $redis, $influencer)
 }
 
 
+function hashtagparse($hashtag, $i, $redis)
+{
+	$getl = $i->getHashtagFeed($hashtag, $maxid = null);
+
+	        $num_rank_results =0;
+	        while ($num_rank_results < $getl['num_results']) {
+	          if($getl['items'][$num_rank_results]['user']['has_anonymous_profile_picture'] == false) {
+	             echo $getl['items'][$num_rank_results]['user']['pk'].">---user pk\n"; ///////
+	          }
+	          $num_rank_results++;
+	        } 
+	        sleep(7);
+
+	        if ($getl['more_available'] ==true ) {
+	          $next_next_max_id = $getl['next_max_id'];
+	          $getnewl = $i->getHashtagFeed($hashtag, $next_next_max_id);
+
+	        } else {
+
+	          echo "------>NO more\n";
+	        }
+
+	        $countertrue = 0;
+	        while (isset($getnewl['more_available']) && $getnewl['more_available'] ==true) {  
+	            $tmpgetnewl = $getnewl;
+
+	            $num_results = 0;
+	            while ($num_results < $getnewl['num_results']) {
+	       
+	            echo $getnewl['items'][$num_results]['user']['pk'].">---user pk\n";
+
+	          
+	             $num_results++;
+	            }
+
+	            sleep(7);
+	            $getnewl = $i->getHashtagFeed( $hashtag, $tmpgetnewl['next_max_id']);
+
+	            $redis->rpush($hashtag.":feed_id",  $tmpgetnewl['next_max_id'] ); 
+
+	            $countertrue++;
+	      }
+}
+
+
 
 function funcgeocoordparse($i, $redis) 
 {
@@ -872,8 +917,8 @@ while ( $redis->scard("proxy") > 0 )
 			$edges= $outputs[1]['edges'];
 			$shift = $outputs[1]['shift']; 
 			$header = $outputs[1]['header'];
-			// exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+			exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		// exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 
 		// exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 			echo $qsstamper[0];	
@@ -1092,10 +1137,15 @@ sleep(6);
 	 	
 
 	 	 
- 		 
+ 		 $pokem = $i->getHashtagFeed("pokemongo", $maxid = null);
+ 		 echo var_export($pokem);
+
+ 		 hashtagparse("pokemongo",$i, $redis);
+
+
 
 		$ad_media_id = 1;
-		funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
+		// funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
 		 
 	// }
 
