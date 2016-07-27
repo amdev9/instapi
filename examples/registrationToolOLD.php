@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-// $romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
-// $romerPREDIS = '/home/blackkorol/in/predis/';
-// $romerINSTA = '/home/blackkorol/in/insta/';
+$romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
+$romerPREDIS = '/home/blackkorol/in/predis/';
+$romerINSTA = '/home/blackkorol/in/insta/';
 
-	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -55,12 +55,10 @@ function functofollow($ilink, $usernamelink, $pkuser) {
 function functocomment($ilink, $usernamelink) 
 {
 
-        // $influencers_rus_WOW = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131", "331286351",  "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
+        $influencers = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131", "331286351",  "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
  	//"243725081",
 
-		$influencers = ['13224318', '327139047', '16494719', '271720365', '19351330', '7962893', '1672489480', '1507448263', '26257074', '22676717', '5211436', '465805681', '1475313335', '17240139', '24610068', '50187813', '177443887'];
-
-		//["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+		// $influencers_ADULT = ['13224318', '327139047', '16494719', '271720365', '19351330', '7962893', '1672489480', '1507448263', '26257074', '22676717', '5211436', '465805681', '1475313335', '17240139', '24610068', '50187813', '177443887', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 
 	 		if ($GLOBALS["redis"]->scard("influencers") == 0 ) {
 	 		 	foreach ($influencers as $inf) {
@@ -69,21 +67,21 @@ function functocomment($ilink, $usernamelink)
 	 		}
 
  			$influencer = $GLOBALS["redis"]->spop("influencers");
- 		    $uinfo =  $ilink->getUsernameInfo($influencer);
- 		    echo $uinfo['user']['is_private'];
-			while ($uinfo['user']['is_private'] == true) {
-			 	$influencer = $GLOBALS["redis"]->spop("influencers");
-			 	$ilink->getUsernameInfo($influencer);
-			 	$uinfo = $ilink->getUsernameInfo($influencer);
-			 	sleep(4);
-			}
+ 		//     $uinfo =  $ilink->getUsernameInfo($influencer);
+ 		//     echo $uinfo['user']['is_private'];
+			// while ($uinfo['user']['is_private'] == true) {
+			//  	$influencer = $GLOBALS["redis"]->spop("influencers");
+			//  	$ilink->getUsernameInfo($influencer);
+			//  	$uinfo = $ilink->getUsernameInfo($influencer);
+			//  	sleep(4);
+			// }
  			 
 
  			$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
  			$medcom = $usfeedforcom['items'][0]['pk'];
  
             /////// COMMENT 
-			$commentindexkeys = $GLOBALS["redis"]->hkeys("comments_adult");		
+			$commentindexkeys = $GLOBALS["redis"]->hkeys("comments_tovarka");	//comments_adult	
 
 			$availableComments = [];
 			foreach ($commentindexkeys as $ind) {
@@ -95,7 +93,7 @@ function functocomment($ilink, $usernamelink)
  				$availableComments = $commentindexkeys;
  			}
  			$commentindex = $availableComments[mt_rand(0, count($availableComments) - 1)]; 
- 			$commenttex = $GLOBALS["redis"]->hget("comments_adult", $commentindex);
+ 			$commenttex = $GLOBALS["redis"]->hget("comments_tovarka", $commentindex);
 
 			// $commenttex_ADULT = ["Guys who want to PLAY with me?? check out my profile!", "Guys who wants to make me COME?? check out my profile", "I will make all u WANT", "Wanna some dirty staff?? Check profile..", "Show my body for you for FREE! Check out profile"];
  		// 	$commenttex = $commenttex_ADULT[mt_rand(0, count($commenttex_ADULT) - 1)];
@@ -106,9 +104,9 @@ function functocomment($ilink, $usernamelink)
 			$smiles =  ["\u{1F609}", "\u{1F61A}", "\u{1F618}" ];  
 	 		$smil = $smiles[mt_rand(0, count($smiles) - 1)];
 	 		// $att = $attention[mt_rand(0, count($smiles) - 1)];
-	 		// $hearts = ["\u{1F49D}","\u{1F49B}","\u{1F49C}","\u{1F49A}"];  
-	 		// $heart = $hearts[mt_rand(0, count($hearts) - 1)];
-	  		$messageFinal = "\u{1F48B}\u{1F48B}\u{1F48B} $commenttex $smil \u{1F4A6}\u{1F4A6}\u{1F4A6}"; //$heart $heart $heart";
+	 		$hearts = ["\u{1F49D}","\u{1F49B}","\u{1F49C}","\u{1F49A}"];  
+	 		$heart = $hearts[mt_rand(0, count($hearts) - 1)];
+	  		$messageFinal = "$heart $commenttex $heart"; //$heart $heart $heart";
 
 
 			$link = $ilink->comment($medcom, $messageFinal); 
@@ -132,58 +130,57 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 {
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 1200;//400 		//  direct 500->57    700->34
+	$posts_per_day = 500;//400 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 ////ADULT////////// 	 
-	while ($GLOBALS["redis"]->scard("foractionM") == 0) {
-		// funcgeocoordparse($ilink, $GLOBALS["redis"]);
-		$influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318'];
-		//["2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+	// while ($GLOBALS["redis"]->scard("foractionM") == 0) {
+		 // funcgeocoordparse($ilink, $GLOBALS["redis"]);
+		// $influencers_ADULT = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 
- 		$availableInf = [];
- 		foreach ($influencers as $ind) {
-		    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
-		   		array_push($availableInf, $ind); 
-		    }
-		}
- 		if ( empty($availableInf) == true ) {
- 			$availableInf = $influencers;
- 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
- 		} else {
- 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
-			$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
- 		}
-		if(empty ($red)) {
-			try {
-				 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
+ 	// 	$availableInf = [];
+ 	// 	foreach ($influencers as $ind) {
+		//     if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
+		//    		array_push($availableInf, $ind); 
+		//     }
+		// }
+ 	// 	if ( empty($availableInf) == true ) {
+ 	// 		$availableInf = $influencers;
+ 	// 		$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
+ 	// 	} else {
+ 	// 		$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
+		// 	$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
+ 	// 	}
+		// if(empty ($red)) {
+		// 	try {
+		// 		 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
+		// 	} catch (Exception $e) {
+		// 	    echo $e->getMessage();
+		// 	}
 
-		} else {
-			try {
-				 $followers = $ilink->getUserFollowers($influencer, $red[0]);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
-		}
-		sleep(10);
-	    funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
+		// } else {
+		// 	try {
+		// 		 $followers = $ilink->getUserFollowers($influencer, $red[0]);
+		// 	} catch (Exception $e) {
+		// 	    echo $e->getMessage();
+		// 	}
+		// }
+		// sleep(10);
+	 //    funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
 
-	}
+	// }
 
- 	$actioner = $GLOBALS["redis"]->spop("foractionM");
+ 	// $actioner = $GLOBALS["redis"]->spop("foractionM");
 
- 	if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  ) {
-	 	$fres = $ilink->follow($actioner);
-	 	if ($fres['status'] == 'ok') {
-	 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-	 	} elseif ($fres['status'] == 'fail' && isset($fres['message']) && $fres['message'] == 'login_required' ) {
-	 		$ilink->login(true);
-	 	}
-		echo var_export($fres);
- 	}
+ 	// if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  ) {
+	 // 	$fres = $ilink->follow($actioner);
+	 // 	if ($fres['status'] == 'ok') {
+	 // 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+	 // 	} elseif ($fres['status'] == 'fail' && isset($fres['message']) && $fres['message'] == 'login_required' ) {
+	 // 		$ilink->login(true);
+	 // 	}
+		// echo var_export($fres);
+ 	// }
  	
  	// functofollow($ilink, $usernamelink, $actioner);	 
 ////.......//////////
@@ -199,33 +196,33 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	}
 	 
 //TOVARKA  *****///////// /////////////////////////////////// NEED TEST
-	// $GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
+	$GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
 
-	// if ($GLOBALS["redis"]->scard("foractionF") == 0) {
-	// 	    funcgeocoordparse($ilink, $GLOBALS["redis"]);
-	// }
+	if ($GLOBALS["redis"]->scard("detection") == 0) {
+		    funcgeocoordparse($ilink, $GLOBALS["redis"]);
+	}
 			 
-	 //  $timetosleep = add_time($delay);      	
-	 //  sleep($timetosleep);	 
-	 //  if ($GLOBALS["redis"]->scard("foractionM") > 0 ) {
-		// if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
-		//     // for($t = 0; $t < 51; $t++) {  //TOVARKA
-		//     	// $actioner = $GLOBALS["redis"]->spop("foractionM");  //TOVARKA
-		// 	    functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
-		// 	    // if 	($GLOBALS["redis"]->scard("foractionM") == 0 ) {
-		// 	    // 	funcgeocoordparse($ilink, $GLOBALS["redis"]);
-		// 	    // }
-		// 	    		// echo $next_iteration_time = add_time($delay); //timer
-		// 	   			 // sleep($next_iteration_time);
-		//     // }
-		// 	}
-		// }
+	  $timetosleep = add_time($delay);      	
+	  sleep($timetosleep);	 
+	  if ($GLOBALS["redis"]->scard("detection") > 0 ) {
+		if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
+		    for($t = 0; $t < 51; $t++) {  //TOVARKA
+		    	$actioner = $GLOBALS["redis"]->spop("detection");  //TOVARKA
+			    functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
+				    if 	($GLOBALS["redis"]->scard("detection") == 0 ) {
+				    	funcgeocoordparse($ilink, $GLOBALS["redis"]);
+				    }
+			    	echo $next_iteration_time = add_time($delay); //timer
+			   		sleep($next_iteration_time);
+			    }
+			}
+	  }
 
-	// $GLOBALS["redis"]->sadd("track", "message".$usernamelink."_".date("Y-m-d_H:i:s"));
-	// if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true && $GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) == true) {
-	// 		$ilink->logout();
-	// 		return;
-	// }
+	$GLOBALS["redis"]->sadd("track", "message".$usernamelink."_".date("Y-m-d_H:i:s"));
+	if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true && $GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) == true) {
+			$ilink->logout();
+			return;
+	}
 /////////////////////////	
 	
 	echo $next_iteration_time = add_time($delay); //86400
@@ -583,8 +580,9 @@ function funcgeocoordparse($i, $redis)
 		 //sent pol USA
 		 // $a = [45.147617,-93.535346];
 		 // $b = [44.741903,-92.903632];
-		 $a = [41.914398,-87.817152];
-		 $b = [41.719208,-87.619340];
+		 $a = [55.852745,37.415947];
+		 $b = [55.651242,37.771637];
+
 		 // $a = [56.073183, 36.826896];
 		 // $b = [55.435435, 38.502311];
 
@@ -673,7 +671,7 @@ function funcgeocoordparse($i, $redis)
 
 					
 
-					 $redis->sadd("detection", $getl['items'][$num_rank_results]['user']['pk'].":".$word1);
+					 $redis->sadd("detection", $getl['items'][$num_rank_results]['user']['pk']); //.":".$word1
 
 					// $redis->sadd("userpk".$a[0].":".$b[0], $getl['items'][$num_rank_results]['user']['pk'] );
 					}
@@ -722,7 +720,7 @@ function funcgeocoordparse($i, $redis)
 						      $word1=$matches[1][0];
 						  }
 
-						 $redis->sadd("detection", $foll['users'][$iter]['pk'].":".$word1);
+						 $redis->sadd("detection", $foll['users'][$iter]['pk']);//.":".$word1
 					}
 
 					
@@ -744,7 +742,7 @@ function funcgeocoordparse($i, $redis)
 
 
 
-					 $redis->sadd("detection", $getnewl['items'][$num_results]['user']['pk'].":".$word1);
+					 $redis->sadd("detection", $getnewl['items'][$num_results]['user']['pk']);//.":".$word1
 		
 
 				     }
@@ -801,11 +799,11 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
           $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
 //$smi_hi
           //////TOVARKA
-	// $text = "Добрый день! \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705}ГАРАНТИРОВАННЫЙ РЕЗУЛЬТАТ В ТЕЧЕНИЕ 2-Х НЕДЕЛЬ! \u{2029}\u{27A1} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
+	$text = "Добрый день! \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
 
               //ADULT
-          $uname = $GLOBALS["username"];
-         $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap kik dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $unameStrip94 $smil I am ONLINE and WAITING..";
+         //  $uname = $GLOBALS["username"];
+         // $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap kik dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $unameStrip94 $smil I am ONLINE and WAITING..";
 
 
  
@@ -917,8 +915,8 @@ while ( $redis->scard("proxy") > 0 )
 			$edges= $outputs[1]['edges'];
 			$shift = $outputs[1]['shift']; 
 			$header = $outputs[1]['header'];
-			exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		// exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+			// exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 
 		// exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 			echo $qsstamper[0];	
@@ -1029,12 +1027,12 @@ while ( $redis->scard("proxy") > 0 )
 		}
 		sleep(3);
 
-// 				try {
-// 		    $i->setPrivateAccount();
-// 		} catch (Exception $e) {
-// 		    echo $e->getMessage();
-// 		}
-// sleep(6);
+				try {
+		    $i->setPrivateAccount();
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+sleep(6);
 
 		$registered = $proxy." ".$username." ".$email." ".$password." ".$first_name;
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
@@ -1125,27 +1123,25 @@ while ( $redis->scard("proxy") > 0 )
 //////////
 
 ///TOVARKA
-// 		$usname = $i->searchUsername("__blackmask__"); 
-// 		$iduser = $usname['user']['pk'];
-// sleep(6);
-// 		$feedres = $i->getUserFeed($iduser, $maxid = null, $minTimestamp = null);
-// 		$ad_media_id = $feedres['items'][mt_rand(0,2)]['pk']; 
+		// $usname = $i->searchUsername("__blackmask__"); 
+		// $iduser = $usname['user']['pk'];
+sleep(6);
+		$feedres = $i->getUserFeed("3153238919", $maxid = null, $minTimestamp = null);
+		$ad_media_id = $feedres['items'][mt_rand(9,11)]['pk']; 
 //////
 		$logoutCounter = 20;
-sleep(6);
-
-	 	
+// sleep(6);
+ 
 
 	 	 
- 		 $pokem = $i->getHashtagFeed("pokemongo", $maxid = null);
- 		 echo var_export($pokem);
+ 		 // $pokem = $i->getHashtagFeed("pokemongo", $maxid = null);
+ 		 // echo var_export($pokem);
 
- 		 hashtagparse("pokemongo",$i, $redis);
+ 		 // hashtagparse("pokemongo",$i, $redis);
 
 
-
-		$ad_media_id = 1;
-		// funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
+ 
+	    funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
 		 
 	// }
 
@@ -1335,7 +1331,7 @@ sleep(6);
 	
 	     break;
     }
-	sleep(6);
+	// sleep(6);
 }     
    
 
