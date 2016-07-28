@@ -18,6 +18,8 @@ class Instagram
   protected $rank_token;          // Rank token
   protected $IGDataPath;          // Data storage path
 
+  protected $phoneclass;
+
   protected $phone_id;
 
   /**
@@ -33,12 +35,13 @@ class Instagram
    *  Default folder to store data, you can change it.
    */
 
-  public function __construct($username, $password, $proxy , $genuuid, $gendeviceid , $genphoneid, $genphoneua, $debug = false, $IGDataPath = null)
+  public function __construct($username, $password, $proxy , $genuuid, $gendeviceid , $genphoneid, $genphoneua, $phoneclass, $debug = false, $IGDataPath = null)
   {
       $this->debug = $debug;
       $this->device_id = $gendeviceid; //$this->generateDeviceId(md5($username.$password));  
       $this->uuid = $genuuid;
       $this->phone_id = $genphoneid;
+      $this->phoneclass = $phoneclass;
 
       $this->UA = $genphoneua;
 
@@ -90,6 +93,84 @@ class Instagram
           $this->token = trim(file_get_contents($this->IGDataPath."$username-token.dat"));
       }
   }
+
+
+
+   public function currentEdit() {
+    $outputs = $this->request('accounts/current_user/?edit=true', null);
+    return $outputs;
+   }
+
+
+// signed_body=3f80bf65d1950d3a19fb2d680f992a04dfa9da6b68135a2fa4c03381cb964ce0.%7B%22
+   // phone_number%22%3A%22%2B79260263988%22%2C%22
+   // _csrftoken%22%3A%22hvo1oRG4LMGDeScVIuQacSLZnFNG2xP6%22%2C%22
+   // _uid%22%3A%223592360965%22%2C%22
+   // _uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%7D
+   // &ig_sig_key_version=4
+
+   public function sendSmsCode($phone) {
+          $data = json_encode([
+        'phone_number'    =>  $phone, 
+        '_csrftoken'  => $this->token,
+         '_uid'       => $this->username_id,
+        '_uuid'       => $this->uuid,
+      ]);
+        return $this->request('accounts/send_sms_code/',  $this->generateSignature($data))[1];
+   }
+
+// signed_body=7fcfdc871e84fdea11fc193fa1f7d96d6cc8260d6516aca0b08c1569898d1345.%7B%22
+   // verification_code%22%3A%22630219%22%2C%22
+   // phone_number%22%3A%22%2B79260263988%22%2C%22
+   // _csrftoken%22%3A%22hvo1oRG4LMGDeScVIuQacSLZnFNG2xP6%22%2C%22
+   // _uid%22%3A%223592360965%22%2C%22
+   // _uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%7D
+   // &ig_sig_key_version=4
+
+// %2B79260263988
+   public function verifySmsCode($phone, $verification_code) {
+      $data = json_encode([
+        'verification_code' => $verification_code,
+        'phone_number'    => $phone, 
+        '_csrftoken'  => $this->token,
+         '_uid'       => $this->username_id,
+        '_uuid'       => $this->uuid,
+      ]);
+        return $this->request('accounts/verify_sms_code/', $this->generateSignature($data))[1];
+   }
+
+
+ public function checkpointChallenge($phone) {
+// 1
+  // GET https://i.instagram.com/challenge/ HTTP/1.1
+    $outputsget = $this->httprequest('challenge/', null);  
+    echo var_export($outputsget);
+// 2
+// POST https://i.instagram.com/challenge/ HTTP/1.1
+  // csrfmiddlewaretoken=Xgmc5B2Mo5U3uNY43tdHQvv2WfjbAslO&phone_number=%2B79260263988
+  $outputspostone = $this->httprequest('challenge/',  "csrfmiddlewaretoken=".$this->token."&phone_number=".urlencode($phone));
+    echo var_export($outputspostone) ;
+      ////----
+      $resp_code = trim(fgets(STDIN));
+      ////----
+      echo "\n".$resp_code."\n";
+// 3
+// POST https://i.instagram.com/challenge/ HTTP/1.1
+// csrfmiddlewaretoken=Xgmc5B2Mo5U3uNY43tdHQvv2WfjbAslO&response_code=965310
+ $outputspostfinal = $this->httprequest('challenge/',   "csrfmiddlewaretoken=".$this->token."&response_code=".$resp_code);
+ echo var_export($outputspostfinal);
+
+ }
+
+// for phone creator
+ // POST https://i.instagram.com/api/v1/accounts/send_confirm_email/ HTTP/1.1
+  // signed_body=9ef8ead4c19d54e133116403cb79fc9aceef7077b599a46180ae38bfe7f8aab7.%7B%22_csrftoken%22%3A%220bphZAtkbrkYJ4Z9qa3jD3k3D3ZSVXRq%22%2C%22send_source%22%3A%22edit_profile%22%2C%22_uid%22%3A%223594561427%22%2C%22_uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%2C%22email%22%3A%22matveev.alexander.vladimir.ovi4%40gmail.com%22%7D&ig_sig_key_version=4
+
+// public function sendConfirmEmail() {
+
+// }
+
+
 
   /**
    * Login to Instagram.
@@ -187,6 +268,7 @@ class Instagram
       ]);
         return $this->request('discover/ayml/', $data)[1]; 
     }
+
 
 //ANDROID POST https://i.instagram.com/api/v1/discover/ayml/ HTTP/1.1
 //   phone_id=913d5b20-c76a-42d9-8132-ece7432fb11c
@@ -567,7 +649,7 @@ class Instagram
          // $respres = var_export($upload);
          // echo $respres;
 
-         return $upload['status'];
+         return $upload;
     }
 
     protected function configureVideo($upload_id, $video, $caption = '')
@@ -1353,10 +1435,13 @@ class Instagram
   {   
 
       $locationParser = $this->request('fbsearch/places/?lat='.$latitude.'&lng='.$longitude.'&timezone_offset=10800')[1];
-      if ($locationParser['status'] != 'ok') {
-          throw new InstagramException($locationParser['message']."\n");
+      if ($locationParser['status'] != 'ok' && $locationParser['message'] =="checkpoint_required" ) {
+          $this->checkpointChallenge($this->phoneclass);
 
-          return;
+          } else {
+
+          throw new InstagramException($locationParser['message']."\n");
+         return;
       }
       return $locationParser;
   }
@@ -1412,11 +1497,18 @@ class Instagram
 
       $locationFeed = $this->request($endpoint)[1];
 
-      if ($locationFeed['status'] != 'ok') {
-          throw new InstagramException($locationFeed['message']."\n");
+      if (  $locationFeed['status'] == "fail" && $locationFeed['message'] == "checkpoint_required" ) { 
 
-          return;
+            $this->checkpointChallenge($this->phoneclass);
+
       }
+      elseif ( $locationFeed['status'] != "ok"  ) {
+           throw new InstagramException($locationFeed['message']."\n");
+
+          // echo  var_export($locationFeed);
+           return;
+     } 
+
 
       return $locationFeed;
   }
@@ -1785,6 +1877,81 @@ class Instagram
 
         return $body;
     }
+
+
+    protected function httprequest($endpoint)
+    { 
+     $headers = [
+      'Host: i.instagram.com',
+      'Connection: keep-alive',
+      'Content-Length:'.strlen($post),
+      'Accept-Language: en-US', 
+      'Accept-Encoding: gzip, deflate',
+      'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
+      'Cookie2: $Version=1',
+                 
+     ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, "https://i.instagram.com/".$endpoint);
+        // curl_setopt($ch, CURLINFO_HEADER_OUT, TRUE);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA ); //Constants::USER_AGENT); //// 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);//true 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); //need test
+        //new
+        curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
+        // new
+        curl_setopt($ch, CURLOPT_VERBOSE, false);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //need test added
+         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //need test added
+
+        curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+        curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+
+
+        if (file_exists($this->IGDataPath."$this->username-cookies.dat")) {
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
+        } else {
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat'); //need fix $this->device_id
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');   //need fix $this->device_id
+        }
+
+        if ($post) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        }
+
+
+       // $information = curl_getinfo($ch);
+       // echo var_export( $information);
+
+
+        $resp = curl_exec($ch);
+        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($resp, 0, $header_len);
+        $body = substr($resp, $header_len);
+
+        curl_close($ch);
+
+        if ($this->debug) {
+            echo "REQUEST: $endpoint\n";
+            if (!is_null($post)) {
+                if (!is_array($post)) {
+                    echo "DATA: $post\n";
+                }
+            }
+            echo "RESPONSE: $body\n\n";
+        }
+
+        return [$header, json_decode($body, true)];
+    }
+
 
     protected function request($endpoint, $post = null, $login = false)
     {

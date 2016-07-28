@@ -1,8 +1,10 @@
 <?php
 
 
+$line = trim(fgets(STDIN));
+echo "\nentered -->".$line."\n\n";
 
-
+ 
 // $txt = 'Алиса Варум';
 // $re1='.*?';	# Non-greedy match on filler
 // $re2='((?:[а-яa-z][a-яa-z]+))';	# Word 1

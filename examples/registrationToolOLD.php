@@ -7,13 +7,13 @@
 // date_default_timezone_set('UTC');
  
 
-$romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
-$romerPREDIS = '/home/blackkorol/in/predis/';
-$romerINSTA = '/home/blackkorol/in/insta/';
+// $romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
+// $romerPREDIS = '/home/blackkorol/in/predis/';
+// $romerINSTA = '/home/blackkorol/in/insta/';
 
-	// $romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	// $romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
+	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -185,18 +185,18 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
  	// functofollow($ilink, $usernamelink, $actioner);	 
 ////.......//////////
 
-	if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
-	 	for($t = 0; $t < 6; $t++) {  //expressive spam 12 OK no sleep
-			if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
-				functocomment($ilink, $usernamelink);   
-				$timetosleep = add_time($delay);      	
-			 	sleep($timetosleep);
-			}
-		}
-	}
-	 
+	// if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
+	//  	for($t = 0; $t < 6; $t++) {  //expressive spam 12 OK no sleep
+	// 		if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
+	// 			functocomment($ilink, $usernamelink);   
+	// 			$timetosleep = add_time($delay);      	
+	// 		 	sleep($timetosleep);
+	// 		}
+	// 	}
+	// }
+	//  $GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
 //TOVARKA  *****///////// /////////////////////////////////// NEED TEST
-	$GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
+	
 
 	if ($GLOBALS["redis"]->scard("detection") == 0) {
 		    funcgeocoordparse($ilink, $GLOBALS["redis"]);
@@ -647,7 +647,7 @@ function funcgeocoordparse($i, $redis)
 
 				$num_rank_results =0;
 				while ($num_rank_results < $getl['num_results']) {
-					// echo $getl['items'][$num_rank_results]['user']['pk']."<----user\n";//['ranked_items']
+					 echo $getl['items'][$num_rank_results]['user']['pk']."<----user\n";//['ranked_items']
 
 					if($getl['items'][$num_rank_results]['user']['has_anonymous_profile_picture'] == false) 
 					  {
@@ -685,7 +685,7 @@ function funcgeocoordparse($i, $redis)
 
 				sleep(7);
 
-				if ($getl['more_available'] ==true ) {
+				if ($getl['more_available'] == true ) {
 					$next_next_max_id = $getl['next_max_id'];
 					$getnewl = $i->getLocationFeed( $locpk, $next_next_max_id);
 				} else {
@@ -702,7 +702,7 @@ function funcgeocoordparse($i, $redis)
 					//parse users pk
 					$num_results = 0;
 					while ($num_results < $getnewl['num_results']) {
-					 // echo $getnewl['items'][$num_results]['user']['pk'].
+					 echo $getnewl['items'][$num_results]['user']['pk'];
 						echo "<----user\n";
 
 					// sleep(1);
@@ -825,9 +825,21 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 
 		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
 		 			
-		 			 if ($answer == "ok") {
+		 			 if ($answer['status']== "ok") {
 		 			 	 echo "\n\n**SEND**\n\n";
 		 				$GLOBALS["redis"]->rpush("recieved",  $message_recipient); 
+		 			} elseif ($answer['status']== "fail" && $answer['message'] == "checkpoint_required") {
+
+		 				$i->checkpointChallenge($GLOBALS["phone"]);
+
+		 				 // $sendsms = $i->sendSmsCode($GLOBALS["phone"]);
+				    //  	 echo var_export($sendsms);
+				    //  	 echo "\nVerification code sent! >>>>>\n";
+				    //  	 $code_verif = trim(fgets(STDIN));
+				    //  	 echo "\n".$code_verif."\n";
+				    //  	 $versms = $i->verifySmsCode($GLOBALS["phone"], $code_verif);
+				    //  	  echo var_export($versms);
+
 		 			} else {
 
 		 				// $GLOBALS["redis"]->rpush("not_recieved",  $message_recipient);  // track not sended messages
@@ -862,7 +874,7 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 
 $gender = 2;
-$phone  = "";
+$phone  = "";//"+79855560279";
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
 $dir    = $romerINSTAPI.'src/'.$profileSetter; 
@@ -895,7 +907,7 @@ while ( $redis->scard("proxy") > 0 )
 	 
 
 
-	// $check = $r->checkEmail($email);
+	//  $check = $r->checkEmail($email);
  
  //    if (isset($check[1]['available']) && $check[1]['available'] == false) {
  //    	$redis->sadd("blacklist_email",  $email);
@@ -915,8 +927,8 @@ while ( $redis->scard("proxy") > 0 )
 			$edges= $outputs[1]['edges'];
 			$shift = $outputs[1]['shift']; 
 			$header = $outputs[1]['header'];
-			// exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+			exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+		// exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 
 		// exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
 			echo $qsstamper[0];	
@@ -1016,23 +1028,12 @@ while ( $redis->scard("proxy") > 0 )
 		$regPhoneUserAgent = $r->returnPhoneUA();
 
 		//need test WOULD IT BE BETTER TO COMBINE TWO CLASSES - NO NEED REQUEST BELOW
-		$i = new Instagram($username, $password, $proxy, $regUuid, $regDeviceId, $regPhoneId, $regPhoneUserAgent , $debug );
+		$i = new Instagram($username, $password, $proxy, $regUuid, $regDeviceId, $regPhoneId, $regPhoneUserAgent , $GLOBALS["phone"], $debug );
 		//set profile picture
 		sleep(3);
 
-		try {
-		    $i->changeProfilePicture($photo);
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(3);
+		
 
-				try {
-		    $i->setPrivateAccount();
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-sleep(6);
 
 		$registered = $proxy." ".$username." ".$email." ".$password." ".$first_name;
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
@@ -1043,9 +1044,25 @@ sleep(6);
      	$redis->sadd("black_proxy",  $proxy);
 
 
+     	$cured = $i->currentEdit();
+     	echo var_export($cured);
+
+
+     	 // $sendsms = $i->sendSmsCode($phone);
+     	 // echo var_export($sendsms);
+     	 // echo "\nVerification code sent! >>>>>\n";
+     	 // $code_verif = trim(fgets(STDIN));
+     	 // echo "\n".$code_verif."\n";
+     	 
+
+     	 // $versms = $i->verifySmsCode($phone, $code_verif);
+     	 //  echo var_export($versms);
+
+
 		//edit profile
 		try { 
-			$GLOBALS["biography"] = str_replace( "_username" , explode(" ",$first_name)[0]  , $GLOBALS["biography"] );  
+			$GLOBALS["biography"] = str_replace( "_username" , explode(" ",$first_name)[0]  , $GLOBALS["biography"] );
+
 		    $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
 		} catch (Exception $e) {
@@ -1054,6 +1071,19 @@ sleep(6);
 
 		sleep(6);
 		
+		try {
+		    $i->changeProfilePicture($photo);
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(3);
+
+		try {
+		    $i->setPrivateAccount();
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+sleep(6);
 		// funcgeocoordparse($i, $redis);  // geo coordinates with gender done
  
 		 
