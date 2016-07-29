@@ -140,26 +140,26 @@ class Instagram
    }
 
 
- public function checkpointChallenge($phone) {
+ public function checkpointPhoneChallenge($phone, $checkpoint_url) {
 // 1
   // GET https://i.instagram.com/challenge/ HTTP/1.1
-    $outputsget = $this->httprequest('challenge/', null);  
+    $outputsget = $this->httprequest($checkpoint_url, null);  
     echo var_export($outputsget);
 // 2
 // POST https://i.instagram.com/challenge/ HTTP/1.1
   // csrfmiddlewaretoken=Xgmc5B2Mo5U3uNY43tdHQvv2WfjbAslO&phone_number=%2B79260263988
-  $outputspostone = $this->httprequest('challenge/',  "csrfmiddlewaretoken=".$this->token."&phone_number=".urlencode($phone));
+  $outputspostone = $this->httprequest($checkpoint_url,  "csrfmiddlewaretoken=".$this->token."&phone_number=".urlencode($phone));
     echo var_export($outputspostone) ;
-      ////----
-      $resp_code = trim(fgets(STDIN));
-      ////----
-      echo "\n".$resp_code."\n";
-// 3
-// POST https://i.instagram.com/challenge/ HTTP/1.1
-// csrfmiddlewaretoken=Xgmc5B2Mo5U3uNY43tdHQvv2WfjbAslO&response_code=965310
- $outputspostfinal = $this->httprequest('challenge/',   "csrfmiddlewaretoken=".$this->token."&response_code=".$resp_code);
- echo var_export($outputspostfinal);
+      
 
+ }
+
+
+ public function checkpointCodeChallenge($resp_code, $checkpoint_url) {
+  
+ $outputspostfinal = $this->httprequest($checkpoint_url,   "csrfmiddlewaretoken=".$this->token."&response_code=".$resp_code);
+ 
+return  $outputspostfinal;
  }
 
 // for phone creator
@@ -1370,10 +1370,11 @@ class Instagram
           .(!is_null($minTimestamp) ? "&min_timestamp=".$minTimestamp : '')
           ."&ranked_content=true"
       )[1];
-      if ($userFeed['status'] != 'ok') {
-          throw new InstagramException($userFeed['message']."\n");
-          return;
-      }
+       
+      // elseif ($userFeed['status'] != 'ok') {
+      //     throw new InstagramException($userFeed['message']."\n");
+      //     return;
+      // }
       return $userFeed;
   }
 
@@ -1436,7 +1437,7 @@ class Instagram
 
       $locationParser = $this->request('fbsearch/places/?lat='.$latitude.'&lng='.$longitude.'&timezone_offset=10800')[1];
       if ($locationParser['status'] != 'ok' && $locationParser['message'] =="checkpoint_required" ) {
-          $this->checkpointChallenge($this->phoneclass);
+          $this->checkpointChallenge($this->phoneclass, $locationParser['checkpoint_url']);
 
           } else {
 
@@ -1499,7 +1500,7 @@ class Instagram
 
       if (  $locationFeed['status'] == "fail" && $locationFeed['message'] == "checkpoint_required" ) { 
 
-            $this->checkpointChallenge($this->phoneclass);
+            $this->checkpointChallenge($this->phoneclass, $locationFeed['checkpoint_url']);
 
       }
       elseif ( $locationFeed['status'] != "ok"  ) {
@@ -1552,9 +1553,21 @@ class Instagram
     * @return array
     *   followers data
     */
+
    public function getUserFollowings($usernameId, $maxid = null)
    {
-       return $this->request("friendships/$usernameId/following/?max_id=$maxid&ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
+       $userFolResult = $this->request("friendships/$usernameId/following/?max_id=$maxid&ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
+
+       if ($userFolResult['status'] == "fail"  && $userFolResult['message'] == "checkpoint_required" )
+       {
+
+              $this->checkpointChallenge($this->phoneclass, $userFolResult['checkpoint_url']);
+       }
+       elseif ($userFolResult['status'] != 'ok') {
+            throw new InstagramException($popularFeed['message']."\n");
+          return;
+        } 
+        return $userFolResult;
    }
 
   /**
@@ -1879,7 +1892,7 @@ class Instagram
     }
 
 
-    protected function httprequest($endpoint)
+    protected function httprequest($endpoint, $post)
     { 
      $headers = [
       'Host: i.instagram.com',

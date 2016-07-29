@@ -94,7 +94,7 @@ public function sendSignupSmsCode($phone) {
           'waterfall_id' => $this->waterfall_id,
       ]);
 
-      $response =   $this->request('accounts/send_signup_sms_code/', $this->generateSignature($data))[1];  
+      $response =   $this->request('accounts/send_signup_sms_code/', $this->generateSignature($data));  
 
 
       preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matchresult);
@@ -125,7 +125,7 @@ public function validateSignupSmsCode($verification_code, $phone) {
 
       ]);
 
-      $response =   $this->request('accounts/validate_signup_sms_code/', $this->generateSignature($data))[1];  
+      $response =   $this->request('accounts/validate_signup_sms_code/', $this->generateSignature($data));  
 
      //  preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matchresult);
      // $this->token = $matchresult[1];
@@ -170,12 +170,25 @@ public function createValidatedAccount($username, $verification_code, $phone, $f
           'password' => $password,
       ]);
 
-      $response =   $this->request('accounts/create_validated/', $this->generateSignature($data))[1];  
+      $result =   $this->request('accounts/create_validated/', $this->generateSignature($data));  
+
+      if (isset($result[1]['account_created']) && ($result[1]['account_created'] == true)) {
+          $this->username_id = $result[1]['created_user']['pk'];
+          file_put_contents($this->IGDataPath."$username-userId.dat", $this->username_id);
+          preg_match('#Set-Cookie: csrftoken=([^;]+)#', $result[0], $match);
+          $token = $match[1];
+          $this->username = $username;
+          file_put_contents($this->IGDataPath."$username-token.dat", $token);
+          // copy($this->IGDataPath.'cookies.dat', $this->IGDataPath.'cookies2.dat'); //no need??
+          rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat");  
+          // rename($this->IGDataPath.'cookies2.dat', $this->IGDataPath.'cookies.dat'); //no need?
+      }
+
 
      //  preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matchresult);
      // $this->token = $matchresult[1];
 
-     return $response;
+     return $result;
 
 }
 
@@ -300,6 +313,8 @@ public function usernameSuggestions($email ,$full_name) //not use for now
 
 
      $response =   $this->request('accounts/username_suggestions/', $this->generateSignature($data))[1];
+
+
      return $response;
     
   }

@@ -78,8 +78,31 @@ function functocomment($ilink, $usernamelink)
  			 
 
  			$usfeedforcom = $ilink->getUserFeed($influencer, $maxid = null, $minTimestamp = null);
+ 			
+ 			if (isset($usfeedforcom['items'][0]['pk'])) {
  			$medcom = $usfeedforcom['items'][0]['pk'];
- 
+ 		} elseif ($usfeedforcom['status'] == "fail" &&  $usfeedforcom['message'] == "checkpoint_required")  {
+
+
+  				$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $usfeedforcom['checkpoint_url']);
+
+           $resp_code = trim(fgets(STDIN));
+
+           echo "\n".$resp_code;
+
+          $results = $ilink->checkpointCodeChallenge($resp_code, $usfeedforcom['checkpoint_url']);
+
+          echo var_export($results);
+
+ 		} else {
+
+ 			throw new InstagramException($usfeedforcom['message']."\n");
+          return;
+ 		}
+
+
+
+
             /////// COMMENT 
 			$commentindexkeys = $GLOBALS["redis"]->hkeys("comments_tovarka");	//comments_adult	
 
@@ -118,8 +141,20 @@ function functocomment($ilink, $usernamelink)
 		    	$GLOBALS["redis"]->sadd("comment_sentactor", $usernamelink);
 		    	
 			}
-			elseif ($link['status']== "fail")
+			elseif ($link['status']== "fail" && $link['message'] == "checkpoint_required")
 			{
+				$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $link['checkpoint_url']);
+
+		 			 $resp_code = trim(fgets(STDIN));
+
+		 			 echo "\n".$resp_code;
+
+		 			$results = $ilink->checkpointCodeChallenge($resp_code, $link['checkpoint_url']);
+
+		 			echo var_export($results);
+			}
+			else {
+
 				$GLOBALS["redis"]->sadd("disabled", "comment_".$usernamelink);
 				echo "\ncomments not send";
 			}
@@ -185,16 +220,16 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
  	// functofollow($ilink, $usernamelink, $actioner);	 
 ////.......//////////
 
-	// if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
-	//  	for($t = 0; $t < 6; $t++) {  //expressive spam 12 OK no sleep
-	// 		if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
-	// 			functocomment($ilink, $usernamelink);   
-	// 			$timetosleep = add_time($delay);      	
-	// 		 	sleep($timetosleep);
-	// 		}
-	// 	}
-	// }
-	//  $GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
+	if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
+	 	for($t = 0; $t < 6; $t++) {  //expressive spam 12 OK no sleep
+			if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
+				functocomment($ilink, $usernamelink);   
+				$timetosleep = add_time($delay);      	
+			 	sleep($timetosleep);
+			}
+		}
+	}
+	 $GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
 //TOVARKA  *****///////// /////////////////////////////////// NEED TEST
 	
 
@@ -709,16 +744,16 @@ function funcgeocoordparse($i, $redis)
 					$foll = $i->getUserFollowings($getnewl['items'][$num_results]['user']['pk'], $maxid = null);
 					echo $foll['users'][0]['pk']."<----following pk\n";
 
-					for($iter = 0, $c = count($foll['users']); $iter < $c; $iter++) {
+					for($iter = 0, $c = count($foll['users']); $iter < $c; $iter++) {  //ADD ITERATOR IN FOLLIWINGS
 
-						  $txt=$foll['users'][$iter]['full_name'];
-						  $re1='.*?';	# Non-greedy match on filler
-						  $re2='((?:[a-z][a-z]+))';	# Word 1
-						  $word1 = "";
-						  if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
-						  {
-						      $word1=$matches[1][0];
-						  }
+						  // $txt=$foll['users'][$iter]['full_name'];
+						  // $re1='.*?';	# Non-greedy match on filler
+						  // $re2='((?:[a-z][a-z]+))';	# Word 1
+						  // $word1 = "";
+						  // if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
+						  // {
+						  //     $word1=$matches[1][0];
+						  // }
 
 						 $redis->sadd("detection", $foll['users'][$iter]['pk']);//.":".$word1
 					}
@@ -727,23 +762,23 @@ function funcgeocoordparse($i, $redis)
 
 					  if($getnewl['items'][$num_results]['user']['has_anonymous_profile_picture'] == false) 
 					  {
-					  	// $getnewl['items'][$num_results]['user']['is_private'] == false
-					    // $usfeed['items'][0]['taken_at'] > $filterDate &&  $usfeed['num_results'] > 9
-						
+						  	// $getnewl['items'][$num_results]['user']['is_private'] == false
+						    // $usfeed['items'][0]['taken_at'] > $filterDate &&  $usfeed['num_results'] > 9
+							
 
-					  $txt=$getnewl['items'][$num_results]['user']['full_name'];
-					  $re1='.*?';	# Non-greedy match on filler
-					  $re2='((?:[a-z][a-z]+))';	# Word 1
-					  $word1 = "";
-					  if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
-					  {
-					      $word1=$matches[1][0];
-					  }
+						  // $txt=$getnewl['items'][$num_results]['user']['full_name'];
+						  // $re1='.*?';	# Non-greedy match on filler
+						  // $re2='((?:[a-z][a-z]+))';	# Word 1
+						  // $word1 = "";
+						  // if ($c=preg_match_all ("/".$re1.$re2."/is", $txt, $matches))
+						  // {
+						  //     $word1=$matches[1][0];
+						  // }
 
 
 
-					 $redis->sadd("detection", $getnewl['items'][$num_results]['user']['pk']);//.":".$word1
-		
+						 $redis->sadd("detection", $getnewl['items'][$num_results]['user']['pk']);//.":".$word1
+			
 
 				     }
 			
@@ -830,7 +865,15 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 		 				$GLOBALS["redis"]->rpush("recieved",  $message_recipient); 
 		 			} elseif ($answer['status']== "fail" && $answer['message'] == "checkpoint_required") {
 
-		 				$i->checkpointChallenge($GLOBALS["phone"]);
+		 			$i->checkpointPhoneChallenge($GLOBALS["phone"], $answer['checkpoint_url']);
+
+		 			 $resp_code = trim(fgets(STDIN));
+
+		 			 echo "\n".$resp_code;
+
+		 			$results = $i->checkpointCodeChallenge($resp_code, $answer['checkpoint_url']);
+
+		 			echo var_export($results);
 
 		 				 // $sendsms = $i->sendSmsCode($GLOBALS["phone"]);
 				    //  	 echo var_export($sendsms);
@@ -874,7 +917,7 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 
 $gender = 2;
-$phone  = "";//"+79855560279";
+$phone  = "+79855560279";
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
 $dir    = $romerINSTAPI.'src/'.$profileSetter; 
@@ -914,7 +957,22 @@ while ( $redis->scard("proxy") > 0 )
 	//     break;
 	// }     
 
-	$outputs = $r->fetchHeaders();
+
+//phonecreateion
+
+
+	//sendsmssignup
+	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
+	echo var_export($sres);
+	 echo "\nVerification code sent! >>>>>\n";
+     	 $cod = trim(fgets(STDIN));
+     	 echo "\n".$cod."\n";
+     	 
+	//validatesmssignup
+	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
+	 echo $sval;
+	//headers+
+	 $outputs = $r->fetchHeaders();
 	 
 
 	 if ($outputs[1]['status'] == 'ok') {
@@ -941,6 +999,10 @@ while ( $redis->scard("proxy") > 0 )
 		}
 		 
 	}	
+	
+	//usernamesuggestuin+
+	//createvalid
+	
       
     // sleep(4);  test without
     $pieces = $redis->spop("names");
@@ -963,9 +1025,10 @@ while ( $redis->scard("proxy") > 0 )
 	// } 
 	 
 
-	
-	  // sleep(4);   test without
-	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
+
+	// $result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
+	 $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
+
 
 	$resToPrint =  var_export($result);
 	echo $resToPrint;
@@ -1048,15 +1111,15 @@ while ( $redis->scard("proxy") > 0 )
      	echo var_export($cured);
 
 
-     	 // $sendsms = $i->sendSmsCode($phone);
-     	 // echo var_export($sendsms);
-     	 // echo "\nVerification code sent! >>>>>\n";
-     	 // $code_verif = trim(fgets(STDIN));
-     	 // echo "\n".$code_verif."\n";
+     	 $sendsms = $i->sendSmsCode($phone);
+     	 echo var_export($sendsms);
+     	 echo "\nVerification code sent! >>>>>\n";
+     	 $code_verif = trim(fgets(STDIN));
+     	 echo "\n".$code_verif."\n";
      	 
 
-     	 // $versms = $i->verifySmsCode($phone, $code_verif);
-     	 //  echo var_export($versms);
+     	 $versms = $i->verifySmsCode($phone, $code_verif);
+     	  echo var_export($versms);
 
 
 		//edit profile
@@ -1361,7 +1424,7 @@ sleep(6);
 	
 	     break;
     }
-	// sleep(6);
+	 sleep(20);
 }     
    
 
