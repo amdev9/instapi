@@ -1,9 +1,11 @@
 <?php
 
+$a = 7;
 
+if ($a > 5) {
 $line = trim(fgets(STDIN));
 echo "\nentered -->".$line."\n\n";
-
+}
  
 // $txt = 'Алиса Варум';
 // $re1='.*?';	# Non-greedy match on filler

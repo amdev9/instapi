@@ -164,11 +164,24 @@ return  $outputspostfinal;
 
 // for phone creator
  // POST https://i.instagram.com/api/v1/accounts/send_confirm_email/ HTTP/1.1
-  // signed_body=9ef8ead4c19d54e133116403cb79fc9aceef7077b599a46180ae38bfe7f8aab7.%7B%22_csrftoken%22%3A%220bphZAtkbrkYJ4Z9qa3jD3k3D3ZSVXRq%22%2C%22send_source%22%3A%22edit_profile%22%2C%22_uid%22%3A%223594561427%22%2C%22_uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%2C%22email%22%3A%22matveev.alexander.vladimir.ovi4%40gmail.com%22%7D&ig_sig_key_version=4
+  // signed_body=9ef8ead4c19d54e133116403cb79fc9aceef7077b599a46180ae38bfe7f8aab7.%7B%22
+ // _csrftoken%22%3A%220bphZAtkbrkYJ4Z9qa3jD3k3D3ZSVXRq%22%2C%22
+ // send_source%22%3A%22%edit_profile%22%2C%22
+ // _uid%22%3A%223594561427%22%2C%22
+ // _uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%2C%22
+ // email%22%3A%22matveev.alexander.vladimir.ovi4%40gmail.com%22%7D
+ // &ig_sig_key_version=4
 
-// public function sendConfirmEmail() {
-
-// }
+public function sendConfirmEmail($email) {
+ $data = json_encode([
+        '_csrftoken'  => $this->token,
+        'send_source' => "edit_profile",
+         '_uid'       => $this->username_id,
+        '_uuid'       => $this->uuid,
+        'email'       => $email,
+      ]);
+        return $this->request('accounts/send_confirm_email/', $this->generateSignature($data))[1];
+}
 
 
 
