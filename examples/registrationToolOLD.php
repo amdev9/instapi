@@ -84,9 +84,9 @@ function functocomment($ilink, $usernamelink)
  		} elseif ($usfeedforcom['status'] == "fail" &&  $usfeedforcom['message'] == "checkpoint_required")  {
 
 
-  				$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $usfeedforcom['checkpoint_url']);
+  				$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $usfeedforcom['checkpoint_url']); // where is sms
 
-           $resp_code = trim(fgets(STDIN));
+           $resp_code = trim(fgets(STDIN)); // why not working?
 
            echo "\n".$resp_code;
 
@@ -960,19 +960,7 @@ while ( $redis->scard("proxy") > 0 )
 
 //phonecreateion
 
-
-	//sendsmssignup
-	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
-	echo var_export($sres);
-	 echo "\nVerification code sent! >>>>>\n";
-     	 $cod = trim(fgets(STDIN));
-     	 echo "\n".$cod."\n";
-     	 
-	//validatesmssignup
-	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
-	 echo $sval;
-	//headers+
-	 $outputs = $r->fetchHeaders();
+$outputs = $r->fetchHeaders();
 	 
 
 	 if ($outputs[1]['status'] == 'ok') {
@@ -999,6 +987,19 @@ while ( $redis->scard("proxy") > 0 )
 		}
 		 
 	}	
+
+	//sendsmssignup
+	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
+	echo var_export($sres);
+	 echo "\nVerification code sent! >>>>>\n";
+     	 $cod = trim(fgets(STDIN));
+     	 echo "\n".$cod."\n";
+     	 
+	//validatesmssignup
+	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
+	 echo var_export($sval);
+	//headers+
+	 
 	
 	//usernamesuggestuin+
 	//createvalid
