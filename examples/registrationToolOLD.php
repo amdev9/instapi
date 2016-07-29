@@ -55,8 +55,10 @@ function functofollow($ilink, $usernamelink, $pkuser) {
 function functocomment($ilink, $usernamelink) 
 {
 
-        $influencers = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131", "331286351",  "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
+        $influencers = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131",   "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
  	//"243725081",
+
+        //"331286351",
 
 		// $influencers_ADULT = ['13224318', '327139047', '16494719', '271720365', '19351330', '7962893', '1672489480', '1507448263', '26257074', '22676717', '5211436', '465805681', '1475313335', '17240139', '24610068', '50187813', '177443887', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 
@@ -84,10 +86,12 @@ function functocomment($ilink, $usernamelink)
  		} elseif ($usfeedforcom['status'] == "fail" &&  $usfeedforcom['message'] == "checkpoint_required")  {
 
 
+ 				sleep(100);
+ 				//
   				$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $usfeedforcom['checkpoint_url']); // where is sms
 
-           $resp_code = trim(fgets(STDIN)); // why not working?
-
+           // $resp_code = trim(fgets(STDIN)); // why not working?
+  				$resp_code = readline("Command: ");
            echo "\n".$resp_code;
 
           $results = $ilink->checkpointCodeChallenge($resp_code, $usfeedforcom['checkpoint_url']);
@@ -143,9 +147,12 @@ function functocomment($ilink, $usernamelink)
 			}
 			elseif ($link['status']== "fail" && $link['message'] == "checkpoint_required")
 			{
+				sleep(100);
 				$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $link['checkpoint_url']);
 
-		 			 $resp_code = trim(fgets(STDIN));
+		 			 // $resp_code = trim(fgets(STDIN));
+
+		 			 $resp_code = readline("Command: ");
 
 		 			 echo "\n".$resp_code;
 
@@ -205,59 +212,65 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 
 	// }
 
- 	// $actioner = $GLOBALS["redis"]->spop("foractionM");
+ 	// $actioner = $GLOBALS["redis"]->spop("detection");
 
- 	// if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  ) {
-	 // 	$fres = $ilink->follow($actioner);
-	 // 	if ($fres['status'] == 'ok') {
-	 // 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-	 // 	} elseif ($fres['status'] == 'fail' && isset($fres['message']) && $fres['message'] == 'login_required' ) {
-	 // 		$ilink->login(true);
-	 // 	}
-		// echo var_export($fres);
- 	// }
  	
  	// functofollow($ilink, $usernamelink, $actioner);	 
 ////.......//////////
 
-	if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
-	 	for($t = 0; $t < 6; $t++) {  //expressive spam 12 OK no sleep
-			if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
-				functocomment($ilink, $usernamelink);   
-				$timetosleep = add_time($delay);      	
-			 	sleep($timetosleep);
-			}
-		}
-	}
-	 $GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
-//TOVARKA  *****///////// /////////////////////////////////// NEED TEST
-	
+	// if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
+	//  	for($t = 0; $t < 6; $t++) {  //expressive spam 12 OK no sleep
+	// 		if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
+	// 			functocomment($ilink, $usernamelink);   
+	// 			$timetosleep = add_time($delay);      	
+	// 		 	sleep($timetosleep);
+	// 		}
+	// 	}
+	// }
+	//  $GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
+
 
 	if ($GLOBALS["redis"]->scard("detection") == 0) {
 		    funcgeocoordparse($ilink, $GLOBALS["redis"]);
-	}
-			 
-	  $timetosleep = add_time($delay);      	
-	  sleep($timetosleep);	 
+		     $timetosleep = add_time($delay);      	
+	 		 sleep($timetosleep);	 
+	}		 
+	 
 	  if ($GLOBALS["redis"]->scard("detection") > 0 ) {
-		if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
+	
 		    for($t = 0; $t < 51; $t++) {  //TOVARKA
-		    	$actioner = $GLOBALS["redis"]->spop("detection");  //TOVARKA
-			    functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
-				    if 	($GLOBALS["redis"]->scard("detection") == 0 ) {
+
+		    	if 	($GLOBALS["redis"]->scard("detection") == 0 ) {
 				    	funcgeocoordparse($ilink, $GLOBALS["redis"]);
-				    }
+				}
+		    	$actioner = $GLOBALS["redis"]->spop("detection");  
+		    	// if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
+			   		 functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
+				  // }
 			    	echo $next_iteration_time = add_time($delay); //timer
 			   		sleep($next_iteration_time);
-			    }
-			}
+
+					if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  ) {
+					 	$fres = $ilink->follow($actioner);
+					 	if ($fres['status'] == 'ok') {
+					 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+					 	} elseif ($fres['status'] == 'fail' && isset($fres['message']) && $fres['message'] == 'login_required' ) {
+					 		$ilink->login(true);
+					 	}
+						echo var_export($fres);
+				 		}
+
+
+
+			   	 }
+			
 	  }
 
-	$GLOBALS["redis"]->sadd("track", "message".$usernamelink."_".date("Y-m-d_H:i:s"));
-	if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true && $GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) == true) {
-			$ilink->logout();
-			return;
-	}
+	// $GLOBALS["redis"]->sadd("track", "message".$usernamelink."_".date("Y-m-d_H:i:s"));
+	// if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true && $GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) == true) {
+	// 		$ilink->logout();
+	// 		return;
+	// }
 /////////////////////////	
 	
 	echo $next_iteration_time = add_time($delay); //86400
@@ -864,10 +877,11 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 		 			 	 echo "\n\n**SEND**\n\n";
 		 				$GLOBALS["redis"]->rpush("recieved",  $message_recipient); 
 		 			} elseif ($answer['status']== "fail" && $answer['message'] == "checkpoint_required") {
-
+		 				sleep(100);
 		 			$i->checkpointPhoneChallenge($GLOBALS["phone"], $answer['checkpoint_url']);
-
-		 			 $resp_code = trim(fgets(STDIN));
+                     echo "\nVerification code sent! >>>>>\n";
+		 			 // $resp_code = trim(fgets(STDIN));
+		 			 $resp_code = readline("Command: ");
 
 		 			 echo "\n".$resp_code;
 
@@ -917,7 +931,7 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 
 $gender = 2;
-$phone  = "+79855560279";
+$phone  = "+79057801330"; //"+79855560279";
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
 $dir    = $romerINSTAPI.'src/'.$profileSetter; 
@@ -992,7 +1006,9 @@ $outputs = $r->fetchHeaders();
 	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
 	echo var_export($sres);
 	 echo "\nVerification code sent! >>>>>\n";
-     	 $cod = trim(fgets(STDIN));
+     	 // $cod = trim(fgets(STDIN));
+     	 $cod = readline("Command: ");
+     	 // trim(
      	 echo "\n".$cod."\n";
      	 
 	//validatesmssignup
@@ -1108,32 +1124,32 @@ $outputs = $r->fetchHeaders();
      	$redis->sadd("black_proxy",  $proxy);
 
 
-     	$cured = $i->currentEdit();
-     	echo var_export($cured);
+     	// $cured = $i->currentEdit();
+     	// echo var_export($cured);
 
 
-     	 $sendsms = $i->sendSmsCode($phone);
-     	 echo var_export($sendsms);
-     	 echo "\nVerification code sent! >>>>>\n";
-     	 $code_verif = trim(fgets(STDIN));
-     	 echo "\n".$code_verif."\n";
+  //    	 $sendsms = $i->sendSmsCode($phone);
+  //    	 echo var_export($sendsms);
+  //    	 echo "\nVerification code sent! >>>>>\n";
+  //    	 $code_verif = trim(fgets(STDIN));
+  //    	 echo "\n".$code_verif."\n";
      	 
 
-     	 $versms = $i->verifySmsCode($phone, $code_verif);
-     	  echo var_export($versms);
+  //    	 $versms = $i->verifySmsCode($phone, $code_verif);
+  //    	  echo var_export($versms);
 
 
-		//edit profile
-		try { 
-			$GLOBALS["biography"] = str_replace( "_username" , explode(" ",$first_name)[0]  , $GLOBALS["biography"] );
+		// //edit profile
+		// try { 
+		// 	$GLOBALS["biography"] = str_replace( "_username" , explode(" ",$first_name)[0]  , $GLOBALS["biography"] );
 
-		    $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+		//     $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
 
-		sleep(6);
+		// sleep(6);
 		
 		try {
 		    $i->changeProfilePicture($photo);

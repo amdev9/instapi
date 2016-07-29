@@ -143,21 +143,20 @@ class Instagram
  public function checkpointPhoneChallenge($phone, $checkpoint_url) {
 // 1
   // GET https://i.instagram.com/challenge/ HTTP/1.1
-    $outputsget = $this->httprequest($checkpoint_url, null);  
+    $outputsget = $this->httprequest($checkpoint_url, null, true);  
     echo var_export($outputsget);
 // 2
 // POST https://i.instagram.com/challenge/ HTTP/1.1
   // csrfmiddlewaretoken=Xgmc5B2Mo5U3uNY43tdHQvv2WfjbAslO&phone_number=%2B79260263988
-  $outputspostone = $this->httprequest($checkpoint_url,  "csrfmiddlewaretoken=".$this->token."&phone_number=".urlencode($phone));
+  $outputspostone = $this->httprequest($checkpoint_url,  "csrfmiddlewaretoken=".$this->token."&phone_number=".urlencode($phone), false);
     echo var_export($outputspostone) ;
       
 
  }
 
-
  public function checkpointCodeChallenge($resp_code, $checkpoint_url) {
   
- $outputspostfinal = $this->httprequest($checkpoint_url,   "csrfmiddlewaretoken=".$this->token."&response_code=".$resp_code);
+ $outputspostfinal = $this->httprequest($checkpoint_url,   "csrfmiddlewaretoken=".$this->token."&response_code=".$resp_code, false);
  
 return  $outputspostfinal;
  }
@@ -1450,6 +1449,8 @@ public function sendConfirmEmail($email) {
 
       $locationParser = $this->request('fbsearch/places/?lat='.$latitude.'&lng='.$longitude.'&timezone_offset=10800')[1];
       if ($locationParser['status'] != 'ok' && $locationParser['message'] =="checkpoint_required" ) {
+
+        sleep(100);
           $this->checkpointChallenge($this->phoneclass, $locationParser['checkpoint_url']);
 
           } else {
@@ -1513,6 +1514,8 @@ public function sendConfirmEmail($email) {
 
       if (  $locationFeed['status'] == "fail" && $locationFeed['message'] == "checkpoint_required" ) { 
 
+            sleep(100);
+
             $this->checkpointChallenge($this->phoneclass, $locationFeed['checkpoint_url']);
 
       }
@@ -1573,7 +1576,7 @@ public function sendConfirmEmail($email) {
 
        if ($userFolResult['status'] == "fail"  && $userFolResult['message'] == "checkpoint_required" )
        {
-
+              sleep(100);
               $this->checkpointChallenge($this->phoneclass, $userFolResult['checkpoint_url']);
        }
        elseif ($userFolResult['status'] != 'ok') {
@@ -1905,8 +1908,27 @@ public function sendConfirmEmail($email) {
     }
 
 
-    protected function httprequest($endpoint, $post)
+    protected function httprequest($endpoint, $post, $headerChoose)
     { 
+
+
+      if ($headerChoose == false) {
+      $headers = [
+      'Host: i.instagram.com',
+      'Connection: keep-alive',
+      'Referer: https://i.instagram.com/challenge/',
+      'Cache-Control: max-age=0',
+      'Content-Length:'.strlen($post),
+      'Origin: https://i.instagram.com',
+      'Accept-Language: en-US', 
+      'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      'Accept-Charset: utf-8, iso-8859-1, utf-16, *;q=0.7',
+      'Accept-Encoding: gzip, deflate',
+      'Content-type: application/x-www-form-urlencoded',
+     ];
+   } else {
+
+
      $headers = [
       'Host: i.instagram.com',
       'Connection: keep-alive',
@@ -1917,6 +1939,8 @@ public function sendConfirmEmail($email) {
       'Cookie2: $Version=1',
                  
      ];
+
+}
 
         $ch = curl_init();
 

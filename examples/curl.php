@@ -2,11 +2,19 @@
 
 $a = 7;
 
+
+try {
 if ($a > 5) {
-$line = trim(fgets(STDIN));
+// $line = trim(fgets(STDIN));
+ $line = readline("Command: ");
 echo "\nentered -->".$line."\n\n";
 }
  
+    } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+   
+   
 // $txt = 'Алиса Варум';
 // $re1='.*?';	# Non-greedy match on filler
 // $re2='((?:[а-яa-z][a-яa-z]+))';	# Word 1
