@@ -404,9 +404,9 @@ public function usernameSuggestions($email ,$full_name) //not use for now
 
 
       return 'Instagram 8.5.1 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
-// 'Instagram 9.0.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)'
-     // return 'Instagram 8.5.1 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
-  }
+
+
+   }
 
 
     public function generateUUID($type)

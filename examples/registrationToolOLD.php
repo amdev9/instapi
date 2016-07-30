@@ -176,41 +176,41 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	$delay = $time_in_day / $posts_per_day;
 
 ////ADULT////////// 	 
-	// while ($GLOBALS["redis"]->scard("foractionM") == 0) {
+	 while ($GLOBALS["redis"]->scard("detection") == 0) {
 		 // funcgeocoordparse($ilink, $GLOBALS["redis"]);
-		// $influencers_ADULT = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+		$influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 
- 	// 	$availableInf = [];
- 	// 	foreach ($influencers as $ind) {
-		//     if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
-		//    		array_push($availableInf, $ind); 
-		//     }
-		// }
- 	// 	if ( empty($availableInf) == true ) {
- 	// 		$availableInf = $influencers;
- 	// 		$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
- 	// 	} else {
- 	// 		$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
-		// 	$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
- 	// 	}
-		// if(empty ($red)) {
-		// 	try {
-		// 		 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
-		// 	} catch (Exception $e) {
-		// 	    echo $e->getMessage();
-		// 	}
+ 		$availableInf = [];
+ 		foreach ($influencers as $ind) {
+		    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
+		   		array_push($availableInf, $ind); 
+		    }
+		}
+ 		if ( empty($availableInf) == true ) {
+ 			$availableInf = $influencers;
+ 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
+ 		} else {
+ 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
+			$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
+ 		}
+		if(empty ($red)) {
+			try {
+				 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
+			} catch (Exception $e) {
+			    echo $e->getMessage();
+			}
 
-		// } else {
-		// 	try {
-		// 		 $followers = $ilink->getUserFollowers($influencer, $red[0]);
-		// 	} catch (Exception $e) {
-		// 	    echo $e->getMessage();
-		// 	}
-		// }
-		// sleep(10);
-	 //    funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
+		} else {
+			try {
+				 $followers = $ilink->getUserFollowers($influencer, $red[0]);
+			} catch (Exception $e) {
+			    echo $e->getMessage();
+			}
+		}
+		sleep(10);
+	    funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
 
-	// }
+ }
 
  	// $actioner = $GLOBALS["redis"]->spop("detection");
 
@@ -230,25 +230,25 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	//  $GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
 
 
-	if ($GLOBALS["redis"]->scard("detection") == 0) {
-		    funcgeocoordparse($ilink, $GLOBALS["redis"]);
-		     $timetosleep = add_time($delay);      	
-	 		 sleep($timetosleep);	 
-	}		 
+	// if ($GLOBALS["redis"]->scard("detection") == 0) {
+	// 	    funcgeocoordparse($ilink, $GLOBALS["redis"]);
+		   //   $timetosleep = add_time($delay);      	
+	 		 // sleep($timetosleep);	 
+	// }		 
 	 
 	  if ($GLOBALS["redis"]->scard("detection") > 0 ) {
 	
-		    for($t = 0; $t < 51; $t++) {  //TOVARKA
+		    // for($t = 0; $t < 51; $t++) {  //TOVARKA
 
-		    	if 	($GLOBALS["redis"]->scard("detection") == 0 ) {
-				    	funcgeocoordparse($ilink, $GLOBALS["redis"]);
-				}
+		  //   	if 	($GLOBALS["redis"]->scard("detection") == 0 ) {
+				//     	funcgeocoordparse($ilink, $GLOBALS["redis"]);
+				// }
 		    	$actioner = $GLOBALS["redis"]->spop("detection");  
-		    	// if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
-			   		 functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
-				  // }
-			    	echo $next_iteration_time = add_time($delay); //timer
-			   		sleep($next_iteration_time);
+		    // 	// if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
+			   		 // functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
+				  // // }
+			   		echo $next_iteration_time = add_time($delay); //timer
+			    		sleep($next_iteration_time);
 
 					if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  ) {
 					 	$fres = $ilink->follow($actioner);
@@ -261,8 +261,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 				 		}
 
 
-
-			   	 }
+			   	 // }
 			
 	  }
 
@@ -847,11 +846,11 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
           $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
 //$smi_hi
           //////TOVARKA
-	$text = "Добрый день! \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
+	// $text = "Добрый день! $smi_hi \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
 
               //ADULT
-         //  $uname = $GLOBALS["username"];
-         // $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap kik dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $unameStrip94 $smil I am ONLINE and WAITING..";
+          $uname = $GLOBALS["username"];
+         $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $unameStrip94 $smil I am ONLINE and WAITING..";
 
 
  
@@ -931,7 +930,7 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 
 $gender = 2;
-$phone  = "+79057801330"; //"+79855560279";
+$phone  = "+79692308115";// "+79057801330"; //"+79855560279";
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
 $dir    = $romerINSTAPI.'src/'.$profileSetter; 
@@ -1233,12 +1232,14 @@ sleep(6);
 //////////
 
 ///TOVARKA
-		// $usname = $i->searchUsername("__blackmask__"); 
-		// $iduser = $usname['user']['pk'];
-sleep(6);
-		$feedres = $i->getUserFeed("3153238919", $maxid = null, $minTimestamp = null);
-		$ad_media_id = $feedres['items'][mt_rand(9,11)]['pk']; 
+// 		$usname = $i->searchUsername("__blackmask__"); 
+// 		$iduser = $usname['user']['pk'];
+// sleep(6);
+// 		$feedres = $i->getUserFeed("3153238919", $maxid = null, $minTimestamp = null);
+// 		$ad_media_id = $feedres['items'][mt_rand(9,11)]['pk']; 
 //////
+
+		$ad_media_id = 123123;
 		$logoutCounter = 20;
 // sleep(6);
  

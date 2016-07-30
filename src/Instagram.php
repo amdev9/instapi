@@ -61,9 +61,9 @@ class Instagram
       $this->directRecentRecipients();
       $this->discoverAyml();
 //
-      $this->timelineFeed();
-      $this->getv2Inbox();
-      $this->getRecentActivity();
+   //  $this->timelineFeed();
+   //  $this->getv2Inbox();
+   //  $this->getRecentActivity();
 
 
   }
@@ -299,7 +299,63 @@ public function sendConfirmEmail($email) {
 
     protected function timelineFeed()
     {
-        return $this->request('feed/timeline/')[1];
+
+     
+       return $this->request('feed/timeline/')[1];
+      
+    //   $endpoint = 'feed/timeline/?is_prefetch=0&phone_id='.$this->phone_id.'&battery_level=14&timezone_offset=10800&is_charging=0';
+
+    //    $headers = [
+    //     'Connection: close',
+    //     'Accept: */*',
+    //     'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
+    //     'Cookie2: $Version=1',
+    //     'Accept-Language: en-US',
+    //     'X-Google-AD-ID: '.$this->generateUUID(true),
+    //     'X-DEVICE-ID: '.$this->generateUUID(true), 
+    //     'X-IG-INSTALLED-APPS: eyIxIjowLCIyIjowfQ==',
+    //     'X-IG-Connection-Type: WIFI',
+    //     'X-IG-Capabilities: 3QI=',
+
+    // ];
+
+    //     $ch = curl_init();
+
+    //     curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
+    //     curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);//Constants::USER_AGENT);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    //     curl_setopt($ch, CURLOPT_HEADER, true);
+    //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    //     curl_setopt($ch, CURLOPT_VERBOSE, false);
+    //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    //     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    //     curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
+    //     curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
+    //       curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+    //     curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+    //     curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+
+
+    //     // if ($post) {
+    //     //     curl_setopt($ch, CURLOPT_POST, true);
+    //     //     curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+    //     // }
+
+    //     $resp = curl_exec($ch);
+    //     $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    //     $header = substr($resp, 0, $header_len);
+    //     $body = substr($resp, $header_len);
+
+    //     curl_close($ch);
+
+    //     if ($this->debug) {
+    //         echo "REQUEST: $endpoint\n";
+            
+    //         echo "RESPONSE: $body\n\n";
+    //     }
+
+    //     return [$header, json_decode($body, true)];
     }
 
     protected function megaphoneLog()
@@ -1931,6 +1987,7 @@ public function sendConfirmEmail($email) {
       'Accept-Charset: utf-8, iso-8859-1, utf-16, *;q=0.7',
       'Accept-Encoding: gzip, deflate',
       'Content-type: application/x-www-form-urlencoded',
+      'Cookie2: $Version=1',
      ];
    } else {
 
