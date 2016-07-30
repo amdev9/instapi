@@ -60,11 +60,11 @@ class Instagram
       $this->autoCompleteUserList();
       $this->directRecentRecipients();
       $this->discoverAyml();
+//
+      $this->timelineFeed();
+      $this->getv2Inbox();
+      $this->getRecentActivity();
 
-
-      //$this->timelineFeed();
-      //$this->getv2Inbox();
-      //$this->getRecentActivity();
 
   }
 
@@ -289,6 +289,12 @@ public function sendConfirmEmail($email) {
 // &_csrftoken=QxwM1rDI5rb9tge8pfD85sUWZqy18sUq
 // &_uuid=70079fbe-8663-4984-a564-f4e021f762de
 // &num_media=3
+
+
+// GET /api/v1/feed/timeline/?is_prefetch=0&phone_id=65188cf9-c788-4b51-b8c5-e2e9c7b98a03&battery_level=1&timezone_offset=10800&is_charging=0 HTTP/1.1
+
+
+// GET /api/v1/feed/timeline/?phone_id=913d5b20-c76a-42d9-8132-ece7432fb11c&battery_level=45&timezone_offset=10800&is_charging=0 HTTP/1.1
 
 
     protected function timelineFeed()
