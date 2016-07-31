@@ -86,7 +86,7 @@ function functocomment($ilink, $usernamelink)
  		} elseif ($usfeedforcom['status'] == "fail" &&  $usfeedforcom['message'] == "checkpoint_required")  {
 
 
- 				sleep(100);
+ 				
  				//
   				$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $usfeedforcom['checkpoint_url']); // where is sms
 
@@ -147,7 +147,7 @@ function functocomment($ilink, $usernamelink)
 			}
 			elseif ($link['status']== "fail" && $link['message'] == "checkpoint_required")
 			{
-				sleep(100);
+				 
 				$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $link['checkpoint_url']);
 
 		 			 // $resp_code = trim(fgets(STDIN));
@@ -171,44 +171,48 @@ function functocomment($ilink, $usernamelink)
 function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 {
 
+	//z y x . l r i g p a n s . w w w / / : p t t h
+	//"bit.ly/2a5srb1" 
+
 	$time_in_day = 24*60*60;
-	$posts_per_day = 500;//400 		//  direct 500->57    700->34
+	$posts_per_day = 25000;//400 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 ////ADULT////////// 	 
-	 while ($GLOBALS["redis"]->scard("detection") == 0) {
-		 // funcgeocoordparse($ilink, $GLOBALS["redis"]);
-		$influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+	 while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) {
+		  funcgeocoordparse($ilink, $GLOBALS["redis"]);
+		
+		// $influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 
- 		$availableInf = [];
- 		foreach ($influencers as $ind) {
-		    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
-		   		array_push($availableInf, $ind); 
-		    }
-		}
- 		if ( empty($availableInf) == true ) {
- 			$availableInf = $influencers;
- 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
- 		} else {
- 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
-			$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
- 		}
-		if(empty ($red)) {
-			try {
-				 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
+ 	// 	$availableInf = [];
+ 	// 	foreach ($influencers as $ind) {
+		//     if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
+		//    		array_push($availableInf, $ind); 
+		//     }
+		// }
+ 	// 	if ( empty($availableInf) == true ) {
+ 	// 		$availableInf = $influencers;
+ 	// 		$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
+ 	// 	} else {
+ 	// 		$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
+		// 	$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
+ 	// 	}
+		// if(empty ($red)) {
+		// 	try {
+		// 		 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
+		// 	} catch (Exception $e) {
+		// 	    echo $e->getMessage();
+		// 	}
 
-		} else {
-			try {
-				 $followers = $ilink->getUserFollowers($influencer, $red[0]);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
-		}
-		sleep(10);
-	    funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
+		// } else {
+		// 	try {
+		// 		 $followers = $ilink->getUserFollowers($influencer, $red[0]);
+		// 	} catch (Exception $e) {
+		// 	    echo $e->getMessage();
+		// 	}
+		// }
+		 
+	 //    funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
 
  }
 
@@ -236,31 +240,63 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	 		 // sleep($timetosleep);	 
 	// }		 
 	 
-	  if ($GLOBALS["redis"]->scard("detection") > 0 ) {
+	  if ($GLOBALS["redis"]->scard("detection".$usernamelink) > 0 ) {
 	
 		    // for($t = 0; $t < 51; $t++) {  //TOVARKA
 
 		  //   	if 	($GLOBALS["redis"]->scard("detection") == 0 ) {
 				//     	funcgeocoordparse($ilink, $GLOBALS["redis"]);
 				// }
-		    	$actioner = $GLOBALS["redis"]->spop("detection");  
-		    // 	// if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true) {
-			   		 // functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
-				  // // }
-			   		echo $next_iteration_time = add_time($delay); //timer
+		    	$actioner = $GLOBALS["redis"]->spop("detection".$usernamelink);  
+		    	if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true && $GLOBALS["redis"]->scard("detection".$usernamelink) % 10 == 0 ) {
+			   		 functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
+				  }
+			   	
+
+				  	echo $next_iteration_time = add_time($delay); //timer
 			    		sleep($next_iteration_time);
 
-					if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  ) {
-					 	$fres = $ilink->follow($actioner);
-					 	if ($fres['status'] == 'ok') {
-					 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-					 	} elseif ($fres['status'] == 'fail' && isset($fres['message']) && $fres['message'] == 'login_required' ) {
-					 		$ilink->login(true);
+					if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true ) {
+						if ( $GLOBALS["redis"]->scard("followed".$usernamelink) < 590 ||  $GLOBALS["redis"]->scard("followed".$usernamelink) > 610) {
+					 		$fres = $ilink->follow($actioner);
 					 	}
+					 	elseif ($GLOBALS["redis"]->scard("followed".$usernamelink) >= 590 && $GLOBALS["redis"]->scard("followed".$usernamelink) <= 610) {
+					 			sleep(500);
+					 			$fres = $ilink->follow($actioner);
+					 	}
+					 	if ($fres[1]['status'] == 'ok') {
+					 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+					 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
+					 		$ilink->login(true);
+					 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
+							 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $fres[1]['checkpoint_url']);
+				                     echo "\nVerification code sent! >>>>>\n";
+						 			 // $resp_code = trim(fgets(STDIN));
+				                      $resp_code = "";
+						 			   while( ctype_digit($resp_code) != true) {
+										 // $line = readline("Command: ");
+										  $resp_code = readline("Command: ");
+										}
+
+																 			
+
+						 			 echo "\n---->".$resp_code;
+
+						 			$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
+
+						 			echo var_export($results);
+							 	}
+
+							 	else {
+							 			echo var_export($fres);
+
+							 	}
 						echo var_export($fres);
-				 		}
 
 
+					}
+
+					
 			   	 // }
 			
 	  }
@@ -272,8 +308,8 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	// }
 /////////////////////////	
 	
-	echo $next_iteration_time = add_time($delay); //86400
-	sleep($next_iteration_time);
+	// echo $next_iteration_time = add_time($delay); //86400
+	// sleep($next_iteration_time);
 
 	funcrecur($ilink, $usernamelink, $pkuser , $counter, $ad_media_id);
 
@@ -405,7 +441,7 @@ function funcparse($followers, $i, $redis, $influencer)
 {
 
 		$counter = 0;
-		while ($counter < 15) {  
+		while ($counter < 14) {  
 
 			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
 		        
@@ -423,7 +459,7 @@ function funcparse($followers, $i, $redis, $influencer)
 					  {
 					      $word1=$matches[1][0];
 					  }
-				      $redis->sadd("detection", $followers['users'][$iter]['pk'].":".$word1);
+				      $redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk']);//.":".$word1);
 
 
 					 //    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
@@ -506,7 +542,7 @@ function funcparse($followers, $i, $redis, $influencer)
 
 					} else {
 						// $key = "wowrussia";
-						$key = "detection";
+						$key = "detection".$GLOBALS["username"];
 						echo "private:med\n";
 						// need test how to count?
 						if ($followers['users'][$iter]['has_anonymous_profile_picture'] == false ) {
@@ -520,7 +556,7 @@ function funcparse($followers, $i, $redis, $influencer)
 							  }
 								  	 
 
-							$redis->sadd($key, $followers['users'][$iter]['pk'].":".$word1);
+							$redis->sadd($key, $followers['users'][$iter]['pk']);//.":".$word1);
 						}
 					}
 				
@@ -560,7 +596,7 @@ function funcparse($followers, $i, $redis, $influencer)
 				break;
 			}
 			
-			sleep(10);
+			// sleep(1);
 		}
 }
 
@@ -718,7 +754,7 @@ function funcgeocoordparse($i, $redis)
 
 					
 
-					 $redis->sadd("detection", $getl['items'][$num_rank_results]['user']['pk']); //.":".$word1
+					 $redis->sadd("detection".$GLOBALS["username"], $getl['items'][$num_rank_results]['user']['pk']); //.":".$word1
 
 					// $redis->sadd("userpk".$a[0].":".$b[0], $getl['items'][$num_rank_results]['user']['pk'] );
 					}
@@ -742,7 +778,7 @@ function funcgeocoordparse($i, $redis)
 				
 
 				$countertrue = 0;
-				while (isset($getnewl['more_available']) && $getnewl['more_available'] ==true) { // $countertrue < 4
+				while (isset($getnewl['more_available']) && $getnewl['more_available'] ==true && $countertrue < 70) { // $countertrue < 4
 						
 					$tmpgetnewl = $getnewl;
 
@@ -767,7 +803,7 @@ function funcgeocoordparse($i, $redis)
 						  //     $word1=$matches[1][0];
 						  // }
 
-						 $redis->sadd("detection", $foll['users'][$iter]['pk']);//.":".$word1
+						 $redis->sadd("detection".$GLOBALS["username"], $foll['users'][$iter]['pk']);//.":".$word1
 					}
 
 					
@@ -789,7 +825,7 @@ function funcgeocoordparse($i, $redis)
 
 
 
-						 $redis->sadd("detection", $getnewl['items'][$num_results]['user']['pk']);//.":".$word1
+						 $redis->sadd("detection".$GLOBALS["username"], $getnewl['items'][$num_results]['user']['pk']);//.":".$word1
 			
 
 				     }
@@ -831,8 +867,8 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 				$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}"];
 			    $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
 				  $smiles =  ["\u{1F609}", "\u{1F60D}" ];  
-				// $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
-			 //    $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+				 $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+			     $cur = $cursors[mt_rand(0, count($cursors) - 1)];
 			     $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
 			    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
 			 $smil = $smiles[mt_rand(0, count($smiles) - 1)];
@@ -846,11 +882,11 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
           $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
 //$smi_hi
           //////TOVARKA
-	// $text = "Добрый день! $smi_hi \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
+	$text = "Добрый день! $smi_hi \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
 
               //ADULT
           $uname = $GLOBALS["username"];
-         $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $unameStrip94 $smil I am ONLINE and WAITING..";
+         // $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $uname_96 $smil I am ONLINE and WAITING.. $cur";
 
 
  
@@ -876,7 +912,7 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 		 			 	 echo "\n\n**SEND**\n\n";
 		 				$GLOBALS["redis"]->rpush("recieved",  $message_recipient); 
 		 			} elseif ($answer['status']== "fail" && $answer['message'] == "checkpoint_required") {
-		 				sleep(100);
+		 				 
 		 			$i->checkpointPhoneChallenge($GLOBALS["phone"], $answer['checkpoint_url']);
                      echo "\nVerification code sent! >>>>>\n";
 		 			 // $resp_code = trim(fgets(STDIN));
@@ -930,7 +966,7 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 
 $gender = 2;
-$phone  = "+79692308115";// "+79057801330"; //"+79855560279";
+$phone  =  "+79057801330"; //"+79692308115";////"+79855560279";
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
 $dir    = $romerINSTAPI.'src/'.$profileSetter; 
@@ -1123,19 +1159,19 @@ $outputs = $r->fetchHeaders();
      	$redis->sadd("black_proxy",  $proxy);
 
 
-     	// $cured = $i->currentEdit();
-     	// echo var_export($cured);
+  //    	$cured = $i->currentEdit();
+  //    	echo var_export($cured);
 
 
-  //    	 $sendsms = $i->sendSmsCode($phone);
-  //    	 echo var_export($sendsms);
-  //    	 echo "\nVerification code sent! >>>>>\n";
-  //    	 $code_verif = trim(fgets(STDIN));
-  //    	 echo "\n".$code_verif."\n";
+  // //    	 $sendsms = $i->sendSmsCode($phone);
+  // //    	 echo var_export($sendsms);
+  // //    	 echo "\nVerification code sent! >>>>>\n";
+  // //    	 $code_verif = trim(fgets(STDIN));
+  // //    	 echo "\n".$code_verif."\n";
      	 
 
-  //    	 $versms = $i->verifySmsCode($phone, $code_verif);
-  //    	  echo var_export($versms);
+  // //    	 $versms = $i->verifySmsCode($phone, $code_verif);
+  // //    	  echo var_export($versms);
 
 
 		// //edit profile
@@ -1148,7 +1184,7 @@ $outputs = $r->fetchHeaders();
 		//     echo $e->getMessage();
 		// }
 
-		// sleep(6);
+		sleep(6);
 		
 		try {
 		    $i->changeProfilePicture($photo);
@@ -1157,12 +1193,14 @@ $outputs = $r->fetchHeaders();
 		}
 		sleep(3);
 
-		try {
-		    $i->setPrivateAccount();
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-sleep(6);
+// 		try {
+// 		   $prres =  $i->setPrivateAccount();
+// 		   echo  var_export($prres);
+// 		} catch (Exception $e) {
+// 		    echo $e->getMessage();
+// 		}
+// sleep(6);
+
 		// funcgeocoordparse($i, $redis);  // geo coordinates with gender done
  
 		 
@@ -1211,24 +1249,46 @@ sleep(6);
 		// } else {
 			//////// NON THEMATIC ////////
 
+		$caption = "ВНИМАНИЕ! Количество товара со скидкой 50% ограничено.\u{2029} ◾BLACK MASK - самая эффективная маска, созданная для быстрого решения таких проблем, как: \u{2029}⭐воспаления; \u{2029}⭐черные точки; \u{2029}⭐прыщи; \u{2029}⭐расширенные поры и жирный блеск;\u{2029} ⭐тусклый цвет кожи.👧\u{2029}🏻Не имеет возрастных ограничений👵\u{2029}🏻 📩Доставка по России, Казахстану, Украине, Беларуси, Грузии, Киргизии и Армении!\u{2029}▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️ \u{2029}🔥ПОСЛЕДНИЕ ДНИ АКЦИИ - СКИДКА 50%!🔥\u{2029} ▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️ \u{2029}💳Стоимость по акции:\u{2029} 🇷🇺990 руб. / 🇰🇿6400 тенге / 🇺🇦359 грн. / 🇧🇾349000 бел. руб. / 🇬🇪50 лари / 🇰🇬1550 сом / 🇦🇲10000 драм \u{2029}📬 ОПЛАТА ТОЛЬКО ПРИ ПОЛУЧЕНИИ❗️ \u{2029}📝ЧТОБЫ ЗАКАЗАТЬ МАСКУ:\u{2029}  1⃣ Перейдите по ссылке в описании профиля; \u{2029}2⃣ Оставьте свой номер телефона и имя на сайте, нажмите кнопку ЗАКАЗАТЬ; \u{2029}3⃣ Наш менеджер свяжется с Вами в течение 15 минут и уточнит детали заказа, также вы сможете задать все интересующие Вас вопросы, держите телефон включенным 🙋🏼📱 \u{2029}✔️ПРИЯТНОГО ИСПОЛЬЗОВАНИЯ И ЧИСТОЙ КОЖИ! 💁🏻";
+
+		$filesVideo = scandir($dir);
+		foreach ( $filesVideo as $k => $value ) {
+		    $ext = pathinfo($value, PATHINFO_EXTENSION);
+		    if ($ext == "mp4") {//&& $value != "1.jpg
+				try {
+				    $i->uploadVideo($dir.'/'.$value, $caption); // use the same caption
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+
+				sleep(10);
+		    }
+		    elseif ($ext == "jpg" && $value != "1.jpg") {
+				try {
+				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+
+				sleep(10);
+		    }
+		}
+
+		echo "video and photo downloaded!\n";
+
+		 
+
+
 		// $files1 = scandir($dir);
 		// foreach ( $files1 as $k => $value ) {
 		//     $ext = pathinfo($value, PATHINFO_EXTENSION);
-		//     if ($ext == "jpg" && $value != "1.jpg") {
-		// 		try {
-		// 		    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
-		// 		} catch (Exception $e) {
-		// 		    echo $e->getMessage();
-		// 		}
-
-		// 		sleep(10);
-		//     }
+		   
 		// }
 
 		// echo "photo downloaded!\n";
 ////ADULT
-		// $feedres = $i->getSelfUserFeed();
-		// $ad_media_id  = $feedres['items'][0]['pk'];
+		$feedres = $i->getSelfUserFeed();
+		$ad_media_id  = $feedres['items'][0]['pk'];
 //////////
 
 ///TOVARKA
@@ -1239,7 +1299,7 @@ sleep(6);
 // 		$ad_media_id = $feedres['items'][mt_rand(9,11)]['pk']; 
 //////
 
-		$ad_media_id = 123123;
+		// $ad_media_id = 123123;
 		$logoutCounter = 20;
 // sleep(6);
  

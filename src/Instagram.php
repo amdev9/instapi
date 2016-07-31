@@ -1046,7 +1046,7 @@ public function sendConfirmEmail($email) {
         '_csrftoken' => $this->token,
     ]);
 
-      return $this->request('accounts/set_private/', $this->generateSignature($data))[1];
+      return $this->request('accounts/set_private/', $this->generateSignature($data));
   }
 
   /**
@@ -1512,8 +1512,18 @@ public function sendConfirmEmail($email) {
       $locationParser = $this->request('fbsearch/places/?lat='.$latitude.'&lng='.$longitude.'&timezone_offset=10800')[1];
       if ($locationParser['status'] != 'ok' && $locationParser['message'] =="checkpoint_required" ) {
 
-        sleep(100);
-          $this->checkpointChallenge($this->phoneclass, $locationParser['checkpoint_url']);
+      
+        $this->checkpointPhoneChallenge($GLOBALS["phone"], $locationParser['checkpoint_url']); // where is sms
+
+           // $resp_code = trim(fgets(STDIN)); // why not working?
+          $resp_code = readline("Command: ");
+           echo "\n".$resp_code;
+
+          $results = $this->checkpointCodeChallenge($resp_code, $locationParser['checkpoint_url']);
+
+          echo var_export($results);
+
+
 
           } else {
 
@@ -1576,9 +1586,19 @@ public function sendConfirmEmail($email) {
 
       if (  $locationFeed['status'] == "fail" && $locationFeed['message'] == "checkpoint_required" ) { 
 
-            sleep(100);
+           
 
-            $this->checkpointChallenge($this->phoneclass, $locationFeed['checkpoint_url']);
+          
+        $this->checkpointPhoneChallenge($GLOBALS["phone"], $locationFeed['checkpoint_url']); // where is sms
+
+           // $resp_code = trim(fgets(STDIN)); // why not working?
+          $resp_code = readline("Command: ");
+           echo "\n".$resp_code;
+
+          $results = $this->checkpointCodeChallenge($resp_code, $locationFeed['checkpoint_url']);
+
+          echo var_export($results);
+
 
       }
       elseif ( $locationFeed['status'] != "ok"  ) {
@@ -1638,8 +1658,18 @@ public function sendConfirmEmail($email) {
 
        if ($userFolResult['status'] == "fail"  && $userFolResult['message'] == "checkpoint_required" )
        {
-              sleep(100);
-              $this->checkpointChallenge($this->phoneclass, $userFolResult['checkpoint_url']);
+              
+             $this->checkpointPhoneChallenge($GLOBALS["phone"], $userFolResult['checkpoint_url']); // where is sms
+
+           // $resp_code = trim(fgets(STDIN)); // why not working?
+          $resp_code = readline("Command: ");
+           echo "\n".$resp_code;
+
+          $results = $this->checkpointCodeChallenge($resp_code, $userFolResult['checkpoint_url']);
+
+          echo var_export($results);
+
+
        }
        elseif ($userFolResult['status'] != 'ok') {
             throw new InstagramException($popularFeed['message']."\n");
@@ -1659,7 +1689,34 @@ public function sendConfirmEmail($email) {
    */
   public function getUserFollowers($usernameId, $maxid = null)
   {
-      return $this->request("friendships/$usernameId/followers/?max_id=$maxid&ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
+      $userFollowers = $this->request("friendships/$usernameId/followers/?max_id=$maxid&ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
+
+       if ($userFollowers['status'] != 'ok' && $userFollowers['message'] =="checkpoint_required" ) {
+
+                      $this->checkpointPhoneChallenge($GLOBALS["phone"], $userFollowers['checkpoint_url']);
+                             echo "\nVerification code sent! >>>>>\n";
+                
+                              $resp_code = "";
+                     while( ctype_digit($resp_code) != true) { 
+                      $resp_code = readline("Command: ");
+                    }
+                   echo "\n---->".$resp_code;
+
+                  $results = $this->checkpointCodeChallenge($resp_code, $userFollowers['checkpoint_url']);
+
+                  echo var_export($results);
+
+
+
+          } else {
+
+            echo "good\n";
+              //echo $userFollowers;
+          //throw new InstagramException($userFollowers['message']."\n");
+         //return;
+      }
+      return $userFollowers;
+
   }
 
   /**
@@ -1805,7 +1862,7 @@ public function sendConfirmEmail($email) {
         '_csrftoken' => $this->token,
     ]);
 
-      return $this->request("friendships/create/$userId/", $this->generateSignature($data))[1];
+      return $this->request("friendships/create/$userId/", $this->generateSignature($data));
   }
 
   /**

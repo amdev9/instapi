@@ -1,19 +1,55 @@
 <?php
 
-$a = 7;
-
-
-try {
-if ($a > 5) {
-// $line = trim(fgets(STDIN));
- $line = readline("Command: ");
-echo "\nentered -->".$line."\n\n";
-}
  
-    } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-   
+
+ $emojstring = "💦";
+
+ echo $emojstring;
+ echo json_decode($emojstring);
+
+ echo "\u{1F4A6}";
+
+
+// $number = 4;
+//  if($number %4 == 0) {
+// //    echo "wer";
+// // }
+
+// function checkFFMPEG()
+// {
+//     @exec('ffmpeg -version 2>&1', $output, $returnvalue);
+//     if ($returnvalue === 0) {
+//         return 'ffmpeg';
+//     }
+//     @exec('avconv -version 2>&1', $output, $returnvalue);
+//     if ($returnvalue === 0) {
+//         return 'avconv';
+//     }
+
+//     return false;
+// }
+
+
+// $ffmpeg = checkFFMPEG();
+//     if ($ffmpeg) {
+
+//  $time = exec("$ffmpeg -i /Users/alex/home/dev/rails/instagram/InstAPI/src/9/lamberis\ george\ instagram_BHMTX6rDcTj.mp4 2>&1 | grep 'Duration' | cut -d ' ' -f 4");
+//         $duration = explode(':', $time);
+//         $seconds = $duration[0] * 3600 + $duration[1] * 60 + round($duration[2]);
+
+// echo $seconds;
+// }
+ 
+ 
+// // $line = trim(fgets(STDIN));
+//   $line = "";
+//   while( ctype_digit($line) != true) {
+//  $line = readline("Command: ");
+
+// }
+
+// echo "\nentered -->".$line."\n\n";
+ 
    
 // $txt = 'Алиса Варум';
 // $re1='.*?';	# Non-greedy match on filler
