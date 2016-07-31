@@ -180,39 +180,41 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 
 ////ADULT////////// 	 
 	 while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) {
-		  funcgeocoordparse($ilink, $GLOBALS["redis"]);
+		  // funcgeocoordparse($ilink, $GLOBALS["redis"]);
+		
+		$influencers = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131",   "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
 		
 		// $influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 
- 	// 	$availableInf = [];
- 	// 	foreach ($influencers as $ind) {
-		//     if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
-		//    		array_push($availableInf, $ind); 
-		//     }
-		// }
- 	// 	if ( empty($availableInf) == true ) {
- 	// 		$availableInf = $influencers;
- 	// 		$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
- 	// 	} else {
- 	// 		$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
-		// 	$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
- 	// 	}
-		// if(empty ($red)) {
-		// 	try {
-		// 		 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
-		// 	} catch (Exception $e) {
-		// 	    echo $e->getMessage();
-		// 	}
+ 		$availableInf = [];
+ 		foreach ($influencers as $ind) {
+		    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
+		   		array_push($availableInf, $ind); 
+		    }
+		}
+ 		if ( empty($availableInf) == true ) {
+ 			$availableInf = $influencers;
+ 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
+ 		} else {
+ 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
+			$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
+ 		}
+		if(empty ($red)) {
+			try {
+				 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
+			} catch (Exception $e) {
+			    echo $e->getMessage();
+			}
 
-		// } else {
-		// 	try {
-		// 		 $followers = $ilink->getUserFollowers($influencer, $red[0]);
-		// 	} catch (Exception $e) {
-		// 	    echo $e->getMessage();
-		// 	}
-		// }
+		} else {
+			try {
+				 $followers = $ilink->getUserFollowers($influencer, $red[0]);
+			} catch (Exception $e) {
+			    echo $e->getMessage();
+			}
+		}
 		 
-	 //    funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
+	    funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
 
  }
 
@@ -222,16 +224,16 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
  	// functofollow($ilink, $usernamelink, $actioner);	 
 ////.......//////////
 
-	// if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
-	//  	for($t = 0; $t < 6; $t++) {  //expressive spam 12 OK no sleep
-	// 		if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
-	// 			functocomment($ilink, $usernamelink);   
-	// 			$timetosleep = add_time($delay);      	
-	// 		 	sleep($timetosleep);
-	// 		}
-	// 	}
-	// }
-	//  $GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
+	if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
+	 	for($t = 0; $t < 6; $t++) {  //expressive spam 12 OK no sleep
+			if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
+				functocomment($ilink, $usernamelink);   
+				$timetosleep = add_time($delay*10);      	
+			 	sleep($timetosleep);
+			}
+		}
+	}
+	 $GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
 
 
 	// if ($GLOBALS["redis"]->scard("detection") == 0) {
@@ -881,11 +883,15 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
   		  $smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{270B}"];
           $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
 //$smi_hi
+           $uname = $GLOBALS["username"];
           //////TOVARKA
-	$text = "Добрый день! $smi_hi \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
+	// $text = "Добрый день! $smi_hi \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
+
+	$text = "Добрый день! $smi_hi \u{2029}\u{2757} CREST 3D WHITE - ТОЛЬКО САМОЕ ЛУЧШЕЕ, ДЛЯ ВАШЕЙ УЛЫБКИ \u{1F604} \u{1F444} \u{1F44D} \u{2029} Самая выгодная цена в России на оригинальную продукцию Crest 3D White из США \u{2029} Все товары сертифицированные в РФ! \u{2029} \u{1F680} Доставка по всей России! \u{2029} Оформляйте заказы на нашем сайте\u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @3dwhite.RUS  \u{1F448}\u{2029}\u{1F449} @3dwhite.RUS  \u{1F448}\u{2029}\u{1F449} @3dwhite.RUS \u{1F448}";
+
 
               //ADULT
-          $uname = $GLOBALS["username"];
+         
          // $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $uname_96 $smil I am ONLINE and WAITING.. $cur";
 
 
