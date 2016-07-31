@@ -9,8 +9,9 @@ class Constants
     
     const API_URL = 'https://i.instagram.com/api/v1/';
     
-    const USER_AGENT = 'Instagram 8.5.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
-    const IG_SIG_KEY = 'b5d839444818714bdab3e288e6da9b515f85b000b6e6b452552bfd399cb56cf0';
+    const USER_AGENT = 'Instagram 8.5.2 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
+    // const IG_SIG_KEY = 'b5d839444818714bdab3e288e6da9b515f85b000b6e6b452552bfd399cb56cf0';
+    const IG_SIG_KEY = '3e0fbc3ab2b2a6b3dbd5f5303dc26cb8d39636291ea9da820283a275d070bd98';
  	// const VERSION = '9.0.0';
     // const IG_SIG_KEY = '9e59332042772deb45117050a9d9065a9cf0c188a8022376c2848b5a5d9a4059';
 
