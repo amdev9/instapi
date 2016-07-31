@@ -60,10 +60,10 @@ class Instagram
       $this->autoCompleteUserList();
       $this->directRecentRecipients();
       $this->discoverAyml();
-//
-   //  $this->timelineFeed();
-   //  $this->getv2Inbox();
-   //  $this->getRecentActivity();
+///////
+    $this->timelineFeed(); //
+    $this->getv2Inbox();    //
+    $this->getRecentActivity();     //
 
 
   }
