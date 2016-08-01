@@ -174,6 +174,8 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 {
 
 	//z y x . l r i g p a n s . w w w / / : p t t h
+	// a t s n i = w & 3 2 2 7 1 0 1 = k n l & 5 5 2 5 5 = f e r ? / 3 e t i h w t s e r c / u r . s d o o o g - s l a e r / / : p t t h
+	
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
@@ -220,29 +222,29 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 
  }
 
- 	// $actioner = $GLOBALS["redis"]->spop("detection");
+ 	$actioner = $GLOBALS["redis"]->spop("detection");
 
  	
  	// functofollow($ilink, $usernamelink, $actioner);	 
 ////.......//////////
 
-	// if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
-	 	 // for($t = 0; $t < 15; $t++) {  //expressive spam 12 OK no sleep
+	if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
+	 	  for($t = 0; $t < 12; $t++) {  //expressive spam 12 OK no sleep
 			if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
 				functocomment($ilink, $usernamelink);   
 				$timetosleep = add_time($delay*10);      	
 			 	sleep($timetosleep);
 			}
-		// }
+		}
 	// }
 	 $GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
 
 
-	// if ($GLOBALS["redis"]->scard("detection") == 0) {
-	// 	    funcgeocoordparse($ilink, $GLOBALS["redis"]);
-		   //   $timetosleep = add_time($delay);      	
-	 		 // sleep($timetosleep);	 
-	// }		 
+	// // if ($GLOBALS["redis"]->scard("detection") == 0) {
+	// // 	    funcgeocoordparse($ilink, $GLOBALS["redis"]);
+	// 	   //   $timetosleep = add_time($delay);      	
+	//  		 // sleep($timetosleep);	 
+	// // }		 
 	 
 	  if ($GLOBALS["redis"]->scard("detection".$usernamelink) > 0 ) {
 	
@@ -251,6 +253,8 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 		  //   	if 	($GLOBALS["redis"]->scard("detection") == 0 ) {
 				//     	funcgeocoordparse($ilink, $GLOBALS["redis"]);
 				// }
+
+
 		    	$actioner = $GLOBALS["redis"]->spop("detection".$usernamelink);  
 		    	if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true && $GLOBALS["redis"]->scard("detection".$usernamelink) % 17 == 0 ) {
 			   		 functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
@@ -601,9 +605,49 @@ function funcparse($followers, $i, $redis, $influencer)
 }
 
 
-function hashtagparse($hashtag, $i, $redis)
+function hashtagparse($getl, $i, $redis, $hashtag)
 {
-	$getl = $i->getHashtagFeed($hashtag, $maxid = null);
+
+///
+	while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) {
+		  // funcgeocoordparse($ilink, $GLOBALS["redis"]);
+		
+		$hashtags = [ "pokemongo", "pokemon" ];
+
+ 		$availableHashtags = [];
+ 		foreach ($influencers as $ind) {
+		    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
+		   		array_push($availableHashtags, $ind); 
+		    }
+		}
+ 		if ( empty($availableHashtags) == true ) {
+ 			$availableHashtags = $hashtags;
+ 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)]; 
+ 		} else {
+ 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)];
+			$red = $GLOBALS["redis"]->lrange("$hashtag:max_id", -1, -1);
+ 		}
+		if(empty ($red)) {
+			try {
+				 $hashtagers = $ilink->getHashtagFeed($hashtag, $maxid = null);
+			} catch (Exception $e) {
+			    echo $e->getMessage();
+			}
+
+		} else {
+			try {
+				 $hashtagers = $ilink->getHashtagFeed($hashtag, $red[0]);
+			} catch (Exception $e) {
+			    echo $e->getMessage();
+			}
+		}
+	   hashtagparse($hashtagers, $i, $GLOBALS["redis"], $hashtag);
+
+ }
+
+ /////
+
+	//$getl = $i->getHashtagFeed($hashtag, $maxid = null);
 
 	        $num_rank_results =0;
 	        while ($num_rank_results < $getl['num_results']) {
@@ -614,7 +658,7 @@ function hashtagparse($hashtag, $i, $redis)
 	          }
 	          $num_rank_results++;
 	        } 
-	        sleep(7);
+	        sleep(1);
 
 	        if ($getl['more_available'] ==true ) {
 	          $next_next_max_id = $getl['next_max_id'];
@@ -626,7 +670,7 @@ function hashtagparse($hashtag, $i, $redis)
 	        }
 
 	        $countertrue = 0;
-	        while (isset($getnewl['more_available']) && $getnewl['more_available'] ==true) {  
+	        while (isset($getnewl['more_available']) && $getnewl['more_available'] ==true && $countertrue < 70) {  
 	            $tmpgetnewl = $getnewl;
 
 	            $num_results = 0;
@@ -642,7 +686,7 @@ function hashtagparse($hashtag, $i, $redis)
 	            sleep(7);
 	            $getnewl = $i->getHashtagFeed( $hashtag, $tmpgetnewl['next_max_id']);
 
-	            $redis->rpush($hashtag.":feed_id",  $tmpgetnewl['next_max_id'] ); 
+	            $redis->rpush($hashtag.":max_id",  $tmpgetnewl['next_max_id'] ); 
 
 	            $countertrue++;
 	      }
@@ -1184,8 +1228,8 @@ $outputs = $r->fetchHeaders();
 		// //edit profile
 		try { 
 			$GLOBALS["biography"] = str_replace( "_username" , explode(" ",$first_name)[0]  , $GLOBALS["biography"] );
-			$GLOBALS["first_name"] = "🔵 Отбеливающие Полоски 🔵";
-			$GLOBALS["biography"] =  "3D CREST 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении 👄🔹👄🔹👄. 👇🏽ЗАКАЗАТЬ👇🏽";
+			// $GLOBALS["first_name"] = "🔵 Отбеливающие Полоски 🔵";
+			// $GLOBALS["biography"] =  "3D CREST 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении 👄🔹👄🔹👄. 👇🏽ЗАКАЗАТЬ👇🏽";
 		    $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
 		} catch (Exception $e) {
@@ -1256,8 +1300,9 @@ $outputs = $r->fetchHeaders();
 			
 		// } else {
 			//////// NON THEMATIC ////////
+		$caption = "No app download required you just need a phone number!";
 
-		$caption = "💎Заказать Crest3DWhite можно перейдя по ссылке наверху 👆\u{2029}  На сайте Вы должны написать ФИО и номер телефона и нажать на ЗАКАЗАТЬ \u{2029} в течении 10 минут наш оператор Вам позвонит \u{2029} 💎Гарантированное отбеливание зубов за 1 неделю  \u{2029} 💎Безвредно для зубов  \u{2029} 💎Результат после первого применения  \u{2029} 💸Оплата заказа при получении на почте.  \u{2029} Получил - проверил - оплатил!  \u{2029}. \u{2029}. \u{2029}. \u{2029} #3dwhite.RUS #3dwhite_RUS #3dwhitecrest #3dcrest#3d#crestwhitestrips#отбеливающие_полоски #отбеливание#зубы#отбеливаниезубов #3dcrest#3дкрест#улыбка#отбеливающиеполоски#белыезубы#красиваяулыбка#красивыезубы#отбеливающаяпаста#россия#сша#домашнееотбеливание#белыезубки#белоснежнаяулубка#красота #crest#3dcrest #white_3d#москва #spb#полоскикрест";
+		// $caption = "💎Заказать Crest3DWhite можно перейдя по ссылке наверху 👆\u{2029}  На сайте Вы должны написать ФИО и номер телефона и нажать на ЗАКАЗАТЬ \u{2029} в течении 10 минут наш оператор Вам позвонит \u{2029} 💎Гарантированное отбеливание зубов за 1 неделю  \u{2029} 💎Безвредно для зубов  \u{2029} 💎Результат после первого применения  \u{2029} 💸Оплата заказа при получении на почте.  \u{2029} Получил - проверил - оплатил!  \u{2029}. \u{2029}. \u{2029}. \u{2029} #3dwhite.RUS #3dwhite_RUS #3dwhitecrest #3dcrest#3d#crestwhitestrips#отбеливающие_полоски #отбеливание#зубы#отбеливаниезубов #3dcrest#3дкрест#улыбка#отбеливающиеполоски#белыезубы#красиваяулыбка#красивыезубы#отбеливающаяпаста#россия#сша#домашнееотбеливание#белыезубки#белоснежнаяулубка#красота #crest#3dcrest #white_3d#москва #spb#полоскикрест";
 
 		// $caption = "ВНИМАНИЕ! Количество товара со скидкой 50% ограничено.\u{2029} ◾BLACK MASK - самая эффективная маска, созданная для быстрого решения таких проблем, как: \u{2029}⭐воспаления; \u{2029}⭐черные точки; \u{2029}⭐прыщи; \u{2029}⭐расширенные поры и жирный блеск;\u{2029} ⭐тусклый цвет кожи.👧\u{2029}🏻Не имеет возрастных ограничений👵\u{2029}🏻 📩Доставка по России, Казахстану, Украине, Беларуси, Грузии, Киргизии и Армении!\u{2029}▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️ \u{2029}🔥ПОСЛЕДНИЕ ДНИ АКЦИИ - СКИДКА 50%!🔥\u{2029} ▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️ \u{2029}💳Стоимость по акции:\u{2029} 🇷🇺990 руб. / 🇰🇿6400 тенге / 🇺🇦359 грн. / 🇧🇾349000 бел. руб. / 🇬🇪50 лари / 🇰🇬1550 сом / 🇦🇲10000 драм \u{2029}📬 ОПЛАТА ТОЛЬКО ПРИ ПОЛУЧЕНИИ❗️ \u{2029}📝ЧТОБЫ ЗАКАЗАТЬ МАСКУ:\u{2029}  1⃣ Перейдите по ссылке в описании профиля; \u{2029}2⃣ Оставьте свой номер телефона и имя на сайте, нажмите кнопку ЗАКАЗАТЬ; \u{2029}3⃣ Наш менеджер свяжется с Вами в течение 15 минут и уточнит детали заказа, также вы сможете задать все интересующие Вас вопросы, держите телефон включенным 🙋🏼📱 \u{2029}✔️ПРИЯТНОГО ИСПОЛЬЗОВАНИЯ И ЧИСТОЙ КОЖИ! 💁🏻";
 
@@ -1318,11 +1363,11 @@ $outputs = $r->fetchHeaders();
  		 // $pokem = $i->getHashtagFeed("pokemongo", $maxid = null);
  		 // echo var_export($pokem);
 
- 		 // hashtagparse("pokemongo",$i, $redis);
+ 		 hashtagparse("pokemongo",$i, $redis);
 
 
  
-	    funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
+	     funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
 		 
 	// }
 
