@@ -191,7 +191,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 		$hashtags = [ "pokemongo", "pokemon" ];
 
  		$availableHashtags = [];
- 		foreach ($influencers as $ind) {
+ 		foreach ($hashtags as $ind) {
 		    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
 		   		array_push($availableHashtags, $ind); 
 		    }
