@@ -217,7 +217,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 			    echo $e->getMessage();
 			}
 		}
-	   hashtagparse($hashtagers, $i, $GLOBALS["redis"], $hashtag);
+	   hashtagparse($hashtagers, $ilink, $GLOBALS["redis"], $hashtag);
 
  }
 ////ADULT////////// 	 
@@ -1360,11 +1360,7 @@ $outputs = $r->fetchHeaders();
  
 
 	 	 
- 		 // $pokem = $i->getHashtagFeed("pokemongo", $maxid = null);
- 		 // echo var_export($pokem);
-
- 		 hashtagparse("pokemongo",$i, $redis);
-
+ 
 
  
 	     funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
