@@ -133,7 +133,7 @@ function functocomment($ilink, $usernamelink)
 	 		// $att = $attention[mt_rand(0, count($smiles) - 1)];
 	 		$hearts = ["\u{1F49D}","\u{1F49B}","\u{1F49C}","\u{1F49A}"];  
 	 		$heart = $hearts[mt_rand(0, count($hearts) - 1)];
-	 		$flag = "\u{1F1FA}";
+	 		$flag = "\u{1F1F8}";
 	 		$mouth = "\u{1F444}";
 	  		$messageFinal = "$heart $mouth $mouth $commenttex $flag $flag $flag"; //$heart $heart $heart";
 
@@ -227,7 +227,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 ////.......//////////
 
 	if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
-	 	for($t = 0; $t < 6; $t++) {  //expressive spam 12 OK no sleep
+	 	for($t = 0; $t < 10; $t++) {  //expressive spam 12 OK no sleep
 			if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
 				functocomment($ilink, $usernamelink);   
 				$timetosleep = add_time($delay*10);      	
@@ -265,7 +265,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 					 		$fres = $ilink->follow($actioner);
 					 	}
 					 	elseif ($GLOBALS["redis"]->scard("followed".$usernamelink) >= 590 && $GLOBALS["redis"]->scard("followed".$usernamelink) <= 610) {
-					 			sleep(500);
+					 			sleep(50);
 					 			$fres = $ilink->follow($actioner);
 					 	}
 					 	if ($fres[1]['status'] == 'ok') {
