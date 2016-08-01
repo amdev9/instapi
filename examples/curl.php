@@ -1,13 +1,14 @@
 <?php
 
  
+echo count($argv);
 
- $emojstring = "💦";
+ // $emojstring = "💦";
 
- echo $emojstring;
- echo json_decode($emojstring);
+ // echo $emojstring;
+ // echo json_decode($emojstring);
 
- echo "\u{1F4A6}";
+ // echo "\u{1F4A6}";
 
 
 // $number = 4;
