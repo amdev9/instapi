@@ -683,7 +683,7 @@ function hashtagparse($getl, $i, $redis, $hashtag)
 	             $num_results++;
 	            }
 
-	            sleep(7);
+	            sleep(1);
 	            $getnewl = $i->getHashtagFeed( $hashtag, $tmpgetnewl['next_max_id']);
 
 	            $redis->rpush($hashtag.":max_id",  $tmpgetnewl['next_max_id'] ); 
