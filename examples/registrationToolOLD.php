@@ -182,45 +182,84 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	$posts_per_day = 25000;//400 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
-////ADULT////////// 	 
-	 while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) {
+
+////HASHTAGS////////
+
+	while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) {
 		  // funcgeocoordparse($ilink, $GLOBALS["redis"]);
 		
-		$influencers = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131",   "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
+		$hashtags = [ "pokemongo", "pokemon" ];
 
-		// $influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
-
- 		$availableInf = [];
+ 		$availableHashtags = [];
  		foreach ($influencers as $ind) {
 		    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
-		   		array_push($availableInf, $ind); 
+		   		array_push($availableHashtags, $ind); 
 		    }
 		}
- 		if ( empty($availableInf) == true ) {
- 			$availableInf = $influencers;
- 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
+ 		if ( empty($availableHashtags) == true ) {
+ 			$availableHashtags = $hashtags;
+ 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)]; 
  		} else {
- 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
-			$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
+ 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)];
+			$red = $GLOBALS["redis"]->lrange("$hashtag:max_id", -1, -1);
  		}
 		if(empty ($red)) {
 			try {
-				 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
+				 $hashtagers = $ilink->getHashtagFeed($hashtag, $maxid = null);
 			} catch (Exception $e) {
 			    echo $e->getMessage();
 			}
 
 		} else {
 			try {
-				 $followers = $ilink->getUserFollowers($influencer, $red[0]);
+				 $hashtagers = $ilink->getHashtagFeed($hashtag, $red[0]);
 			} catch (Exception $e) {
 			    echo $e->getMessage();
 			}
 		}
-		 
-	    funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
+	   hashtagparse($hashtagers, $i, $GLOBALS["redis"], $hashtag);
 
  }
+////ADULT////////// 	 
+	//  while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) {
+	// 	  // funcgeocoordparse($ilink, $GLOBALS["redis"]);
+		
+	// 	$influencers = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131",   "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
+
+	// 	// $influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+
+ // 		$availableInf = [];
+ // 		foreach ($influencers as $ind) {
+	// 	    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
+	// 	   		array_push($availableInf, $ind); 
+	// 	    }
+	// 	}
+ // 		if ( empty($availableInf) == true ) {
+ // 			$availableInf = $influencers;
+ // 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
+ // 		} else {
+ // 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
+	// 		$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
+ // 		}
+	// 	if(empty ($red)) {
+	// 		try {
+	// 			 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
+	// 		} catch (Exception $e) {
+	// 		    echo $e->getMessage();
+	// 		}
+
+	// 	} else {
+	// 		try {
+	// 			 $followers = $ilink->getUserFollowers($influencer, $red[0]);
+	// 		} catch (Exception $e) {
+	// 		    echo $e->getMessage();
+	// 		}
+	// 	}
+		 
+	//     funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
+
+ // }
+////////////////
 
  	$actioner = $GLOBALS["redis"]->spop("detection");
 
@@ -228,16 +267,16 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
  	// functofollow($ilink, $usernamelink, $actioner);	 
 ////.......//////////
 
-	if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
-	 	  for($t = 0; $t < 12; $t++) {  //expressive spam 12 OK no sleep
-			if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
-				functocomment($ilink, $usernamelink);   
-				$timetosleep = add_time($delay*10);      	
-			 	sleep($timetosleep);
-			}
-		}
-	// }
-	 $GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
+	// if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
+	//  	  for($t = 0; $t < 12; $t++) {  //expressive spam 12 OK no sleep
+	// 		if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
+	// 			functocomment($ilink, $usernamelink);   
+	// 			$timetosleep = add_time($delay*10);      	
+	// 		 	sleep($timetosleep);
+	// 		}
+	// 	}
+			// }
+	 //$GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
 
 
 	// // if ($GLOBALS["redis"]->scard("detection") == 0) {
@@ -607,45 +646,6 @@ function funcparse($followers, $i, $redis, $influencer)
 
 function hashtagparse($getl, $i, $redis, $hashtag)
 {
-
-///
-	while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) {
-		  // funcgeocoordparse($ilink, $GLOBALS["redis"]);
-		
-		$hashtags = [ "pokemongo", "pokemon" ];
-
- 		$availableHashtags = [];
- 		foreach ($influencers as $ind) {
-		    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
-		   		array_push($availableHashtags, $ind); 
-		    }
-		}
- 		if ( empty($availableHashtags) == true ) {
- 			$availableHashtags = $hashtags;
- 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)]; 
- 		} else {
- 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)];
-			$red = $GLOBALS["redis"]->lrange("$hashtag:max_id", -1, -1);
- 		}
-		if(empty ($red)) {
-			try {
-				 $hashtagers = $ilink->getHashtagFeed($hashtag, $maxid = null);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
-
-		} else {
-			try {
-				 $hashtagers = $ilink->getHashtagFeed($hashtag, $red[0]);
-			} catch (Exception $e) {
-			    echo $e->getMessage();
-			}
-		}
-	   hashtagparse($hashtagers, $i, $GLOBALS["redis"], $hashtag);
-
- }
-
- /////
 
 	//$getl = $i->getHashtagFeed($hashtag, $maxid = null);
 
