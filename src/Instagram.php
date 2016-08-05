@@ -2039,11 +2039,12 @@ public function sendConfirmEmail($email) {
       'Origin: https://i.instagram.com',
       'Accept-Language: en-US', 
       'Accept: */*',
-      'Accept-Charset: utf-8, iso-8859-1, utf-16, *;q=0.7',
-      'Accept-Encoding: gzip, deflate',
-      'Content-type: application/x-www-form-urlencoded',
+      'Content-Type: application/x-www-form-urlencoded',
       'Cookie2: $Version=1',
      ];
+
+     //  'Accept-Charset: utf-8, iso-8859-1, utf-16, *;q=0.7',
+     
    } else {
 
      $headers = [
@@ -2052,7 +2053,6 @@ public function sendConfirmEmail($email) {
       'Content-Length:'.strlen($post),
       'Accept: */*',
       'Accept-Language: en-US', 
-      'Accept-Encoding: gzip, deflate',
       'Cookie2: $Version=1',        
      ];
 
