@@ -145,6 +145,7 @@ class Instagram
   // GET https://i.instagram.com/challenge/ HTTP/1.1
     $outputsget = $this->httprequest($checkpoint_url, null, true);  
     echo var_export($outputsget);
+    sleep(5);
 // 2
 // POST https://i.instagram.com/challenge/ HTTP/1.1
   // csrfmiddlewaretoken=Xgmc5B2Mo5U3uNY43tdHQvv2WfjbAslO&phone_number=%2B79260263988
@@ -2029,13 +2030,10 @@ public function sendConfirmEmail($email) {
 
     protected function httprequest($endpoint, $post, $headerChoose)
     { 
-
-
       if ($headerChoose == false) {
       $headers = [
       'Host: i.instagram.com',
       'Connection: keep-alive',
-      'Referer: https://i.instagram.com/challenge/',
       'Content-Length:'.strlen($post),
       'Cache-Control: max-age=0',
       'Origin: https://i.instagram.com',
@@ -2055,8 +2053,7 @@ public function sendConfirmEmail($email) {
       'Accept: */*',
       'Accept-Language: en-US', 
       'Accept-Encoding: gzip, deflate',
-      'Cookie2: $Version=1',
-                 
+      'Cookie2: $Version=1',        
      ];
 
 }
@@ -2067,12 +2064,15 @@ public function sendConfirmEmail($email) {
         // curl_setopt($ch, CURLINFO_HEADER_OUT, TRUE);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->UA ); //Constants::USER_AGENT); //// 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+         curl_setopt($ch, CURLOPT_REFERER , 'https://i.instagram.com/challenge/');
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);//true 
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); //need test
         //new
         curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
+          curl_setopt($ch, CURLOPT_AUTOREFERER, true); 
         // new
+
         curl_setopt($ch, CURLOPT_VERBOSE, false);
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //need test added
@@ -2083,13 +2083,13 @@ public function sendConfirmEmail($email) {
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
 
 
-        if (file_exists($this->IGDataPath."$this->username-cookies.dat")) {
+        // if (file_exists($this->IGDataPath."$this->username-cookies.dat")) {
             curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
             curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
-        } else {
-            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat'); //need fix $this->device_id
-            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');   //need fix $this->device_id
-        }
+        // } else {
+            // curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat'); //need fix $this->device_id
+            // curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');   //need fix $this->device_id
+        // }
 
         if ($post) {
             curl_setopt($ch, CURLOPT_POST, true);

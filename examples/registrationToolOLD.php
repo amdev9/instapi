@@ -1018,7 +1018,7 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 
 $gender = 2;
-$phone  =  "+16697779831";//"+79855560279";//"+79260263988"; //// "+79057801330"; //"+79692308115";////
+$phone  =  "+79855560279";//"+79260263988"; //// "+79057801330"; //"+79692308115";////
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
 $dir    = $romerINSTAPI.'src/'.$profileSetter; 
