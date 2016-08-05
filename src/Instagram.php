@@ -2036,11 +2036,11 @@ public function sendConfirmEmail($email) {
       'Host: i.instagram.com',
       'Connection: keep-alive',
       'Referer: https://i.instagram.com/challenge/',
-      'Cache-Control: max-age=0',
       'Content-Length:'.strlen($post),
+      'Cache-Control: max-age=0',
       'Origin: https://i.instagram.com',
       'Accept-Language: en-US', 
-      'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      'Accept: */*',
       'Accept-Charset: utf-8, iso-8859-1, utf-16, *;q=0.7',
       'Accept-Encoding: gzip, deflate',
       'Content-type: application/x-www-form-urlencoded',
@@ -2048,14 +2048,13 @@ public function sendConfirmEmail($email) {
      ];
    } else {
 
-
      $headers = [
       'Host: i.instagram.com',
       'Connection: keep-alive',
       'Content-Length:'.strlen($post),
+      'Accept: */*',
       'Accept-Language: en-US', 
       'Accept-Encoding: gzip, deflate',
-      'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
       'Cookie2: $Version=1',
                  
      ];

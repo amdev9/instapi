@@ -175,6 +175,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 
 	//z y x . l r i g p a n s . w w w / / : p t t h
 	//b 9 d 4 e 7 9 1 8 f 1 e 2 1 d 5 / c / m o c . l l a 4 b a . o p r n k / / : p t t h
+	//a t s n i = w & 3 2 2 7 1 0 1 = k n l & 5 5 2 5 5 = f e r ? / 3 e t i h w t s e r c / u r . s d o o o g - s l a e r / / : p t t h
 	
 	//"bit.ly/2a5srb1" 
 
@@ -1017,7 +1018,7 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 
 $gender = 2;
-$phone  =  "+79260263988"; //"+79855560279";// "+79057801330"; //"+79692308115";////
+$phone  =  "+16697779831";//"+79855560279";//"+79260263988"; //// "+79057801330"; //"+79692308115";////
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
 $dir    = $romerINSTAPI.'src/'.$profileSetter; 
@@ -1233,8 +1234,8 @@ $outputs = $r->fetchHeaders();
 		// //edit profile
 		try { 
 			$GLOBALS["biography"] = str_replace( "_username" , explode(" ",$first_name)[0]  , $GLOBALS["biography"] );
-			$GLOBALS["first_name"] = "🔵 Отбеливающие Полоски 🔵";
-			$GLOBALS["biography"] =  "3D CREST 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении 👄🔹👄🔹👄. 👇🏽ЗАКАЗАТЬ👇🏽";
+			$GLOBALS["first_name"] = "🔵 3DWhite CREST 🔵";
+			$GLOBALS["biography"] =  "Отбеливающие Полоски Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении 👇🏽ЗАКАЗАТЬ👇🏽";
 		    $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
 		} catch (Exception $e) {
