@@ -180,7 +180,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 600;//400//25000 		//  direct 500->57    700->34
+	$posts_per_day = 8000;//400//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -640,7 +640,7 @@ function funcparse($followers, $i, $redis, $influencer)
 				break;
 			}
 			
-			// sleep(1);
+			sleep(5);
 		}
 }
 

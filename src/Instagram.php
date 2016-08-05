@@ -364,6 +364,34 @@ public function sendConfirmEmail($email) {
         return $this->request('megaphone/log/')[1];
     }
 
+  /**
+     * Pending Inbox
+     *
+     * @return array
+     *   Pending Inbox Data
+     */
+    public function getPendingInbox()
+    {
+        $pendingInbox = $this->request('direct_v2/pending_inbox/?')[1];
+        if ($pendingInbox['status'] != 'ok') {
+            throw new InstagramException($pendingInbox['message']."\n");
+            return;
+        }
+        return $pendingInbox;
+    }
+
+
+    /**
+     * Explore Tab
+     *
+     * @return array
+     *   Explore data
+     */
+    public function explore()
+    {
+        return $this->request('discover/explore/?')[1];
+    }
+
     protected function expose()
     {
         $data = json_encode([
@@ -727,6 +755,48 @@ public function sendConfirmEmail($email) {
          return $upload;
     }
 
+
+ /**
+     * Direct Thread Data
+     *
+     * @param string $threadId
+     *   Thread Id
+     *
+     * @return array
+     *   Direct Thread Data
+     */
+    public function directThread($threadId)
+    {
+        $directThread = $this->request("direct_v2/threads/$threadId/?")[1];
+        if ($directThread['status'] != 'ok') {
+            throw new InstagramException($directThread['message']."\n");
+            return;
+        }
+        return $directThread;
+    }
+    /**
+     * Direct Thread Action
+     *
+     * @param string $threadId
+     *   Thread Id
+     *
+     * @param string $threadAction
+     *   Thread Action 'approve' OR 'decline' OR 'block'
+     *
+     * @return array
+     *   Direct Thread Action Data
+     */
+    public function directThreadAction($threadId, $threadAction)
+    {
+        $data = json_encode([
+          '_uuid'      => $this->uuid,
+          '_uid'       => $this->username_id,
+          '_csrftoken' => $this->token,
+        ]);
+        return $this->request("direct_v2/threads/$threadId/$threadAction/", $this->generateSignature($data))[1];
+    }
+
+    
     protected function configureVideo($upload_id, $video, $caption = '')
     {
         $this->uploadPhoto($video, $caption, $upload_id);
@@ -932,6 +1002,38 @@ public function sendConfirmEmail($email) {
     ]);
 
       return $this->request("media/$mediaId/comment/$commentId/delete/", $this->generateSignature($data))[1];
+  }
+
+
+  /**
+   * Delete Comment Bulk
+   *
+   * @param string $mediaId
+   *   Media id
+   *
+   * @param string $commentIds
+   *   List of comments to delete
+   *
+   * @return array
+   *   Delete Comment Bulk Data
+   */
+  public function deleteCommentsBulk($mediaId, $commentIds)
+  {
+      if (!is_array($commentIds)) {
+          $commentIds = [$commentIds];
+      }
+      $string = [];
+      foreach ($commentIds as $commentId) {
+          $string[] = "$commentId";
+      }
+      $comment_ids_to_delete = implode(',', $string);
+      $data = json_encode([
+        '_uuid'      => $this->uuid,
+        '_uid'       => $this->username_id,
+        '_csrftoken' => $this->token,
+        'comment_ids_to_delete' => $comment_ids_to_delete,
+      ]);
+      return $this->http->request("media/$mediaId/comment/bulk_delete/", SignatureUtils::generateSignature($data))[1];
   }
 
   /**
@@ -2060,11 +2162,13 @@ public function sendConfirmEmail($email) {
 
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, "https://i.instagram.com/".$endpoint);
+        curl_setopt($ch, CURLOPT_URL, $endpoint); //"https://i.instagram.com/".
         // curl_setopt($ch, CURLINFO_HEADER_OUT, TRUE);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->UA ); //Constants::USER_AGENT); //// 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        if ($headerChoose == false) {
          curl_setopt($ch, CURLOPT_REFERER , 'https://i.instagram.com/challenge/');
+        }
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);//true 
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); //need test
