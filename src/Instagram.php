@@ -435,6 +435,22 @@ public function sendConfirmEmail($email) {
      */
     public function uploadPhoto($photo, $caption = null, $upload_id = null)
     {
+        ///NEED TEST
+        $fileToUpload1 = imagecreatefromjpeg($photo);
+        $imgdata = getimagesize($photo);
+        $width = $imgdata[0];
+        $height = $imgdata[1];
+        $pix_w=mt_rand(0, $width);
+        $pix_h=mt_rand(0, $height);
+        // echo $pix_w." ".$pix_h;
+        $rgb = imagecolorat($fileToUpload1, $pix_w,$pix_h+1);
+        imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
+        ob_start();
+        imagejpeg($fileToUpload1);
+        $fileToUpload =  ob_get_contents();
+        ob_end_clean();
+        ////
+        
         $endpoint = Constants::API_URL.'upload/photo/';
         $boundary = $this->uuid;
 
@@ -442,7 +458,7 @@ public function sendConfirmEmail($email) {
             $fileToUpload = createVideoIcon($photo);
         } else {
             $upload_id = number_format(round(microtime(true) * 1000), 0, '', '');
-            $fileToUpload = file_get_contents($photo);
+            // $fileToUpload = file_get_contents($photo);
         }
 
         $bodies = [
@@ -530,6 +546,9 @@ public function sendConfirmEmail($email) {
 
         return $configure;
     }
+
+
+// media/configure_to_reel/  Instagram Stories
 
     public function uploadVideo($video, $caption = null)
     {
@@ -1862,7 +1881,7 @@ public function sendConfirmEmail($email) {
         'media_id'   => $mediaId,
     ]);
 
-      return $this->request("media/$mediaId/like/", $this->generateSignature($data))[1];
+      return $this->request("media/$mediaId/like/", $this->generateSignature($data));//[1]
   }
 
   /**

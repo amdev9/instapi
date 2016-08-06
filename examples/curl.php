@@ -3,6 +3,60 @@
  
 echo count($argv);
 
+  
+
+// $gd = imagecreatetruecolor($x, $y);
+
+$photo = "1.jpg";
+$fileToUpload1 = imagecreatefromjpeg($photo);
+$imgdata = getimagesize($photo);
+$width = $imgdata[0];
+$height = $imgdata[1];
+$pix_w=mt_rand(0, $width);
+$pix_h=mt_rand(0, $height);
+// echo $pix_w." ".$pix_h;
+$rgb = imagecolorat($fileToUpload1, $pix_w,$pix_h+10);
+imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
+
+ 
+
+ob_start();
+imagejpeg($fileToUpload1);
+$contents =  ob_get_contents();
+ob_end_clean();
+
+echo $contents;
+
+   // $fileToUpload = file_get_contents($fileToUpload1);
+   // echo  $fileToUpload ;
+// imagejpeg($fileToUpload, "test3.jpg");
+
+ 
+// $corners[0] = array('x' => 100, 'y' =>  10);
+// $corners[1] = array('x' =>   0, 'y' => 190);
+// $corners[2] = array('x' => 200, 'y' => 190);
+
+
+
+// $rgb = imagecolorallocate($gd, 255, 255, 255); 
+
+// for ($i = 0; $i < 100000; $i++) {
+//   imagesetpixel($gd, round($x),round($y), $red);
+//   $a = rand(0, 2);
+//   $x = ($x + $corners[$a]['x']) / 2;
+//   $y = ($y + $corners[$a]['y']) / 2;
+// }
+ 
+
+
+
+// header('Content-Type: image/png');
+
+
+ 
+
+
+
  // $emojstring = "💦";
 
  // echo $emojstring;

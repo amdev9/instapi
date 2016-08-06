@@ -180,7 +180,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 8000;//400//25000 		//  direct 500->57    700->34
+	$posts_per_day = 15000;//400//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -262,7 +262,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
  }
 ////////////////
 
- 	$actioner = $GLOBALS["redis"]->spop("detection");
+ 	// $actioner = $GLOBALS["redis"]->spop("detection");
 
  	
  	// functofollow($ilink, $usernamelink, $actioner);	 
@@ -337,13 +337,57 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 							 	}
 						echo var_export($fres);
 
-
 					}
+					 }
+
+				 if ($GLOBALS["redis"]->scard("detectionlike".$usernamelink) > 0 ) {
+					$medcom = $GLOBALS["redis"]->spop("detectionlike".$usernamelink);  
+					 if ($GLOBALS["redis"]->sismember("liked".$usernamelink , $actioner) != true ) {
+								$lres =$ilink->like($medcom);
+								echo var_export($lres); //need to test res code
+							 
+
+							if ($lres[1]['status'] == 'ok') {
+					 		$GLOBALS["redis"]->sadd("liked".$usernamelink, $actioner);
+					 	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
+					 		$ilink->login(true);
+					 	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
+							 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $lres[1]['checkpoint_url']);
+				                     echo "\nVerification code sent! >>>>>\n";
+						 			 // $resp_code = trim(fgets(STDIN));
+				                      $resp_code = "";
+						 			   while( ctype_digit($resp_code) != true) {
+										 // $line = readline("Command: ");
+										  $resp_code = readline("Command: ");
+										}
+
+																 			
+
+						 			 echo "\n---->".$resp_code;
+
+						 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
+
+						 			echo var_export($results);
+							 	}
+
+							 	else {
+							 			echo var_export($lres);
+
+							 	}
+						echo var_export($lres);
+
+											
+					}
+						
+
+				}
+
+
 
 					
 			   	 // }
 			
-	  }
+	 
 
 	// $GLOBALS["redis"]->sadd("track", "message".$usernamelink."_".date("Y-m-d_H:i:s"));
 	// if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true && $GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) == true) {
@@ -506,10 +550,12 @@ function funcparse($followers, $i, $redis, $influencer)
 				      $redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk']);//.":".$word1);
 
 
-					 //    $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
+					  $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
 
-					 //    if (isset($usfeed['items'][0]['pk'])) {
-						//     $med = $usfeed['items'][0]['pk'];
+					 if (isset($usfeed['items'][0]['pk'])) {
+						    $med = $usfeed['items'][0]['pk'];
+						     $redis->sadd("detectionlike".$GLOBALS["username"], $med );//.":".$word1);
+						}
 						//     echo $med.":med\n";// use the same caption
 						//     if (isset($usfeed['items'][0]['lat']) && isset($usfeed['items'][0]['lng'])) {
 						// 		$lat = $usfeed['items'][0]['lat'];
@@ -640,7 +686,7 @@ function funcparse($followers, $i, $redis, $influencer)
 				break;
 			}
 			
-			sleep(5);
+			sleep(1);
 		}
 }
 
