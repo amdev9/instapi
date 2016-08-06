@@ -1,31 +1,73 @@
 <?php
 
  
-echo count($argv);
+// echo count($argv);
 
-  
+$caption = "Check out link in bio for her contacts 👆👆👆 \u{2029}";
+
+
+$tags = ["18", "follow4follow", "followforfollow", "Body", "CalvinKlein", "FitGirl", "FitnesGirls", "Fitness", "FitnessAddict", "FitnesssGirl", "GirlBody", "Motivation", "PerfectBody", "Work", "Workout", "adult", "babestation", "bigboss", "bigtitties", "bikini", "cool", "danniharwood", "dm", "fancy", "fit", "fitness", "fitnessmodel", "fuckyou", "gym", "health", "hotsexy", "hotties", "instadaily", "instagood", "juliaann", "kiaramia", "kiaramiateam", "ledlight", "like4like", "likeforlike", "lisaann", "love", "lust", "meena", "miakhalifa", "porn", "pornbros", "pornofood", "pornstarr", "prettyyoung", "pörn", "pörnstars", "recentforrecent", "sex", "sexchat", "sexvid", "sophiedee", "squats", "suckforme", "swag", "sëxchat", "sëxy", "twerk", "workout"];
+
+
+ $captiontag = [];
+while (count($captiontag) < 29)
+{
+  $tag = $tags[mt_rand(0, count($tags) - 1)];
+  array_push($captiontag, "#".$tag);
+}
+
+$caption =  $caption . implode(" ", $captiontag); 
+echo $caption;
+
+ // exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
+
+  // $txt='Use 306 759 to verify your Instagram account.';
+
+  // $re1='.*?'; # Non-greedy match on filler
+  // $re2='(\\d+)';  # Integer Number 1
+  // $re3='.*?'; # Non-greedy match on filler
+  // $re4='(\\d+)';  # Integer Number 2
+
+  // if ($c=preg_match_all ("/".$re1.$re2.$re3.$re4."/is", $txt, $matches))
+  // {
+  //     $int1=$matches[1][0];
+  //     $int2=$matches[2][0];
+  //     print "$int1$int2\n";
+  // }
+
+  #-----
+  # Paste the code into a new php file. Then in Unix:
+  # $ php x.php 
+  #-----
+
+
+  #-----
+  # Paste the code into a new php file. Then in Unix:
+  # $ php x.php 
+  #-----
+
 
 // $gd = imagecreatetruecolor($x, $y);
 
-$photo = "1.jpg";
-$fileToUpload1 = imagecreatefromjpeg($photo);
-$imgdata = getimagesize($photo);
-$width = $imgdata[0];
-$height = $imgdata[1];
-$pix_w=mt_rand(0, $width);
-$pix_h=mt_rand(0, $height);
-// echo $pix_w." ".$pix_h;
-$rgb = imagecolorat($fileToUpload1, $pix_w,$pix_h+10);
-imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
+// $photo = "1.jpg";
+// $fileToUpload1 = imagecreatefromjpeg($photo);
+// $imgdata = getimagesize($photo);
+// $width = $imgdata[0];
+// $height = $imgdata[1];
+// $pix_w=mt_rand(0, $width);
+// $pix_h=mt_rand(0, $height);
+// // echo $pix_w." ".$pix_h;
+// $rgb = imagecolorat($fileToUpload1, $pix_w,$pix_h+10);
+// imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
 
  
 
-ob_start();
-imagejpeg($fileToUpload1);
-$contents =  ob_get_contents();
-ob_end_clean();
+// ob_start();
+// imagejpeg($fileToUpload1);
+// $contents =  ob_get_contents();
+// ob_end_clean();
 
-echo $contents;
+// echo $contents;
 
    // $fileToUpload = file_get_contents($fileToUpload1);
    // echo  $fileToUpload ;

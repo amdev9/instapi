@@ -135,7 +135,7 @@ function functocomment($ilink, $usernamelink)
 	 		$heart = $hearts[mt_rand(0, count($hearts) - 1)];
 	 		$flag = "\u{1F1F8}";
 	 		$mouth = "\u{1F444}";
-	  		$messageFinal = "$heart $mouth $mouth $commenttex $flag $flag $flag"; //$heart $heart $heart";
+	  		$messageFinal = "$mouth $mouth $mouth $commenttex $heart $heart $heart"; //$heart $heart $heart";
 
 
 			$link = $ilink->comment($medcom, $messageFinal); 
@@ -269,14 +269,15 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 ////.......//////////
 
 	// if ($GLOBALS["redis"]->sismember("comment_sentactor" , $usernamelink) != true) {
-	//  	  for($t = 0; $t < 12; $t++) {  //expressive spam 12 OK no sleep
+	//  	  for($t = 0; $t < 9; $t++) {  //expressive spam 12 OK no sleep
 	// 		if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) != true) {
 	// 			functocomment($ilink, $usernamelink);   
-	// 			$timetosleep = add_time($delay*10);      	
-	// 		 	sleep($timetosleep);
+	// 			sleep(30);
+	// 			//$timetosleep = add_time($delay*10);      	
+	// 		 	//sleep($timetosleep);
 	// 		}
 	// 	}
-			// }
+	// }
 	 //$GLOBALS["redis"]->sadd("track", "comment".$usernamelink."_".date("Y-m-d_H:i:s"));
 
 
@@ -1139,10 +1140,13 @@ $outputs = $r->fetchHeaders();
 	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
 	echo var_export($sres);
 	 echo "\nVerification code sent! >>>>>\n";
-     	 // $cod = trim(fgets(STDIN));
-     	 $cod = readline("Command: ");
-     	 // trim(
-     	 echo "\n".$cod."\n";
+     	 while ($redis->scard("code") < 1) {
+     	 		sleep(3);
+     	 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
+     	 }
+     	 $cod = $redis->spop("code");
+     	 // $cod = readline("Command: ");
+     	 // echo "\n".$cod."\n";
      	 
 	//validatesmssignup
 	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
@@ -1279,9 +1283,13 @@ $outputs = $r->fetchHeaders();
 
 		// //edit profile
 		try { 
-			$GLOBALS["biography"] = str_replace( "_username" , explode(" ",$first_name)[0]  , $GLOBALS["biography"] );
-			$GLOBALS["first_name"] = "🔵 3DWhite CREST 🔵";
-			$GLOBALS["biography"] =  "Отбеливающие Полоски Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении 👇🏽ЗАКАЗАТЬ👇🏽";
+			// $GLOBALS["biography"] = str_replace( "_username" , explode(" ",$first_name)[0]  , $GLOBALS["biography"] );
+			// $GLOBALS["first_name"] = "🔵 3DWhite CREST 🔵";
+			// $GLOBALS["biography"] =  "Отбеливающие Полоски Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении 👇🏽ЗАКАЗАТЬ👇🏽";
+
+			 
+			$GLOBALS["biography"] =  "HOT CHAT 🔞 Photos in DIRECT📥 🔞 JOIN! 👇👇👇 ";
+
 		    $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
 		} catch (Exception $e) {
@@ -1352,12 +1360,12 @@ $outputs = $r->fetchHeaders();
 			
 		// } else {
 			//////// NON THEMATIC ////////
-		// $caption = "No app download required you just need a phone number!";
+		 
+		$caption = "Check out link in bio for her contacts 😍👆👆👆 \u{2029} ";
 
-		$caption = "💎Заказать Crest3DWhite можно перейдя по ссылке наверху 👆\u{2029}  На сайте Вы должны написать ФИО и номер телефона и нажать на ЗАКАЗАТЬ \u{2029} в течении 10 минут наш оператор Вам позвонит \u{2029} 💎Гарантированное отбеливание зубов за 1 неделю  \u{2029} 💎Безвредно для зубов  \u{2029} 💎Результат после первого применения  \u{2029} 💸Оплата заказа при получении на почте.  \u{2029} Получил - проверил - оплатил!  \u{2029}. \u{2029}. \u{2029}. \u{2029} #3dwhite.RUS #3dwhite_RUS #3dwhitecrest #3dcrest#3d#crestwhitestrips#отбеливающие_полоски #отбеливание#зубы#отбеливаниезубов #3dcrest#3дкрест#улыбка#отбеливающиеполоски#белыезубы#красиваяулыбка#красивыезубы#отбеливающаяпаста#россия#сша#домашнееотбеливание#белыезубки#белоснежнаяулубка#красота #crest#3dcrest #white_3d#москва #spb#полоскикрест";
+		// $caption = "💎Заказать Crest3DWhite можно перейдя по ссылке наверху 👆\u{2029}  На сайте Вы должны написать ФИО и номер телефона и нажать на ЗАКАЗАТЬ \u{2029} в течении 10 минут наш оператор Вам позвонит \u{2029} 💎Гарантированное отбеливание зубов за 1 неделю  \u{2029} 💎Безвредно для зубов  \u{2029} 💎Результат после первого применения  \u{2029} 💸Оплата заказа при получении на почте.  \u{2029} Получил - проверил - оплатил!  \u{2029}. \u{2029}. \u{2029}. \u{2029} #3dwhite.RUS #3dwhite_RUS #3dwhitecrest #3dcrest#3d#crestwhitestrips#отбеливающие_полоски #отбеливание#зубы#отбеливаниезубов #3dcrest#3дкрест#улыбка#отбеливающиеполоски#белыезубы#красиваяулыбка#красивыезубы#отбеливающаяпаста#россия#сша#домашнееотбеливание#белыезубки#белоснежнаяулубка#красота #crest#3dcrest #white_3d#москва #spb#полоскикрест";
 
-		// $caption = "ВНИМАНИЕ! Количество товара со скидкой 50% ограничено.\u{2029} ◾BLACK MASK - самая эффективная маска, созданная для быстрого решения таких проблем, как: \u{2029}⭐воспаления; \u{2029}⭐черные точки; \u{2029}⭐прыщи; \u{2029}⭐расширенные поры и жирный блеск;\u{2029} ⭐тусклый цвет кожи.👧\u{2029}🏻Не имеет возрастных ограничений👵\u{2029}🏻 📩Доставка по России, Казахстану, Украине, Беларуси, Грузии, Киргизии и Армении!\u{2029}▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️ \u{2029}🔥ПОСЛЕДНИЕ ДНИ АКЦИИ - СКИДКА 50%!🔥\u{2029} ▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️ \u{2029}💳Стоимость по акции:\u{2029} 🇷🇺990 руб. / 🇰🇿6400 тенге / 🇺🇦359 грн. / 🇧🇾349000 бел. руб. / 🇬🇪50 лари / 🇰🇬1550 сом / 🇦🇲10000 драм \u{2029}📬 ОПЛАТА ТОЛЬКО ПРИ ПОЛУЧЕНИИ❗️ \u{2029}📝ЧТОБЫ ЗАКАЗАТЬ МАСКУ:\u{2029}  1⃣ Перейдите по ссылке в описании профиля; \u{2029}2⃣ Оставьте свой номер телефона и имя на сайте, нажмите кнопку ЗАКАЗАТЬ; \u{2029}3⃣ Наш менеджер свяжется с Вами в течение 15 минут и уточнит детали заказа, также вы сможете задать все интересующие Вас вопросы, держите телефон включенным 🙋🏼📱 \u{2029}✔️ПРИЯТНОГО ИСПОЛЬЗОВАНИЯ И ЧИСТОЙ КОЖИ! 💁🏻";
-
+		 
 		$filesVideo = scandir($dir);
 		foreach ( $filesVideo as $k => $value ) {
 		    $ext = pathinfo($value, PATHINFO_EXTENSION);
@@ -1371,6 +1379,18 @@ $outputs = $r->fetchHeaders();
 				sleep(10);
 		    }
 		    elseif ($ext == "jpg" && $value != "1.jpg") {
+
+				$tags = ["18", "follow4follow", "followforfollow", "Body", "CalvinKlein", "FitGirl", "FitnesGirls", "Fitness", "FitnessAddict", "FitnesssGirl", "GirlBody", "Motivation", "PerfectBody", "Work", "Workout", "adult", "babestation", "bigboss", "bigtitties", "bikini", "cool", "danniharwood", "dm", "fancy", "fit", "fitness", "fitnessmodel", "fuckyou", "gym", "health", "hotsexy", "hotties", "instadaily", "instagood", "juliaann", "kiaramia", "kiaramiateam", "ledlight", "like4like", "likeforlike", "lisaann", "love", "lust", "meena", "miakhalifa", "porn", "pornbros", "pornofood", "pornstarr", "prettyyoung", "pörn", "pörnstars", "recentforrecent", "sexchat", "sexvid", "sophiedee", "squats", "suckforme", "swag", "sëxchat", "sëxy", "twerk", "workout"];
+
+				 $captiontag = [];
+				while (count($captiontag) < 29)
+				{
+				  $tag = $tags[mt_rand(0, count($tags) - 1)];
+				  array_push($captiontag, "#".$tag);
+				}
+
+				$caption = $caption . implode(" ", $captiontag); 
+
 				try {
 				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
 				} catch (Exception $e) {

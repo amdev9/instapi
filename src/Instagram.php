@@ -1063,6 +1063,23 @@ public function sendConfirmEmail($email) {
    */
   public function changeProfilePicture($photo)
   {
+
+     ///NEED TEST
+        $fileToUpload1 = imagecreatefromjpeg($photo);
+        $imgdata = getimagesize($photo);
+        $width = $imgdata[0];
+        $height = $imgdata[1];
+        $pix_w=mt_rand(0, $width);
+        $pix_h=mt_rand(0, $height);
+        // echo $pix_w." ".$pix_h;
+        $rgb = imagecolorat($fileToUpload1, $pix_w,$pix_h+1);
+        imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
+        ob_start();
+        imagejpeg($fileToUpload1);
+        $fileToUpload =  ob_get_contents();
+        ob_end_clean();
+        ////
+
       if (is_null($photo)) {
           echo "Photo not valid\n\n";
 
@@ -1091,7 +1108,8 @@ public function sendConfirmEmail($email) {
       [
         'type'     => 'form-data',
         'name'     => 'profile_pic',
-        'data'     => file_get_contents($photo),
+        'data'     =>  $fileToUpload,
+        //file_get_contents($photo),
         'filename' => 'profile_pic',
         'headers'  => [
           'Content-type: application/octet-stream',
