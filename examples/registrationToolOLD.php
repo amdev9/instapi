@@ -32,7 +32,7 @@ $redis = new Predis\Client(array(
 function functofollow($ilink, $usernamelink, $pkuser) {
 	$tofollow = $GLOBALS["redis"]->smembers("followmebot");
 
-	if ($GLOBALS["redis"]->scard("followedbybot_".$usernamelink) < 10 ) {
+	if ($GLOBALS["redis"]->scard("followedbybot_".$usernamelink) < 5 ) {
 
     foreach ($tofollow as $fol) {	 
     	if ($GLOBALS["redis"]->sismember("followedbybot", $usernamelink."".$fol ) != true && $fol != $pkuser ) {
@@ -180,7 +180,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 5000;//400//25000 		//  direct 500->57    700->34
+	$posts_per_day = 800;//400//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -226,6 +226,8 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 ////ADULT////////// 	 
 	 while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) {
 		  // funcgeocoordparse($ilink, $GLOBALS["redis"]);
+	 		echo $next_iteration_time = add_time($delay); //timer
+			    		sleep($next_iteration_time);
 		
 		$influencers = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131",   "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
 
@@ -233,7 +235,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 
  		$availableInf = [];
  		foreach ($influencers as $ind) {
-		    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != "0"  ) {
+		    if (	 $GLOBALS["redis"]->lrange("$ind:max_id", -1, -1) != null  ) {
 		   		array_push($availableInf, $ind); 
 		    }
 		}
@@ -290,7 +292,8 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	// // }		 
 	 
 	  if ($GLOBALS["redis"]->scard("detection".$usernamelink) > 0 ) {
-	
+		
+
 		    // for($t = 0; $t < 51; $t++) {  //TOVARKA
 
 		  //   	if 	($GLOBALS["redis"]->scard("detection") == 0 ) {
@@ -310,9 +313,9 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 				}
 		    
 
-		    // 	if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true && $GLOBALS["redis"]->scard("detection".$usernamelink) % 31 == 0 ) {
-			   // 		 functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
-				  // }
+		    	          // 	if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true && $GLOBALS["redis"]->scard("detection".$usernamelink) % 31 == 0 ) {
+			  		     // 		 functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
+					     // }
 			   	
 
 				  	echo $next_iteration_time = add_time($delay); //timer
@@ -352,135 +355,66 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 						echo var_export($fres);
 
 					}
-					}
-					  	echo $next_iteration_time = add_time($delay); //timer
-			    		sleep($next_iteration_time);
+				
+					  
 					 
-				 // if ($GLOBALS["redis"]->scard("detectionlike".$usernamelink) > 0 ) {
-					// $medcom = $GLOBALS["redis"]->spop("detectionlike".$usernamelink);  
-					if ($medcom == "nonprivate") {
-						 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
+					// if ($medcom == "nonprivate") {
+					// 		echo $next_iteration_time = add_time($delay); //timer
+			  //   		sleep($next_iteration_time);
+					// 	 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
+					// 	 echo "\nfeed fecthed\n";
+					// sleep(60);
+					//   if (isset($usfeed['items'][0]['pk'])) {
+					// 	  $med = $usfeed['items'][0]['pk'];
 
-					  if (isset($usfeed['items'][0]['pk'])) {
-						  $med = $usfeed['items'][0]['pk'];
 
-
-					 if ( $GLOBALS["redis"]->sismember("liked".$usernamelink , $med) != true ) {
-								$lres =$ilink->like($med);
-								echo var_export($lres); //need to test res code
+					//  if ( $GLOBALS["redis"]->sismember("liked".$usernamelink , $med) != true ) {
+					// 			$lres =$ilink->like($med);
+					// 			echo var_export($lres); //need to test res code
 							 
 
-							if ($lres[1]['status'] == 'ok') {
-					 		$GLOBALS["redis"]->sadd("liked".$usernamelink, $actioner);
-					 	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
-					 		$ilink->login(true);
-					 	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
-							 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $lres[1]['checkpoint_url']);
-				                     echo "\nVerification code sent! >>>>>\n";
-						 			 // $resp_code = trim(fgets(STDIN));
-				                      $resp_code = "";
-						 			   while( ctype_digit($resp_code) != true) {
-										 // $line = readline("Command: ");
-										  $resp_code = readline("Command: ");
-										}
+					// 		if ($lres[1]['status'] == 'ok') {
+					//  		$GLOBALS["redis"]->sadd("liked".$usernamelink, $med);
+					//  	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
+					//  		$ilink->login(true);
+					//  	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
+					// 		 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $lres[1]['checkpoint_url']);
+				 //                     echo "\nVerification code sent! >>>>>\n";
+					// 	 			 // $resp_code = trim(fgets(STDIN));
+				 //                      $resp_code = "";
+					// 	 			   while( ctype_digit($resp_code) != true) {
+					// 					 // $line = readline("Command: ");
+					// 					  $resp_code = readline("Command: ");
+					// 					}
 
 																 			
 
-						 			 echo "\n---->".$resp_code;
+					// 	 			 echo "\n---->".$resp_code;
 
-						 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
+					// 	 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
 
-						 			echo var_export($results);
-							 	}
+					// 	 			echo var_export($results);
+					// 		 	}
 
-							 	else {
-							 			echo var_export($lres);
+					// 		 	else {
+					// 		 			echo var_export($lres);
 
-							 	}
-						echo var_export($lres);
-						}
-						}
-					}
-						
-
+					// 		 	}
+						 
+					// 	}
+					// 	}
 					// }
 						
-
-				// }
-
-
-
-	 
-
-	// $GLOBALS["redis"]->sadd("track", "message".$usernamelink."_".date("Y-m-d_H:i:s"));
-	// if ($GLOBALS["redis"]->sismember("disabled", "comment_".$usernamelink) == true && $GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) == true) {
-	// 		$ilink->logout();
-	// 		return;
-	// }
-/////////////////////////	
-	
-	// echo $next_iteration_time = add_time($delay); //86400
-	// sleep($next_iteration_time);
+	}
+					 
+						
+ 
+ 
 
 	funcrecur($ilink, $usernamelink, $pkuser , $counter, $ad_media_id);
 
 
-
-	// try {	
-	// 	$fres = $ilink->follow($actioner);
-	// 	echo var_export($fres); //need to test res code
-
-
-	// 	if ($fres['status'] == 'fail' && $fres['message'] == 'login_required') {
-	// 		try {
-
-	// 		    $ilink->login();
-
-	// 		    $fres = $ilink->follow($actioner);
-	// 		    echo var_export($fres); 
-
-	// 		} catch (InstagramException $e) {
-	// 		    $e->getMessage();
-	// 		    exit();
-	// 		}
-	// 	}
-		
-
-	// } catch (Exception $e) {
-	//     echo $e->getMessage();
-	// }
  
-
-	// else { //need fix to check if private or not
-	// 	$usfeedforcom = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
-	// 	$medcom = $usfeedforcom['items'][0]['pk'];
-	// 	try {	
-	// 		$lres =$ilink->like($medcom);
-	// 		echo var_export($lres); //need to test res code
-	// 	} catch (Exception $e) {
-	// 	    echo $e->getMessage();
-	// 	}
-	// 	sleep(6);
-
-	// }
-
-	// else {
-
-	// 	$counter--;
-	// }
-
-	// if ($counter==0) {
-
-	// 	$ilink->logout();
-	// 	return; 
-	// }
-
-
-	
-	 
-  // }
- 
-
 	
 }
  
@@ -517,10 +451,7 @@ function is_arabic($str) {
 	        $str = mb_convert_encoding($str,mb_detect_encoding($str),'UTF-8');
 	    }
 
-	    /*
-	    $str = str_split($str); <- this function is not mb safe, it splits by bytes, not characters. we cannot use it
-	    $str = preg_split('//u',$str); <- this function woulrd probably work fine but there was a bug reported in some php version so it pslits by bytes and not chars as well
-	    */
+	    
 	    preg_match_all('/.|\n/u', $str, $matches);
 	    $chars = $matches[0];
 	    $arabic_count = 0;
@@ -552,7 +483,7 @@ function funcparse($followers, $i, $redis, $influencer)
 {
 
 		$counter = 0;
-		while ($counter < 14) {  
+		// while ($counter < 2) {  
 
 			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
 		        
@@ -573,7 +504,7 @@ function funcparse($followers, $i, $redis, $influencer)
 				     
 					$redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk'].":nonprivate");//.":".$word1);
 
-					  $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
+					  // $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
 
 					 // if (isset($usfeed['items'][0]['pk'])) {
 						//     $med = $usfeed['items'][0]['pk'];
@@ -709,12 +640,12 @@ function funcparse($followers, $i, $redis, $influencer)
 				 				
 				$counter++;
 			} else {
-				$redis->rpush("$influencer:max_id", "0");
-				break;
+				$redis->rpush("$influencer:max_id", null);
+				// break;
 			}
 			
-			sleep(7);
-		}
+			 sleep(30);
+		// }
 }
 
 
@@ -1091,7 +1022,8 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 
 $gender = 2;
-$phone  =  "+12028447146";//"+16692223020";// "+16697779831"; //
+// //
+$phone  = "+12168399838"; //"+16465478033";//"+12182031088";//"+12536422580";//"+12067177718"; //"+12033093704"; //"+12028447146";//"+12028447146";////"+16692223020";// "+16697779831"; //
 // "+79855560279";// "+79260263988";  // "+79057801330"; //"+79692308115";////
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
