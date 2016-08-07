@@ -1,23 +1,38 @@
 <?php
 
  
-// echo count($argv);
+echo count($argv);
+$acmed = "134534";
 
-$caption = "Check out link in bio for her contacts 👆👆👆 \u{2029}";
+if (strpos($acmed, ':') !== false) {
+          $datapart = explode(":", $acmed);
+            $actioner =   $datapart[0];
+            $medcom =  $datapart[1];
+        }
+        else 
+        {
+            $actioner =   $acmed ;
+        }
+        echo $actioner;
+        // echo $medcom;
+        
 
 
-$tags = ["18", "follow4follow", "followforfollow", "Body", "CalvinKlein", "FitGirl", "FitnesGirls", "Fitness", "FitnessAddict", "FitnesssGirl", "GirlBody", "Motivation", "PerfectBody", "Work", "Workout", "adult", "babestation", "bigboss", "bigtitties", "bikini", "cool", "danniharwood", "dm", "fancy", "fit", "fitness", "fitnessmodel", "fuckyou", "gym", "health", "hotsexy", "hotties", "instadaily", "instagood", "juliaann", "kiaramia", "kiaramiateam", "ledlight", "like4like", "likeforlike", "lisaann", "love", "lust", "meena", "miakhalifa", "porn", "pornbros", "pornofood", "pornstarr", "prettyyoung", "pörn", "pörnstars", "recentforrecent", "sex", "sexchat", "sexvid", "sophiedee", "squats", "suckforme", "swag", "sëxchat", "sëxy", "twerk", "workout"];
+// $caption = "Check out link in bio for her contacts 👆👆👆 \u{2029}";
 
 
- $captiontag = [];
-while (count($captiontag) < 29)
-{
-  $tag = $tags[mt_rand(0, count($tags) - 1)];
-  array_push($captiontag, "#".$tag);
-}
+// $tags = ["18", "follow4follow", "followforfollow", "Body", "CalvinKlein", "FitGirl", "FitnesGirls", "Fitness", "FitnessAddict", "FitnesssGirl", "GirlBody", "Motivation", "PerfectBody", "Work", "Workout", "adult", "babestation", "bigboss", "bigtitties", "bikini", "cool", "danniharwood", "dm", "fancy", "fit", "fitness", "fitnessmodel", "fuckyou", "gym", "health", "hotsexy", "hotties", "instadaily", "instagood", "juliaann", "kiaramia", "kiaramiateam", "ledlight", "like4like", "likeforlike", "lisaann", "love", "lust", "meena", "miakhalifa", "porn", "pornbros", "pornofood", "pornstarr", "prettyyoung", "pörn", "pörnstars", "recentforrecent", "sex", "sexchat", "sexvid", "sophiedee", "squats", "suckforme", "swag", "sëxchat", "sëxy", "twerk", "workout"];
 
-$caption =  $caption . implode(" ", $captiontag); 
-echo $caption;
+
+//  $captiontag = [];
+// while (count($captiontag) < 29)
+// {
+//   $tag = $tags[mt_rand(0, count($tags) - 1)];
+//   array_push($captiontag, "#".$tag);
+// }
+
+// $caption =  $caption . implode(" ", $captiontag); 
+// echo $caption;
 
  // exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
 

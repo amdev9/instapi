@@ -440,10 +440,10 @@ public function sendConfirmEmail($email) {
         $imgdata = getimagesize($photo);
         $width = $imgdata[0];
         $height = $imgdata[1];
-        $pix_w=mt_rand(0, $width);
-        $pix_h=mt_rand(0, $height);
+        $pix_w=mt_rand(2, $width);
+        $pix_h=mt_rand(2, $height);
         // echo $pix_w." ".$pix_h;
-        $rgb = imagecolorat($fileToUpload1, $pix_w,$pix_h+1);
+        $rgb = imagecolorat($fileToUpload1, $pix_w,$pix_h-1);
         imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
         ob_start();
         imagejpeg($fileToUpload1);

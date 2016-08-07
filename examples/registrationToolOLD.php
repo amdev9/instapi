@@ -180,7 +180,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 15000;//400//25000 		//  direct 500->57    700->34
+	$posts_per_day = 5000;//400//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -188,7 +188,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 
 	// while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) {
 	// 	  // funcgeocoordparse($ilink, $GLOBALS["redis"]);
-		
+	// 	if ($GLOBALS["redis"]->sismember("hashtag_actor" , $usernamelink) != true) {
 	// 	$hashtags = [ "follow4follow", "followforfollow" ];
 
  // 		$availableHashtags = [];
@@ -219,6 +219,8 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	// 		}
 	// 	}
 	//    hashtagparse($hashtagers, $ilink, $GLOBALS["redis"], $hashtag);
+	// }
+	//    $GLOBALS["redis"]->sadd("hashtag_actor", $usernamelink );
 
  // }
 ////ADULT////////// 	 
@@ -227,7 +229,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 		
 		$influencers = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131",   "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
 
-		// $influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+		 // $influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 
  		$availableInf = [];
  		foreach ($influencers as $ind) {
@@ -295,9 +297,20 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 				//     	funcgeocoordparse($ilink, $GLOBALS["redis"]);
 				// }
 
+	  			$acmed = $GLOBALS["redis"]->spop("detection".$usernamelink);
 
-		    	$actioner = $GLOBALS["redis"]->spop("detection".$usernamelink);  
-		    // 	if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true && $GLOBALS["redis"]->scard("detection".$usernamelink) % 11 == 0 ) {
+				if (strpos($acmed, ':') !== false) {
+					$datapart = explode(":", $acmed);
+				   	$actioner =  $datapart[0];
+		    		$medcom = $datapart[1];
+				}
+				else 
+				{
+					$actioner =  $acmed ;
+				}
+		    
+
+		    // 	if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true && $GLOBALS["redis"]->scard("detection".$usernamelink) % 31 == 0 ) {
 			   // 		 functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
 				  // }
 			   	
@@ -339,11 +352,13 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 						echo var_export($fres);
 
 					}
-					 }
-
-				 if ($GLOBALS["redis"]->scard("detectionlike".$usernamelink) > 0 ) {
-					$medcom = $GLOBALS["redis"]->spop("detectionlike".$usernamelink);  
-					 if ($GLOBALS["redis"]->sismember("liked".$usernamelink , $actioner) != true ) {
+					}
+					  	echo $next_iteration_time = add_time($delay); //timer
+			    		sleep($next_iteration_time);
+					 
+				 // if ($GLOBALS["redis"]->scard("detectionlike".$usernamelink) > 0 ) {
+					// $medcom = $GLOBALS["redis"]->spop("detectionlike".$usernamelink);  
+					 if (isset($medcom) && $GLOBALS["redis"]->sismember("liked".$usernamelink , $medcom) != true ) {
 								$lres =$ilink->like($medcom);
 								echo var_export($lres); //need to test res code
 							 
@@ -376,18 +391,15 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 
 							 	}
 						echo var_export($lres);
-
+						}
 											
-					}
+					// }
 						
 
-				}
+				// }
 
 
 
-					
-			   	 // }
-			
 	 
 
 	// $GLOBALS["redis"]->sadd("track", "message".$usernamelink."_".date("Y-m-d_H:i:s"));
@@ -548,14 +560,16 @@ function funcparse($followers, $i, $redis, $influencer)
 					  {
 					      $word1=$matches[1][0];
 					  }
-				      $redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk']);//.":".$word1);
+				     
 
 
 					  $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
 
 					 if (isset($usfeed['items'][0]['pk'])) {
 						    $med = $usfeed['items'][0]['pk'];
-						     $redis->sadd("detectionlike".$GLOBALS["username"], $med );//.":".$word1);
+						     $redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk'].":".$med );//.":".$word1);
+						} else {
+							 $redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk']);//.":".$word1);
 						}
 						//     echo $med.":med\n";// use the same caption
 						//     if (isset($usfeed['items'][0]['lat']) && isset($usfeed['items'][0]['lng'])) {
@@ -687,7 +701,7 @@ function funcparse($followers, $i, $redis, $influencer)
 				break;
 			}
 			
-			sleep(1);
+			sleep(7);
 		}
 }
 
@@ -718,7 +732,7 @@ function hashtagparse($getl, $i, $redis, $hashtag)
 	        }
 
 	        $countertrue = 0;
-	        while (isset($getnewl['more_available']) && $getnewl['more_available'] ==true && $countertrue < 70) {  
+	        while (isset($getnewl['more_available']) && $getnewl['more_available'] ==true && $countertrue < 25) {  
 	            $tmpgetnewl = $getnewl;
 
 	            $num_results = 0;
@@ -980,12 +994,12 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
           //////TOVARKA
 	// $text = "Добрый день! $smi_hi \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
 
-	$text = "Добрый день! $smi_hi \u{2029}\u{2757} CREST 3D WHITE - ТОЛЬКО САМОЕ ЛУЧШЕЕ, ДЛЯ ВАШЕЙ УЛЫБКИ \u{1F604} \u{1F444} \u{1F44D} \u{2029} Самая выгодная цена в России на оригинальную продукцию Crest 3D White из США \u{2029} Все товары сертифицированные в РФ! \u{2029} \u{1F680} Доставка по всей России! \u{2029} Оформляйте заказы на нашем сайте\u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @3dwhite.RUS  \u{1F448}\u{2029}\u{1F449} @3dwhite.RUS  \u{1F448}\u{2029}\u{1F449} @3dwhite.RUS \u{1F448}";
+	// $text = "Добрый день! $smi_hi \u{2029}\u{2757} CREST 3D WHITE - ТОЛЬКО САМОЕ ЛУЧШЕЕ, ДЛЯ ВАШЕЙ УЛЫБКИ \u{1F604} \u{1F444} \u{1F44D} \u{2029} Самая выгодная цена в России на оригинальную продукцию Crest 3D White из США \u{2029} Все товары сертифицированные в РФ! \u{2029} \u{1F680} Доставка по всей России! \u{2029} Оформляйте заказы на нашем сайте\u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @3dwhite.RUS  \u{1F448}\u{2029}\u{1F449} @3dwhite.RUS  \u{1F448}\u{2029}\u{1F449} @3dwhite.RUS \u{1F448}";
 
 
               //ADULT
          
-         // $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $uname_96 $smil I am ONLINE and WAITING.. $cur";
+         $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $uname_96 $smil I am ONLINE and WAITING.. $cur";
 
 
  
@@ -1065,7 +1079,8 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 
 $gender = 2;
-$phone  =  "+79855560279";//"+79260263988"; //// "+79057801330"; //"+79692308115";////
+$phone  =  "+16692223020";// "+16697779831"; //
+// "+79855560279";// "+79260263988";  // "+79057801330"; //"+79692308115";////
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
 $dir    = $romerINSTAPI.'src/'.$profileSetter; 
@@ -1082,6 +1097,7 @@ $first_name = "";
 $qs_stamp = "";
 
  
+// if login -> funcrecur
 
 while ( $redis->scard("proxy") > 0 ) 
 {
@@ -1140,13 +1156,13 @@ $outputs = $r->fetchHeaders();
 	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
 	echo var_export($sres);
 	 echo "\nVerification code sent! >>>>>\n";
-     	 while ($redis->scard("code") < 1) {
-     	 		sleep(3);
-     	 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
-     	 }
-     	 $cod = $redis->spop("code");
-     	 // $cod = readline("Command: ");
-     	 // echo "\n".$cod."\n";
+     	 // while ($redis->scard("code") < 1) {
+     	 // 		sleep(3);
+     	 // 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
+     	 // }
+     	 // $cod = $redis->spop("code");
+     	 $cod = readline("Command: ");
+     	 echo "\n".$cod."\n";
      	 
 	//validatesmssignup
 	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
@@ -1284,11 +1300,12 @@ $outputs = $r->fetchHeaders();
 		// //edit profile
 		try { 
 			// $GLOBALS["biography"] = str_replace( "_username" , explode(" ",$first_name)[0]  , $GLOBALS["biography"] );
-			// $GLOBALS["first_name"] = "🔵 3DWhite CREST 🔵";
-			// $GLOBALS["biography"] =  "Отбеливающие Полоски Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении 👇🏽ЗАКАЗАТЬ👇🏽";
+	 
+			$GLOBALS["first_name"] = "🔵 Отбеливающие Полоски 🔵";
+			$GLOBALS["biography"] =  "Crest 3DWhite Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении  👇👇ЗАКАЗАТЬ👇👇";
 
 			 
-			$GLOBALS["biography"] =  "HOT CHAT 🔞 Photos in DIRECT📥 🔞 JOIN! 👇👇👇 ";
+			// $GLOBALS["biography"] =  "🔞 JOIN HOT CHAT! 👇👇👇";
 
 		    $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
@@ -1361,9 +1378,9 @@ $outputs = $r->fetchHeaders();
 		// } else {
 			//////// NON THEMATIC ////////
 		 
-		$caption = "Check out link in bio for her contacts 😍👆👆👆 \u{2029} ";
+		
 
-		// $caption = "💎Заказать Crest3DWhite можно перейдя по ссылке наверху 👆\u{2029}  На сайте Вы должны написать ФИО и номер телефона и нажать на ЗАКАЗАТЬ \u{2029} в течении 10 минут наш оператор Вам позвонит \u{2029} 💎Гарантированное отбеливание зубов за 1 неделю  \u{2029} 💎Безвредно для зубов  \u{2029} 💎Результат после первого применения  \u{2029} 💸Оплата заказа при получении на почте.  \u{2029} Получил - проверил - оплатил!  \u{2029}. \u{2029}. \u{2029}. \u{2029} #3dwhite.RUS #3dwhite_RUS #3dwhitecrest #3dcrest#3d#crestwhitestrips#отбеливающие_полоски #отбеливание#зубы#отбеливаниезубов #3dcrest#3дкрест#улыбка#отбеливающиеполоски#белыезубы#красиваяулыбка#красивыезубы#отбеливающаяпаста#россия#сша#домашнееотбеливание#белыезубки#белоснежнаяулубка#красота #crest#3dcrest #white_3d#москва #spb#полоскикрест";
+		
 
 		 
 		$filesVideo = scandir($dir);
@@ -1379,17 +1396,20 @@ $outputs = $r->fetchHeaders();
 				sleep(10);
 		    }
 		    elseif ($ext == "jpg" && $value != "1.jpg") {
+		  //   	$caption = "Check out my HOT video 😍 🔞 link in bio 👆👆👆 \u{2029} #follow4follow #followforfollow #like4like #likeforlike ";
 
-				$tags = ["18", "follow4follow", "followforfollow", "Body", "CalvinKlein", "FitGirl", "FitnesGirls", "Fitness", "FitnessAddict", "FitnesssGirl", "GirlBody", "Motivation", "PerfectBody", "Work", "Workout", "adult", "babestation", "bigboss", "bigtitties", "bikini", "cool", "danniharwood", "dm", "fancy", "fit", "fitness", "fitnessmodel", "fuckyou", "gym", "health", "hotsexy", "hotties", "instadaily", "instagood", "juliaann", "kiaramia", "kiaramiateam", "ledlight", "like4like", "likeforlike", "lisaann", "love", "lust", "meena", "miakhalifa", "porn", "pornbros", "pornofood", "pornstarr", "prettyyoung", "pörn", "pörnstars", "recentforrecent", "sexchat", "sexvid", "sophiedee", "squats", "suckforme", "swag", "sëxchat", "sëxy", "twerk", "workout"];
+				// $tags = ["18", "Body", "CalvinKlein", "FitGirl", "FitnesGirls", "Fitness", "FitnessAddict", "FitnesssGirl", "GirlBody", "Motivation", "PerfectBody", "Work", "Workout", "babestation", "bigboss", "bigtitties", "bikini", "cool", "danniharwood", "dm", "fancy", "fit", "fitness", "fitnessmodel", "gym", "health", "hotsexy", "hotties", "instadaily", "instagood", "juliaann", "kiaramia", "kiaramiateam", "ledlight", "lisaann", "love", "lust", "meena", "miakhalifa", "pornbros", "pornofood", "pornstarr", "prettyyoung", "pörn", "pörnstars", "recentforrecent", "sexchat", "sexvid", "sophiedee", "squats", "swag", "sëxchat", "sëxy", "twerk", "workout"];
 
-				 $captiontag = [];
-				while (count($captiontag) < 29)
-				{
-				  $tag = $tags[mt_rand(0, count($tags) - 1)];
-				  array_push($captiontag, "#".$tag);
-				}
+				//  $captiontag = [];
+				// while (count($captiontag) < 25)
+				// {
+				//   $tag = $tags[mt_rand(0, count($tags) - 1)];
+				//   array_push($captiontag, "#".$tag);
+				// }
 
-				$caption = $caption . implode(" ", $captiontag); 
+				// $caption = $caption . implode(" ", $captiontag); 
+				$caption = "CREST 3D WHITE ИДЕАЛЬНО БЕЛЫЕ ЗУБЫ ЗА 20 ДНЕЙ \u{2029} Уникальная домашняя методика, которую рекомендуют 99% мировых специалистов. \u{2029} ✅Более щадящая процедура по сравнению с методами, во время которых используется лазер. \u{2029} ✅Зубы могут быть очищены в относительно короткие сроки. \u{2029} ✅Не возникает повышенной чувствительности зубов. \u{2029} ✅Повышение уверенности в себе и хороший психологический эффект. \u{2029} ✅Можно контролировать уровень белизны зубов. \u{2029} Подходит как для женщин, так и для мужчин \u{2029} Заказать по акции в профиле 👆👆👆";
+
 
 				try {
 				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
@@ -1397,7 +1417,7 @@ $outputs = $r->fetchHeaders();
 				    echo $e->getMessage();
 				}
 
-				sleep(10);
+				sleep(30);
 		    }
 		}
 
@@ -1414,8 +1434,8 @@ $outputs = $r->fetchHeaders();
 
 		// echo "photo downloaded!\n";
 ////ADULT
-		$feedres = $i->getSelfUserFeed();
-		$ad_media_id  = $feedres['items'][0]['pk'];
+		// $feedres = $i->getSelfUserFeed();
+		// $ad_media_id  = $feedres['items'][0]['pk'];
 //////////
 
 ///TOVARKA
@@ -1426,7 +1446,7 @@ $outputs = $r->fetchHeaders();
 // 		$ad_media_id = $feedres['items'][mt_rand(9,11)]['pk']; 
 //////
 
-		// $ad_media_id = 123123;
+		$ad_media_id = 123123;
 		$logoutCounter = 20;
 // sleep(6);
  
