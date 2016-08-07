@@ -358,8 +358,15 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 					 
 				 // if ($GLOBALS["redis"]->scard("detectionlike".$usernamelink) > 0 ) {
 					// $medcom = $GLOBALS["redis"]->spop("detectionlike".$usernamelink);  
-					 if (isset($medcom) && $GLOBALS["redis"]->sismember("liked".$usernamelink , $medcom) != true ) {
-								$lres =$ilink->like($medcom);
+					if ($medcom == "nonprivate") {
+						 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
+
+					  if (isset($usfeed['items'][0]['pk'])) {
+						  $med = $usfeed['items'][0]['pk'];
+
+
+					 if ( $GLOBALS["redis"]->sismember("liked".$usernamelink , $med) != true ) {
+								$lres =$ilink->like($med);
 								echo var_export($lres); //need to test res code
 							 
 
@@ -392,7 +399,10 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 							 	}
 						echo var_export($lres);
 						}
-											
+						}
+					}
+						
+
 					// }
 						
 
@@ -561,16 +571,18 @@ function funcparse($followers, $i, $redis, $influencer)
 					      $word1=$matches[1][0];
 					  }
 				     
-
+					$redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk'].":nonprivate");//.":".$word1);
 
 					  $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
 
-					 if (isset($usfeed['items'][0]['pk'])) {
-						    $med = $usfeed['items'][0]['pk'];
-						     $redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk'].":".$med );//.":".$word1);
-						} else {
-							 $redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk']);//.":".$word1);
-						}
+					 // if (isset($usfeed['items'][0]['pk'])) {
+						//     $med = $usfeed['items'][0]['pk'];
+						//      $redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk'].":".$med );//.":".$word1);
+						// } else {
+						// 	 $redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk']);//.":".$word1);
+						// }
+
+
 						//     echo $med.":med\n";// use the same caption
 						//     if (isset($usfeed['items'][0]['lat']) && isset($usfeed['items'][0]['lng'])) {
 						// 		$lat = $usfeed['items'][0]['lat'];
@@ -661,7 +673,7 @@ function funcparse($followers, $i, $redis, $influencer)
 							  }
 								  	 
 
-							$redis->sadd($key, $followers['users'][$iter]['pk']);//.":".$word1);
+							$redis->sadd($key, $followers['users'][$iter]['pk'].":private");//.":".$word1);
 						}
 					}
 				
@@ -1079,7 +1091,7 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 
 $gender = 2;
-$phone  =  "+16692223020";// "+16697779831"; //
+$phone  =  "+12028447146";//"+16692223020";// "+16697779831"; //
 // "+79855560279";// "+79260263988";  // "+79057801330"; //"+79692308115";////
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
@@ -1299,10 +1311,13 @@ $outputs = $r->fetchHeaders();
 
 		// //edit profile
 		try { 
+
+			$GLOBALS["first_name"] = "";
+			$GLOBALS["biography"] = "";
 			// $GLOBALS["biography"] = str_replace( "_username" , explode(" ",$first_name)[0]  , $GLOBALS["biography"] );
 	 
-			$GLOBALS["first_name"] = "🔵 Отбеливающие Полоски 🔵";
-			$GLOBALS["biography"] =  "Crest 3DWhite Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении  👇👇ЗАКАЗАТЬ👇👇";
+			// $GLOBALS["first_name"] = "🔵 Отбеливающие Полоски 🔵";
+			// $GLOBALS["biography"] =  "Crest 3DWhite Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении  👇👇ЗАКАЗАТЬ👇👇";
 
 			 
 			// $GLOBALS["biography"] =  "🔞 JOIN HOT CHAT! 👇👇👇";
@@ -1383,45 +1398,45 @@ $outputs = $r->fetchHeaders();
 		
 
 		 
-		$filesVideo = scandir($dir);
-		foreach ( $filesVideo as $k => $value ) {
-		    $ext = pathinfo($value, PATHINFO_EXTENSION);
-		    if ($ext == "mp4") {//&& $value != "1.jpg
-				try {
-				    $i->uploadVideo($dir.'/'.$value, $caption); // use the same caption
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
+		// $filesVideo = scandir($dir);
+		// foreach ( $filesVideo as $k => $value ) {
+		//     $ext = pathinfo($value, PATHINFO_EXTENSION);
+		//     if ($ext == "mp4") {//&& $value != "1.jpg
+		// 		try {
+		// 		    $i->uploadVideo($dir.'/'.$value, $caption); // use the same caption
+		// 		} catch (Exception $e) {
+		// 		    echo $e->getMessage();
+		// 		}
 
-				sleep(10);
-		    }
-		    elseif ($ext == "jpg" && $value != "1.jpg") {
-		  //   	$caption = "Check out my HOT video 😍 🔞 link in bio 👆👆👆 \u{2029} #follow4follow #followforfollow #like4like #likeforlike ";
+		// 		sleep(10);
+		//     }
+		//     elseif ($ext == "jpg" && $value != "1.jpg") {
+		//   //   	$caption = "Check out my HOT video 😍 🔞 link in bio 👆👆👆 \u{2029} #follow4follow #followforfollow #like4like #likeforlike ";
 
-				// $tags = ["18", "Body", "CalvinKlein", "FitGirl", "FitnesGirls", "Fitness", "FitnessAddict", "FitnesssGirl", "GirlBody", "Motivation", "PerfectBody", "Work", "Workout", "babestation", "bigboss", "bigtitties", "bikini", "cool", "danniharwood", "dm", "fancy", "fit", "fitness", "fitnessmodel", "gym", "health", "hotsexy", "hotties", "instadaily", "instagood", "juliaann", "kiaramia", "kiaramiateam", "ledlight", "lisaann", "love", "lust", "meena", "miakhalifa", "pornbros", "pornofood", "pornstarr", "prettyyoung", "pörn", "pörnstars", "recentforrecent", "sexchat", "sexvid", "sophiedee", "squats", "swag", "sëxchat", "sëxy", "twerk", "workout"];
+		// 		// $tags = ["18", "Body", "CalvinKlein", "FitGirl", "FitnesGirls", "Fitness", "FitnessAddict", "FitnesssGirl", "GirlBody", "Motivation", "PerfectBody", "Work", "Workout", "babestation", "bigboss", "bigtitties", "bikini", "cool", "danniharwood", "dm", "fancy", "fit", "fitness", "fitnessmodel", "gym", "health", "hotsexy", "hotties", "instadaily", "instagood", "juliaann", "kiaramia", "kiaramiateam", "ledlight", "lisaann", "love", "lust", "meena", "miakhalifa", "pornbros", "pornofood", "pornstarr", "prettyyoung", "pörn", "pörnstars", "recentforrecent", "sexchat", "sexvid", "sophiedee", "squats", "swag", "sëxchat", "sëxy", "twerk", "workout"];
 
-				//  $captiontag = [];
-				// while (count($captiontag) < 25)
-				// {
-				//   $tag = $tags[mt_rand(0, count($tags) - 1)];
-				//   array_push($captiontag, "#".$tag);
-				// }
+		// 		//  $captiontag = [];
+		// 		// while (count($captiontag) < 25)
+		// 		// {
+		// 		//   $tag = $tags[mt_rand(0, count($tags) - 1)];
+		// 		//   array_push($captiontag, "#".$tag);
+		// 		// }
 
-				// $caption = $caption . implode(" ", $captiontag); 
-				$caption = "CREST 3D WHITE ИДЕАЛЬНО БЕЛЫЕ ЗУБЫ ЗА 20 ДНЕЙ \u{2029} Уникальная домашняя методика, которую рекомендуют 99% мировых специалистов. \u{2029} ✅Более щадящая процедура по сравнению с методами, во время которых используется лазер. \u{2029} ✅Зубы могут быть очищены в относительно короткие сроки. \u{2029} ✅Не возникает повышенной чувствительности зубов. \u{2029} ✅Повышение уверенности в себе и хороший психологический эффект. \u{2029} ✅Можно контролировать уровень белизны зубов. \u{2029} Подходит как для женщин, так и для мужчин \u{2029} Заказать по акции в профиле 👆👆👆";
+		// 		// $caption = $caption . implode(" ", $captiontag); 
+		// 		$caption = "CREST 3D WHITE ИДЕАЛЬНО БЕЛЫЕ ЗУБЫ ЗА 20 ДНЕЙ \u{2029} Уникальная домашняя методика, которую рекомендуют 99% мировых специалистов. \u{2029} ✅Более щадящая процедура по сравнению с методами, во время которых используется лазер. \u{2029} ✅Зубы могут быть очищены в относительно короткие сроки. \u{2029} ✅Не возникает повышенной чувствительности зубов. \u{2029} ✅Повышение уверенности в себе и хороший психологический эффект. \u{2029} ✅Можно контролировать уровень белизны зубов. \u{2029} Подходит как для женщин, так и для мужчин \u{2029} Заказать по акции в профиле 👆👆👆";
 
 
-				try {
-				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
+		// 		try {
+		// 		    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
+		// 		} catch (Exception $e) {
+		// 		    echo $e->getMessage();
+		// 		}
 
-				sleep(30);
-		    }
-		}
+		// 		sleep(30);
+		//     }
+		// }
 
-		echo "video and photo downloaded!\n";
+		// echo "video and photo downloaded!\n";
 
 		 
 
