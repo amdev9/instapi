@@ -485,12 +485,12 @@ function funcparse($followers, $i, $redis, $influencer)
 		$counter = 0;
 		// while ($counter < 2) {  
 
-			for($iter = 0, $c = count($followers['users']); $iter < $c; $iter++) {
+			for($iter = 0, $c = $followers['page_size']; $iter < $c; $iter++) {
 		        
 		        
 		        echo $followers['users'][$iter]['pk'];
 
-				try {
+			 
 					if ($followers['users'][$iter]['is_private'] == false) {
 
 					  $txt=$followers['users'][$iter]['full_name'];
@@ -608,9 +608,7 @@ function funcparse($followers, $i, $redis, $influencer)
 						}
 					}
 				
-				} catch (Exception $e) {
-					echo $e->getMessage();
-				}
+				 
 			}
 					
 			$tmpfollowers = $followers;
@@ -646,6 +644,7 @@ function funcparse($followers, $i, $redis, $influencer)
 			
 			 sleep(30);
 		// }
+
 }
 
 

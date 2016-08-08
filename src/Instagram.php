@@ -1893,13 +1893,15 @@ public function sendConfirmEmail($email) {
   public function like($mediaId)
   {
       $data = json_encode([
-        '_uuid'      => $this->uuid,
-        '_uid'       => $this->username_id,
+        'module_name' => "feed_timeline",
+        'media_id'   => $mediaId."_".$this->username_id,
         '_csrftoken' => $this->token,
-        'media_id'   => $mediaId,
+        '_uid'       => $this->username_id,
+        '_uuid'      => $this->uuid,
+        
     ]);
 
-      return $this->request("media/$mediaId/like/", $this->generateSignature($data));//[1]
+      return $this->request("media/".$mediaId."_".$this->username_id."/like/", $this->generateSignature($data));//[1]
   }
 
   /**
