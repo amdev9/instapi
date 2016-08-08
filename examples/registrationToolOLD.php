@@ -224,7 +224,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 
  // }
 ////ADULT////////// 	 
-	 while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) {
+	 while ($GLOBALS["redis"]->llen("detection".$usernamelink) == 0) { //
 		  // funcgeocoordparse($ilink, $GLOBALS["redis"]);
 	 		echo $next_iteration_time = add_time($delay); //timer
 			    		sleep($next_iteration_time);
@@ -291,7 +291,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	//  		 // sleep($timetosleep);	 
 	// // }		 
 	 
-	  if ($GLOBALS["redis"]->scard("detection".$usernamelink) > 0 ) {
+	  if ($GLOBALS["redis"]->llen("detection".$usernamelink) > 0 ) {
 		
 
 		    // for($t = 0; $t < 51; $t++) {  //TOVARKA
@@ -300,7 +300,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 				//     	funcgeocoordparse($ilink, $GLOBALS["redis"]);
 				// }
 
-	  			$acmed = $GLOBALS["redis"]->spop("detection".$usernamelink);
+	  			$acmed = $GLOBALS["redis"]->lpop("detection".$usernamelink);
 
 				if (strpos($acmed, ':') !== false) {
 					$datapart = explode(":", $acmed);
@@ -481,12 +481,11 @@ function is_arabic($str) {
 
 function funcparse($followers, $i, $redis, $influencer) 
 {
-
+	echo $followers['page_size'];
 		$counter = 0;
 		// while ($counter < 2) {  
 
-			for($iter = 0, $c = $followers['page_size']; $iter < $c; $iter++) {
-		        
+			for($iter = 0; $iter < $followers['page_size']; $iter++) {//
 		        
 		        echo $followers['users'][$iter]['pk'];
 
@@ -501,8 +500,11 @@ function funcparse($followers, $i, $redis, $influencer)
 					  {
 					      $word1=$matches[1][0];
 					  }
-				     
-					$redis->sadd("detection".$GLOBALS["username"], $followers['users'][$iter]['pk'].":nonprivate");//.":".$word1);
+				     //change to list . follow from top to bottom
+					$redis->rpush("detection".$GLOBALS["username"], $followers['users'][$iter]['pk'].":nonprivate");
+						//sadd
+
+					//.":".$word1);
 
 					  // $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
 
@@ -604,7 +606,8 @@ function funcparse($followers, $i, $redis, $influencer)
 							  }
 								  	 
 
-							$redis->sadd($key, $followers['users'][$iter]['pk'].":private");//.":".$word1);
+							$redis->rpush($key, $followers['users'][$iter]['pk'].":private");
+							//.":".$word1);  sadd
 						}
 					}
 				
@@ -627,7 +630,7 @@ function funcparse($followers, $i, $redis, $influencer)
 
 // Notice: Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 451
 // PHP Notice:  Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 453
-
+			sleep(30);
 			if (isset($tmpfollowers['next_max_id'])) {
 				$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
 				try {
@@ -1022,7 +1025,7 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 $gender = 2;
 // //
-$phone  = "+12168399838"; //"+16465478033";//"+12182031088";//"+12536422580";//"+12067177718"; //"+12033093704"; //"+12028447146";//"+12028447146";////"+16692223020";// "+16697779831"; //
+$phone  = "+12192245676"; //"+12168399838"; //"+16465478033";//"+12182031088";//"+12536422580";//"+12067177718"; //"+12033093704"; //"+12028447146";//"+12028447146";////"+16692223020";// "+16697779831"; //
 // "+79855560279";// "+79260263988";  // "+79057801330"; //"+79692308115";////
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
@@ -1094,7 +1097,7 @@ $outputs = $r->fetchHeaders();
 		}
 		 
 	}	
-
+	sleep(10);
 	//sendsmssignup
 	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
 	echo var_export($sres);
@@ -1116,8 +1119,8 @@ $outputs = $r->fetchHeaders();
 	//usernamesuggestuin+
 	//createvalid
 	
-      
-    // sleep(4);  test without
+      sleep(10);
+   
 	 if ($redis->scard("names") > 0) {
    		$pieces = $redis->spop("names");
     } else {
@@ -1143,7 +1146,7 @@ $outputs = $r->fetchHeaders();
 	// } 
 	 
 
-
+	sleep(10);
 	// $result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
 	 $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
 
@@ -1224,7 +1227,7 @@ $outputs = $r->fetchHeaders();
      	$redis->sadd("blacklist_email",  $email);
      	$redis->sadd("black_proxy",  $proxy);
 
-
+     	sleep(10);
      	$cured = $i->currentEdit();
      	echo var_export($cured);
 
@@ -1252,21 +1255,21 @@ $outputs = $r->fetchHeaders();
 
 			 
 			// $GLOBALS["biography"] =  "🔞 JOIN HOT CHAT! 👇👇👇";
-
+			sleep(10);
 		    $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
 		} catch (Exception $e) {
 		    echo $e->getMessage();
 		}
 
-		sleep(6);
+		sleep(30);
 		
 		try {
 		    $i->changeProfilePicture($photo);
 		} catch (Exception $e) {
 		    echo $e->getMessage();
 		}
-		sleep(3);
+		sleep(20);
 
 // 		try {
 // 		   $prres =  $i->setPrivateAccount();
