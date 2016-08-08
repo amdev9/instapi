@@ -57,12 +57,18 @@ class Instagram
   /////////////////////////////// for just created accounts ///////////////
 
       $this->syncFeatures();
+      sleep(3);
       $this->autoCompleteUserList();
+        sleep(3);
       $this->directRecentRecipients();
+        sleep(3);
       $this->discoverAyml();
 ///////
+        sleep(5);
     $this->timelineFeed(); //
+     sleep(3);
     $this->getv2Inbox();    //
+     sleep(3);
     $this->getRecentActivity();     //
 
 
@@ -1829,7 +1835,10 @@ public function sendConfirmEmail($email) {
    */
   public function getUserFollowers($usernameId, $maxid = null)
   {
-      $userFollowers = $this->request("friendships/$usernameId/followers/?max_id=$maxid&ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
+    // need fix when null
+    //?max_id=$maxid&
+    //need test ---> delete after followers/
+      $userFollowers = $this->request("friendships/$usernameId/followers/".(!is_null($maxid) ? "?max_id=".$maxid."&" : '?')."ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
 
        if ($userFollowers['status'] != 'ok' && $userFollowers['message'] =="checkpoint_required" ) {
 
@@ -1994,6 +2003,9 @@ public function sendConfirmEmail($email) {
    *
    * @return array
    *   Friendship status data
+   signed_body=fe3f4a50c6ee13ee74299df6661e5d259e6f3508b7db3490f9a5c090e155c971.%7B%22
+   _csrftoken%22%3A%22hvo1oRG4LMGDeScVIuQacSLZnFNG2xP6%22%2C%22user_id%22%3A%2225025320%22%2C%22_uid%22%3A%223592360965%22%2C%22_uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%7D&ig_sig_key_version=4
+
    */
   public function follow($userId)
   {
