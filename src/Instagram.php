@@ -57,18 +57,18 @@ class Instagram
   /////////////////////////////// for just created accounts ///////////////
 
       $this->syncFeatures();
-      sleep(3);
+      
       $this->autoCompleteUserList();
-        sleep(3);
+       
       $this->directRecentRecipients();
-        sleep(3);
+     
       $this->discoverAyml();
 ///////
-        sleep(5);
+        sleep(2);
     $this->timelineFeed(); //
-     sleep(3);
+     
     $this->getv2Inbox();    //
-     sleep(3);
+     
     $this->getRecentActivity();     //
 
 

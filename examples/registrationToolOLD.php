@@ -181,7 +181,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 1000;//400//25000 		//  direct 500->57    700->34
+	$posts_per_day = 3000;//400//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -363,53 +363,53 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 				
 					  
 					 
-					if ($medcom == "nonprivate") {
-							echo $next_iteration_time = add_time($delay); //timer
-			    		sleep($next_iteration_time);
-						 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
-						 echo "\nfeed fecthed\n";
+					// if ($medcom == "nonprivate") {
+					// 		echo $next_iteration_time = add_time($delay); //timer
+			  //   		sleep($next_iteration_time);
+					// 	 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
+					// 	 echo "\nfeed fecthed\n";
 					
-					  if (isset($usfeed['items'][0]['pk'])) {
-						  $med = $usfeed['items'][0]['pk'];
-						  sleep(60);
+					//   if (isset($usfeed['items'][0]['pk'])) {
+					// 	  $med = $usfeed['items'][0]['pk'];
+					// 	  sleep(60);
 
 
-					 if ( $GLOBALS["redis"]->sismember("liked".$usernamelink , $med) != true ) {
-								$lres =$ilink->like($med);
-								echo var_export($lres); //need to test res code
+					//  if ( $GLOBALS["redis"]->sismember("liked".$usernamelink , $med) != true ) {
+					// 			$lres =$ilink->like($med);
+					// 			echo var_export($lres); //need to test res code
 							 
 
-							if ($lres[1]['status'] == 'ok') {
-					 		$GLOBALS["redis"]->sadd("liked".$usernamelink, $med);
-					 	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
-					 		$ilink->login(true);
-					 	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
-							 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $lres[1]['checkpoint_url']);
-				                     echo "\nVerification code sent! >>>>>\n";
-						 			 // $resp_code = trim(fgets(STDIN));
-				                      $resp_code = "";
-						 			   while( ctype_digit($resp_code) != true) {
-										 // $line = readline("Command: ");
-										  $resp_code = readline("Command: ");
-										}
+					// 		if ($lres[1]['status'] == 'ok') {
+					//  		$GLOBALS["redis"]->sadd("liked".$usernamelink, $med);
+					//  	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
+					//  		$ilink->login(true);
+					//  	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
+					// 		 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $lres[1]['checkpoint_url']);
+				 //                     echo "\nVerification code sent! >>>>>\n";
+					// 	 			 // $resp_code = trim(fgets(STDIN));
+				 //                      $resp_code = "";
+					// 	 			   while( ctype_digit($resp_code) != true) {
+					// 					 // $line = readline("Command: ");
+					// 					  $resp_code = readline("Command: ");
+					// 					}
 
 																 			
 
-						 			 echo "\n---->".$resp_code;
+					// 	 			 echo "\n---->".$resp_code;
 
-						 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
+					// 	 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
 
-						 			echo var_export($results);
-							 	}
+					// 	 			echo var_export($results);
+					// 		 	}
 
-							 	else {
-							 			echo var_export($lres);
+					// 		 	else {
+					// 		 			echo var_export($lres);
 
-							 	}
+					// 		 	}
 						 
-						}
-						}
-					}
+					// 	}
+					// 	}
+					// }
 						
 	}
 					 
@@ -493,8 +493,8 @@ function funcparse($followers, $i, $redis, $influencer)
 
 			for($iter = 0; $iter < count($followers['users']); $iter++) { 
 				//$followers['page_size']
-		        echo count($followers['users'])."\n";
-		        echo $followers['users'][$iter]['pk'];
+		        // echo count($followers['users'])."\n";
+		        // echo $followers['users'][$iter]['pk'];
 
 			 
 					if ($followers['users'][$iter]['is_private'] == false) {
@@ -1021,7 +1021,7 @@ $password = $argv[1];
 $email= $argv[2]; 
 $url  = $argv[3]; 
 
-$biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_flower", "\u{1F339}", str_replace("_smi_video", "\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $argv[4])) ) ) ;
+$biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_flower", "\u{1F339}", str_replace("_smi_video", "🔞\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $argv[4])) ) ) ;
 
 
  //."\u{1F4A6}\u{1F447}\u{1F447}\u{1F447}";    
@@ -1032,7 +1032,7 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 $gender = 2;
 // //
-$phone  = "+14307022073";//"+17709173756";//"+14704274180";//"+12137886860"; //"+16465834276";//"+16695007087"; //"+19197060040"; //"+12192245676"; //"+12168399838"; //"+16465478033";//"+12182031088";//"+12536422580";//"+12067177718"; //"+12033093704"; //"+12028447146";//"+12028447146";////"+16692223020";// "+16697779831"; //
+$phone  = "+16692223214";//"+14307022073";//"+17709173756";//"+14704274180";//"+12137886860"; //"+16465834276";//"+16695007087"; //"+19197060040"; //"+12192245676"; //"+12168399838"; //"+16465478033";//"+12182031088";//"+12536422580";//"+12067177718"; //"+12033093704"; //"+12028447146";//"+12028447146";////"+16692223020";// "+16697779831"; //
 // "+79855560279";// "+79260263988";  // "+79057801330"; //"+79692308115";////
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
@@ -1104,7 +1104,7 @@ $outputs = $r->fetchHeaders();
 		}
 		 
 	}	
-	sleep(10);
+	 
 	//sendsmssignup
 	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
 	echo var_export($sres);
@@ -1153,7 +1153,7 @@ $outputs = $r->fetchHeaders();
 	// } 
 	 
 
-	sleep(10);
+	sleep(2);
 	// $result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
 	 $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
 
@@ -1223,9 +1223,7 @@ $outputs = $r->fetchHeaders();
 		//set profile picture
 		sleep(3);
 
-		
-
-// 🔞
+		 
 		$registered = $proxy." ".$username." ".$email." ".$password." ".$first_name;
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
          $caption = str_replace( "_username" , explode(" ",$first_name)[0]  ,  $caption );  
@@ -1254,7 +1252,9 @@ $outputs = $r->fetchHeaders();
 		try { 
 
 			 
-			 $GLOBALS["biography"] = $GLOBALS["biography"]."🔞🔞";
+			 $GLOBALS["biography"] = $GLOBALS["biography"]."😍";
+			 $GLOBALS["biography"]  = str_replace( "_username" , explode(" ",$first_name)[0],  $GLOBALS["biography"] );  
+
 			// $GLOBALS["first_name"] = "🔵 Отбеливающие Полоски 🔵";
 			// $GLOBALS["biography"] =  "Crest 3DWhite Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении  👇👇ЗАКАЗАТЬ👇👇";
 
@@ -1361,7 +1361,8 @@ $outputs = $r->fetchHeaders();
 				  array_push($captiontag, "#".$tag);
 				}
 
-				$caption = $caption ." #follow4follow #followme #like4follow #like4like ".implode(" ", $captiontag); 
+				// $caption = $caption ." #follow4follow #followme #like4follow #like4like ".implode(" ", $captiontag);
+				 
 				// $caption = "CREST 3D WHITE ИДЕАЛЬНО БЕЛЫЕ ЗУБЫ ЗА 20 ДНЕЙ \u{2029} Уникальная домашняя методика, которую рекомендуют 99% мировых специалистов. \u{2029} ✅Более щадящая процедура по сравнению с методами, во время которых используется лазер. \u{2029} ✅Зубы могут быть очищены в относительно короткие сроки. \u{2029} ✅Не возникает повышенной чувствительности зубов. \u{2029} ✅Повышение уверенности в себе и хороший психологический эффект. \u{2029} ✅Можно контролировать уровень белизны зубов. \u{2029} Подходит как для женщин, так и для мужчин \u{2029} Заказать по акции в профиле 👆👆👆";
 
 
