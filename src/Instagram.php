@@ -1069,16 +1069,17 @@ public function sendConfirmEmail($email) {
    */
   public function changeProfilePicture($photo)
   {
-
+      //
      ///NEED TEST
         $fileToUpload1 = imagecreatefromjpeg($photo);
         $imgdata = getimagesize($photo);
         $width = $imgdata[0];
         $height = $imgdata[1];
-        $pix_w=mt_rand(0, $width);
-        $pix_h=mt_rand(0, $height);
+        $pix_w=mt_rand(20, $width);
+        $pix_h=mt_rand(20, $height);
         // echo $pix_w." ".$pix_h;
-        $rgb = imagecolorat($fileToUpload1, $pix_w,$pix_h+1);
+        $rgb = imagecolorat($fileToUpload1, $pix_w-10,$pix_h-10);
+        // $red = imagecolorallocate($gd, 255, 0, 0); 
         imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
         ob_start();
         imagejpeg($fileToUpload1);
@@ -1838,7 +1839,9 @@ public function sendConfirmEmail($email) {
     // need fix when null
     //?max_id=$maxid&
     //need test ---> delete after followers/
-      $userFollowers = $this->request("friendships/$usernameId/followers/".(!is_null($maxid) ? "?max_id=".$maxid."&" : '?')."ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
+      $userFollowers = $this->request("friendships/$usernameId/followers/".(!is_null($maxid) ? "?max_id=".$maxid : ''))[1]; //."&rank_token=$this->rank_token"
+//."ig_sig_key_version=".Constants::SIG_KEY_VERSION 
+// $userFollowers = $this->request("friendships/$usernameId/followers/".(!is_null($maxid) ? "?max_id=".$maxid."&" : '?')."ig_sig_key_version=".Constants::SIG_KEY_VERSION."&rank_token=$this->rank_token")[1];
 
        if ($userFollowers['status'] != 'ok' && $userFollowers['message'] =="checkpoint_required" ) {
 
