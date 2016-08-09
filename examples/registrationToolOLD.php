@@ -368,9 +368,10 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 			    		sleep($next_iteration_time);
 						 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
 						 echo "\nfeed fecthed\n";
-					sleep(60);
+					
 					  if (isset($usfeed['items'][0]['pk'])) {
 						  $med = $usfeed['items'][0]['pk'];
+						  sleep(60);
 
 
 					 if ( $GLOBALS["redis"]->sismember("liked".$usernamelink , $med) != true ) {
