@@ -363,53 +363,54 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 				
 					  
 					 
-					// if ($medcom == "nonprivate") {
-					// 		echo $next_iteration_time = add_time($delay); //timer
-			  //   		sleep($next_iteration_time);
-					// 	 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
-					// 	 echo "\nfeed fecthed\n";
+					if ($medcom == "nonprivate") {
+						  sleep(2);
+							// echo $next_iteration_time = add_time($delay); //timer
+			    // 		sleep($next_iteration_time);
+						 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
+						 echo "\nfeed fecthed\n";
 					
-					//   if (isset($usfeed['items'][0]['pk'])) {
-					// 	  $med = $usfeed['items'][0]['pk'];
-					// 	  sleep(60);
+					  if (isset($usfeed['items'][0]['pk'])) {
+						  $med = $usfeed['items'][0]['pk'];
+						  sleep(10);
 
 
-					//  if ( $GLOBALS["redis"]->sismember("liked".$usernamelink , $med) != true ) {
-					// 			$lres =$ilink->like($med);
-					// 			echo var_export($lres); //need to test res code
+					 if ( $GLOBALS["redis"]->sismember("liked".$usernamelink , $med) != true ) {
+								$lres =$ilink->like($med);
+								echo var_export($lres); //need to test res code
 							 
 
-					// 		if ($lres[1]['status'] == 'ok') {
-					//  		$GLOBALS["redis"]->sadd("liked".$usernamelink, $med);
-					//  	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
-					//  		$ilink->login(true);
-					//  	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
-					// 		 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $lres[1]['checkpoint_url']);
-				 //                     echo "\nVerification code sent! >>>>>\n";
-					// 	 			 // $resp_code = trim(fgets(STDIN));
-				 //                      $resp_code = "";
-					// 	 			   while( ctype_digit($resp_code) != true) {
-					// 					 // $line = readline("Command: ");
-					// 					  $resp_code = readline("Command: ");
-					// 					}
+							if ($lres[1]['status'] == 'ok') {
+					 		$GLOBALS["redis"]->sadd("liked".$usernamelink, $med);
+					 	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
+					 		$ilink->login(true);
+					 	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
+							 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $lres[1]['checkpoint_url']);
+				                     echo "\nVerification code sent! >>>>>\n";
+						 			 // $resp_code = trim(fgets(STDIN));
+				                      $resp_code = "";
+						 			   while( ctype_digit($resp_code) != true) {
+										 // $line = readline("Command: ");
+										  $resp_code = readline("Command: ");
+										}
 
 																 			
 
-					// 	 			 echo "\n---->".$resp_code;
+						 			 echo "\n---->".$resp_code;
 
-					// 	 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
+						 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
 
-					// 	 			echo var_export($results);
-					// 		 	}
+						 			echo var_export($results);
+							 	}
 
-					// 		 	else {
-					// 		 			echo var_export($lres);
+							 	else {
+							 			echo var_export($lres);
 
-					// 		 	}
+							 	}
 						 
-					// 	}
-					// 	}
-					// }
+						}
+						}
+					}
 						
 	}
 					 
@@ -623,21 +624,8 @@ function funcparse($followers, $i, $redis, $influencer)
 					
 			$tmpfollowers = $followers;
 			 
-//NEED FIX
-// 			1296734699675058367:med
-// no geo:med
-// 2367194649REQUEST: feed/user/2367194649/?rank_token=3570247882_578c4930-e0c4-456f-98c1-920e9f581a97&ranked_content=true
-// RESPONSE: {"auto_load_more_enabled": true, "items": [], "status": "ok", "num_results": 0, "more_available": false}
-
-// no media yet:med
-// PHP Notice:  Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 449
-
-// Notice: Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 449
-// PHP Notice:  Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 451
-
-// Notice: Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 451
-// PHP Notice:  Undefined index: next_max_id in /Users/alex/home/dev/rails/instagram/InstAPI/examples/registrationToolOLD.php on line 453
-			sleep(30);
+ 
+			sleep(10);
 			if (isset($tmpfollowers['next_max_id'])) {
 				$redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
 				try {
