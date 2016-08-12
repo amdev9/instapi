@@ -11,9 +11,9 @@
 // $romerPREDIS = '/home/blackkorol/in/predis/';
 // $romerINSTA = '/home/blackkorol/in/insta/';
 
-	$romerINSTAPI = '/Users/alex/home/dev/rails/instagram/InstAPI/';
-	$romerPREDIS = '/Users/alex/home/dev/redis/predis/';
-	$romerINSTA = '/Users/alex/home/dev/rails/instagram/InstA/';
+	$romerINSTAPI = '/Users/alex/dev/instapi/';
+	$romerPREDIS = '/Users/alex/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/dev/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -1020,7 +1020,10 @@ $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace (
 
 $gender = 2;
 // //
-$phone  = "+16692223214";//"+14307022073";//"+17709173756";//"+14704274180";//"+12137886860"; //"+16465834276";//"+16695007087"; //"+19197060040"; //"+12192245676"; //"+12168399838"; //"+16465478033";//"+12182031088";//"+12536422580";//"+12067177718"; //"+12033093704"; //"+12028447146";//"+12028447146";////"+16692223020";// "+16697779831"; //
+$phone  = $argv[8]; 
+
+// "+16692223214";
+//"+14307022073";//"+17709173756";//"+14704274180";//"+12137886860"; //"+16465834276";//"+16695007087"; //"+19197060040"; //"+12192245676"; //"+12168399838"; //"+16465478033";//"+12182031088";//"+12536422580";//"+12067177718"; //"+12033093704"; //"+12028447146";//"+12028447146";////"+16692223020";// "+16697779831"; //
 // "+79855560279";// "+79260263988";  // "+79057801330"; //"+79692308115";////
 $photo = $romerINSTAPI."src/".$argv[6]; 
 $profileSetter = $argv[7]; 
