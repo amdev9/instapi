@@ -181,7 +181,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 3000;//400//25000 		//  direct 500->57    700->34
+	$posts_per_day = 8000;//400//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -1096,7 +1096,7 @@ $outputs = $r->fetchHeaders();
 		 
 	}	
 	 
-	//sendsmssignup
+ 
 	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
 	echo var_export($sres);
 	 echo "\nVerification code sent! >>>>>\n";
@@ -1108,14 +1108,11 @@ $outputs = $r->fetchHeaders();
      	 $cod = readline("Command: ");
      	 echo "\n".$cod."\n";
      	 
-	//validatesmssignup
+ 
 	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
 	 echo var_export($sval);
-	//headers+
-	 
+ 
 	
-	//usernamesuggestuin+
-	//createvalid
 	
       sleep(10);
    
