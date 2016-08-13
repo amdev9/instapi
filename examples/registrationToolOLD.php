@@ -326,7 +326,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 				  	echo $next_iteration_time = add_time($delay); //timer
 			    		sleep($next_iteration_time);
 
-					if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true ) {
+					if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 590 ) {
 						// if ( $GLOBALS["redis"]->scard("followed".$usernamelink) < 590 ||  $GLOBALS["redis"]->scard("followed".$usernamelink) > 610) {
 					 		$fres = $ilink->follow($actioner);
 					  
@@ -360,7 +360,12 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 						echo var_export($fres);
 
 					}
-				
+					else {
+
+						$ilink->logout();
+						echo "\nlogout success";
+					}
+
 					  
 					 
 					if ($medcom == "nonprivate") {
@@ -1058,7 +1063,7 @@ while ( $redis->scard("proxy") > 0 )
 	 
 
 
-	//  $check = $r->checkEmail($email);
+	 // $check = $r->checkEmail($email);
  
  //    if (isset($check[1]['available']) && $check[1]['available'] == false) {
  //    	$redis->sadd("blacklist_email",  $email);
