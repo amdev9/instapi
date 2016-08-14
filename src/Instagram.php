@@ -1078,7 +1078,8 @@ public function sendConfirmEmail($email) {
         $pix_w=mt_rand(20, $width);
         $pix_h=mt_rand(20, $height);
         // echo $pix_w." ".$pix_h;
-        $rgb = imagecolorat($fileToUpload1, $pix_w-10,$pix_h-10);
+        $rgb = imagecolorallocate($fileToUpload1, 0, 0, 0); 
+        // $rgb = imagecolorat($fileToUpload1, $pix_w-10,$pix_h-10);
         // $red = imagecolorallocate($gd, 255, 0, 0); 
         imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
         ob_start();

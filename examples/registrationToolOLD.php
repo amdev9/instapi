@@ -363,7 +363,9 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 					else {
 
 						$ilink->logout();
+
 						echo "\nlogout success";
+						return;
 					}
 
 					  
