@@ -1021,6 +1021,8 @@ $proxy = $argv[3];
 
 	$i = new Instagram($username, $password, $proxy, $debug );
 	// $regUuid, $regDeviceId, $regPhoneId, $regPhoneUserAgent , $GLOBALS["phone"],
+
+	$i->login();
 	$logoutCounter = 20;
 	$ad_media_id  = 12323;
    $usname = $i->searchUsername($username);; 
