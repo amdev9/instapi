@@ -170,7 +170,7 @@ function functocomment($ilink, $usernamelink)
 
 }
 
-function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
+function funcrecur($ilink, $usernamelink, $pkuser)
 {
 //zub 3 2 3 2 2 0 1 = k n l & 5 5 2 5 5 = f e r ? / 5 e t i h w t s e r c / u r . s d o o o g - s l a e r / / : p t t h
 
@@ -422,10 +422,7 @@ function funcrecur($ilink, $usernamelink, $pkuser,  $counter,$ad_media_id)
 	}
 					 
 						
- 
- 
-
-	funcrecur($ilink, $usernamelink, $pkuser , $counter, $ad_media_id);
+	funcrecur($ilink, $usernamelink, $pkuser  );
 
 
  
@@ -1023,12 +1020,11 @@ $proxy = $argv[3];
 	// $regUuid, $regDeviceId, $regPhoneId, $regPhoneUserAgent , $GLOBALS["phone"],
 
 	$i->login();
-	$logoutCounter = 20;
-	$ad_media_id  = 12323;
+	 
    $usname = $i->searchUsername($username);; 
 	$pk = $usname['user']['pk'];
 
-     funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
+     funcrecur($i, $username, $pk  ); 
 
 }  else {
 
@@ -1403,8 +1399,8 @@ $outputs = $r->fetchHeaders();
 // 		$ad_media_id = $feedres['items'][mt_rand(9,11)]['pk']; 
 //////
 
-		$ad_media_id = 123123;
-		$logoutCounter = 20;
+		 
+	 
 // sleep(6);
  
 
@@ -1412,7 +1408,7 @@ $outputs = $r->fetchHeaders();
  
 
  
-	     funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
+	     funcrecur($i, $username, $pk  ); 
 		 
 	// }
 
