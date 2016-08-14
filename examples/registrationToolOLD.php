@@ -6,7 +6,6 @@
 
 // date_default_timezone_set('UTC');
  
-
 // $romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
 // $romerPREDIS = '/home/blackkorol/in/predis/';
 // $romerINSTA = '/home/blackkorol/in/insta/';
@@ -1128,6 +1127,7 @@ $outputs = $r->fetchHeaders();
 	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
 	echo var_export($sres);
 	 echo "\nVerification code sent! >>>>>\n";
+	 //add code for sms service
      	 // while ($redis->scard("code") < 1) {
      	 // 		sleep(3);
      	 // 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
@@ -1139,9 +1139,6 @@ $outputs = $r->fetchHeaders();
  
 	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
 	 echo var_export($sval);
- 
-	
-	
       sleep(10);
    
 	 if ($redis->scard("names") > 0) {
@@ -1267,12 +1264,12 @@ $outputs = $r->fetchHeaders();
 
 		sleep(20);
 		
-		try {
-		    $i->changeProfilePicture($photo);
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(20);
+		// try {
+		//     $i->changeProfilePicture($photo);
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		// sleep(20);
 
 // 		try {
 // 		   $prres =  $i->setPrivateAccount();
