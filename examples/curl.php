@@ -2,19 +2,19 @@
 
  
 echo count($argv);
-$acmed = "134534";
+// $acmed = "134534";
 
-if (strpos($acmed, ':') !== false) {
-          $datapart = explode(":", $acmed);
-            $actioner =   $datapart[0];
-            $medcom =  $datapart[1];
-        }
-        else 
-        {
-            $actioner =   $acmed ;
-        }
-        echo $actioner;
-        // echo $medcom;
+// if (strpos($acmed, ':') !== false) {
+//           $datapart = explode(":", $acmed);
+//             $actioner =   $datapart[0];
+//             $medcom =  $datapart[1];
+//         }
+//         else 
+//         {
+//             $actioner =   $acmed ;
+//         }
+//         echo $actioner;
+//         // echo $medcom;
         
 
 

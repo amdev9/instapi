@@ -17,8 +17,7 @@ class Instagram
   protected $isLoggedIn = false;  // Session status
   protected $rank_token;          // Rank token
   protected $IGDataPath;          // Data storage path
-
-  protected $phoneclass;
+ 
 
   protected $phone_id;
 
@@ -35,15 +34,13 @@ class Instagram
    *  Default folder to store data, you can change it.
    */
 
-  public function __construct($username, $password, $proxy , $genuuid, $gendeviceid , $genphoneid, $genphoneua, $phoneclass, $debug = false, $IGDataPath = null)
+  public function __construct($username, $password, $proxy ,  $debug = false, $IGDataPath = null)
   {
+    //$genuuid, $gendeviceid , $genphoneid, $genphoneua = null,
       $this->debug = $debug;
-      $this->device_id = $gendeviceid; //$this->generateDeviceId(md5($username.$password));  
-      $this->uuid = $genuuid;
-      $this->phone_id = $genphoneid;
-      $this->phoneclass = $phoneclass;
+    
 
-      $this->UA = $genphoneua;
+      $this->UA = Constants::USER_AGENT;//= $genphoneua;
 
  $this->proxy = $proxy;
       if (!is_null($IGDataPath)) {
@@ -97,6 +94,13 @@ class Instagram
           //$this->rank_token = $this->username_id.'_'.$this->uuid;
           $this->rank_token = $this->username_id.'_'.$this->generateUUID(true);
           $this->token = trim(file_get_contents($this->IGDataPath."$username-token.dat"));
+
+            $this->device_id =trim(file_get_contents($this->IGDataPath."$username-deviceid.dat"));
+             // $gendeviceid; //$this->generateDeviceId(md5($username.$password));  
+      $this->uuid = trim(file_get_contents($this->IGDataPath."$username-uuid.dat"));
+      $this->phone_id = trim(file_get_contents($this->IGDataPath."$username-phoneid.dat"));
+      
+
       }
   }
 

@@ -21,13 +21,14 @@ class InstagramRegistration
     {
         $this->proxy = $proxy;
         $this->debug = $debug;
+
         $this->uuid = $this->generateUUID(true);
-
-
          $this->phone_id = $this->generateUUID(true);
+
         $this->waterfall_id =  $this->generateUUID(true);
         $this->UA = $this->GenerateUserAgent();
         echo $this->UA."-------UA\n\n";
+
         $this->device_id = 'android-'.bin2hex(openssl_random_pseudo_bytes(8));
          
 
@@ -48,41 +49,32 @@ class InstagramRegistration
    */
 
 
- public function returnUUID()
-{
-     return $this->uuid;
-}
+//  public function returnUUID()
+// {
+//      return $this->uuid;
+// }
 
- public function returnDeviceId()
-  {
-     return $this->device_id;
-  }
+//  public function returnDeviceId()
+//   {
+//      return $this->device_id;
+//   }
 
- public function returnPhoneId()
-  {
-     return $this->phone_id;
-  }
+//  public function returnPhoneId()
+//   {
+//      return $this->phone_id;
+//   }
 
-public function returnPhoneUA() 
-{
-  return $this->UA;
-}
+// public function returnPhoneUA() 
+// {
+//   return $this->UA;
+// }
 
 public function returnIGDataPath() 
 {
   return $this->IGDataPath;
 }
 
-
-// POST https://i.instagram.com/api/v1/accounts/send_signup_sms_code/
-// signed_body=7a8653a099b845a95dfa28c3b1dc5ee263d660b1d6ef4e981a7b06590e78e0ac.%7B%22
-// phone_id%22%3A%2265188cf9-c788-4b51-b8c5-e2e9c7b98a03%22%2C%22
-// phone_number%22%3A%22%2B79260263988%22%2C%22
-// guid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%2C%22
-// device_id%22%3A%22android-8d88fc0023959267%22%2C%22
-// waterfall_id%22%3A%220369968d-b7fd-4ed2-bedd-983288db32f0%22%7D
-// &ig_sig_key_version=4
-
+ 
 
 public function sendSignupSmsCode($phone) {
 
@@ -102,16 +94,7 @@ public function sendSignupSmsCode($phone) {
 
      return $response;
 }
-
-// POST https://i.instagram.com/api/v1/accounts/validate_signup_sms_code/ HTTP/1.1
-// signed_body=05dc10204a8f0d0a05b5e7ac9cd27fdf04b674656c8b320c88b1a2c6a266bfe1.%7B%22
-// verification_code%22%3A%22948065%22%2C%22
-// phone_number%22%3A%22%2B79260263988%22%2C%2
-// _csrftoken%22%3A%22wA1z93JZSLmlX8eMyc8j0WCo46iBZQWL%22%2C%22
-// guid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%2C%22
-// device_id%22%3A%22android-8d88fc0023959267%22%2C%22
-// waterfall_id%22%3A%220369968d-b7fd-4ed2-bedd-983288db32f0%22%7D
-// &ig_sig_key_version=4
+ 
 
 public function validateSignupSmsCode($verification_code, $phone) {
 
@@ -134,23 +117,7 @@ public function validateSignupSmsCode($verification_code, $phone) {
 }
 
 
-
-// POST https://i.instagram.com/api/v1/accounts/create_validated/ HTTP/1.1
-// signed_body=3e922e17924562802cc00331ff235ac0af559847c75ee777bfc478f5d53d5d84.%7B%22
-// verification_code%22%3A%22948065%22%2C%22
-// phone_id%22%3A%2265188cf9-c788-4b51-b8c5-e2e9c7b98a03%22%2C%22
-// phone_number%22%3A%22%2B79260263988%22%2C%22
-// _csrftoken%22%3A%22wA1z93JZSLmlX8eMyc8j0WCo46iBZQWL%22%2C%22
-// username%22%3A%22amat%22%2C%22
-// first_name%22%3A%22alex%22%2C%22
-// guid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%2C%22
-// device_id%22%3A%22android-8d88fc0023959267%22%2C%22
-// force_sign_up_code%22%3A%22%22%2C%22
-// waterfall_id%22%3A%220369968d-b7fd-4ed2-bedd-983288db32f0%22%2C%22
-
-// qs_stamp%22%3A%22%22%2C%22
-// password%22%3A%22qweqwe1w3%22%7D
-// &ig_sig_key_version=4
+ 
 
 
 public function createValidatedAccount($username, $verification_code, $phone, $full_name , $password) {
@@ -179,6 +146,11 @@ public function createValidatedAccount($username, $verification_code, $phone, $f
           $token = $match[1];
           $this->username = $username;
           file_put_contents($this->IGDataPath."$username-token.dat", $token);
+        ///NEW///
+            file_put_contents($this->IGDataPath.$this->username.'-uuid.dat', $this->uuid);
+             file_put_contents($this->IGDataPath.$this->username.'-phoneid.dat', $this->phone_id);
+              file_put_contents($this->IGDataPath.$this->username.'-deviceid.dat', $this->device_id);
+        ///////
           // copy($this->IGDataPath.'cookies.dat', $this->IGDataPath.'cookies2.dat'); //no need??
           rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat");  
           // rename($this->IGDataPath.'cookies2.dat', $this->IGDataPath.'cookies.dat'); //no need?
@@ -276,24 +248,7 @@ public function createValidatedAccount($username, $verification_code, $phone, $f
 
   public function fetchHeaders()
   {
-
-  
-        
-    // if (isset($outputs[1]['status']) && $outputs[1]['status'] == 'fail') 
-    //   {
-    //     $DelFilePath =  $this->IGDataPath.'cookies.dat'; // need fix
-    //     if (file_exists($DelFilePath)) { 
-    //        unlink ($DelFilePath);          //delete cookies.dat if exist
-    //     }
-    //     return;
-    //   } 
-
-    //   return  $this->request('si/fetch_headers/?challenge_type=signup&guid='.$this->generateUUID(false), null);
-    // return  $this->request('si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null);
     $outputs = $this->request('si/fetch_headers/?guid='.str_replace('-', '', $this->uuid).'&challenge_type=signup', null);
-
-
-
     preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
     $this->token = $matcht[1];
       
@@ -335,9 +290,9 @@ public function usernameSuggestions($email ,$full_name) //not use for now
 
       $data = json_encode([
           'phone_id'           => $this->phone_id,
-          '_csrftoken'         => $this->token, //'missing', //
+          '_csrftoken'         => $this->token,  
           'username'           => $username,
-          'first_name'         => $full_name,          //before ''
+          'first_name'         => $full_name,           
           'guid'               => $this->uuid,
           'device_id'          => $this->device_id,
           'email'              => $email,
@@ -349,8 +304,6 @@ public function usernameSuggestions($email ,$full_name) //not use for now
 
       $result = $this->request('accounts/create/', $this->generateSignature($data));
      
-
- 
       
       if (isset($result[1]['account_created']) && ($result[1]['account_created'] == true)) {
           $this->username_id = $result[1]['created_user']['pk'];
@@ -359,6 +312,11 @@ public function usernameSuggestions($email ,$full_name) //not use for now
           $token = $match[1];
           $this->username = $username;
           file_put_contents($this->IGDataPath."$username-token.dat", $token);
+           ///NEW///
+            file_put_contents($this->IGDataPath.$this->username.'-uuid.dat', $this->uuid);
+             file_put_contents($this->IGDataPath.$this->username.'-phoneid.dat', $this->phone_id);
+              file_put_contents($this->IGDataPath.$this->username.'-deviceid.dat', $this->device_id);
+        ///////
           // copy($this->IGDataPath.'cookies.dat', $this->IGDataPath.'cookies2.dat'); //no need??
           rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat");  
           // rename($this->IGDataPath.'cookies2.dat', $this->IGDataPath.'cookies.dat'); //no need?

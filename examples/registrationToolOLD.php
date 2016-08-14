@@ -1007,6 +1007,30 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 	 
 }
 
+
+
+if (count($argv) < 5 ) {
+
+
+$debug = true;//usual true
+
+
+$username = $argv[1]; 
+$password = $argv[2]; 
+$proxy = $argv[3]; 
+
+	$i = new Instagram($username, $password, $proxy, $debug );
+	// $regUuid, $regDeviceId, $regPhoneId, $regPhoneUserAgent , $GLOBALS["phone"],
+	$logoutCounter = 20;
+	$ad_media_id  = 12323;
+   $usname = $i->searchUsername($username);; 
+	$pk = $usname['user']['pk'];
+
+     funcrecur($i, $username, $pk, $logoutCounter, $ad_media_id  ); 
+
+}  else {
+
+
 // NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
  
@@ -1048,7 +1072,6 @@ $first_name = "";
 $qs_stamp = "";
 
  
-// if login -> funcrecur
 
 while ( $redis->scard("proxy") > 0 ) 
 {
@@ -1178,28 +1201,9 @@ $outputs = $r->fetchHeaders();
 
 	    echo "PKKEY: ".$result[1]['created_user']['pk']."\n\n";
 
-///////////////////////////////////
 	    $pk = $result[1]['created_user']['pk'];
 	    // $redis->sadd("followmebot", $pk);
 
-	  
-	   
-
-	 //   		try {
-	 //   		 $outputinfo = $i->getSelfUsernameInfo();
-	 //   		 //check if has some followers
-	 //   		 //???
-	 //   		 $outputres = var_export($outputinfo);
-		//   	 echo $outputres;	 
-		// 	} catch (Exception $e) {
-		// 	  echo $e->getMessage();
-		// 	}		
-
-
-	  	 
-	  	
-		// } 
-///////////////////////////////////
 		echo "\nconnection_established\n";
 
 
@@ -1208,13 +1212,14 @@ $outputs = $r->fetchHeaders();
 		// echo "\n _proxy_------>".$proxy."\n";
 		$debug = true; // false FOR VPS  
 
-		$regUuid = $r->returnUUID();
-		$regDeviceId = $r->returnDeviceId();
-		$regPhoneId = $r->returnPhoneId();
-		$regPhoneUserAgent = $r->returnPhoneUA();
+		// $regUuid = $r->returnUUID();
+		// $regDeviceId = $r->returnDeviceId();
+		// $regPhoneId = $r->returnPhoneId();
+		// $regPhoneUserAgent = $r->returnPhoneUA();
 
 		//need test WOULD IT BE BETTER TO COMBINE TWO CLASSES - NO NEED REQUEST BELOW
-		$i = new Instagram($username, $password, $proxy, $regUuid, $regDeviceId, $regPhoneId, $regPhoneUserAgent , $GLOBALS["phone"], $debug );
+	    $i = new Instagram($username, $password, $proxy, $debug);
+	    //$regUuid, $regDeviceId, $regPhoneId, $regPhoneUserAgent
 		//set profile picture
 		sleep(3);
 
@@ -1598,5 +1603,6 @@ $outputs = $r->fetchHeaders();
 	 sleep(20);
 }     
    
+   }
 
 
