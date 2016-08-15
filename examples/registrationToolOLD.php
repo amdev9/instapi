@@ -180,7 +180,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 8000;//400//25000 		//  direct 500->57    700->34
+	$posts_per_day = 4000;//400//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -361,9 +361,8 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					}
 					else {
 
-						$ilink->logout();
-
-						echo "\nlogout success";
+						// $ilink->logout();
+						// echo "\nlogout success";
 						return;
 					}
 
@@ -1255,7 +1254,7 @@ $outputs = $r->fetchHeaders();
 
 			 
 			// $GLOBALS["biography"] =  "🔞 JOIN HOT CHAT! 👇👇👇";
-			sleep(10);
+			// sleep(10);
 		    $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
 		} catch (Exception $e) {
@@ -1264,12 +1263,12 @@ $outputs = $r->fetchHeaders();
 
 		sleep(20);
 		
-		// try {
-		//     $i->changeProfilePicture($photo);
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
-		// sleep(20);
+		try {
+		    $i->changeProfilePicture($photo);
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+		sleep(20);
 
 // 		try {
 // 		   $prres =  $i->setPrivateAccount();
@@ -1373,7 +1372,7 @@ $outputs = $r->fetchHeaders();
 
 		echo "video and photo downloaded!\n";
 
-		 
+		  funcrecur($i, $username, $pk  ); 
 
 
 		// $files1 = scandir($dir);
@@ -1401,11 +1400,9 @@ $outputs = $r->fetchHeaders();
 // sleep(6);
  
 
-	 	 
- 
 
  
-	     funcrecur($i, $username, $pk  ); 
+	    
 		 
 	// }
 
