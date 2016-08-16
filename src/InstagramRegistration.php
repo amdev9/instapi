@@ -427,9 +427,9 @@ public function usernameSuggestions($email ,$full_name) //not use for now
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //need test added
          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //need test added
 
-        curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
-        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-        curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        // curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+        // curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+        // curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
 
 
         if (file_exists($this->IGDataPath."$this->username-cookies.dat")) {
