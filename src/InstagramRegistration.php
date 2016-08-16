@@ -358,7 +358,7 @@ public function usernameSuggestions($email ,$full_name) //not use for now
       // }
       // $deviceData = explode(';', $line_of_text[mt_rand(0, 11867)][0]);
       // fclose($file_handle);
-      // return sprintf('Instagram 8.5.1 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
+      // return sprintf('Instagram 9.0.1 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
 
 
       return 'Instagram 9.0.1 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';

@@ -325,7 +325,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 				  	echo $next_iteration_time = add_time($delay); //timer
 			    		sleep($next_iteration_time);
 
-					if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 590 ) {
+					if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590 ) {
 						// if ( $GLOBALS["redis"]->scard("followed".$usernamelink) < 590 ||  $GLOBALS["redis"]->scard("followed".$usernamelink) > 610) {
 					 		$fres = $ilink->follow($actioner);
 					  
@@ -1019,6 +1019,19 @@ $proxy = $argv[3];
 
 	$i->login();
 	 
+	 	// try {
+  //    	$cured = $i->currentEdit();
+  //    	echo var_export($cured);
+ 
+		//  sleep(4);
+		//     $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
+
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+
+		// sleep(5);
+
    $usname = $i->searchUsername($username);; 
 	$pk = $usname['user']['pk'];
 
@@ -1123,22 +1136,22 @@ $outputs = $r->fetchHeaders();
 	}	
 	 
  
-	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
-	echo var_export($sres);
-	 echo "\nVerification code sent! >>>>>\n";
-	 //add code for sms service
-     	 // while ($redis->scard("code") < 1) {
-     	 // 		sleep(3);
-     	 // 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
-     	 // }
-     	 // $cod = $redis->spop("code");
-     	 $cod = readline("Command: ");
-     	 echo "\n".$cod."\n";
+	// $sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
+	// echo var_export($sres);
+	//  echo "\nVerification code sent! >>>>>\n";
+	//  //add code for sms service
+ //     	 // while ($redis->scard("code") < 1) {
+ //     	 // 		sleep(3);
+ //     	 // 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
+ //     	 // }
+ //     	 // $cod = $redis->spop("code");
+ //     	 $cod = readline("Command: ");
+ //     	 echo "\n".$cod."\n";
      	 
  
-	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
-	 echo var_export($sval);
-      sleep(10);
+	//  $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
+	//  echo var_export($sval);
+ //      sleep(10);
    
 	 if ($redis->scard("names") > 0) {
    		$pieces = $redis->spop("names");
@@ -1166,8 +1179,8 @@ $outputs = $r->fetchHeaders();
 	 
 
 	sleep(2);
-	// $result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
-	 $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
+	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
+	 // $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
 
 
 	$resToPrint =  var_export($result);
@@ -1202,6 +1215,8 @@ $outputs = $r->fetchHeaders();
 
 
 		echo "\n\n PROX ---------->".$prox. "\n\n";
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
 		$GLOBALS["proxy"] = $prox;		 
 		// echo "\n _proxy_------>".$proxy."\n";
 		$debug = true; // false FOR VPS  
@@ -1247,7 +1262,7 @@ $outputs = $r->fetchHeaders();
 
 			 
 			 $GLOBALS["biography"] = $GLOBALS["biography"]."😍";
-			 $GLOBALS["biography"]  = str_replace( "_username" , explode(" ",$first_name)[0],  $GLOBALS["biography"] );  
+			 $GLOBALS["biography"]  = str_replace( "_username" , explode(" ",$first_name)[0]."".explode(" ",$first_name)[1],  $GLOBALS["biography"] );  
 
 			// $GLOBALS["first_name"] = "🔵 Отбеливающие Полоски 🔵";
 			// $GLOBALS["biography"] =  "Crest 3DWhite Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении  👇👇ЗАКАЗАТЬ👇👇";
@@ -1373,7 +1388,7 @@ $outputs = $r->fetchHeaders();
 		echo "video and photo downloaded!\n";
 
 		  funcrecur($i, $username, $pk  ); 
-
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		// $files1 = scandir($dir);
 		// foreach ( $files1 as $k => $value ) {
