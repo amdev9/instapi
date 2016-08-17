@@ -180,7 +180,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 4000;//400//25000 		//  direct 500->57    700->34
+	$posts_per_day = 700;//400//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -1245,16 +1245,14 @@ $outputs = $r->fetchHeaders();
      	$cured = $i->currentEdit();
      	echo var_export($cured);
 
-
-  // //    	 $sendsms = $i->sendSmsCode($phone);
-  // //    	 echo var_export($sendsms);
-  // //    	 echo "\nVerification code sent! >>>>>\n";
-  // //    	 $code_verif = trim(fgets(STDIN));
-  // //    	 echo "\n".$code_verif."\n";
-     	 
-
-  // //    	 $versms = $i->verifySmsCode($phone, $code_verif);
-  // //    	  echo var_export($versms);
+		 // PHONE VERIFICATION WHEN CHANGE / ADD PHONE NUMBER
+     	 // $sendsms = $i->sendSmsCode($phone);
+     	 // echo var_export($sendsms);
+     	 // echo "\nVerification code sent! >>>>>\n";
+     	 // $code_verif = trim(fgets(STDIN));
+     	 // echo "\n".$code_verif."\n";
+     	 // $versms = $i->verifySmsCode($phone, $code_verif);
+     	 //  echo var_export($versms);
 
 
 		// //edit profile

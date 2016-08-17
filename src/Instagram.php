@@ -450,16 +450,19 @@ public function sendConfirmEmail($email) {
         $imgdata = getimagesize($photo);
         $width = $imgdata[0];
         $height = $imgdata[1];
-        $pix_w=mt_rand(2, $width);
-        $pix_h=mt_rand(2, $height);
+        $pix_w=mt_rand(20, $width);
+        $pix_h=mt_rand(20, $height);
         // echo $pix_w." ".$pix_h;
-        $rgb = imagecolorat($fileToUpload1, $pix_w,$pix_h-1);
+        $rgb = imagecolorallocate($fileToUpload1, 0, 0, 0); 
+        // $rgb = imagecolorat($fileToUpload1, $pix_w-10,$pix_h-10);
+        // $red = imagecolorallocate($gd, 255, 0, 0); 
         imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
         ob_start();
         imagejpeg($fileToUpload1);
         $fileToUpload =  ob_get_contents();
         ob_end_clean();
         ////
+
         
         $endpoint = Constants::API_URL.'upload/photo/';
         $boundary = $this->uuid;
