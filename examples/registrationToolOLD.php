@@ -428,7 +428,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					 	 echo var_export($cured);
 						 sleep(10);
 						 $GLOBALS["biography"] = $GLOBALS["biography"]."😍";
-						 $GLOBALS["biography"]  = str_replace( "_username" , explode(" ",$first_name)[0]."".explode(" ",$first_name)[1],  $GLOBALS["biography"] );  
+ 							$GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );  
 						 $ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 							sleep(520);//*60*20);
 						 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true ); //check params
