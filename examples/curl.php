@@ -3,14 +3,15 @@
  
 // echo count($argv);
 
-$variable = 597;
-while ($variable < 1000) {
-if ($variable % 600 != 0) {
+$variable = 100;
+$a = false;
+// while ($variable < 1000) {
+if (  $a != true && ($variable % 100 != 0 || $variable == 0) ) {
     echo 'This number is divisible by 6. --> '.$variable."\n";
 }
-$variable = $variable +1;
-  sleep(1);
-}
+// $variable = $variable +1;
+  // sleep(1);
+// }
 
 // $acmed = "134534";
 
