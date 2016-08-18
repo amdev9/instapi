@@ -1,7 +1,17 @@
 <?php
 
  
-echo count($argv);
+// echo count($argv);
+
+$variable = 597;
+while ($variable < 1000) {
+if ($variable % 600 != 0) {
+    echo 'This number is divisible by 6. --> '.$variable."\n";
+}
+$variable = $variable +1;
+  sleep(1);
+}
+
 // $acmed = "134534";
 
 // if (strpos($acmed, ':') !== false) {

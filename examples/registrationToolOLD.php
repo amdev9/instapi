@@ -180,7 +180,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 700;//400//25000 		//  direct 500->57    700->34
+	$posts_per_day = 16000;//700//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -322,56 +322,12 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					     // }
 			   	
 
-				  	echo $next_iteration_time = add_time($delay); //timer
-			    		sleep($next_iteration_time);
+				  
+					echo $next_iteration_time = add_time($delay); //timer
+			    	sleep($next_iteration_time);
 
-					if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590 ) {
-						// if ( $GLOBALS["redis"]->scard("followed".$usernamelink) < 590 ||  $GLOBALS["redis"]->scard("followed".$usernamelink) > 610) {
-					 		$fres = $ilink->follow($actioner);
-					  
-					 	if ($fres[1]['status'] == 'ok') {
-					 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-					 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
-					 		$ilink->login(true);
-					 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
-							 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $fres[1]['checkpoint_url']);
-				                     echo "\nVerification code sent! >>>>>\n";
-						 			 // $resp_code = trim(fgets(STDIN));
-				                      $resp_code = "";
-						 			   while( ctype_digit($resp_code) != true) {
-										 // $line = readline("Command: ");
-										  $resp_code = readline("Command: ");
-										}
-
-																 			
-
-						 			 echo "\n---->".$resp_code;
-
-						 			$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
-
-						 			echo var_export($results);
-							 	}
-
-							 	else {
-							 			echo var_export($fres);
-
-							 	}
-						echo var_export($fres);
-
-					}
-					else {
-
-						// $ilink->logout();
-						// echo "\nlogout success";
-						return;
-					}
-
-					  
-					 
 					if ($medcom == "nonprivate") {
-						  sleep(2);
-							// echo $next_iteration_time = add_time($delay); //timer
-			    // 		sleep($next_iteration_time);
+					
 						 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
 						 echo "\nfeed fecthed\n";
 					
@@ -416,6 +372,75 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						}
 						}
 					}
+
+			    // if ($medcom == "private") {
+			    	// echo $next_iteration_time = add_time($delay); //timer
+			    	// sleep($next_iteration_time);
+					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
+			 
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true $GLOBALS["redis"]->scard("followed".$usernamelink) % 600 != 0 ) {
+						  sleep(2);
+
+					 		$fres = $ilink->follow($actioner);
+					  
+					 	if ($fres[1]['status'] == 'ok') {
+					 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+					 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
+					 		$ilink->login(true);
+					 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
+							 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $fres[1]['checkpoint_url']);
+				                     echo "\nVerification code sent! >>>>>\n";
+						 			 // $resp_code = trim(fgets(STDIN));
+				                      $resp_code = "";
+						 			   while( ctype_digit($resp_code) != true) {
+										 // $line = readline("Command: ");
+										  $resp_code = readline("Command: ");
+										}
+
+																 			
+
+						 			 echo "\n---->".$resp_code;
+
+						 			$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
+
+						 			echo var_export($results);
+							 	}
+
+							 	else {
+							 			echo var_export($fres);
+
+							 	}
+						echo var_export($fres);
+
+					}
+					else {
+
+						// $ilink->logout();
+						// echo "\nlogout success";
+						return;
+					
+						//  $i->login();
+						//  sleep(3);
+					 	//  $cured = $i->currentEdit();
+					 	//  echo var_export($cured);
+						// 	sleep(10);
+						//  $i->editProfile( params to add link );
+						//	sleep(60*60*20);
+						//  $i = new Instagram($username, $password, $proxy, $debug ); //check params
+						//  $i->login();
+						//  sleep(3);
+					 	//  $cured = $i->currentEdit();
+					 	//  echo var_export($cured);
+						// 	sleep(10);
+						//  $i->editProfile( params to delete link );
+				 		//  $usname = $i->searchUsername($username);; 
+						//  $pk = $usname['user']['pk'];
+						//  funcrecur($i, $username, $pk  ); 
+
+					}
+
+					  
+					
 						
 	}
 					 
@@ -1018,24 +1043,25 @@ $proxy = $argv[3];
 	// $regUuid, $regDeviceId, $regPhoneId, $regPhoneUserAgent , $GLOBALS["phone"],
 
 	$i->login();
-	 
-	 	// try {
-  //    	$cured = $i->currentEdit();
-  //    	echo var_export($cured);
+	 sleep(3);
+	 	try {
+     	$cured = $i->currentEdit();
+     	echo var_export($cured);
  
-		//  sleep(4);
+		 sleep(10);
 		//     $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
-
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
+	 $i->editProfile("bit.ly/2b6E5CX", "" , "Madeleine Sugars", "" , "q.qqqqqqqqqqqqqqpppppppppppppp.p@gmail.com" , 2);
+//
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
 
 		// sleep(5);
 
-   $usname = $i->searchUsername($username);; 
-	$pk = $usname['user']['pk'];
+ //   $usname = $i->searchUsername($username);; 
+	// $pk = $usname['user']['pk'];
 
-     funcrecur($i, $username, $pk  ); 
+ //     funcrecur($i, $username, $pk  ); 
 
 }  else {
 
@@ -1242,8 +1268,11 @@ $outputs = $r->fetchHeaders();
      	$redis->sadd("black_proxy",  $proxy);
 
      	sleep(10);
-     	$cured = $i->currentEdit();
-     	echo var_export($cured);
+
+  //    	$cured = $i->currentEdit();
+  //    	echo var_export($cured);
+		// sleep(10);
+
 
 		 // PHONE VERIFICATION WHEN CHANGE / ADD PHONE NUMBER
      	 // $sendsms = $i->sendSmsCode($phone);
@@ -1256,26 +1285,23 @@ $outputs = $r->fetchHeaders();
 
 
 		// //edit profile
-		try { 
+		// try { 
+		// 	 $GLOBALS["biography"] = $GLOBALS["biography"]."😍";
+		// 	 $GLOBALS["biography"]  = str_replace( "_username" , explode(" ",$first_name)[0]."".explode(" ",$first_name)[1],  $GLOBALS["biography"] );  
 
-			 
-			 $GLOBALS["biography"] = $GLOBALS["biography"]."😍";
-			 $GLOBALS["biography"]  = str_replace( "_username" , explode(" ",$first_name)[0]."".explode(" ",$first_name)[1],  $GLOBALS["biography"] );  
+		// 	// $GLOBALS["first_name"] = "🔵 Отбеливающие Полоски 🔵";
+		// 	// $GLOBALS["biography"] =  "Crest 3DWhite Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении  👇👇ЗАКАЗАТЬ👇👇";
 
-			// $GLOBALS["first_name"] = "🔵 Отбеливающие Полоски 🔵";
-			// $GLOBALS["biography"] =  "Crest 3DWhite Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении  👇👇ЗАКАЗАТЬ👇👇";
+		// 	// $GLOBALS["biography"] =  "🔞 JOIN HOT CHAT! 👇👇👇";
+		// 	// sleep(10);
+		//     $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
-			 
-			// $GLOBALS["biography"] =  "🔞 JOIN HOT CHAT! 👇👇👇";
-			// sleep(10);
-		    $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-
-		sleep(20);
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		// sleep(20);
 		
+
 		try {
 		    $i->changeProfilePicture($photo);
 		} catch (Exception $e) {
@@ -1605,7 +1631,7 @@ $outputs = $r->fetchHeaders();
 	
 	     break;
     }
-	 sleep(20);
+	 sleep(3);
 }     
    
    }

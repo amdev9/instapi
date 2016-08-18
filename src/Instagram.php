@@ -445,23 +445,49 @@ public function sendConfirmEmail($email) {
      */
     public function uploadPhoto($photo, $caption = null, $upload_id = null)
     {
+        $_prefix = 'IMG';
+        $image = $photo;
+        $output = 'output.jpg';
+        $_image = $image;
+        list($_width, $_height) = getimagesize($image);
+        $_output = $output;
+        $_tmp = $_prefix.rand();
+        copy($_image, $_tmp);
+
+        $colors_list = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2' ,'3','4', '5', '6', '7', '9'];
+        $firstcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+        $secondcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+        $thirdcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+
+        $color  = '#F'.$firstcol.'E'.$secondcol.'E'.$thirdcol;
+        echo  $color;
+        $input = $_tmp;
+        $width = 20;
+
+        $command = "convert $input -bordercolor $color -border {$width}x{$width} $input";
+        $command = str_replace(array("\n", "'"), array('', '"'), $command);
+        $command = escapeshellcmd($command);
+        exec($command);
+
+        rename($_tmp, $_output);
+
         ///NEED TEST
-        $fileToUpload1 = imagecreatefromjpeg($photo);
-        $imgdata = getimagesize($photo);
-        $width = $imgdata[0];
-        $height = $imgdata[1];
-        $pix_w=mt_rand(20, $width);
-        $pix_h=mt_rand(20, $height);
-        // echo $pix_w." ".$pix_h;
-        $rgb = imagecolorallocate($fileToUpload1, 0, 0, 0); 
-        // $rgb = imagecolorat($fileToUpload1, $pix_w-10,$pix_h-10);
-        // $red = imagecolorallocate($gd, 255, 0, 0); 
-        imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
-        ob_start();
-        imagejpeg($fileToUpload1);
-        $fileToUpload =  ob_get_contents();
-        ob_end_clean();
-        ////
+        // $fileToUpload1 = imagecreatefromjpeg($photo);
+        // $imgdata = getimagesize($photo);
+        // $width = $imgdata[0];
+        // $height = $imgdata[1];
+        // $pix_w=mt_rand(20, $width - 10);
+        // $pix_h=mt_rand(20, $height - 10);
+        // // echo $pix_w." ".$pix_h;
+        // $rgb = imagecolorallocate($fileToUpload1, 255, 0, 0); 
+        // // $rgb = imagecolorat($fileToUpload1, $pix_w-10,$pix_h-10);
+        // // $red = imagecolorallocate($gd, 255, 0, 0); 
+        // imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
+        // ob_start();
+        // imagejpeg($fileToUpload1);
+        // $fileToUpload =  ob_get_contents();
+        // ob_end_clean();
+        // ////
 
         
         $endpoint = Constants::API_URL.'upload/photo/';
@@ -471,7 +497,7 @@ public function sendConfirmEmail($email) {
             $fileToUpload = createVideoIcon($photo);
         } else {
             $upload_id = number_format(round(microtime(true) * 1000), 0, '', '');
-            // $fileToUpload = file_get_contents($photo);
+             $fileToUpload = file_get_contents($output);
         }
 
         $bodies = [
@@ -1076,24 +1102,49 @@ public function sendConfirmEmail($email) {
    */
   public function changeProfilePicture($photo)
   {
+        $_prefix = 'IMG';
+        $image = $photo;
+        $output = 'output.jpg';
+        $_image = $image;
+        list($_width, $_height) = getimagesize($image);
+        $_output = $output;
+        $_tmp = $_prefix.rand();
+        copy($_image, $_tmp);
+
+        $colors_list = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2' ,'3','4', '5', '6', '7', '9'];
+        $firstcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+        $secondcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+        $thirdcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+
+        $color  = '#F'.$firstcol.'E'.$secondcol.'E'.$thirdcol;
+        echo  $color;
+        $input = $_tmp;
+        $width = 1;
+
+        $command = "convert $input -bordercolor $color -border {$width}x{$width} $input";
+        $command = str_replace(array("\n", "'"), array('', '"'), $command);
+        $command = escapeshellcmd($command);
+        exec($command);
+
+        rename($_tmp, $_output);
       //
      ///NEED TEST
-        $fileToUpload1 = imagecreatefromjpeg($photo);
-        $imgdata = getimagesize($photo);
-        $width = $imgdata[0];
-        $height = $imgdata[1];
-        $pix_w=mt_rand(20, $width);
-        $pix_h=mt_rand(20, $height);
-        // echo $pix_w." ".$pix_h;
-        $rgb = imagecolorallocate($fileToUpload1, 0, 0, 0); 
-        // $rgb = imagecolorat($fileToUpload1, $pix_w-10,$pix_h-10);
-        // $red = imagecolorallocate($gd, 255, 0, 0); 
-        imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
-        ob_start();
-        imagejpeg($fileToUpload1);
-        $fileToUpload =  ob_get_contents();
-        ob_end_clean();
-        ////
+        // $fileToUpload1 = imagecreatefromjpeg($photo);
+        // $imgdata = getimagesize($photo);
+        // $width = $imgdata[0];
+        // $height = $imgdata[1];
+        // $pix_w=mt_rand(20, $width);
+        // $pix_h=mt_rand(20, $height);
+        // // echo $pix_w." ".$pix_h;
+        // $rgb = imagecolorallocate($fileToUpload1, 0, 0, 0); 
+        // // $rgb = imagecolorat($fileToUpload1, $pix_w-10,$pix_h-10);
+        // // $red = imagecolorallocate($gd, 255, 0, 0); 
+        // imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
+        // ob_start();
+        // imagejpeg($fileToUpload1);
+        // $fileToUpload =  ob_get_contents();
+        // ob_end_clean();
+        // ////
 
       if (is_null($photo)) {
           echo "Photo not valid\n\n";
@@ -1123,8 +1174,9 @@ public function sendConfirmEmail($email) {
       [
         'type'     => 'form-data',
         'name'     => 'profile_pic',
-        'data'     =>  $fileToUpload,
-        //file_get_contents($photo),
+        'data'     =>  file_get_contents($output),
+        // $fileToUpload,
+        //
         'filename' => 'profile_pic',
         'headers'  => [
           'Content-type: application/octet-stream',
