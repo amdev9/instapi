@@ -424,7 +424,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					 	//  $cured = $i->currentEdit();
 					 	//  echo var_export($cured);
 						// 	sleep(10);
-						//  $i->editProfile( params to add link );
+						//  $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 						//	sleep(60*60*20);
 						//  $i = new Instagram($username, $password, $proxy, $debug ); //check params
 						//  $i->login();
@@ -432,7 +432,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					 	//  $cured = $i->currentEdit();
 					 	//  echo var_export($cured);
 						// 	sleep(10);
-						//  $i->editProfile( params to delete link );
+						//	$i->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
 				 		//  $usname = $i->searchUsername($username);; 
 						//  $pk = $usname['user']['pk'];
 						//  funcrecur($i, $username, $pk  ); 
