@@ -421,23 +421,26 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						// return;
 						// echo "\n\nELSE --<<<  \n\n";
 						//works
-					 	 $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
+					 	 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
 						 $ilink->login();
-						 sleep(3);
+						 sleep(5);
 					 	 $cured = $ilink->currentEdit();
 					 	 echo var_export($cured);
 							sleep(10);
 						 $ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-							sleep(60);//*60*20);
-						 $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true ); //check params
+							sleep(520);//*60*20);
+						 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true ); //check params
 						 $ilink->login();
-						 sleep(3);
+						 sleep(5);
 					 	 $cured = $ilink->currentEdit();
 					 	 echo var_export($cured);
 							sleep(10);
 							$ilink->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
+							sleep(12);
 				 		 $usname = $ilink->searchUsername($usernamelink);; 
 						 $pk = $usname['user']['pk'];
+						 sleep(10);
+						 $GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
 						 funcrecur($ilink, $usernamelink, $pk  ); 
 
 					}
