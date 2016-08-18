@@ -180,7 +180,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 19000;//700//25000 		//  direct 500->57    700->34
+	$posts_per_day = 10000;//700//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -378,7 +378,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 100 != 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 50 != 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					//600
 						  sleep(2);
 
@@ -422,11 +422,13 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						// echo "\n\nELSE --<<<  \n\n";
 						//works
 					 	 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
-						 $ilink->login();
+						 // $ilink->login();
 						 sleep(5);
 					 	 $cured = $ilink->currentEdit();
 					 	 echo var_export($cured);
-							sleep(10);
+						 sleep(10);
+						 $GLOBALS["biography"] = $GLOBALS["biography"]."😍";
+						 $GLOBALS["biography"]  = str_replace( "_username" , explode(" ",$first_name)[0]."".explode(" ",$first_name)[1],  $GLOBALS["biography"] );  
 						 $ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 							sleep(520);//*60*20);
 						 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true ); //check params
