@@ -430,7 +430,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 		
 						 $ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 						 // return;
-							sleep(3520);//*60*20);
+							sleep(7200);//*60*20);
 						 
 						 $ilink->login();
 						 sleep(5);
