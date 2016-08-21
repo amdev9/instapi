@@ -371,6 +371,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						 
 						}
 						}
+						 sleep(2);
 					}
 
 			    // if ($medcom == "private") {
@@ -380,7 +381,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			 
 				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 50 != 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					//600
-						  sleep(2);
+						 
 
 					 		$fres = $ilink->follow($actioner);
 					  
