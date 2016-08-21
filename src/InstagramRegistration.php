@@ -361,7 +361,7 @@ public function usernameSuggestions($email ,$full_name) //not use for now
       // return sprintf('Instagram 9.0.1 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
 
 
-      return 'Instagram 9.0.1 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
+      return 'Instagram 9.1.5 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
 
 
    }
