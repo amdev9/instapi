@@ -1382,46 +1382,46 @@ $outputs = $r->fetchHeaders();
 		
 
 		 
-		// $filesVideo = scandir($dir);
-		// foreach ( $filesVideo as $k => $value ) {
-		//     $ext = pathinfo($value, PATHINFO_EXTENSION);
-		//     if ($ext == "mp4") {//&& $value != "1.jpg
-		// 		try {
-		// 		    $i->uploadVideo($dir.'/'.$value, $caption); // use the same caption
-		// 		} catch (Exception $e) {
-		// 		    echo $e->getMessage();
-		// 		}
+		$filesVideo = scandir($dir);
+		foreach ( $filesVideo as $k => $value ) {
+		    $ext = pathinfo($value, PATHINFO_EXTENSION);
+		    if ($ext == "mp4") {//&& $value != "1.jpg
+				try {
+				    $i->uploadVideo($dir.'/'.$value, $caption); // use the same caption
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
 
-		// 		sleep(10);
-		//     }
-		//     elseif ($ext == "jpg" && $value != "1.jpg") {
-		//   //   	$caption = "Check out my HOT video 😍 🔞 link in bio 👆👆👆 \u{2029} #follow4follow #followforfollow #like4like #likeforlike ";
+				sleep(10);
+		    }
+		    elseif ($ext == "jpg" && $value != "1.jpg") {
+		  //   	$caption = "Check out my HOT video 😍 🔞 link in bio 👆👆👆 \u{2029} #follow4follow #followforfollow #like4like #likeforlike ";
 
-		// 		$tags = ["18", "Body", "CalvinKlein", "FitGirl", "FitnesGirls", "Fitness", "FitnessAddict", "FitnesssGirl", "GirlBody", "Motivation", "PerfectBody", "Work", "Workout", "babestation", "bigboss", "bigtitties", "bikini", "cool", "danniharwood", "dm", "fancy", "fit", "fitness", "fitnessmodel", "gym", "health", "hotsexy", "hotties", "instadaily", "instagood", "juliaann", "kiaramia", "kiaramiateam", "ledlight", "lisaann", "love", "lust", "meena", "miakhalifa", "pornbros", "pornofood", "pornstarr", "prettyyoung", "pörn", "pörnstars", "recentforrecent", "sexchat", "sexvid", "sophiedee", "squats", "swag", "sëxchat", "sëxy", "twerk", "workout"];
+				$tags = ["18", "Body", "CalvinKlein", "FitGirl", "FitnesGirls", "Fitness", "FitnessAddict", "FitnesssGirl", "GirlBody", "Motivation", "PerfectBody", "Work", "Workout", "babestation", "bigboss", "bigtitties", "bikini", "cool", "danniharwood", "dm", "fancy", "fit", "fitness", "fitnessmodel", "gym", "health", "hotsexy", "hotties", "instadaily", "instagood", "juliaann", "kiaramia", "kiaramiateam", "ledlight", "lisaann", "love", "lust", "meena", "miakhalifa", "pornbros", "pornofood", "pornstarr", "prettyyoung", "pörn", "pörnstars", "recentforrecent", "sexchat", "sexvid", "sophiedee", "squats", "swag", "sëxchat", "sëxy", "twerk", "workout"];
 
-		// 		 $captiontag = [];
-		// 		while (count($captiontag) < 20)
-		// 		{
-		// 		  $tag = $tags[mt_rand(0, count($tags) - 1)];
-		// 		  array_push($captiontag, "#".$tag);
-		// 		}
+				 $captiontag = [];
+				while (count($captiontag) < 20)
+				{
+				  $tag = $tags[mt_rand(0, count($tags) - 1)];
+				  array_push($captiontag, "#".$tag);
+				}
 
-		// 		// $caption = $caption ." #follow4follow #followme #like4follow #like4like ".implode(" ", $captiontag);
+				// $caption = $caption ." #follow4follow #followme #like4follow #like4like ".implode(" ", $captiontag);
 				 
-		// 		// $caption = "CREST 3D WHITE ИДЕАЛЬНО БЕЛЫЕ ЗУБЫ ЗА 20 ДНЕЙ \u{2029} Уникальная домашняя методика, которую рекомендуют 99% мировых специалистов. \u{2029} ✅Более щадящая процедура по сравнению с методами, во время которых используется лазер. \u{2029} ✅Зубы могут быть очищены в относительно короткие сроки. \u{2029} ✅Не возникает повышенной чувствительности зубов. \u{2029} ✅Повышение уверенности в себе и хороший психологический эффект. \u{2029} ✅Можно контролировать уровень белизны зубов. \u{2029} Подходит как для женщин, так и для мужчин \u{2029} Заказать по акции в профиле 👆👆👆";
+				// $caption = "CREST 3D WHITE ИДЕАЛЬНО БЕЛЫЕ ЗУБЫ ЗА 20 ДНЕЙ \u{2029} Уникальная домашняя методика, которую рекомендуют 99% мировых специалистов. \u{2029} ✅Более щадящая процедура по сравнению с методами, во время которых используется лазер. \u{2029} ✅Зубы могут быть очищены в относительно короткие сроки. \u{2029} ✅Не возникает повышенной чувствительности зубов. \u{2029} ✅Повышение уверенности в себе и хороший психологический эффект. \u{2029} ✅Можно контролировать уровень белизны зубов. \u{2029} Подходит как для женщин, так и для мужчин \u{2029} Заказать по акции в профиле 👆👆👆";
 
 
-		// 		try {
-		// 		    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
-		// 		} catch (Exception $e) {
-		// 		    echo $e->getMessage();
-		// 		}
+				try {
+				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
 
-		// 		sleep(30);
-		//     }
-		// }
+				sleep(30);
+		    }
+		}
 
-		// echo "video and photo downloaded!\n";
+		echo "video and photo downloaded!\n";
 
 		  funcrecur($i, $username, $pk  ); 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

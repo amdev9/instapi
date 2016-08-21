@@ -462,7 +462,7 @@ public function sendConfirmEmail($email) {
         $color  = '#F'.$firstcol.'E'.$secondcol.'E'.$thirdcol;
         echo  $color;
         $input = $_tmp;
-        $width = 20;
+        $width = 1;
 
         $command = "convert $input -bordercolor $color -border {$width}x{$width} $input";
         $command = str_replace(array("\n", "'"), array('', '"'), $command);
