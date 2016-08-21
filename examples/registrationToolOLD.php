@@ -180,7 +180,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 20000;//700//25000 		//  direct 500->57    700->34
+	$posts_per_day = 22000;//700//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -378,7 +378,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 2 != 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 50 != 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					//600
 						  sleep(2);
 
