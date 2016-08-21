@@ -180,7 +180,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 22000;//700//25000 		//  direct 500->57    700->34
+	$posts_per_day = 24000;//700//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -333,7 +333,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					
 					  if (isset($usfeed['items'][0]['pk'])) {
 						  $med = $usfeed['items'][0]['pk'];
-						  sleep(10);
+						  sleep(2);
 
 
 					 if ( $GLOBALS["redis"]->sismember("liked".$usernamelink , $med) != true ) {
