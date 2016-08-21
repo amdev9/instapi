@@ -180,7 +180,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 24000;//700//25000 		//  direct 500->57    700->34
+	$posts_per_day = 25000;//700//25000 		//  direct 500->57    700->34
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -424,22 +424,22 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						//works
 					 	 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
 						 $ilink->login();
-						 sleep(3);
+						 sleep(2);
 					 	 $cured = $ilink->currentEdit();
 					 	 echo var_export($cured);
-						 sleep(5);
+						 sleep(4);
 		
 						 $ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 						 // return;
 							sleep(7200);//*60*20);
 						 
 						 $ilink->login();
-						 sleep(5);
+						 sleep(3);
 					 	 $cured = $ilink->currentEdit();
 					 	 echo var_export($cured);
-							sleep(5);
+							sleep(4);
 							$ilink->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
-							sleep(6);
+							sleep(4);
 				 		 $usname = $ilink->searchUsername($usernamelink);; 
 						 $pk = $usname['user']['pk'];
 						 sleep(4);
