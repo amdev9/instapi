@@ -1320,13 +1320,13 @@ $outputs = $r->fetchHeaders();
 		}
 		sleep(20);
 
-// 		try {
-// 		   $prres =  $i->setPrivateAccount();
-// 		   echo  var_export($prres);
-// 		} catch (Exception $e) {
-// 		    echo $e->getMessage();
-// 		}
-// sleep(6);
+		try {
+		   $prres =  $i->setPrivateAccount();
+		   echo  var_export($prres);
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
+sleep(6);
 
 		// funcgeocoordparse($i, $redis);  // geo coordinates with gender done
  
