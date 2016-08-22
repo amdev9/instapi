@@ -378,7 +378,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 200 != 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 150!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					//600
 						 
 
