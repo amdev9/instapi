@@ -455,11 +455,16 @@ public function sendConfirmEmail($email) {
         copy($_image, $_tmp);
 
         $colors_list = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2' ,'3','4', '5', '6', '7', '9'];
+        $fe_list = ['F', 'E'];
         $firstcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
         $secondcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
         $thirdcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
 
-        $color  = '#F'.$firstcol.'E'.$secondcol.'E'.$thirdcol;
+        $fe1 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+        $fe2 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+        $fe3 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+
+        $color  = '#'.$fe1.$firstcol.$fe2.$secondcol.$fe3.$thirdcol; // F or E
         echo  $color;
         $input = $_tmp;
         $width = 1;
@@ -1112,11 +1117,16 @@ public function sendConfirmEmail($email) {
         copy($_image, $_tmp);
 
         $colors_list = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2' ,'3','4', '5', '6', '7', '9'];
+        $fe_list = ['F', 'E'];
         $firstcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
         $secondcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
         $thirdcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
 
-        $color  = '#F'.$firstcol.'E'.$secondcol.'E'.$thirdcol;
+        $fe1 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+        $fe2 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+        $fe3 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+
+        $color  = '#'.$fe1.$firstcol.$fe2.$secondcol.$fe3.$thirdcol; // F or E
         echo  $color;
         $input = $_tmp;
         $width = 1;
