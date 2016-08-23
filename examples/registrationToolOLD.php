@@ -378,7 +378,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 200!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 300!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					//600
 						 
 
@@ -429,7 +429,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						 sleep(4);
  
 
-						 $ilink->editProfile("bit.ly/2bc5ilW", "" , "Karen Price", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login KarenPrice93 I am WAITING.. CLICK 👇 👇 👇" , "qqqqq.qqqqqqqqqqqqqqqqqqqq.qqppp@gmail.com" , 2);
+						 $ilink->editProfile("bit.ly/2bbWD2V", "" , "Zoe Ali", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login ZoeAli94 I am WAITING.. CLICK 👇 👇 👇" , "iiiiiiiii.iiiiiiiiiii.iiihhhhhhh@gmail.com" , 2);
 
 						 return;
 		
@@ -1065,7 +1065,7 @@ $proxy = $argv[3];
 		 sleep(10);
 		    // $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
 
-	 $i->editProfile("", "" , "Karen Price", "" , "qqqqq.qqqqqqqqqqqqqqqqqqqq.qqppp@gmail.com" , 2);
+	 $i->editProfile("", "" , "Zoe Ali", "" , "iiiiiiiii.iiiiiiiiiii.iiihhhhhhh@gmail.com" , 2);
 
 	 //->editProfile("", "" , "Rachel Levesque", "" , "ppppppp.pppppppppppppppp.ppppppp@gmail.com" , 2);
  //Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login RachelLevesque93 I am WAITING.. CLICK
