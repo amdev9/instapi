@@ -378,7 +378,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 400!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 200!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					//600
 						 
 
@@ -422,14 +422,15 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						// echo "\n\nELSE --<<<  \n\n";
 						//works
 					 	 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
-						 $ilink->login();
-						 sleep(2);
-					 	 $cured = $ilink->currentEdit();
-					 	 echo var_export($cured);
-						 sleep(4);
+						 // $ilink->login();
+						 // sleep(2);
+					 	 
+					 	//  $cured = $ilink->currentEdit();
+					 	//  echo var_export($cured);
+						 // sleep(4);
  
 
-						 $ilink->editProfile("bit.ly/2bpaLcm", "" , "Laura Patel", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login LauraPatel95 I am WAITING.. CLICK 👇 👇 👇" , "cccbbbbbb.bbbbbbbbbbbb.bbbbbbbbb@gmail.com" , 2);
+						 // $ilink->editProfile("bit.ly/2bpaLcm", "" , "Laura Patel", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login LauraPatel95 I am WAITING.. CLICK 👇 👇 👇" , "cccbbbbbb.bbbbbbbbbbbb.bbbbbbbbb@gmail.com" , 2);
 
 						 return;
 		
@@ -1059,13 +1060,12 @@ $proxy = $argv[3];
 	$i->login();
 	 sleep(3);
 	  
-     	$cured = $i->currentEdit();
-     	echo var_export($cured);
+   //   	$cured = $i->currentEdit();
+   //   	echo var_export($cured);
  
-		 sleep(10);
+		 // sleep(10);
 		    // $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
-
-	 $i->editProfile("", "" , "Laura Patel", "" , "cccbbbbbb.bbbbbbbbbbbb.bbbbbbbbb@gmail.com" , 2);
+	 // $i->editProfile("", "" , "Laura Patel", "" , "cccbbbbbb.bbbbbbbbbbbb.bbbbbbbbb@gmail.com" , 2);
 
 	 // editProfile("", "" , "Annabelle Garrison", "" , "ffffffff.feeeeeeeeeeeee.eeeeeeee@gmail.com" , 2);
 
