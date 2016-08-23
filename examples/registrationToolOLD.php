@@ -427,23 +427,27 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					 	 $cured = $ilink->currentEdit();
 					 	 echo var_export($cured);
 						 sleep(4);
+
+						 $ilink->editProfile("bit.ly/2bc92UI", "Wanna HOT chat with me? (snap kik dm). all my contacts on the site below 👇 login RachelLevesque93 I am WAITING.. CLICK" , "Rachel Levesque", "" , "ppppppp.pppppppppppppppp.ppppppp@gmail.com" , 2);
+
+						 return;
 		
-						 $ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+						 // $ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 						   
-							sleep(14400);//*60*20);
+							// sleep(14400);//*60*20);
 						 
-						 $ilink->login();
-						 sleep(3);
-					 	 $cured = $ilink->currentEdit();
-					 	 echo var_export($cured);
-							sleep(4);
-							$ilink->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
-							sleep(4);
-				 		 $usname = $ilink->searchUsername($usernamelink);; 
-						 $pk = $usname['user']['pk'];
-						 sleep(4);
-						 $GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-						 funcrecur($ilink, $usernamelink, $pk  ); 
+						 // $ilink->login();
+						 // sleep(3);
+					 	//  $cured = $ilink->currentEdit();
+					 	//  echo var_export($cured);
+							// sleep(4);
+							// $ilink->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
+							// sleep(4);
+				 		//  $usname = $ilink->searchUsername($usernamelink);; 
+						 // $pk = $usname['user']['pk'];
+						 // sleep(4);
+						 // $GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+						 // funcrecur($ilink, $usernamelink, $pk  ); 
 						 ///
 
 					}
@@ -1052,20 +1056,18 @@ $proxy = $argv[3];
 	// $regUuid, $regDeviceId, $regPhoneId, $regPhoneUserAgent , $GLOBALS["phone"],
 
 	$i->login();
-	 // sleep(3);
-	 // 	try {
-  //    	$cured = $i->currentEdit();
-  //    	echo var_export($cured);
+	 sleep(3);
+	  
+     	$cured = $i->currentEdit();
+     	echo var_export($cured);
  
 		 sleep(10);
-		//     $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
-	 // $i->editProfile("bit.ly/2b6E5CX", "" , "Madeleine Sugars", "" , "q.qqqqqqqqqqqqqqpppppppppppppp.p@gmail.com" , 2);
-// //
-// 		} catch (Exception $e) {
-// 		    echo $e->getMessage();
-// 		}
+		    // $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
+	 $i->editProfile("", "" , "Rachel Levesque", "" , "ppppppp.pppppppppppppppp.ppppppp@gmail.com" , 2);
+ //Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login RachelLevesque93 I am WAITING.. CLICK
+		 //bit.ly/2bc92UI
 
-		// sleep(5);
+		sleep(5);
 
    $usname = $i->searchUsername($username);; 
 	$pk = $usname['user']['pk'];
