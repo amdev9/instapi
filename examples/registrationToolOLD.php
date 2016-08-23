@@ -1072,6 +1072,8 @@ $proxy = $argv[3];
 		 //bit.ly/2bc92UI
 
 		sleep(5);
+$i->setPublicAccount();
+sleep(5);
 
    $usname = $i->searchUsername($username);; 
 	$pk = $usname['user']['pk'];
