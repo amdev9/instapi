@@ -430,7 +430,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						 sleep(4);
  
 
-						 $ilink->editProfile("bit.ly/2bpaLcm", "" , "Laura Patel", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login LauraPatel95 I am WAITING.. CLICK 👇 👇 👇" , "cccbbbbbb.bbbbbbbbbbbb.bbbbbbbbb@gmail.com" , 2);
+						 $ilink->editProfile("bit.ly/2bbghfA", "" , "Ashley Irvine", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login AshleyIrvine97 I am WAITING.. CLICK 👇 👇 👇 " , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
 
 						 return;
 		
@@ -1065,7 +1065,9 @@ $proxy = $argv[3];
  
 		 sleep(10);
 		    // $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
-	 $i->editProfile("", "" , "Laura Patel", "" , "cccbbbbbb.bbbbbbbbbbbb.bbbbbbbbb@gmail.com" , 2);
+	 $i->editProfile("", "" , "Ashley Irvine", "" , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
+
+	 // ->editProfile("", "" , "Laura Patel", "" , "cccbbbbbb.bbbbbbbbbbbb.bbbbbbbbb@gmail.com" , 2);
 
 	 // editProfile("", "" , "Annabelle Garrison", "" , "ffffffff.feeeeeeeeeeeee.eeeeeeee@gmail.com" , 2);
 
