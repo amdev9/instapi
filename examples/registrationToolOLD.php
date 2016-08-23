@@ -422,20 +422,19 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						// echo "\n\nELSE --<<<  \n\n";
 						//works
 					 	 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
-						 // $ilink->login();
-						 // sleep(2);
-					 	 
-					 	//  $cured = $ilink->currentEdit();
-					 	//  echo var_export($cured);
-						 // sleep(4);
- 
+						 $ilink->login();
+						 sleep(2);
+					 	 $cured = $ilink->currentEdit();
+					 	 echo var_export($cured);
+						 sleep(4);
+						 $ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+
 
 						 // $ilink->editProfile("bit.ly/2bbghfA", "" , "Ashley Irvine", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login AshleyIrvine97 I am WAITING.. CLICK 👇 👇 👇 " , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
 
-						 return;
-		
-						 // $ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-						   
+						 
+
+						   return;
 							// sleep(14400);//*60*20);
 						 
 						 // $ilink->login();
