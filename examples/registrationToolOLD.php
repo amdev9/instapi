@@ -378,7 +378,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 100!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 200!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					//600
 						 
 
@@ -427,8 +427,8 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					 	 $cured = $ilink->currentEdit();
 					 	 echo var_export($cured);
 						 sleep(4);
-
-						 $ilink->editProfile("bit.ly/2bc92UI", "Wanna HOT chat with me? (snap kik dm). all my contacts on the site below 👇 login RachelLevesque93 I am WAITING.. CLICK" , "Rachel Levesque", "" , "ppppppp.pppppppppppppppp.ppppppp@gmail.com" , 2);
+ 
+						 $ilink->editProfile("bit.ly/2bc92UI", "" , "Rachel Levesque", "Wanna HOT chat with me? (snap kik dm). all my contacts on the site below 👇 login RachelLevesque93 I am WAITING.. CLICK" , "ppppppp.pppppppppppppppp.ppppppp@gmail.com" , 2);
 
 						 return;
 		
