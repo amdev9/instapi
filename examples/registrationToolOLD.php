@@ -428,7 +428,8 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					 	 echo var_export($cured);
 						 sleep(4);
  
-						 $ilink->editProfile("bit.ly/2bc92UI", "" , "Rachel Levesque", "Wanna HOT chat with me? (snap kik dm). all my contacts on the site below 👇 login RachelLevesque93 I am WAITING.. CLICK" , "ppppppp.pppppppppppppppp.ppppppp@gmail.com" , 2);
+
+						 $ilink->editProfile("bit.ly/2bc5ilW", "" , "Karen Price", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login KarenPrice93 I am WAITING.. CLICK 👇 👇 👇" , "qqqqq.qqqqqqqqqqqqqqqqqqqq.qqppp@gmail.com" , 2);
 
 						 return;
 		
@@ -1063,7 +1064,10 @@ $proxy = $argv[3];
  
 		 sleep(10);
 		    // $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
-	 $i->editProfile("", "" , "Rachel Levesque", "" , "ppppppp.pppppppppppppppp.ppppppp@gmail.com" , 2);
+
+	 $i->editProfile("", "" , "Karen Price", "" , "qqqqq.qqqqqqqqqqqqqqqqqqqq.qqppp@gmail.com" , 2);
+
+	 //->editProfile("", "" , "Rachel Levesque", "" , "ppppppp.pppppppppppppppp.ppppppp@gmail.com" , 2);
  //Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login RachelLevesque93 I am WAITING.. CLICK
 		 //bit.ly/2bc92UI
 
