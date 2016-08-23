@@ -378,7 +378,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 400!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 100!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					//600
 						 
 
@@ -422,15 +422,15 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						// echo "\n\nELSE --<<<  \n\n";
 						//works
 					 	 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
-						 $ilink->login();
-						 sleep(2);
+						 // $ilink->login();
+						 // sleep(2);
 					 	 
-					 	 $cured = $ilink->currentEdit();
-					 	 echo var_export($cured);
-						 sleep(4);
+					 	//  $cured = $ilink->currentEdit();
+					 	//  echo var_export($cured);
+						 // sleep(4);
  
 
-						 $ilink->editProfile("bit.ly/2bbghfA", "" , "Ashley Irvine", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login AshleyIrvine97 I am WAITING.. CLICK 👇 👇 👇 " , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
+						 // $ilink->editProfile("bit.ly/2bbghfA", "" , "Ashley Irvine", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login AshleyIrvine97 I am WAITING.. CLICK 👇 👇 👇 " , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
 
 						 return;
 		
