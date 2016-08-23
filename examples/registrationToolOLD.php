@@ -378,7 +378,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 599!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 200!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					//600
 						 
 
@@ -429,22 +429,22 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						 sleep(4);
 		
 						 $ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-						  return;
-							// sleep(28800);//*60*20);
+						   
+							sleep(28800);//*60*20);
 						 
-						 // $ilink->login();
-						 // sleep(3);
-					 	//  $cured = $ilink->currentEdit();
-					 	//  echo var_export($cured);
-							// sleep(4);
-							// $ilink->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
-							// sleep(4);
-				 		//  $usname = $ilink->searchUsername($usernamelink);; 
-						 // $pk = $usname['user']['pk'];
-						 // sleep(4);
-						 // $GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-						 // funcrecur($ilink, $usernamelink, $pk  ); 
-						 // ///
+						 $ilink->login();
+						 sleep(3);
+					 	 $cured = $ilink->currentEdit();
+					 	 echo var_export($cured);
+							sleep(4);
+							$ilink->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
+							sleep(4);
+				 		 $usname = $ilink->searchUsername($usernamelink);; 
+						 $pk = $usname['user']['pk'];
+						 sleep(4);
+						 $GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+						 funcrecur($ilink, $usernamelink, $pk  ); 
+						 ///
 
 					}
 
