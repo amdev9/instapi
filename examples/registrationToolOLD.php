@@ -1020,18 +1020,15 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 
 
 
-if (count($argv) < 5 ) {
+if (count($argv) < 4 ) {
 
 
-$debug = true;//usual true
-
-
+$debug = true; 
 $username = $argv[1]; 
 $password = $argv[2]; 
 $proxy = $argv[3]; 
 
 	$i = new Instagram($username, $password, $proxy, $debug );
-	// $regUuid, $regDeviceId, $regPhoneId, $regPhoneUserAgent , $GLOBALS["phone"],
 
 	$i->login();
 	 sleep(3);
@@ -1044,10 +1041,7 @@ $proxy = $argv[3];
 	 $i->editProfile("", "" , "Ashley Irvine", "" , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
 
 	 // ->editProfile("", "" , "Laura Patel", "" , "cccbbbbbb.bbbbbbbbbbbb.bbbbbbbbb@gmail.com" , 2);
-
 	 // editProfile("", "" , "Annabelle Garrison", "" , "ffffffff.feeeeeeeeeeeee.eeeeeeee@gmail.com" , 2);
-
-
 	 //->editProfile("", "" , "Rachel Levesque", "" , "ppppppp.pppppppppppppppp.ppppppp@gmail.com" , 2);
  //Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login RachelLevesque93 I am WAITING.. CLICK
 		 //bit.ly/2bc92UI
@@ -1246,7 +1240,7 @@ $outputs = $r->fetchHeaders();
 		$filesVideo = scandir($dir);
 		$ava = true;
 		foreach ( $filesVideo as $k => $value ) {
-			
+
 		    $ext = pathinfo($value, PATHINFO_EXTENSION);
 		    if ($ext == "mp4") { 
 				try {
@@ -1283,35 +1277,6 @@ $outputs = $r->fetchHeaders();
 		funcrecur($i, $username, $pk  ); 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-		// $files1 = scandir($dir);
-		// foreach ( $files1 as $k => $value ) {
-		//     $ext = pathinfo($value, PATHINFO_EXTENSION);
-		   
-		// }
-
-		// echo "photo downloaded!\n";
-////ADULT
-		// $feedres = $i->getSelfUserFeed();
-		// $ad_media_id  = $feedres['items'][0]['pk'];
-//////////
-
-///TOVARKA
-// 		$usname = $i->searchUsername("__blackmask__"); 
-// 		$iduser = $usname['user']['pk'];
-// sleep(6);
-// 		$feedres = $i->getUserFeed("3153238919", $maxid = null, $minTimestamp = null);
-// 		$ad_media_id = $feedres['items'][mt_rand(9,11)]['pk']; 
-//////
-
-		 
-	 
-// sleep(6);
- 
-
-
- 
-	    
-		 
 	// }
 
 		// check if 
