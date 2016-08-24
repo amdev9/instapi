@@ -1282,7 +1282,7 @@ $outputs = $r->fetchHeaders();
 
 				       
 
-				    	$i->changeProfilePicture($photo, $degrees);
+				    	$i->changeProfilePicture($dir.'/'.$value, $degrees);
 					}
 				} catch (Exception $e) {
 				    echo $e->getMessage();
