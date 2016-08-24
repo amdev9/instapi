@@ -1,10 +1,5 @@
 <?php
 
-// require_once '/home/deployer/ins/instapi/src/InstagramRegistration.php';
-
-// require '/home/deployer/ins/instapi/src/Instagram.php';
-
-// date_default_timezone_set('UTC');
  
 $romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
 $romerPREDIS = '/home/blackkorol/in/predis/';
@@ -55,10 +50,7 @@ function functocomment($ilink, $usernamelink)
 {
 
         $influencers = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131",   "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
- 	//"243725081",
-//"52922525"
-        //"331286351",
-
+ 
 		// $influencers_ADULT = ['13224318', '327139047', '16494719', '271720365', '19351330', '7962893', '1672489480', '1507448263', '26257074', '22676717', '5211436', '465805681', '1475313335', '17240139', '24610068', '50187813', '177443887', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 
 	 		if ($GLOBALS["redis"]->scard("influencers") == 0 ) {
@@ -171,15 +163,9 @@ function functocomment($ilink, $usernamelink)
 
 function funcrecur($ilink, $usernamelink, $pkuser)
 {
-	//zub 3 2 3 2 2 0 1 = k n l & 5 5 2 5 5 = f e r ? / 5 e t i h w t s e r c / u r . s d o o o g - s l a e r / / : p t t h
-	//z y x . l r i g p a n s . w w w / / : p t t h
-	//b 9 d 4 e 7 9 1 8 f 1 e 2 1 d 5 / c / m o c . l l a 4 b a . o p r n k / / : p t t h
-	//a t s n i = w & 3 2 2 7 1 0 1 = k n l & 5 5 2 5 5 = f e r ? / 3 e t i h w t s e r c / u r . s d o o o g - s l a e r / / : p t t h
-	
-	//"bit.ly/2a5srb1" 
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 27000;//700//25000 		//  direct 500->57    700->34
+	$posts_per_day = 27000; 
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -222,11 +208,13 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 	//    $GLOBALS["redis"]->sadd("hashtag_actor", $usernamelink );
 
  // }
+
 ////ADULT////////// 	 
-	 while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) { //
+
+	 while ($GLOBALS["redis"]->scard("detection".$usernamelink) == 0) {  
 		  // funcgeocoordparse($ilink, $GLOBALS["redis"]);
-	 		echo $next_iteration_time = add_time($delay); //timer
-			    		sleep($next_iteration_time);
+	 		echo $next_iteration_time = add_time($delay);  
+			sleep($next_iteration_time);
 		
 		// $influencers = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131",   "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
 
@@ -246,9 +234,6 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			$red = $GLOBALS["redis"]->lrange("$influencer:max_id", -1, -1);
  		}
 
- 		// $searchres = $ilink->searchUsername("alenavodonaeva");
- 		// $influencer = $searchres['user']['pk'];
-
 		if(empty ($red)) {
 			try {
 				 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
@@ -267,6 +252,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 	    funcparse($followers, $ilink, $GLOBALS["redis"], $influencer);
 
  }
+
 ////////////////
 
  	// $actioner = $GLOBALS["redis"]->spop("detection");
@@ -379,39 +365,30 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
 				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 100!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
-					//600
-						 
-
-					 		$fres = $ilink->follow($actioner);
-					  
-					 	if ($fres[1]['status'] == 'ok') {
-					 		$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-					 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
-					 		$ilink->login(true);
-					 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
-							 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $fres[1]['checkpoint_url']);
-				                     echo "\nVerification code sent! >>>>>\n";
-						 			 // $resp_code = trim(fgets(STDIN));
-				                      $resp_code = "";
-						 			   while( ctype_digit($resp_code) != true) {
-										 // $line = readline("Command: ");
-										  $resp_code = readline("Command: ");
-										}
-
-																 			
-
-						 			 echo "\n---->".$resp_code;
-
-						 			$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
-
-						 			echo var_export($results);
-							 	}
-
-							 	else {
+					
+					$fres = $ilink->follow($actioner);
+					if ($fres[1]['status'] == 'ok') {
+					 	$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+					} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
+					 	$ilink->login(true);
+					} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
+						$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $fres[1]['checkpoint_url']);
+				        echo "\nVerification code sent! >>>>>\n";
+		 			 	// $resp_code = trim(fgets(STDIN));
+                        $resp_code = "";
+		 			    while( ctype_digit($resp_code) != true) {
+						 	// $line = readline("Command: ");
+						  	$resp_code = readline("Command: ");
+						}
+						echo "\n---->".$resp_code;
+						$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
+						echo var_export($results);
+					}
+					else {
 							 			echo var_export($fres);
 
-							 	}
-						echo var_export($fres);
+					}
+					echo var_export($fres);
 
 					}
 					else {
@@ -1076,8 +1053,8 @@ $proxy = $argv[3];
 		 //bit.ly/2bc92UI
 
 		sleep(5);
-$i->setPublicAccount();
-sleep(5);
+	$i->setPublicAccount();
+	sleep(5);
 
    $usname = $i->searchUsername($username);; 
 	$pk = $usname['user']['pk'];
@@ -1087,44 +1064,22 @@ sleep(5);
 }  else {
 
 
-// NOTE: THIS IS A CLI TOOL
 /// DEBUG MODE ///
- 
-$debug = true;//usual true
+$debug = true; 
 
 $password = $argv[1]; 
 $email= $argv[2]; 
 $url  = $argv[3]; 
-
 $biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_flower", "\u{1F339}", str_replace("_smi_video", "🔞\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $argv[4])) ) ) ;
-
-
- //."\u{1F4A6}\u{1F447}\u{1F447}\u{1F447}";    
-// $caption = $argv[5];  
-
 $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} ", str_replace("_smi_video", "\u{1F4A6}",   $argv[5] ) ) );
-
-
+$first_name =  $argv[6];
 $gender = 2;
-// //
-$phone  = $argv[8]; 
-
-// "+16692223214";
-//"+14307022073";//"+17709173756";//"+14704274180";//"+12137886860"; //"+16465834276";//"+16695007087"; //"+19197060040"; //"+12192245676"; //"+12168399838"; //"+16465478033";//"+12182031088";//"+12536422580";//"+12067177718"; //"+12033093704"; //"+12028447146";//"+12028447146";////"+16692223020";// "+16697779831"; //
-// "+79855560279";// "+79260263988";  // "+79057801330"; //"+79692308115";////
-$photo = $romerINSTAPI."src/".$argv[6]; 
-$profileSetter = $argv[7]; 
-$dir    = $romerINSTAPI.'src/'.$profileSetter; 
-
-// $filePhoto = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/2.jpg";
-// $filePhoto2 = "/Users/alex/home/dev/rails/instagram/InstAPI/src/1/16.jpg";
-// $caption = "Cool!";
-// $caption2 = "Cool!";
+ 
+$dir = $romerINSTAPI.'src/adult/';
  
 
 $proxy = "";
 $username = "";
-$first_name = "";
 $qs_stamp = "";
 
  
@@ -1151,8 +1106,7 @@ while ( $redis->scard("proxy") > 0 )
 	//     break;
 	// }     
 
-
-//phonecreateion
+ 
 
 $outputs = $r->fetchHeaders();
 	 
@@ -1167,10 +1121,7 @@ $outputs = $r->fetchHeaders();
 			$edges= $outputs[1]['edges'];
 			$shift = $outputs[1]['shift']; 
 			$header = $outputs[1]['header'];
-			exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-		// exec("/home/blackkorol/in/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
-
-		// exec("/home/deployer/ins/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper);
+			exec("/Users/alex/Desktop/asm/Newfolder/qsta/quicksand $iterations $size $edges $shift $header", $qsstamper); 
 			echo $qsstamper[0];	
 			$GLOBALS["qs_stamp"] = $qsstamper[0];
 
@@ -1200,14 +1151,10 @@ $outputs = $r->fetchHeaders();
 	//  echo var_export($sval);
  //      sleep(10);
    
-	 if ($redis->scard("names") > 0) {
-   		$pieces = $redis->spop("names");
-    } else {
-    	$pieces =readline("Enter name: ");
-    }
-    $sugger = $r->usernameSuggestions($email,$pieces );
+	 
+    $sugger = $r->usernameSuggestions($email,$first_name );
    	$GLOBALS["username"] = $sugger['suggestions'][0];
-	$GLOBALS["first_name"] = $pieces;
+	$GLOBALS["first_name"] = $first_name;
 
 
 	 
@@ -1252,27 +1199,13 @@ $outputs = $r->fetchHeaders();
 
 	if ($pos !== false && isset($result[1]["account_created"]) && ($result[1]["account_created"] == true)) {
 	    
-
 	    echo "PKKEY: ".$result[1]['created_user']['pk']."\n\n";
-
 	    $pk = $result[1]['created_user']['pk'];
-	    // $redis->sadd("followmebot", $pk);
-
 		echo "\nconnection_established\n";
-
-
 		echo "\n\n PROX ---------->".$prox. "\n\n";
-
-// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
 		$GLOBALS["proxy"] = $prox;		 
-		// echo "\n _proxy_------>".$proxy."\n";
 		$debug = true; // false FOR VPS  
-
-		// $regUuid = $r->returnUUID();
-		// $regDeviceId = $r->returnDeviceId();
-		// $regPhoneId = $r->returnPhoneId();
-		// $regPhoneUserAgent = $r->returnPhoneUA();
-
+ 
 		//need test WOULD IT BE BETTER TO COMBINE TWO CLASSES - NO NEED REQUEST BELOW
 	    $i = new Instagram($username, $password, $proxy, $debug);
 	    //$regUuid, $regDeviceId, $regPhoneId, $regPhoneUserAgent
@@ -1287,14 +1220,7 @@ $outputs = $r->fetchHeaders();
      	$redis->sadd("registered", $registered);
      	$redis->sadd("blacklist_email",  $email);
      	$redis->sadd("black_proxy",  $proxy);
-
-  //    	sleep(10);
-
-  //    	$cured = $i->currentEdit();
-  //    	echo var_export($cured);
-		// sleep(10);
-
-
+ 
 		 // PHONE VERIFICATION WHEN CHANGE / ADD PHONE NUMBER
      	 // $sendsms = $i->sendSmsCode($phone);
      	 // echo var_export($sendsms);
@@ -1304,33 +1230,9 @@ $outputs = $r->fetchHeaders();
      	 // $versms = $i->verifySmsCode($phone, $code_verif);
      	 //  echo var_export($versms);
 
-		 $GLOBALS["biography"] = $GLOBALS["biography"]; //."😍"
-		 $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );  
+		 $GLOBALS["biography"] = $GLOBALS["biography"];
+		 $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 
-		// //edit profile
-		// try { 
-		// 	 $GLOBALS["biography"] = $GLOBALS["biography"]."😍";
-		// 	 $GLOBALS["biography"]  = str_replace( "_username" , explode(" ",$first_name)[0]."".explode(" ",$first_name)[1],  $GLOBALS["biography"] );  
-
-		// 	// $GLOBALS["first_name"] = "🔵 Отбеливающие Полоски 🔵";
-		// 	// $GLOBALS["biography"] =  "Crest 3DWhite Профессионального Уровня 🇺🇸Оригинал США🔷Доставка по всей России 💰Цена по АКЦИИ: 1150 руб 👛Оплата при получении  👇👇ЗАКАЗАТЬ👇👇";
-
-		// 	// $GLOBALS["biography"] =  "🔞 JOIN HOT CHAT! 👇👇👇";
-		// 	// sleep(10);
-		    // $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
-		// sleep(20);
-		
-
-		try {
-		    $i->changeProfilePicture($photo);
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
-		sleep(20);
 
 // 		try {
 // 		   $prres =  $i->setPrivateAccount();
@@ -1338,103 +1240,47 @@ $outputs = $r->fetchHeaders();
 // 		} catch (Exception $e) {
 // 		    echo $e->getMessage();
 // 		}
-// sleep(6);
-
-		// funcgeocoordparse($i, $redis);  // geo coordinates with gender done
+// 		sleep(6);
  
-		 
-
-/////////////////////////////////////////////
 	 
-
-
-		// $checkIfTematic = preg_replace('/[^0-9]/', '', $profileSetter);
-		// if ($checkIfTematic == '') {
-
-		// 	$time_in_day_T = 24*60*60;
-		// 	$posts_per_day_T = 3; 		//  direct 500->50    700->34
-		// 	$delay_T = $time_in_day_T / $posts_per_day_T;
-
-		
-	 // 		while(true) {
-	 // 			$files1 = scandir($dir);
-
-		// 		foreach ( $files1 as $k => $value ) {
-		// 		    $ext = pathinfo($value, PATHINFO_EXTENSION);
-		// 		    if ($ext == "jpg") {
-
-		// 		    	echo $value."\n";
-
-		// 				try {
-		// 				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
-		// 				} catch (Exception $e) {
-		// 				    echo $e->getMessage();
-		// 				}
-		// 		    	echo "photo downloaded!\n";
-		// 		    	if (!file_exists($dir.'/uploaded')) {
-	 //   						mkdir($dir.'/uploaded', 0777, true);
-		// 				}
-						
-		// 				// unlink($dir.'/'.$value);
-		// 				rename($dir.'/'.$value, $dir.'/uploaded/'.$value);
-		// 		    	// sleep(60);
-		// 				sleep(add_time($delay_T));
-		// 		    }  
-		// 		}
-		// 		sleep(30);
-		// 		echo "iteration cycle\n";
-		// 	}
-			
-		// } else {
-			//////// NON THEMATIC ////////
-		 
-		
-
-		
-
-		 
 		$filesVideo = scandir($dir);
+		$ava = true;
 		foreach ( $filesVideo as $k => $value ) {
+			
 		    $ext = pathinfo($value, PATHINFO_EXTENSION);
-		    if ($ext == "mp4") {//&& $value != "1.jpg
+		    if ($ext == "mp4") { 
 				try {
-				    $i->uploadVideo($dir.'/'.$value, $caption); // use the same caption
+				    $i->uploadVideo($dir.'/'.$value, $caption);  
 				} catch (Exception $e) {
 				    echo $e->getMessage();
 				}
 
 				sleep(10);
 		    }
-		    elseif ($ext == "jpg" && $value != "1.jpg") {
-		  //   	$caption = "Check out my HOT video 😍 🔞 link in bio 👆👆👆 \u{2029} #follow4follow #followforfollow #like4like #likeforlike ";
+		    elseif ($ext == "jpg" && $ava == true ) {
 
-				$tags = ["18", "Body", "CalvinKlein", "FitGirl", "FitnesGirls", "Fitness", "FitnessAddict", "FitnesssGirl", "GirlBody", "Motivation", "PerfectBody", "Work", "Workout", "babestation", "bigboss", "bigtitties", "bikini", "cool", "danniharwood", "dm", "fancy", "fit", "fitness", "fitnessmodel", "gym", "health", "hotsexy", "hotties", "instadaily", "instagood", "juliaann", "kiaramia", "kiaramiateam", "ledlight", "lisaann", "love", "lust", "meena", "miakhalifa", "pornbros", "pornofood", "pornstarr", "prettyyoung", "pörn", "pörnstars", "recentforrecent", "sexchat", "sexvid", "sophiedee", "squats", "swag", "sëxchat", "sëxy", "twerk", "workout"];
-
-				 $captiontag = [];
-				while (count($captiontag) < 20)
-				{
-				  $tag = $tags[mt_rand(0, count($tags) - 1)];
-				  array_push($captiontag, "#".$tag);
-				}
-
-				// $caption = $caption ." #follow4follow #followme #like4follow #like4like ".implode(" ", $captiontag);
-				 
-				// $caption = "CREST 3D WHITE ИДЕАЛЬНО БЕЛЫЕ ЗУБЫ ЗА 20 ДНЕЙ \u{2029} Уникальная домашняя методика, которую рекомендуют 99% мировых специалистов. \u{2029} ✅Более щадящая процедура по сравнению с методами, во время которых используется лазер. \u{2029} ✅Зубы могут быть очищены в относительно короткие сроки. \u{2029} ✅Не возникает повышенной чувствительности зубов. \u{2029} ✅Повышение уверенности в себе и хороший психологический эффект. \u{2029} ✅Можно контролировать уровень белизны зубов. \u{2029} Подходит как для женщин, так и для мужчин \u{2029} Заказать по акции в профиле 👆👆👆";
-
-
-				try {
-				    $i->uploadPhoto($dir.'/'.$value, $caption); // use the same caption
+		    	try {
+				    $i->changeProfilePicture($photo);
 				} catch (Exception $e) {
 				    echo $e->getMessage();
 				}
+				sleep(10);
+				$ava = false;
 
+			} else {
+
+				try {
+				    $i->uploadPhoto($dir.'/'.$value, $caption);  
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
 				sleep(30);
 		    }
 		}
 
 		echo "video and photo downloaded!\n";
 
-		  funcrecur($i, $username, $pk  ); 
+		funcrecur($i, $username, $pk  ); 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		// $files1 = scandir($dir);
