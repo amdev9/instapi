@@ -23,6 +23,18 @@ $redis = new Predis\Client(array(
 		"port" => 6379));
 
 
+function shuffle_assoc($list) { 
+  if (!is_array($list)) return $list; 
+
+  $keys = array_keys($list); 
+  shuffle($keys); 
+  $random = array(); 
+  foreach ($keys as $key) { 
+    $random[$key] = $list[$key]; 
+  }
+  return $random; 
+} 
+
 function functofollow($ilink, $usernamelink, $pkuser) {
 	$tofollow = $GLOBALS["redis"]->smembers("followmebot");
 
@@ -1015,7 +1027,6 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 				} catch (Exception $e) {
 				    echo $e->getMessage();
 				}
-	 
 }
 
 
@@ -1239,7 +1250,10 @@ $outputs = $r->fetchHeaders();
 	 
 		$filesVideo = scandir($dir);
 		$ava = true;
-		foreach ( $filesVideo as $k => $value ) {
+		$uploadCounter = 0;
+		$filesVid = shuffle_assoc($filesVideo);
+
+		foreach ( $filesVid as $k => $value ) {
 
 		    $ext = pathinfo($value, PATHINFO_EXTENSION);
 		    if ($ext == "mp4") { 
@@ -1254,7 +1268,21 @@ $outputs = $r->fetchHeaders();
 		    elseif ($ext == "jpg" && $ava == true ) {
 
 		    	try {
-				    $i->changeProfilePicture($photo);
+		    		if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+					{
+						if ($GLOBALS["redis"]->scard($value) == 0 ) {
+						     $GLOBALS["redis"]->sadd('picked', $value);
+						    foreach (range(-12, 12) as $number) {
+						        if ($number != 0)
+						            $GLOBALS["redis"]->sadd($value, $number);
+						    }
+						} 
+
+				        $degrees = $GLOBALS["redis"]->spop($value);
+				        echo $degrees;
+
+				    	$i->changeProfilePicture($photo, $degrees);
+					}
 				} catch (Exception $e) {
 				    echo $e->getMessage();
 				}
@@ -1262,9 +1290,22 @@ $outputs = $r->fetchHeaders();
 				$ava = false;
 
 			} else {
-
+				if ($uploadCounter == 2) { break; }
 				try {
-				    $i->uploadPhoto($dir.'/'.$value, $caption);  
+					if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+					{
+						if ($GLOBALS["redis"]->scard($value) == 0 ) {
+						     $GLOBALS["redis"]->sadd('picked', $value);
+						    foreach (range(-12, 12) as $number) {
+						        if ($number != 0)
+						            $GLOBALS["redis"]->sadd($value, $number);
+						    }
+						}
+				        $degrees = $GLOBALS["redis"]->spop($value);
+				        echo $degrees;
+					    $i->uploadPhoto($dir.'/'.$value, $caption, null , $degrees);  
+					    $uploadCounter = $uploadCounter + 1;
+					}
 				} catch (Exception $e) {
 				    echo $e->getMessage();
 				}

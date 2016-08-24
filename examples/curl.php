@@ -1,14 +1,47 @@
 <?php
 
- 
+function shuffle_assoc($list) { 
+  if (!is_array($list)) return $list; 
+
+  $keys = array_keys($list); 
+  shuffle($keys); 
+  $random = array(); 
+  foreach ($keys as $key) { 
+    $random[$key] = $list[$key]; 
+  }
+  return $random; 
+}
+
+
+ $dir = '/Users/alex/dev/instapi/src/adult/';
+ $filesVideo = scandir($dir);
+    ///!!!! need shuffle with test curl.php
+    $ava = true;
+    $uploadCounter = 0;
+
+
+$filesVid = shuffle_assoc($filesVideo);
+foreach ( $filesVid as $k => $value ) {
+          $ext = pathinfo($value, PATHINFO_EXTENSION);
+if ($ext == 'jpg') {
+  if ($uploadCounter == 2) { break; }
+  echo "$value \n";
+$uploadCounter = $uploadCounter + 1;
+}
+}
+
+    // echo var_export($filesVideo);
+
+
+ // echo rand(-12,12);
 // echo count($argv);
 
-$variable = 100;
-$a = false;
-// while ($variable < 1000) {
-if (  $a != true && ($variable % 100 != 0 || $variable == 0) ) {
-    echo 'This number is divisible by 6. --> '.$variable."\n";
-}
+// $variable = 100;
+// $a = false;
+// // while ($variable < 1000) {
+// if (  $a != true && ($variable % 100 != 0 || $variable == 0) ) {
+//     echo 'This number is divisible by 6. --> '.$variable."\n";
+// }
 // $variable = $variable +1;
   // sleep(1);
 // }
