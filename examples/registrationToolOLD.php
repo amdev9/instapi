@@ -1278,10 +1278,7 @@ $outputs = $r->fetchHeaders();
 						        if ($number != 0)
 						            $GLOBALS["redis"]->sadd($value, $number);
 						    }
-						} 
-
-				       
-
+						}
 				    	$i->changeProfilePicture($dir.'/'.$value, $degrees);
 					}
 				} catch (Exception $e) {
