@@ -1294,6 +1294,8 @@ $outputs = $r->fetchHeaders();
 				try {
 					if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
 					{
+						$degrees = $GLOBALS["redis"]->spop($value);
+						echo $degrees;
 						if ($GLOBALS["redis"]->scard($value) == 0 ) {
 						     $GLOBALS["redis"]->sadd('picked', $value);
 						    foreach (range(-12, 12) as $number) {
@@ -1301,8 +1303,8 @@ $outputs = $r->fetchHeaders();
 						            $GLOBALS["redis"]->sadd($value, $number);
 						    }
 						}
-				        $degrees = $GLOBALS["redis"]->spop($value);
-				        echo $degrees;
+				        
+				      
 					    $i->uploadPhoto($dir.'/'.$value, $caption, null , $degrees);  
 					    $uploadCounter = $uploadCounter + 1;
 					}
