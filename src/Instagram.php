@@ -445,37 +445,33 @@ public function sendConfirmEmail($email) {
      */
     public function uploadPhoto($photo, $caption = null, $upload_id = null)
     {
-        $_prefix = 'IMG';
-        $image = $photo;
-        $output = 'output.jpg';
-        $_image = $image;
-        list($_width, $_height) = getimagesize($image);
-        $_output = $output;
-        $_tmp = $_prefix.rand();
-        copy($_image, $_tmp);
 
-        $colors_list = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2' ,'3','4', '5', '6', '7', '9'];
-        $fe_list = ['F', 'E'];
-        $firstcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
-        $secondcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
-        $thirdcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
-
-        $fe1 = $fe_list[mt_rand(0, count($fe_list) - 1)];
-        $fe2 = $fe_list[mt_rand(0, count($fe_list) - 1)];
-        $fe3 = $fe_list[mt_rand(0, count($fe_list) - 1)];
-
-        $color  = '#'.$fe1.$firstcol.$fe2.$secondcol.$fe3.$thirdcol; // F or E
-        echo  $color;
-        $input = $_tmp;
-        $width = 1;
-
-        $command = "convert $input -bordercolor $color -border {$width}x{$width} $input";
-        $command = str_replace(array("\n", "'"), array('', '"'), $command);
-        $command = escapeshellcmd($command);
-        exec($command);
-
-        rename($_tmp, $_output);
-
+        ////
+        // $_prefix = 'IMG';
+        // $image = $photo;
+        // $output = 'output.jpg';
+        // $_image = $image;
+        // list($_width, $_height) = getimagesize($image);
+        // $_output = $output;
+        // $_tmp = $_prefix.rand();
+        // copy($_image, $_tmp);
+        // $colors_list = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2' ,'3','4', '5', '6', '7', '9'];
+        // $fe_list = ['F', 'E'];
+        // $firstcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+        // $secondcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+        // $thirdcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+        // $fe1 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+        // $fe2 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+        // $fe3 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+        // $color  = '#'.$fe1.$firstcol.$fe2.$secondcol.$fe3.$thirdcol; // F or E
+        // echo  $color;
+        // $input = $_tmp;
+        // $width = 1;
+        // $command = "convert $input -bordercolor $color -border {$width}x{$width} $input";
+        // $command = str_replace(array("\n", "'"), array('', '"'), $command);
+        // $command = escapeshellcmd($command);
+        // exec($command);
+        // rename($_tmp, $_output);
         ///NEED TEST
         // $fileToUpload1 = imagecreatefromjpeg($photo);
         // $imgdata = getimagesize($photo);
@@ -502,7 +498,7 @@ public function sendConfirmEmail($email) {
             $fileToUpload = createVideoIcon($photo);
         } else {
             $upload_id = number_format(round(microtime(true) * 1000), 0, '', '');
-             $fileToUpload = file_get_contents($output);
+             $fileToUpload = file_get_contents($photo);
         }
 
         $bodies = [
@@ -1107,38 +1103,35 @@ public function sendConfirmEmail($email) {
    */
   public function changeProfilePicture($photo)
   {
-        $_prefix = 'IMG';
-        $image = $photo;
-        $output = 'output.jpg';
-        $_image = $image;
-        list($_width, $_height) = getimagesize($image);
-        $_output = $output;
-        $_tmp = $_prefix.rand();
-        copy($_image, $_tmp);
-
-        $colors_list = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2' ,'3','4', '5', '6', '7', '9'];
-        $fe_list = ['F', 'E'];
-        $firstcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
-        $secondcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
-        $thirdcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
-
-        $fe1 = $fe_list[mt_rand(0, count($fe_list) - 1)];
-        $fe2 = $fe_list[mt_rand(0, count($fe_list) - 1)];
-        $fe3 = $fe_list[mt_rand(0, count($fe_list) - 1)];
-
-        $color  = '#'.$fe1.$firstcol.$fe2.$secondcol.$fe3.$thirdcol; // F or E
-        echo  $color;
-        $input = $_tmp;
-        $width = 1;
-
-        $command = "convert $input -bordercolor $color -border {$width}x{$width} $input";
-        $command = str_replace(array("\n", "'"), array('', '"'), $command);
-        $command = escapeshellcmd($command);
-        exec($command);
-
-        rename($_tmp, $_output);
-      //
-     ///NEED TEST
+        $fileToUpload = file_get_contents($photo);
+        
+        // $_prefix = 'IMG';
+        // $image = $photo;
+        // $output = 'output.jpg';
+        // $_image = $image;
+        // list($_width, $_height) = getimagesize($image);
+        // $_output = $output;
+        // $_tmp = $_prefix.rand();
+        // copy($_image, $_tmp);
+        // $colors_list = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2' ,'3','4', '5', '6', '7', '9'];
+        // $fe_list = ['F', 'E'];
+        // $firstcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+        // $secondcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+        // $thirdcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
+        // $fe1 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+        // $fe2 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+        // $fe3 = $fe_list[mt_rand(0, count($fe_list) - 1)];
+        // $color  = '#'.$fe1.$firstcol.$fe2.$secondcol.$fe3.$thirdcol; // F or E
+        // echo  $color;
+        // $input = $_tmp;
+        // $width = 1;
+        // $command = "convert $input -bordercolor $color -border {$width}x{$width} $input";
+        // $command = str_replace(array("\n", "'"), array('', '"'), $command);
+        // $command = escapeshellcmd($command);
+        // exec($command);
+        // rename($_tmp, $_output);
+        //
+        ///NEED TEST
         // $fileToUpload1 = imagecreatefromjpeg($photo);
         // $imgdata = getimagesize($photo);
         // $width = $imgdata[0];
@@ -1184,9 +1177,7 @@ public function sendConfirmEmail($email) {
       [
         'type'     => 'form-data',
         'name'     => 'profile_pic',
-        'data'     =>  file_get_contents($output),
-        // $fileToUpload,
-        //
+        'data'     => $fileToUpload,
         'filename' => 'profile_pic',
         'headers'  => [
           'Content-type: application/octet-stream',
