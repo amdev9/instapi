@@ -424,7 +424,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						
 						// return;
 
-						sleep(14000);//*60*20);
+						sleep(14400);//*60*20);
 						$ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
 						$ilink->login();
 						sleep(3);
