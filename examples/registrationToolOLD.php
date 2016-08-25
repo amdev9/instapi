@@ -323,53 +323,53 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					echo $next_iteration_time = add_time($delay); //timer
 			    	sleep($next_iteration_time);
 
-					if ($medcom == "nonprivate") {
+					// if ($medcom == "nonprivate") {
 					
-						 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
-						 echo "\nfeed fecthed\n";
+					// 	 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
+					// 	 echo "\nfeed fecthed\n";
 					
-					  if (isset($usfeed['items'][0]['pk'])) {
-						  $med = $usfeed['items'][0]['pk'];
-						  sleep(2);
+					//   if (isset($usfeed['items'][0]['pk'])) {
+					// 	  $med = $usfeed['items'][0]['pk'];
+					// 	  sleep(2);
 
 
-					 if ( $GLOBALS["redis"]->sismember("liked".$usernamelink , $med) != true ) {
-								$lres =$ilink->like($med);
-								echo var_export($lres); //need to test res code
+					//  if ( $GLOBALS["redis"]->sismember("liked".$usernamelink , $med) != true ) {
+					// 			$lres =$ilink->like($med);
+					// 			echo var_export($lres); //need to test res code
 							 
 
-							if ($lres[1]['status'] == 'ok') {
-					 		$GLOBALS["redis"]->sadd("liked".$usernamelink, $med);
-					 	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
-					 		$ilink->login(true);
-					 	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
-							 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $lres[1]['checkpoint_url']);
-				                     echo "\nVerification code sent! >>>>>\n";
-						 			 // $resp_code = trim(fgets(STDIN));
-				                      $resp_code = "";
-						 			   while( ctype_digit($resp_code) != true) {
-										 // $line = readline("Command: ");
-										  $resp_code = readline("Command: ");
-										}
+					// 		if ($lres[1]['status'] == 'ok') {
+					//  		$GLOBALS["redis"]->sadd("liked".$usernamelink, $med);
+					//  	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
+					//  		$ilink->login(true);
+					//  	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
+					// 		 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $lres[1]['checkpoint_url']);
+				 //                     echo "\nVerification code sent! >>>>>\n";
+					// 	 			 // $resp_code = trim(fgets(STDIN));
+				 //                      $resp_code = "";
+					// 	 			   while( ctype_digit($resp_code) != true) {
+					// 					 // $line = readline("Command: ");
+					// 					  $resp_code = readline("Command: ");
+					// 					}
 
 																 			
 
-						 			 echo "\n---->".$resp_code;
+					// 	 			 echo "\n---->".$resp_code;
 
-						 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
+					// 	 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
 
-						 			echo var_export($results);
-							 	}
+					// 	 			echo var_export($results);
+					// 		 	}
 
-							 	else {
-							 			echo var_export($lres);
+					// 		 	else {
+					// 		 			echo var_export($lres);
 
-							 	}
+					// 		 	}
 						 
-						}
-						}
-						 sleep(2);
-					}
+					// 	}
+					// 	}
+					// 	 sleep(2);
+					// }
 
 			    // if ($medcom == "private") {
 			    	// echo $next_iteration_time = add_time($delay); //timer
@@ -411,34 +411,34 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						// echo "\n\nELSE --<<<  \n\n";
 						//works
 					 	 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
-						 $ilink->login();
-						 sleep(2);
-					 	 $cured = $ilink->currentEdit();
-					 	 echo var_export($cured);
-						 sleep(4);
-						 $ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+						$ilink->login();
+						sleep(2);
+						$cured = $ilink->currentEdit();
+						echo var_export($cured);
+						sleep(4);
+						$ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
 
 						 // $ilink->editProfile("bit.ly/2bbghfA", "" , "Ashley Irvine", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login AshleyIrvine97 I am WAITING.. CLICK 👇 👇 👇 " , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
 
-						 
+						
+						// return;
 
-						  return;
-							// sleep(14000);//*60*20);
-						 // 	$ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
-						 // $ilink->login();
-						 // sleep(3);
-					 	//  $cured = $ilink->currentEdit();
-					 	//  echo var_export($cured);
-							// sleep(4);
-							// $ilink->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
-							// sleep(4);
-				 		//  $usname = $ilink->searchUsername($usernamelink);; 
-						 // $pk = $usname['user']['pk'];
-						 // sleep(4);
-						 // $GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-						 // funcrecur($ilink, $usernamelink, $pk  ); 
-						 
+						sleep(14000);//*60*20);
+						$ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
+						$ilink->login();
+						sleep(3);
+						$cured = $ilink->currentEdit();
+						echo var_export($cured);
+						sleep(4);
+						$ilink->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
+						sleep(4);
+						$usname = $ilink->searchUsername($usernamelink);; 
+						$pk = $usname['user']['pk'];
+						sleep(4);
+						$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+						funcrecur($ilink, $usernamelink, $pk  ); 
+
 
 					}
 
