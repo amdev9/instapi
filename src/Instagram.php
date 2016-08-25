@@ -1218,8 +1218,8 @@ public function sendConfirmEmail($email) {
         imagejpeg($final_image);
         $fileToUpload =  ob_get_contents();
         ob_end_clean();
-        // $fileToUpload = file_get_contents($photo);
         
+        // $fileToUpload = file_get_contents($photo);
         // $_prefix = 'IMG';
         // $image = $photo;
         // $output = 'output.jpg';
