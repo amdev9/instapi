@@ -416,7 +416,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						$cured = $ilink->currentEdit();
 						echo var_export($cured);
 						sleep(4);
-						$ilink->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+						$ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
 
 						 // $ilink->editProfile("bit.ly/2bbghfA", "" , "Ashley Irvine", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login AshleyIrvine97 I am WAITING.. CLICK 👇 👇 👇 " , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
@@ -431,7 +431,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						$cured = $ilink->currentEdit();
 						echo var_export($cured);
 						sleep(4);
-						$ilink->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
+						$ilink->editProfile("", "", $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
 						sleep(4);
 						$usname = $ilink->searchUsername($usernamelink);; 
 						$pk = $usname['user']['pk'];
