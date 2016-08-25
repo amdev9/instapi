@@ -423,22 +423,22 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 
 						 
 
-						   return;
-							// sleep(14400);//*60*20);
+						   // return;
+							sleep(14000);//*60*20);
+						 	$ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
+						 $ilink->login();
+						 sleep(3);
+					 	 $cured = $ilink->currentEdit();
+					 	 echo var_export($cured);
+							sleep(4);
+							$ilink->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
+							sleep(4);
+				 		 $usname = $ilink->searchUsername($usernamelink);; 
+						 $pk = $usname['user']['pk'];
+						 sleep(4);
+						 $GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+						 funcrecur($ilink, $usernamelink, $pk  ); 
 						 
-						 // $ilink->login();
-						 // sleep(3);
-					 	//  $cured = $ilink->currentEdit();
-					 	//  echo var_export($cured);
-							// sleep(4);
-							// $ilink->editProfile("", $GLOBALS["phone"], $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
-							// sleep(4);
-				 		//  $usname = $ilink->searchUsername($usernamelink);; 
-						 // $pk = $usname['user']['pk'];
-						 // sleep(4);
-						 // $GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-						 // funcrecur($ilink, $usernamelink, $pk  ); 
-						 ///
 
 					}
 
