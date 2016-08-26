@@ -1026,7 +1026,7 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 
 
 
-if (count($argv) < 4 ) {
+if (count($argv) < 5 ) {
 
 
 $debug = true; 
