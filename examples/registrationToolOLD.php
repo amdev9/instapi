@@ -177,7 +177,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 {
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 1000;  //27000
+	$posts_per_day = 800;  //27000
 	$delay = $time_in_day / $posts_per_day;
 
 
