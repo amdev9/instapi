@@ -177,7 +177,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 {
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 27000; 
+	$posts_per_day = 1000;  //27000
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -376,7 +376,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 100!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 500!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					
 					$fres = $ilink->follow($actioner);
 					if ($fres[1]['status'] == 'ok') {
@@ -411,33 +411,28 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						// echo "\n\nELSE --<<<  \n\n";
 						//works
 					 	 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
-						$ilink->login();
-						sleep(2);
-						$cured = $ilink->currentEdit();
-						echo var_export($cured);
-						sleep(4);
-						$ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 
-
-						 // $ilink->editProfile("bit.ly/2bbghfA", "" , "Ashley Irvine", "Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login AshleyIrvine97 I am WAITING.. CLICK 👇 👇 👇 " , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
-
-						
-						// return;
-
-						sleep(14400);//*60*20);
-						$ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
-						$ilink->login();
-						sleep(3);
-						$cured = $ilink->currentEdit();
-						echo var_export($cured);
-						sleep(4);
-						$ilink->editProfile("", "", $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
-						sleep(4);
-						$usname = $ilink->searchUsername($usernamelink);; 
-						$pk = $usname['user']['pk'];
-						sleep(4);
-						$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-						funcrecur($ilink, $usernamelink, $pk  ); 
+						return;
+						// $ilink->login();
+						// sleep(2);
+						// $cured = $ilink->currentEdit();
+						// echo var_export($cured);
+						// sleep(4);
+						// $ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+						// sleep(14400);//*60*20);
+						// $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
+						// $ilink->login();
+						// sleep(3);
+						// $cured = $ilink->currentEdit();
+						// echo var_export($cured);
+						// sleep(4);
+						// $ilink->editProfile("", "", $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
+						// sleep(4);
+						// $usname = $ilink->searchUsername($usernamelink);; 
+						// $pk = $usname['user']['pk'];
+						// sleep(4);
+						// $GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+						// funcrecur($ilink, $usernamelink, $pk  ); 
 
 
 					}
@@ -1044,12 +1039,12 @@ $proxy = $argv[3];
 	$i->login();
 	 sleep(3);
 	  
-     	$cured = $i->currentEdit();
-     	echo var_export($cured);
+     	// $cured = $i->currentEdit();
+     	// echo var_export($cured);
  
 		 sleep(10);
 		    // $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
-	 $i->editProfile("", "" , "Ashley Irvine", "" , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
+	 // $i->editProfile("", "" , "Ashley Irvine", "" , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
 
 	 // ->editProfile("", "" , "Laura Patel", "" , "cccbbbbbb.bbbbbbbbbbbb.bbbbbbbbb@gmail.com" , 2);
 	 // editProfile("", "" , "Annabelle Garrison", "" , "ffffffff.feeeeeeeeeeeee.eeeeeeee@gmail.com" , 2);
@@ -1057,9 +1052,9 @@ $proxy = $argv[3];
  //Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login RachelLevesque93 I am WAITING.. CLICK
 		 //bit.ly/2bc92UI
 
-		sleep(5);
-	$i->setPublicAccount();
-	sleep(5);
+	// 	sleep(5);
+	// $i->setPublicAccount();
+	// sleep(5);
 
    $usname = $i->searchUsername($username);; 
 	$pk = $usname['user']['pk'];
