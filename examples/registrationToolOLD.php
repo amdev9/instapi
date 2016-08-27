@@ -1313,10 +1313,10 @@ while ( $redis->scard("proxy") > 0 )
 
 		echo "video and photo downloaded!\n";
 
-		$cured = $ilink->currentEdit();
+		$cured = $i->currentEdit();
 		echo var_export($cured);
 		sleep(4);
-		$ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+		$i->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 		sleep(4);
 		try {
 		    $i->setPrivateAccount();
