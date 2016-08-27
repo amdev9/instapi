@@ -360,6 +360,7 @@ public function usernameSuggestions($email ,$full_name) //not use for now
 
     public function request($endpoint, $post = null)
     {
+      //'Cookie: mid=V3jbkwABAAEOM1k5BegeySOA_0OP', 
 
      $headers = [
       'Host: i.instagram.com',
@@ -368,7 +369,6 @@ public function usernameSuggestions($email ,$full_name) //not use for now
       'X-IG-Connection-Type: WIFI',
       'X-IG-Capabilities: 3QI=',
       'Accept-Language: en-US', 
-      'Cookie: mid=V3jbkwABAAEOM1k5BegeySOA_0OP', 
       'Accept-Encoding: gzip, deflate',
       'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
       'Cookie2: $Version=1',
