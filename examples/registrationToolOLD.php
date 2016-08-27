@@ -1042,7 +1042,7 @@ $proxy = $argv[3];
      	// $cured = $i->currentEdit();
      	// echo var_export($cured);
  
-		 sleep(10);
+		 // sleep(7);
 		    // $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
 	 // $i->editProfile("", "" , "Ashley Irvine", "" , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
 
@@ -1313,11 +1313,17 @@ while ( $redis->scard("proxy") > 0 )
 
 		echo "video and photo downloaded!\n";
 
+		$cured = $ilink->currentEdit();
+		echo var_export($cured);
+		sleep(4);
+		$ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+		sleep(4);
 		try {
 		    $i->setPrivateAccount();
 		} catch (Exception $e) {
 		    echo $e->getMessage();
 		}
+
 		
 		sleep(6);
 
