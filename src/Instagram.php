@@ -113,9 +113,9 @@ class Instagram
 
 
 // signed_body=3f80bf65d1950d3a19fb2d680f992a04dfa9da6b68135a2fa4c03381cb964ce0.%7B%22
-   // phone_number%22%3A%22%2B79260263988%22%2C%22
-   // _csrftoken%22%3A%22hvo1oRG4LMGDeScVIuQacSLZnFNG2xP6%22%2C%22
-   // _uid%22%3A%223592360965%22%2C%22
+   // phone_number%22%3A%22%2B79260263988%22,%22
+   // _csrftoken%22%3A%22hvo1oRG4LMGDeScVIuQacSLZnFNG2xP6%22,%22
+   // _uid%22%3A%223592360965%22,%22
    // _uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%7D
    // &ig_sig_key_version=4
 
@@ -130,10 +130,10 @@ class Instagram
    }
 
 // signed_body=7fcfdc871e84fdea11fc193fa1f7d96d6cc8260d6516aca0b08c1569898d1345.%7B%22
-   // verification_code%22%3A%22630219%22%2C%22
-   // phone_number%22%3A%22%2B79260263988%22%2C%22
-   // _csrftoken%22%3A%22hvo1oRG4LMGDeScVIuQacSLZnFNG2xP6%22%2C%22
-   // _uid%22%3A%223592360965%22%2C%22
+   // verification_code%22%3A%22630219%22,%22
+   // phone_number%22%3A%22%2B79260263988%22,%22
+   // _csrftoken%22%3A%22hvo1oRG4LMGDeScVIuQacSLZnFNG2xP6%22,%22
+   // _uid%22%3A%223592360965%22,%22
    // _uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%7D
    // &ig_sig_key_version=4
 
@@ -175,10 +175,10 @@ return  $outputspostfinal;
 // for phone creator
  // POST https://i.instagram.com/api/v1/accounts/send_confirm_email/ HTTP/1.1
   // signed_body=9ef8ead4c19d54e133116403cb79fc9aceef7077b599a46180ae38bfe7f8aab7.%7B%22
- // _csrftoken%22%3A%220bphZAtkbrkYJ4Z9qa3jD3k3D3ZSVXRq%22%2C%22
- // send_source%22%3A%22%edit_profile%22%2C%22
- // _uid%22%3A%223594561427%22%2C%22
- // _uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%2C%22
+ // _csrftoken%22%3A%220bphZAtkbrkYJ4Z9qa3jD3k3D3ZSVXRq%22,%22
+ // send_source%22%3A%22%edit_profile%22,%22
+ // _uid%22%3A%223594561427%22,%22
+ // _uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22,%22
  // email%22%3A%22matveev.alexander.vladimir.ovi4%40gmail.com%22%7D
  // &ig_sig_key_version=4
 
@@ -255,6 +255,11 @@ public function sendConfirmEmail($email) {
       $this->getv2Inbox();
       $this->getRecentActivity();
   }
+
+
+//   POST https://i.instagram.com/api/v1/qe/sync/ HTTP/1.1
+// _csrftoken%22%3A%22ECyV1yyk84rvyaL3DICec9QSo3jBQwPP%22,%22
+ 
 
     public function syncFeatures()
     {
@@ -1809,7 +1814,7 @@ public function sendConfirmEmail($email) {
 
   /**
 
-  signed_body=3f9153ee63d3395151babb5028821b08758a0827c36adfc57402218105614587.%7B%22_csrftoken%22%3A%22IjKRj5NGejIAQNSqrmvjWNyziJYNRKCd%22%2C%22email%22%3A%22mat.veev.alexander.vladimirovi4%40gmail.com%22%2C%22qe_id%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%2C%22waterfall_id%22%3A%22ed596800-1f15-40b0-ad4d-42cd41017dc7%22%7D&ig_sig_key_version=4
+  signed_body=3f9153ee63d3395151babb5028821b08758a0827c36adfc57402218105614587.%7B%22_csrftoken%22%3A%22IjKRj5NGejIAQNSqrmvjWNyziJYNRKCd%22,%22email%22%3A%22mat.veev.alexander.vladimirovi4%40gmail.com%22,%22qe_id%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22,%22waterfall_id%22%3A%22ed596800-1f15-40b0-ad4d-42cd41017dc7%22%7D&ig_sig_key_version=4
  
    */
 
@@ -2183,7 +2188,7 @@ public function sendConfirmEmail($email) {
    * @return array
    *   Friendship status data
    signed_body=fe3f4a50c6ee13ee74299df6661e5d259e6f3508b7db3490f9a5c090e155c971.%7B%22
-   _csrftoken%22%3A%22hvo1oRG4LMGDeScVIuQacSLZnFNG2xP6%22%2C%22user_id%22%3A%2225025320%22%2C%22_uid%22%3A%223592360965%22%2C%22_uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%7D&ig_sig_key_version=4
+   _csrftoken%22%3A%22hvo1oRG4LMGDeScVIuQacSLZnFNG2xP6%22,%22user_id%22%3A%2225025320%22,%22_uid%22%3A%223592360965%22,%22_uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%7D&ig_sig_key_version=4
 
    */
   public function follow($userId)

@@ -23,6 +23,7 @@ class InstagramRegistration
         $this->debug = $debug;
 
         $this->uuid = $this->generateUUID(true);
+
          $this->phone_id = $this->generateUUID(true);
 
         $this->waterfall_id =  $this->generateUUID(true);
@@ -39,35 +40,39 @@ class InstagramRegistration
         }
     }
 
-  /**
-   * Checks if the username is already taken (exists).
-   *
-   * @param string $username
-   *
-   * @return array
-   *   Username availability data
-   */
+   
 
 
-//  public function returnUUID()
-// {
-//      return $this->uuid;
-// }
+public function syncFeaturesRegister()
+    {
 
-//  public function returnDeviceId()
-//   {
-//      return $this->device_id;
-//   }
 
-//  public function returnPhoneId()
-//   {
-//      return $this->phone_id;
-//   }
+// POST https://i.instagram.com/api/v1/qe/sync/ HTTP/1.1
+// Host: i.instagram.com
+// Connection: keep-alive
+// Content-Length: 870
+// X-IG-Connection-Type: WIFI
+// X-IG-Capabilities: 3QI=
+// Accept-Language: ru-RU
+// Cookie: mid=V3jbkwABAAEOM1k5BegeySOA_0OP
+// Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+// User-Agent: Instagram 9.2.0 Android (17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; ru_RU)
+// Accept-Encoding: gzip, deflate
 
-// public function returnPhoneUA() 
-// {
-//   return $this->UA;
-// }
+      $data = json_encode([
+        'id'            =>  $this->uuid,
+        'experiments'   => Constants::EXPERIMENTS_REG,
+      ]);
+
+      $outputs = $this->request('qe/sync/', $this->generateSignature($data));
+      preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
+      $this->token = $matcht[1];
+
+
+        return $outputs;
+    }
+
+
 
 public function returnIGDataPath() 
 {
@@ -168,50 +173,26 @@ public function createValidatedAccount($username, $verification_code, $phone, $f
 
   public function checkEmail($email)
   {
-    
+     
+      // _csrftoken%22%3A%22hzJ1omdP00EUaTItOVQWSuTtxOnAhofJ%22%2C%22
+      // email%22%3A%22b.l.a.ck.koro.l%40gmail.com%22%2C%22
+      // qe_id%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%2C%22
+      // waterfall_id%22%3A%2235c54e09-c815-41c3-8fb2-ef480e82a62f%22%7D
 
-      
        
-      // $data = json_encode([ //before
-      //     '_uuid'      => $this->uuid,      ///SNIFFER do not need  
-      //     'email'   => $email,
-      //     '_csrftoken' => $this->token, //before 'missing',   ///SNIFFER do not need  
-      // ]);
-
-  // csrftoken=IjKRj5NGejIAQNSqrmvjWNyziJYNRKCd
-  // mid=V3jbkwABAAEOM1k5BegeySOA_0OP
-
- // signed_body=ada24bf23443752656e2665b26a716de39150f81c5fb8a6e4d00ca9f9851b510.%7B%22_csrftoken%22%3A%229NP51Flp6Bu1SiG5gJrsbYDE8QtKe6PI%22%2C%22email%22%3A%22matveev.alexander.vladimirovi.4%40gmail.com%22%2C%22qe_id%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%2C%22waterfall_id%22%3A%2237558c40-5e80-46bc-9578-ac30ba420169%22%7D&ig_sig_key_version=4
-
-      if (file_exists($this->IGDataPath."token.dat")) {
           $this->token = trim(file_get_contents($this->IGDataPath."token.dat"));
           $data = json_encode([
-              '_csrftoken'   =>  $this->token ,    // need test
+              '_csrftoken'   =>  $this->token,     
               'email'   => $email,
               'qe_id'   => $this->uuid,        
               'waterfall_id' => $this->waterfall_id, 
           ]);
-      } else {
-            $data = json_encode([
-                  '_csrftoken'   =>  'missing' ,    // need test
-                  'email'   => $email,
-                  'qe_id'   => $this->uuid,        
-                  'waterfall_id' => $this->waterfall_id, 
-              ]);
-      }
-
+     
 
       $response =   $this->request('users/check_email/', $this->generateSignature($data));//[1];
       echo var_export($response);  
       
-
-       preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matchresult);
-      $this->token = $matchresult[1];
-
-        file_put_contents($this->IGDataPath."token.dat", $this->token);
-
-
-      // echo "TOKEN:=====> ".$this->token;
+ 
      return $response;
   }
 
@@ -249,8 +230,8 @@ public function createValidatedAccount($username, $verification_code, $phone, $f
   public function fetchHeaders()
   {
     $outputs = $this->request('si/fetch_headers/?guid='.str_replace('-', '', $this->uuid).'&challenge_type=signup', null);
-    preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
-    $this->token = $matcht[1];
+    // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
+    // $this->token = $matcht[1];
       
     return $outputs;
     
@@ -333,35 +314,21 @@ public function usernameSuggestions($email ,$full_name) //not use for now
     }
 
 
- 
-
-// Instagram 8.4.0 Android (17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; en_US)  ok!  -
-// Instagram 8.4.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)              ok!
-// Instagram 8.4.0 Android (17/4.2.2; 240dpi; 540x960; samsung; SM-C101; mproject3g; smdk4x12; en_US)    ok! +
-// Instagram 8.4.0 Android (19/4.4.2; 480dpi; 1080x1920; samsung; SM-N900; ha3g; universal5420; en_US)    ok!
-
-
-// Instagram 8.4.0 Android (18/4.3; 480dpi; 1080x1920; samsung; SM-N9000Q; ha3g; universal5420; en_US)   ok! --
-// Instagram 8.4.0 Android (19/4.4.2; 320dpi; 720x1280; asus; PadFone 2; A68; qcom; en_US)       ???checkpoint?
-// Instagram 8.4.0 Android (17/4.2.2; 480dpi; 1080x1800; asus; K00G; K00G; redhookbay; en_US)       ???checkpoint
-// Instagram 8.4.0 Android (18/4.3; 320dpi; 720x1280; samsung; SGH-I747M; d2can; qcom; en_US)        ??checkpoint
-// Instagram 8.4.0 Android (18/4.3; 480dpi; 1080x1920; samsung/Verizon; SCH-I545; jfltevzw; qcom; en_US)    ???
- 
 
     public function GenerateUserAgent() {  
       // NEED TEST
-      $csvfile = __DIR__.'/devices.csv';
-      $file_handle = fopen($csvfile, 'r');
-      $line_of_text = [];
-      while (!feof($file_handle)) {
-          $line_of_text[] = fgetcsv($file_handle, 1024);
-      }
-      $deviceData = explode(';', $line_of_text[mt_rand(0, 11867)][0]);
-      fclose($file_handle);
-      return sprintf('Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
+      // $csvfile = __DIR__.'/devices.csv';
+      // $file_handle = fopen($csvfile, 'r');
+      // $line_of_text = [];
+      // while (!feof($file_handle)) {
+      //     $line_of_text[] = fgetcsv($file_handle, 1024);
+      // }
+      // $deviceData = explode(';', $line_of_text[mt_rand(0, 11867)][0]);
+      // fclose($file_handle);
+      // return sprintf('Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
 
 
-      // return 'Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
+      return 'Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
 
 
    }
@@ -393,9 +360,6 @@ public function usernameSuggestions($email ,$full_name) //not use for now
 
     public function request($endpoint, $post = null)
     {
- 
- 
- 
 
      $headers = [
       'Host: i.instagram.com',

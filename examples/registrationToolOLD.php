@@ -1099,16 +1099,18 @@ while ( $redis->scard("proxy") > 0 )
 	 
 
 
-	 // $check = $r->checkEmail($email);
- 
- //    if (isset($check[1]['available']) && $check[1]['available'] == false) {
- //    	$redis->sadd("blacklist_email",  $email);
-	//     break;
-	// }     
+	$qesyncreg = $r->syncFeaturesRegister();
 
- 
+	sleep(4);
 
-$outputs = $r->fetchHeaders();
+	$check = $r->checkEmail($email);
+    if (isset($check[1]['available']) && $check[1]['available'] == false) {
+    	$redis->sadd("blacklist_email",  $email);
+	    break;
+	}     
+
+
+	$outputs = $r->fetchHeaders();
 	 
 
 	 if ($outputs[1]['status'] == 'ok') {
