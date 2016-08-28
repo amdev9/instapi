@@ -412,13 +412,14 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						//works
 					 	 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
 
-						return;
-						// $ilink->login();
-						// sleep(2);
-						// $cured = $ilink->currentEdit();
-						// echo var_export($cured);
-						// sleep(4);
-						// $ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+					
+						$ilink->login();
+						sleep(2);
+						$cured = $ilink->currentEdit();
+						echo var_export($cured);
+						sleep(4);
+						$ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+							return;
 						// sleep(14400);//*60*20);
 						// $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
 						// $ilink->login();
@@ -1313,11 +1314,12 @@ while ( $redis->scard("proxy") > 0 )
 
 		echo "video and photo downloaded!\n";
 
-		$cured = $i->currentEdit();
-		echo var_export($cured);
-		sleep(4);
-		$i->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-		sleep(4);
+		// $cured = $i->currentEdit();
+		// echo var_export($cured);
+		// sleep(4);
+		// $i->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+		// sleep(4);
+		
 		try {
 		    $i->setPrivateAccount();
 		} catch (Exception $e) {
