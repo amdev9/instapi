@@ -1102,7 +1102,7 @@ while ( $redis->scard("proxy") > 0 )
 
 	$qesyncreg = $r->syncFeaturesRegister();
 
-	sleep(4);
+	 
 
 	$check = $r->checkEmail($email);
     if (isset($check[1]['available']) && $check[1]['available'] == false) {
@@ -1175,7 +1175,7 @@ while ( $redis->scard("proxy") > 0 )
 	// } 
 	 
 
-	sleep(2);
+ 
 	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
 	 // $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
 
@@ -1319,7 +1319,7 @@ while ( $redis->scard("proxy") > 0 )
 		// sleep(4);
 		// $i->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 		// sleep(4);
-		
+
 		try {
 		    $i->setPrivateAccount();
 		} catch (Exception $e) {
