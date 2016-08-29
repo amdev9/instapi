@@ -68,6 +68,9 @@ public function syncFeaturesRegister()
       preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
       $this->token = $matcht[1];
 
+   
+      echo var_export($outputs);  
+
 
         return $outputs;
     }
@@ -191,7 +194,10 @@ public function createValidatedAccount($username, $verification_code, $phone, $f
 
       $response =   $this->request('users/check_email/', $this->generateSignature($data));//[1];
       echo var_export($response);  
-      
+     
+      preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matcht);
+      $this->token = $matcht[1];
+ 
  
      return $response;
   }
@@ -230,9 +236,12 @@ public function createValidatedAccount($username, $verification_code, $phone, $f
   public function fetchHeaders()
   {
     $outputs = $this->request('si/fetch_headers/?guid='.str_replace('-', '', $this->uuid).'&challenge_type=signup', null);
-    // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
-    // $this->token = $matcht[1];
-      
+     
+
+      preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
+      $this->token = $matcht[1];
+
+      echo var_export($outputs);
     return $outputs;
     
   }
@@ -249,7 +258,11 @@ public function usernameSuggestions($email ,$full_name) //not use for now
 
 
      $response =   $this->request('accounts/username_suggestions/', $this->generateSignature($data))[1];
+echo var_export( $response);
 
+  preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matcht);
+      $this->token = $matcht[1];
+      
 
      return $response;
     
@@ -303,6 +316,7 @@ public function usernameSuggestions($email ,$full_name) //not use for now
           // rename($this->IGDataPath.'cookies2.dat', $this->IGDataPath.'cookies.dat'); //no need?
       }
 
+echo var_export($result);
       return $result;
   }
 
