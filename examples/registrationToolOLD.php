@@ -1098,7 +1098,13 @@ while ( $redis->scard("proxy") > 0 )
 
 	$r = new InstagramRegistration($prox, $debug);
 	 
+ $DelFilePath =  $r->returnIGDataPath().'cookies.dat';
+        if (file_exists($DelFilePath)) { 
+           unlink ($DelFilePath);          //delete cookies.dat if exist
 
+           echo "\n*****---FILE cookies.dat DELETED!--****\n";
+        }
+        
 
 	$qesyncreg = $r->syncFeaturesRegister();
 
