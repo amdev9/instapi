@@ -1156,7 +1156,7 @@ while ( $redis->scard("proxy") > 0 )
    
 	 
     $sugger = $r->usernameSuggestions($email,$first_name );
-   	$GLOBALS["username"] = $sugger['suggestions'][0];
+   	$GLOBALS["username"] = $sugger[1]['suggestions'][0];
 	$GLOBALS["first_name"] = $first_name;
 
 
