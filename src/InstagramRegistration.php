@@ -257,7 +257,7 @@ public function usernameSuggestions($email ,$full_name) //not use for now
       ]);
 
 
-     $response =   $this->request('accounts/username_suggestions/', $this->generateSignature($data))[1];
+     $response =   $this->request('accounts/username_suggestions/', $this->generateSignature($data));//[1];
 echo var_export( $response);
 
   preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matcht);
