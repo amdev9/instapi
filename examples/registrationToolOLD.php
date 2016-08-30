@@ -1,13 +1,13 @@
 <?php
 
  
-// $romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
-// $romerPREDIS = '/home/blackkorol/in/predis/';
-// $romerINSTA = '/home/blackkorol/in/insta/';
+$romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
+$romerPREDIS = '/home/blackkorol/in/predis/';
+$romerINSTA = '/home/blackkorol/in/insta/';
 
-	$romerINSTAPI = '/Users/alex/dev/instapi/';
-	$romerPREDIS = '/Users/alex/dev/redis/predis/';
-	$romerINSTA = '/Users/alex/dev/insta/';
+	// $romerINSTAPI = '/Users/alex/dev/instapi/';
+	// $romerPREDIS = '/Users/alex/dev/redis/predis/';
+	// $romerINSTA = '/Users/alex/dev/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
