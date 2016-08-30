@@ -36,7 +36,7 @@ class Instagram
 
   public function __construct($username, $password, $proxy ,  $debug = false, $IGDataPath = null)
   {
-    //$genuuid, $gendeviceid , $genphoneid, $genphoneua = null,
+    
       $this->debug = $debug;
     
 
@@ -88,7 +88,7 @@ class Instagram
       // $this->uuid = $this->generateUUID(true);  
 
       if ((file_exists($this->IGDataPath."$this->username-cookies.dat")) && (file_exists($this->IGDataPath."$this->username-userId.dat"))
-    && (file_exists($this->IGDataPath."$this->username-token.dat"))) {
+    && (file_exists($this->IGDataPath."$this->username-token.dat")) && (file_exists($this->IGDataPath."$this->username-uuid.dat")) && (file_exists($this->IGDataPath."$this->username-phoneid.dat")) && (file_exists($this->IGDataPath."$this->username-deviceid.dat")) ) {
           $this->isLoggedIn = true;
           $this->username_id = trim(file_get_contents($this->IGDataPath."$username-userId.dat"));
           //$this->rank_token = $this->username_id.'_'.$this->uuid;
@@ -100,6 +100,14 @@ class Instagram
       $this->uuid = trim(file_get_contents($this->IGDataPath."$username-uuid.dat"));
       $this->phone_id = trim(file_get_contents($this->IGDataPath."$username-phoneid.dat"));
       
+
+      } else 
+      {
+        
+        $this->isLoggedIn = false;
+        $this->uuid = $this->generateUUID(true);
+        $this->phone_id = $this->generateUUID(true);
+        $this->device_id = 'android-'.bin2hex(openssl_random_pseudo_bytes(8));
 
       }
   }

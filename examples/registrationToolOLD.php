@@ -1,13 +1,13 @@
 <?php
 
  
-$romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
-$romerPREDIS = '/home/blackkorol/in/predis/';
-$romerINSTA = '/home/blackkorol/in/insta/';
+// $romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
+// $romerPREDIS = '/home/blackkorol/in/predis/';
+// $romerINSTA = '/home/blackkorol/in/insta/';
 
-	// $romerINSTAPI = '/Users/alex/dev/instapi/';
-	// $romerPREDIS = '/Users/alex/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/dev/insta/';
+	$romerINSTAPI = '/Users/alex/dev/instapi/';
+	$romerPREDIS = '/Users/alex/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/dev/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -413,12 +413,12 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 					 	 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
 
 					
-						$ilink->login();
-						sleep(2);
-						$cured = $ilink->currentEdit();
-						echo var_export($cured);
-						sleep(4);
-						$ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+						// $ilink->login();
+						// sleep(2);
+						// $cured = $ilink->currentEdit();
+						// echo var_export($cured);
+						// sleep(4);
+						// $ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
 							return;
 						// sleep(14400);//*60*20);
 						// $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
@@ -1098,12 +1098,12 @@ while ( $redis->scard("proxy") > 0 )
 
 	$r = new InstagramRegistration($prox, $debug);
 	 
- $DelFilePath =  $r->returnIGDataPath().'cookies.dat';
-        if (file_exists($DelFilePath)) { 
-           unlink ($DelFilePath);          //delete cookies.dat if exist
+ // $DelFilePath =  $r->returnIGDataPath().'cookies.dat';
+ //        if (file_exists($DelFilePath)) { 
+ //           unlink ($DelFilePath);          //delete cookies.dat if exist
 
-           echo "\n*****---FILE cookies.dat DELETED!--****\n";
-        }
+ //           echo "\n*****---FILE cookies.dat DELETED!--****\n";
+ //        }
         
 
 	$qesyncreg = $r->syncFeaturesRegister();
