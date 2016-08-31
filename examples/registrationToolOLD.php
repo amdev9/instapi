@@ -1027,14 +1027,25 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
 
 
 
-if (count($argv) < 5 ) {
+if (count($argv) == 6 ) {
 
 
-$debug = true; 
-$username = $argv[1]; 
-$password = $argv[2]; 
-// $proxy = $argv[3]; 
-$proxy =  $redis->spop("proxy");	
+	$debug = true; 
+
+	$username = explode(" ",$redis->spop("tologin")[0]);	
+	$password = explode(" ",$redis->spop("tologin")[1]);		
+
+	 
+	$url  = $argv[3]; 
+	$biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_kiss", "\u{1F48B}", str_replace("_smi_video", "🔞\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $argv[4])) ) ) ;
+	$caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} ", str_replace("_smi_video", "\u{1F4A6}",   $argv[5] ) ) );
+	$first_name =  $argv[6];
+	$gender = 2;
+	 
+	$dir = $romerINSTAPI.'src/adult/';
+
+	 
+	$proxy =  $redis->spop("proxy");	
 
 	$i = new Instagram($username, $password, $proxy, $debug );
 
@@ -1043,24 +1054,22 @@ $proxy =  $redis->spop("proxy");
 
 	$cured = $i->currentEdit();
     echo var_export($cured);
+
+   	$email =  $cured[1]['user']['email'];
+   	$first_name =  $cured[1]['user']['full_name'];
+
+    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
+	 
+	sleep(4);
+	$i->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+	sleep(4);
+
 	  
-  	$logined = $proxy." ".$username." ".$password;
+  	$logined = $proxy." ".$username." ".$password." ".$email;
   	$redis->sadd("successlogin", $logined);	
 
-	  	//.$email." ".$password." ".$first_name;
 
-     	
- 
-		 // sleep(7);
-		    // $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
-	 // $i->editProfile("", "" , "Ashley Irvine", "" , "n.nnnnnnnnnmmmmmmmmmmmmmmmmmm.mm@gmail.com" , 2);
-
-	 // ->editProfile("", "" , "Laura Patel", "" , "cccbbbbbb.bbbbbbbbbbbb.bbbbbbbbb@gmail.com" , 2);
-	 // editProfile("", "" , "Annabelle Garrison", "" , "ffffffff.feeeeeeeeeeeee.eeeeeeee@gmail.com" , 2);
-	 //->editProfile("", "" , "Rachel Levesque", "" , "ppppppp.pppppppppppppppp.ppppppp@gmail.com" , 2);
- //Wanna HOT chat with me? (snap kik dm) 🔞💦 all my contacts on the site below 👇 👇 👇 login RachelLevesque93 I am WAITING.. CLICK
-		 //bit.ly/2bc92UI
-
+	 
 	// 	sleep(5);
 	// $i->setPublicAccount();
 	// sleep(5);
@@ -1247,7 +1256,7 @@ while ( $redis->scard("proxy") > 0 )
      	 // $versms = $i->verifySmsCode($phone, $code_verif);
      	 //  echo var_export($versms);
 
-		 $GLOBALS["biography"] = $GLOBALS["biography"];
+		  
 		 $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 
 
