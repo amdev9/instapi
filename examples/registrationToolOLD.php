@@ -1147,7 +1147,7 @@ if (count($argv) == 6 ) {
 	// sleep(4);
 
 	  
-  	$logined = $proxy." ".$username." ".$password." ".$email;
+  	$logined = $proxy." ".$username." ".$password;//." ".$email;
   	$redis->sadd("successlogin", $logined);	
 
 
