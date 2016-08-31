@@ -1039,7 +1039,7 @@ if (count($argv) == 6 ) {
 	$url  = $argv[3]; 
 	$biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_kiss", "\u{1F48B}", str_replace("_smi_video", "🔞\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $argv[4])) ) ) ;
 	$caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} ", str_replace("_smi_video", "\u{1F4A6}",   $argv[5] ) ) );
-	$first_name =  $argv[6];
+	 
 	$gender = 2;
 	 
 	$dir = $romerINSTAPI.'src/adult/';
