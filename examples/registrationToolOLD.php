@@ -1054,6 +1054,74 @@ if (count($argv) == 6 ) {
 	$i->login();
 	 sleep(3);
 
+	$filesVideo = scandir($dir);
+		$ava = true;
+		$uploadCounter = 0;
+		$filesVid = shuffle_assoc($filesVideo);
+
+		foreach ( $filesVid as $k => $value ) {
+
+		    $ext = pathinfo($value, PATHINFO_EXTENSION);
+		    if ($ext == "mp4") { 
+				try {
+				    $i->uploadVideo($dir.'/'.$value, $caption);  
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+
+				sleep(10);
+		    }
+		    elseif ($ext == "jpg" && $ava == true ) {
+
+		    	try {
+		    		if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+					{
+						
+						if ($GLOBALS["redis"]->scard($value) == 0 ) {
+						     $GLOBALS["redis"]->sadd('picked', $value);
+						    foreach (range(-12, 12) as $number) {
+						        if ($number != 0)
+						            $GLOBALS["redis"]->sadd($value, $number);
+						    }
+						}
+						$degrees = $GLOBALS["redis"]->spop($value);
+				        echo $degrees;
+				    	$i->changeProfilePicture($dir.'/'.$value, $degrees);
+					}
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+				sleep(10);
+				$ava = false;
+
+			} else {
+				if ($uploadCounter == 2) { break; }
+				try {
+					if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+					{
+						
+						if ($GLOBALS["redis"]->scard($value) == 0 ) {
+						     $GLOBALS["redis"]->sadd('picked', $value);
+						    foreach (range(-12, 12) as $number) {
+						        if ($number != 0)
+						            $GLOBALS["redis"]->sadd($value, $number);
+						    }
+						}
+				        $degrees = $GLOBALS["redis"]->spop($value);
+						echo $degrees;
+				      
+					    $i->uploadPhoto($dir.'/'.$value, $caption, null , $degrees);  
+					    $uploadCounter = $uploadCounter + 1;
+					}
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+				sleep(30);
+		    }
+		}
+
+		echo "video and photo downloaded!\n"; 
+
 	$cured = $i->currentEdit();
     echo var_export($cured);
 
