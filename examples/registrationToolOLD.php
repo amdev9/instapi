@@ -1032,8 +1032,8 @@ if (count($argv) == 6 ) {
 
 	$debug = true; 
 
-	$username = explode(" ",$redis->spop("tologin")[0]);	
-	$password = explode(" ",$redis->spop("tologin")[1]);		
+	$username = explode(" ",$redis->spop("tologin"))[0];	
+	$password = explode(" ",$redis->spop("tologin"))[1];		
 
 	 
 	$url  = $argv[3]; 
