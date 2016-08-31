@@ -1064,7 +1064,7 @@ if (count($argv) == 6 ) {
 	$i = new Instagram($username, $password, $proxy, $debug );
 
 	$i->login();
-	 sleep(3);
+	 sleep(15);
 
 	$filesVideo = scandir($dir);
 		$ava = true;
