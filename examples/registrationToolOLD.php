@@ -1033,15 +1033,23 @@ if (count($argv) < 5 ) {
 $debug = true; 
 $username = $argv[1]; 
 $password = $argv[2]; 
-$proxy = $argv[3]; 
+// $proxy = $argv[3]; 
+$proxy =  $redis->spop("proxy");	
 
 	$i = new Instagram($username, $password, $proxy, $debug );
 
 	$i->login();
 	 sleep(3);
+
+	$cured = $i->currentEdit();
+    echo var_export($cured);
 	  
-     	// $cured = $i->currentEdit();
-     	// echo var_export($cured);
+  	$logined = $proxy." ".$username." ".$password;
+  	$redis->sadd("successlogin", $logined);	
+
+	  	//.$email." ".$password." ".$first_name;
+
+     	
  
 		 // sleep(7);
 		    // $i->editProfile("bit.ly/2aTWsJJ", "+12137886860", "", "", "", 3);
