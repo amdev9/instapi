@@ -297,7 +297,9 @@ public function sendConfirmEmail($email) {
 
     protected function autoCompleteUserList()
     {
-        return $this->request('friendships/autocomplete_user_list/?followinfo=True&version=2')[1];//added /?followinfo=True&version=2  for ANDROID
+        return $this->request('friendships/autocomplete_user_list/')[1];
+        //
+        // ?followinfo=True&version=2added /?followinfo=True&version=2  for ANDROID
     }
 
      protected function directRecentRecipients()
