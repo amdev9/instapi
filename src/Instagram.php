@@ -246,11 +246,24 @@ public function sendConfirmEmail($email) {
           $this->token = $match[1];
           file_put_contents($this->IGDataPath.$this->username.'-token.dat', $this->token);
 
+          sleep(4);
+         
+          // $this->syncFeatures();
+          // $this->autoCompleteUserList();
+          // $this->timelineFeed();
+          // $this->getv2Inbox();
+          // $this->getRecentActivity();
+
           $this->syncFeatures();
-          $this->autoCompleteUserList();
           $this->timelineFeed();
+          // $this->getReelsTrayFeed();
+          $this->autoCompleteUserList();
           $this->getv2Inbox();
           $this->getRecentActivity();
+          // $this->explore();
+
+
+
 
           return $login[1];
       }
