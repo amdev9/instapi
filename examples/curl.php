@@ -1,24 +1,8 @@
 <?php
 
-
-
- $romerPREDIS = '/Users/alex/dev/redis/predis/';
-require $romerPREDIS.'autoload.php';
-
-
-        Predis\Autoloader::register();
-
-        $redis = new Predis\Client(array(
-         "scheme" => "tcp",
-         "host" => "127.0.0.1",
-         "port" => 6379));
-
-
-$userstring = $redis->spop("tologin");
-$userarray = explode ( " ", $userstring  ) ; 
-echo $userarray[0];
-echo $userarray[1];
-
+echo openssl_random_pseudo_bytes(8)."\n";
+ echo bin2hex(openssl_random_pseudo_bytes(8));
+ 
 // explode(" ", // 
   // $password = explode(" ",$redis->spop("tologin"))[1]  ;  
 
@@ -59,7 +43,7 @@ echo $userarray[1];
 
 
  // echo rand(-12,12);
-echo count($argv);
+// echo count($argv);
 
 // $variable = 100;
 // $a = false;

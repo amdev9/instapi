@@ -1,13 +1,13 @@
 <?php
 
  
-$romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
-$romerPREDIS = '/home/blackkorol/in/predis/';
-$romerINSTA = '/home/blackkorol/in/insta/';
+// $romerINSTAPI = '/home/blackkorol/in/instapi/'; // FOR VPS
+// $romerPREDIS = '/home/blackkorol/in/predis/';
+// $romerINSTA = '/home/blackkorol/in/insta/';
 
-	// $romerINSTAPI = '/Users/alex/dev/instapi/';
-	// $romerPREDIS = '/Users/alex/dev/redis/predis/';
-	// $romerINSTA = '/Users/alex/dev/insta/';
+	$romerINSTAPI = '/Users/alex/dev/instapi/';
+	$romerPREDIS = '/Users/alex/dev/redis/predis/';
+	$romerINSTA = '/Users/alex/dev/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -376,7 +376,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 100!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 30!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					
 					$fres = $ilink->follow($actioner);
 					if ($fres[1]['status'] == 'ok') {
@@ -419,16 +419,16 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						// echo var_export($cured);
 						// sleep(4);
 						// $ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-						$cured = $i->currentEdit();
+						$cured = $ilink->currentEdit();
 					    echo var_export($cured);
 
 					   	$email =  $cured[1]['user']['email'];
 					   	$first_name =  $cured[1]['user']['full_name'];
 
-					    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
+					    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$first_name )[0]."".explode(" ",	$first_name )[1], $GLOBALS["biography"] );
 						 
 						sleep(4);
-						$i->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+						$ilink->editProfile($GLOBALS["url"], "" , $first_name, $GLOBALS["biography"], $email, $GLOBALS["gender"]);
 						sleep(4);
 
 						return;
