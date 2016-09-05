@@ -2614,7 +2614,7 @@ public function sendConfirmEmail($email) {
                 '_appVersion'  =>  '9.2.0', 
                 '_logTime'     =>   time(),        //1472240105 , // replace with timestamp
                 '_eventName'   =>  'fb_mobile_activate_app',
-              ]);   
+              ]),   
           ],
           [
               'type' => 'form-data',
@@ -2682,7 +2682,7 @@ public function sendConfirmEmail($email) {
 
         curl_close($ch);
 
-        if ($upload['status'] == 'fail') {
+        if ($upload['success'] == 'false') {
             throw new InstagramException($upload['message']);
 
             return;
