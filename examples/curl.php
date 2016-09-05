@@ -1,7 +1,9 @@
 <?php
 
-echo openssl_random_pseudo_bytes(8)."\n";
- echo bin2hex(openssl_random_pseudo_bytes(8));
+
+echo microtime();
+// echo openssl_random_pseudo_bytes(8)."\n";
+//  echo bin2hex(openssl_random_pseudo_bytes(8));
  
 // explode(" ", // 
   // $password = explode(" ",$redis->spop("tologin"))[1]  ;  
