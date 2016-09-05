@@ -215,6 +215,7 @@ public function sendConfirmEmail($email) {
   public function login($force = false)
   {
       if (!$this->isLoggedIn || $force) {
+          $this->syncFeatures(true);
           $fetch = $this->request('si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null, true);
             //$this->generateUUID(false), null, true);
           preg_match('#Set-Cookie: csrftoken=([^;]+)#', $fetch[0], $token);
@@ -248,21 +249,16 @@ public function sendConfirmEmail($email) {
 
           sleep(4);
          
-          // $this->syncFeatures();
-          // $this->autoCompleteUserList();
-          // $this->timelineFeed();
-          // $this->getv2Inbox();
-          // $this->getRecentActivity();
-
           $this->syncFeatures();
-          $this->timelineFeed();
-          // $this->getReelsTrayFeed();
           $this->autoCompleteUserList();
+          $this->timelineFeed();
+          $this->getRankedRecipients();
+          $this->getRecentRecipients();
+          $this->megaphoneLog();
           $this->getv2Inbox();
           $this->getRecentActivity();
-          // $this->explore();
-
-
+          $this->getReelsTrayFeed();
+          $this->explore();
 
 
           return $login[1];
@@ -273,8 +269,16 @@ public function sendConfirmEmail($email) {
       {
         $this->login(true);
       }
+      $this->autoCompleteUserList();
+      $this->getReelsTrayFeed();
+      $this->getRankedRecipients();
+      //push register
+      $this->getRecentRecipients();
+      //push register
+      $this->megaphoneLog();
       $this->getv2Inbox();
       $this->getRecentActivity();
+      $this->explore();
   }
 
 
@@ -282,25 +286,73 @@ public function sendConfirmEmail($email) {
 // _csrftoken%22%3A%22ECyV1yyk84rvyaL3DICec9QSo3jBQwPP%22,%22
  
 
-    public function syncFeatures()
+    public function syncFeatures($prelogin = false)
     {
-      $data = json_encode([
-        '_csrftoken'    => $this->token,
-        'id'            => $this->username_id,
-        '_uid'          => $this->username_id,
-        '_uuid'         => $this->uuid,
-        'experiments'   => Constants::EXPERIMENTS,
-      ]);
-
+        if ($prelogin) {
+            $data = json_encode([
+                'id'            => $this->generateUUID(true),
+                'experiments'   => Constants::LOGIN_EXPERIMENTS,
+            ]);
+        } else {
+            $data = json_encode([
+                '_uuid'         => $this->uuid,
+                '_uid'          => $this->username_id,
+                '_csrftoken'    => $this->token,
+                'id'            => $this->username_id,
+                'experiments'   => Constants::EXPERIMENTS,
+            ]);
+        }
         return $this->request('qe/sync/', $this->generateSignature($data))[1];
     }
+
 
     protected function autoCompleteUserList()
     {
         return $this->request('friendships/autocomplete_user_list/')[1];
-        //
-        // ?followinfo=True&version=2added /?followinfo=True&version=2  for ANDROID
+      
     }
+
+     public function pushRegister($gcmToken)
+    {
+        $deviceToken = json_encode([
+            'k' => $gcmToken,
+            'v' => 0,
+            't' => 'fbns-b64',
+        ]);
+        $data = json_encode([
+            '_uuid'                 => $this->uuid,
+            'guid'                  => $this->uuid,
+            'phone_id'              => $this->generateUUID(true),
+            'device_type'           => 'android_mqtt',
+            'device_token'          => $deviceToken,
+            'is_main_push_channel'  => true,
+            '_csrftoken'            => $this->token,
+            'users'                 => $this->username_id,
+        ]);
+        return $this->request('push/register/?platform=10&device_type=android_mqtt', $this->generateSignature($data))[1];
+    }
+
+    protected function megaphoneLog()
+    {
+        $data = [
+            'type'          => 'feed_aysf',
+            'action'        => 'seen',
+            'reason'        => "",
+            '_uuid'         => $this->uuid,
+            'device_id'     => $this->device_id,
+            '_csrftoken'    => $this->token,
+            'uuid'          => md5(time()),
+        ];
+        return $this->request('megaphone/log/', http_build_query($data))[1];
+    }
+
+    public function getReelsTrayFeed()
+    {
+        $feed = $this->request('feed/reels_tray/')[1]);
+        return $feed;
+    }
+
+
 
      protected function directRecentRecipients()
     {
@@ -418,6 +470,29 @@ public function sendConfirmEmail($email) {
         return $pendingInbox;
     }
 
+
+    /**
+     * Ranked recipients.
+     *
+     * @return array
+     *              Ranked recipients Data
+     */
+    public function getRankedRecipients()
+    {
+        $ranked_recipients = $this->request('direct_v2/ranked_recipients/?show_threads=true')[1];
+        return $ranked_recipients;
+    }
+    /**
+     * Recent recipients.
+     *
+     * @return array
+     *              Ranked recipients Data
+     */
+    public function getRecentRecipients()
+    {
+        $recent_recipients =  $this->request('direct_share/recent_recipients/')[1];
+        return $recent_recipients;
+    }
 
     /**
      * Explore Tab
