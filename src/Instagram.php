@@ -205,6 +205,10 @@ public function sendConfirmEmail($email) {
       if (!$this->isLoggedIn || $force) {
           $this->syncFeaturesRegister();
 
+          $this->fbRequest();
+
+          sleep(2);
+
           $fetch = $this->request('si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null, true);
             
           preg_match('#Set-Cookie: csrftoken=([^;]+)#', $fetch[0], $token);
@@ -682,7 +686,7 @@ public function sendConfirmEmail($email) {
             [
                 'type' => 'form-data',
                 'name' => 'image_compression',
-                'data'   => '{"lib_name":"jt","lib_version":"1.3.0","quality":"70"}',
+                'data' => '{"lib_name":"jt","lib_version":"1.3.0","quality":"70"}',
             ],
             [
                 'type'     => 'form-data',
@@ -2560,12 +2564,42 @@ public function sendConfirmEmail($email) {
     }
 
 
+    protected function buildBodyFb($bodies, $boundary)
+    {
+        $body = '';
+        foreach ($bodies as $b) {
+            $body .= '--'.$boundary."\r\n";
+            $body .= 'Content-Disposition: '.$b['type'].'; name="'.$b['name'].'"';
+            if (isset($b['filename'])) {
+                
+                $body .= '; filename="'.$b['filename'].'"';
+
+                // $ext = pathinfo($b['filename'], PATHINFO_EXTENSION);
+                // 'pending_media_'.number_format(round(microtime(true) * 1000), 0, '', '').'.'.$ext.'"';
+            }
+
+            if (isset($b['headers']) && is_array($b['headers'])) {
+                foreach ($b['headers'] as $header) {
+                    $body .= "\r\n".$header;
+                }
+            }
+
+            $body .= "\r\n\r\n".$b['data']."\r\n";
+        }
+        $body .= '--'.$boundary.'--';
+
+        return $body;
+    }
+
+
+    // POST https://graph.facebook.com/v2.3/124024574287414/activities HTTP/1.1
+ 
     protected function fbRequest()
     {
 
       $endpoint = 'https://graph.facebook.com/v2.3/124024574287414/activities';
       
-      $boundary = 'F4Xd30I2Gnhc6fMiwVpbqP3i39LAxq';
+      $boundary = 'F4Xd30I2Gnha6fMiwVpbqP3i39LAxq'; //a-c
 
       $bodies = [
           [
@@ -2578,7 +2612,7 @@ public function sendConfirmEmail($email) {
               ],
               'data' => json_encode([
                 '_appVersion'  =>  '9.2.0', 
-                '_logTime'     =>  time(),        //1472240105 , // replace with timestamp
+                '_logTime'     =>   time(),        //1472240105 , // replace with timestamp
                 '_eventName'   =>  'fb_mobile_activate_app',
               ]);   
           ],
@@ -2609,7 +2643,7 @@ public function sendConfirmEmail($email) {
           ],
       ];
 
-        $data = $this->buildBody($bodies, $boundary);
+        $data = $this->buildBodyFb($bodies, $boundary);
         
         $headers = [
           'Host: graph.facebook.com',
@@ -2630,6 +2664,8 @@ public function sendConfirmEmail($email) {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
         // curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
         // curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
         curl_setopt($ch, CURLOPT_POST, true);
@@ -2655,86 +2691,8 @@ public function sendConfirmEmail($email) {
         if ($this->debug) {
             echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
         }
-
-        // $configure = $this->configure($upload['upload_id'], $photo, $caption);
-        // $this->expose();
-        
+ 
         return [$header, $upload];
-        
-
-
-      // $headers = [
-      // 'Host: graph.facebook.com',
-      // 'Connection: keep-alive',
-      // 'Content-Length:'.strlen($post),
-      // 'Accept-Language: en-US', 
-      // 'Accept-Encoding: gzip, deflate',
-      // 'Content-Type: multipart/form-data; boundary='.$boundary, //F4Xd30I2Gnhc6fMiwVpbqP3i39LAxq
-      // ];
-
-      //   $ch = curl_init();
-
-      //   curl_setopt($ch, CURLOPT_URL, $endpoint);
-      //   // curl_setopt($ch, CURLINFO_HEADER_OUT, TRUE);
-      //   curl_setopt($ch, CURLOPT_USERAGENT, $this->UA ); //Constants::USER_AGENT); //// 
-      //   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      //   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-      //   curl_setopt($ch, CURLOPT_HEADER, true);//true 
-      //   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); //need test
-      //   //new
-      //   curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
-      //   // new
-      //   curl_setopt($ch, CURLOPT_VERBOSE, false);
-
-      //   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //need test added
-      //    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //need test added
-
-      //   curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
-      //   curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-      //   curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-
-
-      //   // if (file_exists($this->IGDataPath."$this->username-cookies.dat")) {
-      //   //     curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
-      //   //     curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
-      //   // } else {
-      //   //     curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat'); //need fix $this->device_id
-      //   //     curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');   //need fix $this->device_id
-      //   // }
-
-      //   if ($post) {
-      //       curl_setopt($ch, CURLOPT_POST, true);
-      //       curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-      //   }
-      //     ///??
-
-      //  // $information = curl_getinfo($ch);
-      //  // echo var_export( $information);
-
-
-      //   $resp = curl_exec($ch);
-      //   $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-      //   $header = substr($resp, 0, $header_len);
-      //   $body = substr($resp, $header_len);
-
-      //   curl_close($ch);
-
-      //   if ($this->debug) {
-      //       echo "REQUEST: $endpoint\n";
-      //       if (!is_null($post)) {
-      //           if (!is_array($post)) {
-      //               echo "DATA: $post\n";
-      //           }
-      //       }
-      //       echo "RESPONSE: $body\n\n";
-      //   }
-
-      //   return [$header, json_decode($body, true)];
-      
-// POST https://graph.facebook.com/v2.3/124024574287414/activities HTTP/1.1
- 
- 
-
     }
 
     protected function request($endpoint, $post = null, $login = false)

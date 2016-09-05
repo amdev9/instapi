@@ -1206,7 +1206,7 @@ while ( $redis->scard("proxy") > 0 )
 
 	$qesyncreg = $r->syncFeaturesRegister();
 
-	 
+	// fbRequest(); 
 
 	$check = $r->checkEmail($email);
     if (isset($check[1]['available']) && $check[1]['available'] == false) {
