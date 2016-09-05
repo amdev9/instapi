@@ -372,6 +372,140 @@ echo var_export($result);
         return $type ? $uuid : str_replace('-', '', $uuid);
     }
 
+
+      public function buildBodyFb($bodies, $boundary)
+    {
+        $body = '';
+        foreach ($bodies as $b) {
+            $body .= '--'.$boundary."\r\n";
+            $body .= 'Content-Disposition: '.$b['type'].'; name="'.$b['name'].'"';
+            if (isset($b['filename'])) {
+                
+                $body .= '; filename="'.$b['filename'].'"';
+
+                // $ext = pathinfo($b['filename'], PATHINFO_EXTENSION);
+                // 'pending_media_'.number_format(round(microtime(true) * 1000), 0, '', '').'.'.$ext.'"';
+            }
+
+            if (isset($b['headers']) && is_array($b['headers'])) {
+                foreach ($b['headers'] as $header) {
+                    $body .= "\r\n".$header;
+                }
+            }
+
+            $body .= "\r\n\r\n".$b['data']."\r\n";
+        }
+        $body .= '--'.$boundary.'--';
+
+        return $body;
+    }
+
+
+    // POST https://graph.facebook.com/v2.3/124024574287414/activities HTTP/1.1
+ 
+    public function fbRequest()
+    {
+
+      $endpoint = 'https://graph.facebook.com/v2.3/124024574287414/activities';
+      
+      $boundary = 'F4Xd30I2Gnhe6fMiwVpbqP3i39LAxq'; //a-c - e
+
+      $bodies = [
+          [
+              'type' => 'form-data',
+              'name' => 'custom_events_file',
+              'filename' => 'custom_events_file',
+              'headers'  => [
+                  'Content-Type: application/json',
+                  'Content-Transfer-Encoding: binary',
+              ],
+              'data' => json_encode([
+                '_appVersion'  =>  '9.2.0', 
+                '_logTime'     =>   time(),        //1472240105 , // replace with timestamp
+                '_eventName'   =>  'fb_mobile_activate_app',
+              ]),   
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'format',
+              'data' => 'json',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'anon_id',
+              'data' => "XZ".$this->generateUUID(true),
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'event',
+              'data' => 'CUSTOM_APP_EVENTS',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'application_package_name',
+              'data' => 'com.instagram.android',   
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'application_tracking_enabled',
+              'data' => '1',   
+          ],
+      ];
+
+        $data = $this->buildBodyFb($bodies, $boundary);
+        
+        $headers = [
+          'Host: graph.facebook.com',
+          'Connection: keep-alive',
+          'Content-Length: '.strlen($data),
+          'Accept-Language: en-US', 
+          'Accept-Encoding: gzip, deflate',
+          'Content-Type: multipart/form-data; boundary='.$boundary,  
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);// Constants::USER_AGENT);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
+        // curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
+        // curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+        curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+        curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+
+        $resp = curl_exec($ch);
+        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($resp, 0, $header_len);
+        $upload = json_decode(substr($resp, $header_len), true);
+
+        curl_close($ch);
+
+        // if ($upload['success'] == 'false') {
+        //     throw new InstagramException($upload['message']);
+
+        //     return;
+        // }
+
+        if ($this->debug) {
+            echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
+        }
+ 
+        return [$header, $upload];
+    }
+
+
+
     public function request($endpoint, $post = null)
     {
       //'Cookie: mid=V3jbkwABAAEOM1k5BegeySOA_0OP', 
