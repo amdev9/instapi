@@ -374,7 +374,7 @@ public function sendConfirmEmail($email) {
       ]);
         return $this->request('discover/ayml/', $data)[1]; 
     }
-}
+
 
 
 //ANDROID POST https://i.instagram.com/api/v1/discover/ayml/ HTTP/1.1
