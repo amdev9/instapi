@@ -38,11 +38,9 @@ class Instagram
   {
     
       $this->debug = $debug;
-    
-
-      $this->UA = Constants::USER_AGENT;//= $genphoneua;
-
- $this->proxy = $proxy;
+      $this->UA = Constants::USER_AGENT;
+      $this->proxy = $proxy;
+      
       if (!is_null($IGDataPath)) {
           $this->IGDataPath = $IGDataPath;
       } else {
@@ -84,31 +82,21 @@ class Instagram
       $this->username = $username;
       $this->password = $password;
 
+      if ((file_exists($this->IGDataPath."$this->username-cookies.dat")) && (file_exists($this->IGDataPath."$this->username-userId.dat")) && (file_exists($this->IGDataPath."$this->username-token.dat")) && (file_exists($this->IGDataPath."$this->username-uuid.dat")) && (file_exists($this->IGDataPath."$this->username-phoneid.dat")) && (file_exists($this->IGDataPath."$this->username-deviceid.dat")) ) {
 
-      // $this->uuid = $this->generateUUID(true);  
-
-      if ((file_exists($this->IGDataPath."$this->username-cookies.dat")) && (file_exists($this->IGDataPath."$this->username-userId.dat"))
-    && (file_exists($this->IGDataPath."$this->username-token.dat")) && (file_exists($this->IGDataPath."$this->username-uuid.dat")) && (file_exists($this->IGDataPath."$this->username-phoneid.dat")) && (file_exists($this->IGDataPath."$this->username-deviceid.dat")) ) {
           $this->isLoggedIn = true;
           $this->username_id = trim(file_get_contents($this->IGDataPath."$username-userId.dat"));
-          //$this->rank_token = $this->username_id.'_'.$this->uuid;
           $this->rank_token = $this->username_id.'_'.$this->generateUUID(true);
           $this->token = trim(file_get_contents($this->IGDataPath."$username-token.dat"));
-
-            $this->device_id =trim(file_get_contents($this->IGDataPath."$username-deviceid.dat"));
-             // $gendeviceid; //$this->generateDeviceId(md5($username.$password));  
-      $this->uuid = trim(file_get_contents($this->IGDataPath."$username-uuid.dat"));
-      $this->phone_id = trim(file_get_contents($this->IGDataPath."$username-phoneid.dat"));
+          $this->device_id =trim(file_get_contents($this->IGDataPath."$username-deviceid.dat"));
+          $this->uuid = trim(file_get_contents($this->IGDataPath."$username-uuid.dat"));
+          $this->phone_id = trim(file_get_contents($this->IGDataPath."$username-phoneid.dat"));
       
-
-      } else 
-      {
-        
-        $this->isLoggedIn = false;
-        $this->uuid = $this->generateUUID(true);
-        $this->phone_id = $this->generateUUID(true);
-        $this->device_id = 'android-'.bin2hex(openssl_random_pseudo_bytes(8));
-
+      } else {
+          $this->isLoggedIn = false;
+          $this->uuid = $this->generateUUID(true);
+          $this->phone_id = $this->generateUUID(true);
+          $this->device_id = 'android-'.bin2hex(openssl_random_pseudo_bytes(8));
       }
   }
 
@@ -215,9 +203,9 @@ public function sendConfirmEmail($email) {
   public function login($force = false)
   {
       if (!$this->isLoggedIn || $force) {
-          $this->syncFeatures(true);
+          // $this->syncFeatures(true);
           $fetch = $this->request('si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null, true);
-            //$this->generateUUID(false), null, true);
+            
           preg_match('#Set-Cookie: csrftoken=([^;]+)#', $fetch[0], $token);
 
           $data = [
@@ -260,7 +248,6 @@ public function sendConfirmEmail($email) {
           $this->getReelsTrayFeed();
           $this->explore();
 
-
           return $login[1];
       }
 
@@ -281,9 +268,6 @@ public function sendConfirmEmail($email) {
       $this->explore();
   }
 
-
-//   POST https://i.instagram.com/api/v1/qe/sync/ HTTP/1.1
-// _csrftoken%22%3A%22ECyV1yyk84rvyaL3DICec9QSo3jBQwPP%22,%22
  
 
     public function syncFeatures($prelogin = false)
@@ -348,11 +332,9 @@ public function sendConfirmEmail($email) {
 
     public function getReelsTrayFeed()
     {
-        $feed = $this->request('feed/reels_tray/')[1]);
+        $feed = $this->request('feed/reels_tray/')[1];
         return $feed;
     }
-
-
 
      protected function directRecentRecipients()
     {
@@ -449,10 +431,7 @@ public function sendConfirmEmail($email) {
     //     return [$header, json_decode($body, true)];
     }
 
-    protected function megaphoneLog()
-    {
-        return $this->request('megaphone/log/')[1];
-    }
+   
 
   /**
      * Pending Inbox
