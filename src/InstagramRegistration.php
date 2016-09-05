@@ -379,7 +379,7 @@ echo var_export($result);
      $headers = [
       'Host: i.instagram.com',
       'Connection: keep-alive',
-      'Content-Length:'.strlen($post),
+      'Content-Length: '.strlen($post),
       'X-IG-Connection-Type: WIFI',
       'X-IG-Capabilities: 3QI=',
       'Accept-Language: en-US', 

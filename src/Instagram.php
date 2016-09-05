@@ -2648,7 +2648,7 @@ public function sendConfirmEmail($email) {
         $headers = [
           'Host: graph.facebook.com',
           'Connection: keep-alive',
-          'Content-Length:'.strlen($data),
+          'Content-Length: '.strlen($data),
           'Accept-Language: en-US', 
           'Accept-Encoding: gzip, deflate',
           'Content-Type: multipart/form-data; boundary='.$boundary,  
