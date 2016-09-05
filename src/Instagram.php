@@ -203,13 +203,14 @@ public function sendConfirmEmail($email) {
   public function login($force = false)
   {
       if (!$this->isLoggedIn || $force) {
-          // $this->syncFeatures(true);
+          $this->syncFeaturesRegister();
+
           $fetch = $this->request('si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null, true);
             
           preg_match('#Set-Cookie: csrftoken=([^;]+)#', $fetch[0], $token);
 
           $data = [
-          'phone_id'            => $this->phone_id, //generateUUID(true),
+          'phone_id'            => $this->phone_id,  
           '_csrftoken'          => $token[0],
           'username'            => $this->username,
           'guid'                => $this->uuid,
@@ -268,16 +269,37 @@ public function sendConfirmEmail($email) {
       $this->explore();
   }
 
- 
 
-    public function syncFeatures($prelogin = false)
+    public function getusernameId()
     {
-        if ($prelogin) {
-            $data = json_encode([
-                'id'            => $this->generateUUID(true),
-                'experiments'   => Constants::LOGIN_EXPERIMENTS,
-            ]);
-        } else {
+
+      return $this->username_id;
+    }
+ 
+    public function syncFeaturesRegister()
+    {
+
+
+      $data = json_encode([
+        'id'            =>  $this->uuid,
+        'experiments'   => Constants::EXPERIMENTS_REG,
+      ]);
+
+      $outputs = $this->request('qe/sync/', $this->generateSignature($data));
+      preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
+      $this->token = $matcht[1];
+
+   
+      echo var_export($outputs);  
+
+
+        return $outputs;
+    }
+
+
+
+    public function syncFeatures()
+    {
             $data = json_encode([
                 '_uuid'         => $this->uuid,
                 '_uid'          => $this->username_id,
@@ -285,7 +307,6 @@ public function sendConfirmEmail($email) {
                 'id'            => $this->username_id,
                 'experiments'   => Constants::EXPERIMENTS,
             ]);
-        }
         return $this->request('qe/sync/', $this->generateSignature($data))[1];
     }
 
@@ -353,6 +374,7 @@ public function sendConfirmEmail($email) {
       ]);
         return $this->request('discover/ayml/', $data)[1]; 
     }
+}
 
 
 //ANDROID POST https://i.instagram.com/api/v1/discover/ayml/ HTTP/1.1
@@ -2540,11 +2562,11 @@ public function sendConfirmEmail($email) {
 
     protected function request($endpoint, $post = null, $login = false)
     {
-        if (!$this->isLoggedIn && !$login) {
-            throw new InstagramException("Not logged in\n");
+        // if (!$this->isLoggedIn && !$login) {
+        //     throw new InstagramException("Not logged in\n");
 
-            return;
-        }
+        //     return;
+        // }
 
         $headers = [
         'Connection: close',

@@ -373,7 +373,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 15!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 3!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					
 					$fres = $ilink->follow($actioner);
 					if ($fres[1]['status'] == 'ok') {
@@ -1152,10 +1152,11 @@ if (count($argv) == 6 ) {
 		sleep(5);
 	// $i->setPublicAccount();
 		$i->setPrivateAccount();
-	sleep(5);
+	// sleep(5);
 
-   $usname = $i->searchUsername($username);; 
-	$pk = $usname['user']['pk'];
+ //   $usname = $i->searchUsername($username);; 
+	// $pk = $usname['user']['pk'];
+      $pk = $i->getusernameId();
 
      funcrecur($i, $username, $pk  ); 
 
