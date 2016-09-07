@@ -651,10 +651,19 @@ public function sendConfirmEmail($email) {
         imagecopyresampled($enlarged_image, $square_image, 0, 0, 0, 0, $enlarged_size, $enlarged_size, $rotated_size, $rotated_size);
         imagecopyresampled($final_image, $enlarged_image, 0, 0, round($enlarged_size / 2) - ($square_size / 2), round($enlarged_size / 2) - ($square_size / 2), $square_size, $square_size, $square_size, $square_size);
 
+        $stamp = imagecreatefrompng("stamp2.png");
+        $sx = imagesx($stamp);
+        $sy = imagesy($stamp);
+        $marge_right = 30;
+        imagecopy($final_image, $stamp, imagesx($final_image) - $sx + $marge_right , imagesy($final_image) - $sy , 0, 0, imagesx($stamp), imagesy($stamp));
+
+
+
         ob_start();
         imagejpeg($final_image);
         $fileToUpload =  ob_get_contents();
         ob_end_clean();
+
 
 //////
         $endpoint = Constants::API_URL.'upload/photo/';
