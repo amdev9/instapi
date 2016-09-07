@@ -1144,8 +1144,8 @@ if (count($argv) == 6 ) {
     $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 	 
 	sleep(4);
-	$i->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-	sleep(4);
+	$i->editProfile("", "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
+	sleep(4);//1 $GLOBALS["url"]
 
 	  
   	$logined = $proxy." ".$username." ".$password;//." ".$email;
@@ -1153,15 +1153,13 @@ if (count($argv) == 6 ) {
 
 
 	 
-		sleep(5);
+	// sleep(5);
 	// $i->setPublicAccount();
-		$i->setPrivateAccount();
-	sleep(5);
+	// 	$i->setPrivateAccount();
+	// sleep(5);
+ 
 
- //   $usname = $i->searchUsername($username);; 
-	// $pk = $usname['user']['pk'];
-      $pk = $i->getusernameId();
-
+     $pk = $i->getusernameId();
      funcrecur($i, $username, $pk  ); 
 
 }  else {
@@ -1414,7 +1412,7 @@ while ( $redis->scard("proxy") > 0 )
 				        $degrees = $GLOBALS["redis"]->spop($value);
 						echo $degrees;
 				      
-					    $i->uploadPhoto($dir.'/'.$value, $caption, null , $degrees);  
+					    $i->uploadPhoto($dir.'/'.$value, "", null , $degrees);  //$caption
 					    $uploadCounter = $uploadCounter + 1;
 					}
 				} catch (Exception $e) {
