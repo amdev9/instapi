@@ -1,7 +1,23 @@
 <?php
 
 
-echo microtime();
+echo time()."\n";
+echo md5(microtime())."\n";
+
+
+$a= base64_encode(microtime());
+
+  // openssl_random_pseudo_bytes(19));
+
+echo $a."\n-->";
+
+echo base64_decode('F4Xd30I2Gnhc6fMiwVpbqP3i39LAxq');
+
+
+
+// echo md5(uniqid(rand(), true));
+
+// echo microtime();
 // echo openssl_random_pseudo_bytes(8)."\n";
 //  echo bin2hex(openssl_random_pseudo_bytes(8));
  

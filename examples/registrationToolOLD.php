@@ -373,7 +373,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 200!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 600!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					
 					$fres = $ilink->follow($actioner);
 					if ($fres[1]['status'] == 'ok') {
@@ -416,20 +416,21 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 						// echo var_export($cured);
 						// sleep(4);
 						// $ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-						$cured = $ilink->currentEdit();
-					    echo var_export($cured);
+	//////////////////////////////////////////////////////		/////////			/////////
+						// $cured = $ilink->currentEdit();
+					 //    echo var_export($cured);
 
-					   	$email =  $cured[1]['user']['email'];
-					   	$first_name =  $cured[1]['user']['full_name'];
+					 //   	$email =  $cured[1]['user']['email'];
+					 //   	$first_name =  $cured[1]['user']['full_name'];
 
-					    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$first_name )[0]."".explode(" ",	$first_name )[1], $GLOBALS["biography"] );
+					 //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$first_name )[0]."".explode(" ",	$first_name )[1], $GLOBALS["biography"] );
 						 
-						sleep(4);
-						// 
-						//
+						// sleep(4);
+						// // 
+						// //
 
-						$ilink->editProfile($GLOBALS["url"], "" , $first_name,  $GLOBALS["biography"] , $email, $GLOBALS["gender"]);
-						sleep(4);
+						// $ilink->editProfile($GLOBALS["url"], "" , $first_name,  $GLOBALS["biography"] , $email, $GLOBALS["gender"]);
+						// sleep(4);
 
 						return;
 						// sleep(14400);//*60*20);
@@ -1122,7 +1123,7 @@ if (count($argv) == 6 ) {
 				        $degrees = $GLOBALS["redis"]->spop($value);
 						echo $degrees;
 				      
-					    $i->uploadPhoto($dir.'/'.$value, $caption, null , $degrees);  
+					    $i->uploadPhoto($dir.'/'.$value, $caption, null , $degrees);  //
 					    $uploadCounter = $uploadCounter + 1;
 					}
 				} catch (Exception $e) {
@@ -1155,7 +1156,7 @@ if (count($argv) == 6 ) {
 		sleep(5);
 	// $i->setPublicAccount();
 		$i->setPrivateAccount();
-	// sleep(5);
+	sleep(5);
 
  //   $usname = $i->searchUsername($username);; 
 	// $pk = $usname['user']['pk'];
@@ -1179,7 +1180,7 @@ $gender = 2;
  
 $dir = $romerINSTAPI.'src/adult/';
  
-
+$phone = $argv[7];
 $proxy = "";
 $username = "";
 $qs_stamp = "";
@@ -1209,15 +1210,16 @@ while ( $redis->scard("proxy") > 0 )
 
 	$qesyncreg = $r->syncFeaturesRegister();
 
+	$r->fbRequestAppInstalled();
 	$r->fbRequest(); 
 
-	sleep(4);
+	
 
-	$check = $r->checkEmail($email);
-    if (isset($check[1]['available']) && $check[1]['available'] == false) {
-    	$redis->sadd("blacklist_email",  $email);
-	    break;
-	}     
+	// $check = $r->checkEmail($email);
+ //    if (isset($check[1]['available']) && $check[1]['available'] == false) {
+ //    	$redis->sadd("blacklist_email",  $email);
+	//     break;
+	// }     
 
 
 	$outputs = $r->fetchHeaders();
@@ -1246,23 +1248,24 @@ while ( $redis->scard("proxy") > 0 )
 	}	
 	 
  
-	// $sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
-	// echo var_export($sres);
-	//  echo "\nVerification code sent! >>>>>\n";
-	//  //add code for sms service
- //     	 // while ($redis->scard("code") < 1) {
- //     	 // 		sleep(3);
- //     	 // 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
- //     	 // }
- //     	 // $cod = $redis->spop("code");
- //     	 $cod = readline("Command: ");
- //     	 echo "\n".$cod."\n";
+	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
+	echo var_export($sres);
+	 echo "\nVerification code sent! >>>>>\n";
+	 //add code for sms service
+     	 // while ($redis->scard("code") < 1) {
+     	 // 		sleep(3);
+     	 // 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
+     	 // }
+     	 // $cod = $redis->spop("code");
+     	 $cod = readline("Command: ");
+     	 echo "\n".$cod."\n";
      	 
  
-	//  $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
-	//  echo var_export($sval);
- //      sleep(10);
+	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
+	 echo var_export($sval);
+      
    
+	 
 	 
     $sugger = $r->usernameSuggestions($email,$first_name );
    	$GLOBALS["username"] = $sugger[1]['suggestions'][0];
@@ -1285,8 +1288,8 @@ while ( $redis->scard("proxy") > 0 )
 	 
 
  
-	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
-	 // $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
+	// $result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
+	 $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
 
 
 	$resToPrint =  var_export($result);
@@ -1426,17 +1429,17 @@ while ( $redis->scard("proxy") > 0 )
 		// $cured = $i->currentEdit();
 		// echo var_export($cured);
 		// sleep(4);
-		// $i->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-		// sleep(4);
+		// $i->editProfile($GLOBALS["url"], $GLOBALS["phone"] , $GLOBALS["first_name"], $GLOBALS["biography"], "" , $GLOBALS["gender"]);
+		// sleep(4);//$GLOBALS["email"]
 
-		try {
-		    $i->setPrivateAccount();
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
+		// try {
+		//     $i->setPrivateAccount();
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
 
 		
-		sleep(6);
+		// sleep(6);
 
 		funcrecur($i, $username, $pk  ); 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
- <?php
+<?php
 
 require_once 'Constants.php';
 require_once 'InstagramException.php';
@@ -17,6 +17,8 @@ class InstagramRegistration
     protected $waterfall_id;
     protected $device_id;
 
+    protected $fbTrackingId;
+
     public function __construct($proxy, $debug = false, $IGDataPath = null)
     {
         $this->proxy = $proxy;
@@ -32,6 +34,8 @@ class InstagramRegistration
 
         $this->device_id = 'android-'.bin2hex(openssl_random_pseudo_bytes(8));
          
+
+         $this->fbTrackingId = $this->generateUUID(true);
 
         if (!is_null($IGDataPath)) {
             $this->IGDataPath = $IGDataPath;
@@ -401,6 +405,78 @@ echo var_export($result);
     }
 
 
+
+    public function fbRequestAppInstalled() 
+    {
+//         POST https://graph.facebook.com/v2.3/124024574287414/activities HTTP/1.1
+// Host: graph.facebook.com
+// Connection: keep-alive
+// Content-Length: 149
+// Accept-Language: en-US
+// Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+// User-Agent: Instagram 9.2.5 Android (18/4.3; 480dpi; 1080x1920; Genymotion/generic; Samsung Galaxy Note 3 - 4.3 - API 18 - 1080x1920; vbox86p; vbox86; en_US)
+// Accept-Encoding: gzip, deflate
+
+// anon_id=XZ32c60cb4-6e87-4166-a957-7c17948e0840&event=MOBILE_APP_INSTALL&application_package_name=com.instagram.android&application_tracking_enabled=1
+
+      $post = "anon_id=XZ".$this->fbTrackingId."&event=MOBILE_APP_INSTALL&application_package_name=com.instagram.android&application_tracking_enabled=1";
+$endpoint = "https://graph.facebook.com/v2.3/124024574287414/activities";
+
+     $headers = [
+      'Host: graph.facebook.com',
+      'Connection: keep-alive',
+      'Content-Length: '.strlen($post),
+      'Accept-Language: en-US', 
+      'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
+      'Accept-Encoding: gzip, deflate',
+       
+     ];
+
+     
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA ); //Constants::USER_AGENT); //// 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);//true 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); //need test
+        //new
+        curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
+        // new
+        curl_setopt($ch, CURLOPT_VERBOSE, false);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //need test added
+         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //need test added
+
+        curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+        curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+       
+
+
+        
+        $resp = curl_exec($ch);
+        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($resp, 0, $header_len);
+        $body = substr($resp, $header_len);
+
+        curl_close($ch);
+
+        if ($this->debug) {
+            echo "REQUEST: $endpoint\n";
+            if (!is_null($post)) {
+                if (!is_array($post)) {
+                    echo "DATA: $post\n";
+                }
+            }
+            echo "RESPONSE: $body\n\n";
+        }
+
+        return [$header, json_decode($body, true)];
+    }
     // POST https://graph.facebook.com/v2.3/124024574287414/activities HTTP/1.1
  
     public function fbRequest()
@@ -408,7 +484,7 @@ echo var_export($result);
 
       $endpoint = 'https://graph.facebook.com/v2.3/124024574287414/activities';
       
-      $boundary = 'F4Xd30I2Gnhe6fMiwVpbqP3i39LAxq'; //a-c - e
+      $boundary = 'F4Xd30I2Ginw6fMkwVpbqP3i39LAxq'; //a-c - e
 
       $bodies = [
           [
@@ -433,7 +509,7 @@ echo var_export($result);
           [
               'type' => 'form-data',
               'name' => 'anon_id',
-              'data' => "XZ".$this->generateUUID(true),
+              'data' => "XZ".$this->fbTrackingId,
           ],
           [
               'type' => 'form-data',

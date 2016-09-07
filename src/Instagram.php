@@ -2682,11 +2682,11 @@ public function sendConfirmEmail($email) {
 
         curl_close($ch);
 
-        if ($upload['success'] == 'false') {
-            throw new InstagramException($upload['message']);
+        // if ($upload['success'] == 'false') {
+        //     throw new InstagramException($upload['message']);
 
-            return;
-        }
+        //     return;
+        // }
 
         if ($this->debug) {
             echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
