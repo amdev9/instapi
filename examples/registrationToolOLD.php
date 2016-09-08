@@ -1123,7 +1123,7 @@ if (count($argv) == 6 ) {
 				        $degrees = $GLOBALS["redis"]->spop($value);
 						echo $degrees;
 				      
-					    $i->uploadPhoto($dir.'/'.$value, $caption, null , $degrees);  //
+					    $i->uploadPhoto($dir.'/'.$value, $caption, null, $degrees);  //
 					    $uploadCounter = $uploadCounter + 1;
 					}
 				} catch (Exception $e) {
@@ -1135,17 +1135,18 @@ if (count($argv) == 6 ) {
 
 		echo "video and photo downloaded!\n"; 
 
-	$cured = $i->currentEdit();
-    echo var_export($cured);
+	// $cured = $i->currentEdit();
+ //    echo var_export($cured);
 
-   	$email =  $cured[1]['user']['email'];
-   	$first_name =  $cured[1]['user']['full_name'];
+ //    $phone =  $cured[1]['user']['phone_number'];
+ //   	$email =  $cured[1]['user']['email'];
+ //   	$first_name =  $cured[1]['user']['full_name'];
 
-    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
+ //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 	 
-	sleep(4);
-	$i->editProfile("", "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-	sleep(4);//1 $GLOBALS["url"]
+	// sleep(4);
+	// $i->editProfile($GLOBALS["url"], $phone , $GLOBALS["first_name"], $GLOBALS["biography"],"", $GLOBALS["gender"]);
+	// sleep(4);//1 $GLOBALS["email"]
 
 	  
   	$logined = $proxy." ".$username." ".$password;//." ".$email;
@@ -1153,10 +1154,10 @@ if (count($argv) == 6 ) {
 
 
 	 
-	// sleep(5);
+	sleep(5);
 	// $i->setPublicAccount();
-	// 	$i->setPrivateAccount();
-	// sleep(5);
+		$i->setPrivateAccount();
+	sleep(5);
  
 
      $pk = $i->getusernameId();
@@ -1206,7 +1207,7 @@ while ( $redis->scard("proxy") > 0 )
  //        }
         
 
-	$qesyncreg = $r->syncFeaturesRegister();
+	$r->syncFeaturesRegister();
 
 	$r->fbRequestAppInstalled();
 	$r->fbRequest(); 
@@ -1347,13 +1348,13 @@ while ( $redis->scard("proxy") > 0 )
 		 $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 
 
-// 		try {
-// 		   $prres =  $i->setPrivateAccount();
-// 		   echo  var_export($prres);
-// 		} catch (Exception $e) {
-// 		    echo $e->getMessage();
-// 		}
-// 		sleep(6);
+		// try {
+		//    $prres =  $i->setPrivateAccount();
+		//    echo  var_export($prres);
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
+		// sleep(6);
  
 	 
 		$filesVideo = scandir($dir);
@@ -1412,7 +1413,7 @@ while ( $redis->scard("proxy") > 0 )
 				        $degrees = $GLOBALS["redis"]->spop($value);
 						echo $degrees;
 				      
-					    $i->uploadPhoto($dir.'/'.$value, "", null , $degrees);  //$caption
+					    $i->uploadPhoto($dir.'/'.$value, null , $degrees);  //$caption
 					    $uploadCounter = $uploadCounter + 1;
 					}
 				} catch (Exception $e) {
@@ -1424,17 +1425,17 @@ while ( $redis->scard("proxy") > 0 )
 
 		echo "video and photo downloaded!\n";
 
-		// $cured = $i->currentEdit();
-		// echo var_export($cured);
-		// sleep(4);
-		// $i->editProfile($GLOBALS["url"], $GLOBALS["phone"] , $GLOBALS["first_name"], $GLOBALS["biography"], "" , $GLOBALS["gender"]);
-		// sleep(4);//$GLOBALS["email"]
+		$cured = $i->currentEdit();
+		echo var_export($cured);
+		sleep(4);
+		$i->editProfile($GLOBALS["url"], $GLOBALS["phone"] , $GLOBALS["first_name"], $GLOBALS["biography"], "" , $GLOBALS["gender"]);
+		sleep(4);//$GLOBALS["email"]
 
-		// try {
-		//     $i->setPrivateAccount();
-		// } catch (Exception $e) {
-		//     echo $e->getMessage();
-		// }
+		try {
+		    $i->setPrivateAccount();
+		} catch (Exception $e) {
+		    echo $e->getMessage();
+		}
 
 		
 		// sleep(6);

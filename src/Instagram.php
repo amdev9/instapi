@@ -107,13 +107,7 @@ class Instagram
     return $outputs;
    }
 
-
-// signed_body=3f80bf65d1950d3a19fb2d680f992a04dfa9da6b68135a2fa4c03381cb964ce0.%7B%22
-   // phone_number%22%3A%22%2B79260263988%22,%22
-   // _csrftoken%22%3A%22hvo1oRG4LMGDeScVIuQacSLZnFNG2xP6%22,%22
-   // _uid%22%3A%223592360965%22,%22
-   // _uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%7D
-   // &ig_sig_key_version=4
+ 
 
    public function sendSmsCode($phone) {
           $data = json_encode([
@@ -125,15 +119,7 @@ class Instagram
         return $this->request('accounts/send_sms_code/',  $this->generateSignature($data))[1];
    }
 
-// signed_body=7fcfdc871e84fdea11fc193fa1f7d96d6cc8260d6516aca0b08c1569898d1345.%7B%22
-   // verification_code%22%3A%22630219%22,%22
-   // phone_number%22%3A%22%2B79260263988%22,%22
-   // _csrftoken%22%3A%22hvo1oRG4LMGDeScVIuQacSLZnFNG2xP6%22,%22
-   // _uid%22%3A%223592360965%22,%22
-   // _uuid%22%3A%22ea57180e-3663-446a-9356-e5d103f729dc%22%7D
-   // &ig_sig_key_version=4
-
-// %2B79260263988
+ 
    public function verifySmsCode($phone, $verification_code) {
       $data = json_encode([
         'verification_code' => $verification_code,
@@ -203,6 +189,7 @@ public function sendConfirmEmail($email) {
   public function login($force = false)
   {
       if (!$this->isLoggedIn || $force) {
+        
           $this->syncFeaturesRegister();
 
           $this->fbRequest();
@@ -402,59 +389,7 @@ public function sendConfirmEmail($email) {
      
        return $this->request('feed/timeline/')[1];
       
-    //   $endpoint = 'feed/timeline/?is_prefetch=0&phone_id='.$this->phone_id.'&battery_level=14&timezone_offset=10800&is_charging=0';
-
-    //    $headers = [
-    //     'Connection: close',
-    //     'Accept: */*',
-    //     'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
-    //     'Cookie2: $Version=1',
-    //     'Accept-Language: en-US',
-    //     'X-Google-AD-ID: '.$this->generateUUID(true),
-    //     'X-DEVICE-ID: '.$this->generateUUID(true), 
-    //     'X-IG-INSTALLED-APPS: eyIxIjowLCIyIjowfQ==',
-    //     'X-IG-Connection-Type: WIFI',
-    //     'X-IG-Capabilities: 3QI=',
-
-    // ];
-
-    //     $ch = curl_init();
-
-    //     curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
-    //     curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);//Constants::USER_AGENT);
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    //     curl_setopt($ch, CURLOPT_HEADER, true);
-    //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    //     curl_setopt($ch, CURLOPT_VERBOSE, false);
-    //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    //     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    //     curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
-    //     curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
-    //       curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
-    //     curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-    //     curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-
-
-    //     // if ($post) {
-    //     //     curl_setopt($ch, CURLOPT_POST, true);
-    //     //     curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-    //     // }
-
-    //     $resp = curl_exec($ch);
-    //     $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-    //     $header = substr($resp, 0, $header_len);
-    //     $body = substr($resp, $header_len);
-
-    //     curl_close($ch);
-
-    //     if ($this->debug) {
-    //         echo "REQUEST: $endpoint\n";
-            
-    //         echo "RESPONSE: $body\n\n";
-    //     }
-
-    //     return [$header, json_decode($body, true)];
+    
     }
 
    
@@ -651,19 +586,21 @@ public function sendConfirmEmail($email) {
         imagecopyresampled($enlarged_image, $square_image, 0, 0, 0, 0, $enlarged_size, $enlarged_size, $rotated_size, $rotated_size);
         imagecopyresampled($final_image, $enlarged_image, 0, 0, round($enlarged_size / 2) - ($square_size / 2), round($enlarged_size / 2) - ($square_size / 2), $square_size, $square_size, $square_size, $square_size);
 
-        $stamp = imagecreatefrompng("stamp2.png");
-        $sx = imagesx($stamp);
-        $sy = imagesy($stamp);
-        $marge_right = 30;
-        imagecopy($final_image, $stamp, imagesx($final_image) - $sx + $marge_right , imagesy($final_image) - $sy , 0, 0, imagesx($stamp), imagesy($stamp));
+
+        ///watermark
+        // $stamp = imagecreatefrompng("/Users/alex/dev/instapi/src/stamp2.png");
+        // $sx = imagesx($stamp);
+        // $sy = imagesy($stamp);
+        // $marge_right = 30;
+        // imagecopy($final_image, $stamp, imagesx($final_image) - $sx + $marge_right , imagesy($final_image) - $sy , 0, 0, imagesx($stamp), imagesy($stamp));
 
 
+        // imagejpeg($final_image, "result.jpg");
 
         ob_start();
         imagejpeg($final_image);
         $fileToUpload =  ob_get_contents();
         ob_end_clean();
-
 
 //////
         $endpoint = Constants::API_URL.'upload/photo/';
@@ -673,7 +610,7 @@ public function sendConfirmEmail($email) {
             $fileToUpload = createVideoIcon($photo);
         } else {
             $upload_id = number_format(round(microtime(true) * 1000), 0, '', '');
-             $fileToUpload = file_get_contents($photo);
+             // $fileToUpload = file_get_contents($photo);
         }
 
         $bodies = [

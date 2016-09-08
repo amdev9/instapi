@@ -49,20 +49,7 @@ class InstagramRegistration
 
 public function syncFeaturesRegister()
     {
-
-
-// POST https://i.instagram.com/api/v1/qe/sync/ HTTP/1.1
-// Host: i.instagram.com
-// Connection: keep-alive
-// Content-Length: 870
-// X-IG-Connection-Type: WIFI
-// X-IG-Capabilities: 3QI=
-// Accept-Language: ru-RU
-// Cookie: mid=V3jbkwABAAEOM1k5BegeySOA_0OP
-// Content-Type: application/x-www-form-urlencoded; charset=UTF-8
-// User-Agent: Instagram 9.2.0 Android (17/4.2.2; 160dpi; 600x976; samsung; GT-P3100; espressorf; espresso; ru_RU)
-// Accept-Encoding: gzip, deflate
-
+ 
       $data = json_encode([
         'id'            =>  $this->uuid,
         'experiments'   => Constants::EXPERIMENTS_REG,
@@ -324,29 +311,29 @@ echo var_export($result);
       return $result;
   }
 
-    public function generateSignature($data)
+   public function generateSignature($data)
     {
-        $hash = hash_hmac('sha256', $data, Constants::IG_SIG_KEY );
+        $hash = hash_hmac('sha256', $data, Constants::IG_SIG_KEY);
 
-        return 'signed_body='.$hash.'.'.urlencode($data).'&ig_sig_key_version='.Constants::SIG_KEY_VERSION;
+        return 'ig_sig_key_version='.Constants::SIG_KEY_VERSION.'&signed_body='.$hash.'.'.urlencode($data);
     }
 
 
 
     public function GenerateUserAgent() {  
       // NEED TEST
-      $csvfile = __DIR__.'/devices.csv';
-      $file_handle = fopen($csvfile, 'r');
-      $line_of_text = [];
-      while (!feof($file_handle)) {
-          $line_of_text[] = fgetcsv($file_handle, 1024);
-      }
-      $deviceData = explode(';', $line_of_text[mt_rand(0, 11867)][0]);
-      fclose($file_handle);
-      return sprintf('Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
+      // $csvfile = __DIR__.'/devices.csv';
+      // $file_handle = fopen($csvfile, 'r');
+      // $line_of_text = [];
+      // while (!feof($file_handle)) {
+      //     $line_of_text[] = fgetcsv($file_handle, 1024);
+      // }
+      // $deviceData = explode(';', $line_of_text[mt_rand(0, 11867)][0]);
+      // fclose($file_handle);
+      // return sprintf('Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
 
 
-      // return 'Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
+      return 'Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
 
 
    }
@@ -408,16 +395,7 @@ echo var_export($result);
 
     public function fbRequestAppInstalled() 
     {
-//         POST https://graph.facebook.com/v2.3/124024574287414/activities HTTP/1.1
-// Host: graph.facebook.com
-// Connection: keep-alive
-// Content-Length: 149
-// Accept-Language: en-US
-// Content-Type: application/x-www-form-urlencoded; charset=UTF-8
-// User-Agent: Instagram 9.2.5 Android (18/4.3; 480dpi; 1080x1920; Genymotion/generic; Samsung Galaxy Note 3 - 4.3 - API 18 - 1080x1920; vbox86p; vbox86; en_US)
-// Accept-Encoding: gzip, deflate
-
-// anon_id=XZ32c60cb4-6e87-4166-a957-7c17948e0840&event=MOBILE_APP_INSTALL&application_package_name=com.instagram.android&application_tracking_enabled=1
+ 
 
       $post = "anon_id=XZ".$this->fbTrackingId."&event=MOBILE_APP_INSTALL&application_package_name=com.instagram.android&application_tracking_enabled=1";
 $endpoint = "https://graph.facebook.com/v2.3/124024574287414/activities";
@@ -584,7 +562,8 @@ $endpoint = "https://graph.facebook.com/v2.3/124024574287414/activities";
 
     public function request($endpoint, $post = null)
     {
-      //'Cookie: mid=V3jbkwABAAEOM1k5BegeySOA_0OP', 
+      
+ 
 
      $headers = [
       'Host: i.instagram.com',
