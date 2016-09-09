@@ -1128,14 +1128,14 @@ public function sendConfirmEmail($email) {
         $size = getimagesize($photo)[0];
         $post = json_encode([
           'upload_id'          => $upload_id,
-          'source_type'        => 3,
+          'source_type'        => 4,
           'edits'              => [
               'crop_original_size' => [$size, $size],
-              'crop_zoom'          => 1.3333334,
+              'crop_zoom'          => 1.0,
               'crop_center'        => [0.0, 0.0],
           ],
           'extra' => [
-              'source_width'  => $size,
+              'source_width'  => $size,//($size*73 ) / 120 ,
               'source_height' => $size,
           ],
           'device' => [
@@ -1154,7 +1154,7 @@ public function sendConfirmEmail($email) {
               // 'model'           => //$this->settings->get('model'),
               // 'android_version' => //Constants::ANDROID_VERSION,
               // 'android_release' => //Constants::ANDROID_RELEASE,
-        
+
         $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,0.0]', $post);
         
         return $this->request('media/configure_to_reel/', $this->generateSignature($post))[1];
@@ -2767,9 +2767,10 @@ public function sendConfirmEmail($email) {
         //     return;
         // }
 
-        $headers = [
+     $headers = [
         'Connection: close',
         'Accept: */*',
+        'X-IG-Capabilities: 3QI=',
         'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
         'Cookie2: $Version=1',
         'Accept-Language: en-US',
