@@ -174,7 +174,7 @@ public function createValidatedAccount($username, $verification_code, $phone, $f
       // waterfall_id%22%3A%2235c54e09-c815-41c3-8fb2-ef480e82a62f%22%7D
 
        
-          $this->token = trim(file_get_contents($this->IGDataPath."token.dat"));
+          // $this->token = trim(file_get_contents($this->IGDataPath."token.dat"));
           $data = json_encode([
               '_csrftoken'   =>  $this->token,     
               'email'   => $email,

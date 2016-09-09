@@ -174,7 +174,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 {
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 2000;  //27000
+	$posts_per_day = 1000;  //27000
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -311,14 +311,20 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 				}
 		    
 
-		    	          // 	if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true && $GLOBALS["redis"]->scard("detection".$usernamelink) % 31 == 0 ) {
-			  		     // 		 functiondirectshare($usernamelink, $ilink, $actioner ,$ad_media_id);
-					     // }
+		    	  
 			   	
 
 				  
 					echo $next_iteration_time = add_time($delay); //timer
 			    	sleep($next_iteration_time);
+
+        		if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true ) {
+
+        			functiondirectshare($usernamelink, $ilink, $actioner );//,$ad_media_id
+
+				}
+
+
 
 					// if ($medcom == "nonprivate") {
 					
@@ -372,88 +378,39 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// echo $next_iteration_time = add_time($delay); //timer
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
-			 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 600!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+	/// MASS FOLLOW		//// 
+				// if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 600!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					
-					$fres = $ilink->follow($actioner);
-					if ($fres[1]['status'] == 'ok') {
-					 	$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-					} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
-					 	$ilink->login(true);
-					} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
-						$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $fres[1]['checkpoint_url']);
-				        echo "\nVerification code sent! >>>>>\n";
-		 			 	// $resp_code = trim(fgets(STDIN));
-                        $resp_code = "";
-		 			    while( ctype_digit($resp_code) != true) {
-						 	// $line = readline("Command: ");
-						  	$resp_code = readline("Command: ");
-						}
-						echo "\n---->".$resp_code;
-						$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
-						echo var_export($results);
-					}
-					else {
-							 			echo var_export($fres);
+				// 	$fres = $ilink->follow($actioner);
+				// 	if ($fres[1]['status'] == 'ok') {
+				// 	 	$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+				// 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
+				// 	 	$ilink->login(true);
+				// 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
+				// 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $fres[1]['checkpoint_url']);
+				//         echo "\nVerification code sent! >>>>>\n";
+		 	// 		 	// $resp_code = trim(fgets(STDIN));
+    //                     $resp_code = "";
+		 	// 		    while( ctype_digit($resp_code) != true) {
+				// 		 	// $line = readline("Command: ");
+				// 		  	$resp_code = readline("Command: ");
+				// 		}
+				// 		echo "\n---->".$resp_code;
+				// 		$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
+				// 		echo var_export($results);
+				// 	}
+				// 	else {
+				// 			 			echo var_export($fres);
 
-					}
-					echo var_export($fres);
+				// 	}
+				// 	echo var_export($fres);
 
-					}
-					else {
-
-						// $ilink->logout();
-						// echo "\nlogout success";
-						// return;
-						// echo "\n\nELSE --<<<  \n\n";
-						//works
-					 	 // $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
-
-					
-						// $ilink->login();
-						// sleep(2);
-						// $cured = $ilink->currentEdit();
-						// echo var_export($cured);
-						// sleep(4);
-						// $ilink->editProfile($GLOBALS["url"], "" , $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"], $GLOBALS["gender"]);
-	//////////////////////////////////////////////////////		/////////			/////////
-						// $cured = $ilink->currentEdit();
-					 //    echo var_export($cured);
-
-					 //   	$email =  $cured[1]['user']['email'];
-					 //   	$first_name =  $cured[1]['user']['full_name'];
-
-					 //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$first_name )[0]."".explode(" ",	$first_name )[1], $GLOBALS["biography"] );
-						 
-						// sleep(4);
-						// // 
-						// //
-
-						// $ilink->editProfile($GLOBALS["url"], "" , $first_name,  $GLOBALS["biography"] , $email, $GLOBALS["gender"]);
-						// sleep(4);
-
-						return;
-						// sleep(14400);//*60*20);
-						// $ilink = new Instagram($usernamelink, $GLOBALS["password"], $GLOBALS["proxy"], true );
-						// $ilink->login();
-						// sleep(3);
-						// $cured = $ilink->currentEdit();
-						// echo var_export($cured);
-						// sleep(4);
-						// $ilink->editProfile("", "", $GLOBALS["first_name"], "" , $GLOBALS["email"], $GLOBALS["gender"]);
-						// sleep(4);
-						// $usname = $ilink->searchUsername($usernamelink);; 
-						// $pk = $usname['user']['pk'];
-						// sleep(4);
-						// $GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-						// funcrecur($ilink, $usernamelink, $pk  ); 
+				// 	}
+				// 	else {
+				// 		 return;
+				// 	}		
 
 
-					}
-
-					  
-					
-						
 	}
 					 
 						
@@ -937,84 +894,55 @@ function funcgeocoordparse($i, $redis)
 }
 
 
-function functiondirectshare($username, $i, $message_recipient, $ad_media_id)
+function functiondirectshare($username, $i, $message_recipient, $ad_media_id = null)
 {	 
 
+	$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}"];
+	$smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+	$smiles =  ["\u{1F609}", "\u{1F60D}" ];  
+	$cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+	$cur = $cursors[mt_rand(0, count($cursors) - 1)];
+	$smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+	$smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+	$smil = $smiles[mt_rand(0, count($smiles) - 1)];
+	$first_name_txt = explode(" ",$GLOBALS["first_name"]);
+	$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+	$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+	$smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{270B}"];
+	$smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+	$uname = $GLOBALS["username"];
 
-				// $ad_media_list  = [ ];
-				
-		  //   	$ad_media_id = $ad_media_list[mt_rand(0, count($ad_media_list) - 1)];
-				
-				// $followlike  = $redis->spop($key);   
-			 //    $resarr = explode(":",$followlike);
-				// $message_recipient = $resarr[0];
 
-  	 
-  		// return user ID 
-
-				$smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}"];
-			    $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
-				  $smiles =  ["\u{1F609}", "\u{1F60D}" ];  
-				 $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
-			     $cur = $cursors[mt_rand(0, count($cursors) - 1)];
-			     $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
-			    $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
-			 $smil = $smiles[mt_rand(0, count($smiles) - 1)];
-				$first_name_txt = explode(" ",$GLOBALS["first_name"]);
-				 $hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
-		 	 	$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
-
-				// $text = "$hiw $first_name_txt[0] $smi_hi Follow this awesome profile with naughty girls @livecamshowtvonline $smil $smi $cur $cur $cur";
-			     
-  		  $smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{270B}"];
-          $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
-//$smi_hi
-           $uname = $GLOBALS["username"];
-          //////TOVARKA
+    //////TOVARKA
 	// $text = "Добрый день! $smi_hi \u{2029}\u{2757} Попробуйте признанную во всём мире органическую маску для лица @__blackmask__ \u{2757}\u{2029}\u{2753} Почему тысячи девушек выбирают Black Mask? \u{1F4AD}\u{2029}\u{2705} Потому что наша маска:\u{2029}\u{1F539} оказывает успокаивающее действие на раздраженную и воспаленную кожу;\u{2029}\u{1F539} разглаживает морщинки,возрастные складки, выравнивает текстуру кожи;\u{2029}\u{1F539} делает контур лица более четким;\u{2029}\u{1F539} улучшает цвет лица;\u{2029}\u{1F539} поглощает токсины,устраняет с поверхности эпидермиса мертвые клетки; борется с акне и прыщами\u{2029}\u{1F539} делает практически незаметными пигментные пятна различного происхождения \u{1F64C}\u{2029}\u{1F33F} При этом, маска полностью натуральная  \u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}\u{2029}\u{1F449} @__blackmask__  \u{1F448}";
 
 	// $text = "Добрый день! $smi_hi \u{2029}\u{2757} CREST 3D WHITE - ТОЛЬКО САМОЕ ЛУЧШЕЕ, ДЛЯ ВАШЕЙ УЛЫБКИ \u{1F604} \u{1F444} \u{1F44D} \u{2029} Самая выгодная цена в России на оригинальную продукцию Crest 3D White из США \u{2029} Все товары сертифицированные в РФ! \u{2029} \u{1F680} Доставка по всей России! \u{2029} Оформляйте заказы на нашем сайте\u{2029}\u{2705} Активная ссылка и подробности акции в описании профиля \u{27A1}\u{2029}\u{1F449} @3dwhite.RUS  \u{1F448}\u{2029}\u{1F449} @3dwhite.RUS  \u{1F448}\u{2029}\u{1F449} @3dwhite.RUS \u{1F448}";
 
 
-              //ADULT
-         
-         $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $uname_96 $smil I am ONLINE and WAITING.. $cur";
-
-
+    //ADULT
+  
+    $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $uname_96 $smil I am ONLINE and WAITING.. $cur";
+	try {
  
+		// $message_recipient = array("1009845355"); //4ewir   , "3299015045"
+		// $answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
+  
+		$answer = $i->direct_message($message_recipient, $text ); 
+		 
+		 
+		
+		 if ($answer['status']== "ok") {
+		 	 echo "\n\n**SEND**\n\n";
+			$GLOBALS["redis"]->rpush("recieved",  $message_recipient); 
+		} elseif ($answer['status']== "fail" && $answer['message'] == "checkpoint_required") {
+			 
+			$i->checkpointPhoneChallenge($GLOBALS["phone"], $answer['checkpoint_url']);
+	    		 echo "\nVerification code sent! >>>>>\n";
+	    		 $resp_code = readline("Command: ");
+			 	echo "\n".$resp_code;
+				$results = $i->checkpointCodeChallenge($resp_code, $answer['checkpoint_url']);
 
-				try {
-				//    $dirsh =  $i->direct_share("1244961383516529243", "1009845355", "hi) thats coool!!"); //send to one user
-				//$i->direct_share("1244961383516529243", array("1009845355", "3299015045"), "hi! thats woow!");  
-		 			
-
-//15 spop foractionF
-					// $message_recipient = [];
-				 //    for($it = 0; $it < 5; $it++) 
-				 //   	{ 
-					//     array_push($message_recipient, $GLOBALS["redis"]->spop("foractionF") ); 
-					// }
-					// $message_recipient = $GLOBALS["redis"]->spop("foractionF");
-		 			// $message_recipient = array("1009845355", "3299015045"); //4ewir
-		 			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
-
-		 			 // $i->direct_share($ad_media_id, "1009845355", $text );    
-		 			
-		 			 if ($answer['status']== "ok") {
-		 			 	 echo "\n\n**SEND**\n\n";
-		 				$GLOBALS["redis"]->rpush("recieved",  $message_recipient); 
-		 			} elseif ($answer['status']== "fail" && $answer['message'] == "checkpoint_required") {
-		 				 
-		 			$i->checkpointPhoneChallenge($GLOBALS["phone"], $answer['checkpoint_url']);
-                     echo "\nVerification code sent! >>>>>\n";
-		 			 // $resp_code = trim(fgets(STDIN));
-		 			 $resp_code = readline("Command: ");
-
-		 			 echo "\n".$resp_code;
-
-		 			$results = $i->checkpointCodeChallenge($resp_code, $answer['checkpoint_url']);
-
-		 			echo var_export($results);
+		echo var_export($results);
 
 		 				 // $sendsms = $i->sendSmsCode($GLOBALS["phone"]);
 				    //  	 echo var_export($sendsms);
@@ -1067,98 +995,100 @@ if (count($argv) == 6 ) {
 	$i->login();
 	 sleep(15);
 
-	$filesVideo = scandir($dir);
-		$ava = true;
-		$uploadCounter = 0;
-		$filesVid = shuffle_assoc($filesVideo);
+	// $filesVideo = scandir($dir);
+	// 	$ava = true;
+	// 	$uploadCounter = 0;
+	// 	$filesVid = shuffle_assoc($filesVideo);
 
-		foreach ( $filesVid as $k => $value ) {
+	// 	foreach ( $filesVid as $k => $value ) {
 
-		    $ext = pathinfo($value, PATHINFO_EXTENSION);
-		    if ($ext == "mp4") { 
-				try {
-				    $i->uploadVideo($dir.'/'.$value, $caption);  
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
+	// 	    $ext = pathinfo($value, PATHINFO_EXTENSION);
+	// 	    if ($ext == "mp4") { 
+	// 			try {
+	// 			    $i->uploadVideo($dir.'/'.$value, $caption);  
+	// 			} catch (Exception $e) {
+	// 			    echo $e->getMessage();
+	// 			}
 
-				sleep(10);
-		    }
-		    elseif ($ext == "jpg" && $ava == true ) {
+	// 			sleep(10);
+	// 	    }
+	// 	    elseif ($ext == "jpg" && $ava == true ) {
 
-		    	try {
-		    		if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
-					{
+	// 	    	try {
+	// 	    		if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+	// 				{
 						
-						if ($GLOBALS["redis"]->scard($value) == 0 ) {
-						     $GLOBALS["redis"]->sadd('picked', $value);
-						    foreach (range(-12, 12) as $number) {
-						        if ($number != 0)
-						            $GLOBALS["redis"]->sadd($value, $number);
-						    }
-						}
-						$degrees = $GLOBALS["redis"]->spop($value);
-				        echo $degrees;
-				    	$i->changeProfilePicture($dir.'/'.$value, $degrees);
-					}
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
-				sleep(10);
-				$ava = false;
+	// 					if ($GLOBALS["redis"]->scard($value) == 0 ) {
+	// 					     $GLOBALS["redis"]->sadd('picked', $value);
+	// 					    foreach (range(-12, 12) as $number) {
+	// 					        if ($number != 0)
+	// 					            $GLOBALS["redis"]->sadd($value, $number);
+	// 					    }
+	// 					}
+	// 					$degrees = $GLOBALS["redis"]->spop($value);
+	// 			        echo $degrees;
+	// 			    	$i->changeProfilePicture($dir.'/'.$value, $degrees);
+	// 				}
+	// 			} catch (Exception $e) {
+	// 			    echo $e->getMessage();
+	// 			}
+	// 			sleep(10);
+	// 			$ava = false;
 
-			} else {
-				if ($uploadCounter == 2) { break; }
-				try {
-					if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
-					{
+	// 		} else {
+	// 			if ($uploadCounter == 6) { break; }
+	// 			try {
+	// 				if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+	// 				{
 						
-						if ($GLOBALS["redis"]->scard($value) == 0 ) {
-						     $GLOBALS["redis"]->sadd('picked', $value);
-						    foreach (range(-12, 12) as $number) {
-						        if ($number != 0)
-						            $GLOBALS["redis"]->sadd($value, $number);
-						    }
-						}
-				        $degrees = $GLOBALS["redis"]->spop($value);
-						echo $degrees;
+	// 					if ($GLOBALS["redis"]->scard($value) == 0 ) {
+	// 					     $GLOBALS["redis"]->sadd('picked', $value);
+	// 					    foreach (range(-12, 12) as $number) {
+	// 					        if ($number != 0)
+	// 					            $GLOBALS["redis"]->sadd($value, $number);
+	// 					    }
+	// 					}
+	// 			        $degrees = $GLOBALS["redis"]->spop($value);
+	// 					echo $degrees;
 				      
-					    $i->uploadPhoto($dir.'/'.$value, $caption, null, $degrees);  //
-					    $uploadCounter = $uploadCounter + 1;
-					}
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
-				sleep(30);
-		    }
-		}
+	// 				    $i->uploadPhoto($dir.'/'.$value, "", null, $degrees);  //caption
+	// 				    $uploadCounter = $uploadCounter + 1;
+	// 				}
+	// 			} catch (Exception $e) {
+	// 			    echo $e->getMessage();
+	// 			}
+	// 			sleep(30);
+	// 	    }
+	// 	}
 
-		echo "video and photo downloaded!\n"; 
+	// 	echo "video and photo downloaded!\n"; 
 
-	// $cured = $i->currentEdit();
+
+	 
+	//  sleep(5);
+	// // // $i->setPublicAccount();
+		// $i->setPrivateAccount();
+	// sleep(10);
+
+	
+ 	
+ // 	$cured = $i->currentEdit();
  //    echo var_export($cured);
 
- //    $phone =  $cured[1]['user']['phone_number'];
- //   	$email =  $cured[1]['user']['email'];
+ //    $phoneparsed =  $cured[1]['user']['phone_number'];
+ //   	$emailparsed =  $cured[1]['user']['email'];
  //   	$first_name =  $cured[1]['user']['full_name'];
 
  //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 	 
 	// sleep(4);
-	// $i->editProfile($GLOBALS["url"], $phone , $GLOBALS["first_name"], $GLOBALS["biography"],"", $GLOBALS["gender"]);
+	// $i->editProfile($GLOBALS["url"], $phoneparsed , $GLOBALS["first_name"], $GLOBALS["biography"], $emailparsed , $GLOBALS["gender"]);
 	// sleep(4);//1 $GLOBALS["email"]
 
 	  
-  	$logined = $proxy." ".$username." ".$password;//." ".$email;
-  	$redis->sadd("successlogin", $logined);	
+ //  	$logined = $proxy." ".$username." ".$password;//." ".$email;
+ //  	$redis->sadd("successlogin", $logined);	
 
-
-	 
-	sleep(5);
-	// $i->setPublicAccount();
-		$i->setPrivateAccount();
-	sleep(5);
- 
 
      $pk = $i->getusernameId();
      funcrecur($i, $username, $pk  ); 
@@ -1398,7 +1328,7 @@ while ( $redis->scard("proxy") > 0 )
 				$ava = false;
 
 			} else {
-				if ($uploadCounter == 2) { break; }
+				if ($uploadCounter == 9) { break; }
 				try {
 					if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
 					{
@@ -1413,7 +1343,7 @@ while ( $redis->scard("proxy") > 0 )
 				        $degrees = $GLOBALS["redis"]->spop($value);
 						echo $degrees;
 				      
-					    $i->uploadPhoto($dir.'/'.$value, null , $degrees);  //$caption
+					    $i->uploadPhoto($dir.'/'.$value, $caption , null , $degrees);  //$
 					    $uploadCounter = $uploadCounter + 1;
 					}
 				} catch (Exception $e) {
@@ -1428,8 +1358,8 @@ while ( $redis->scard("proxy") > 0 )
 		$cured = $i->currentEdit();
 		echo var_export($cured);
 		sleep(4);
-		$i->editProfile($GLOBALS["url"], $GLOBALS["phone"] , $GLOBALS["first_name"], $GLOBALS["biography"], "" , $GLOBALS["gender"]);
-		sleep(4);//$GLOBALS["email"]
+		$i->editProfile($GLOBALS["url"],"", $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"] , $GLOBALS["gender"]);
+		sleep(4);//
 
 		try {
 		    $i->setPrivateAccount();

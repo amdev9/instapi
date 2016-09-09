@@ -595,7 +595,7 @@ public function sendConfirmEmail($email) {
         // imagecopy($final_image, $stamp, imagesx($final_image) - $sx + $marge_right , imagesy($final_image) - $sy , 0, 0, imagesx($stamp), imagesy($stamp));
 
 
-        // imagejpeg($final_image, "result.jpg");
+        imagejpeg($final_image, "result.jpg");
 
         ob_start();
         imagejpeg($final_image);
@@ -610,7 +610,7 @@ public function sendConfirmEmail($email) {
             $fileToUpload = createVideoIcon($photo);
         } else {
             $upload_id = number_format(round(microtime(true) * 1000), 0, '', '');
-             // $fileToUpload = file_get_contents($photo);
+             $fileToUpload = file_get_contents('result.jpg');
         }
 
         $bodies = [
@@ -833,6 +833,85 @@ public function sendConfirmEmail($email) {
         $this->expose();
 
         return $configure;
+    }
+
+     /**
+     * Send direct message to user by inbox.
+     *
+     * @param (array | int) $recipients Users id
+     * @param string        $text       Text message
+     *
+     * @return void
+     */
+    public function direct_message($recipients, $text)
+   {
+        if (!is_array($recipients)) {
+            $recipients = [$recipients];
+        }
+        $string = [];
+        foreach ($recipients as $recipient) {
+            $string[] = "\"$recipient\"";
+        }
+        $recipient_users = implode(',', $string);
+        $endpoint = Constants::API_URL.'direct_v2/threads/broadcast/text/';
+        $boundary = $this->parent->uuid;
+        $bodies = [
+            [
+                'type' => 'form-data',
+                'name' => 'recipient_users',
+                'data' => "[[$recipient_users]]",
+            ],
+            [
+                'type' => 'form-data',
+                'name' => 'client_context',
+                'data' => $this->parent->uuid,
+            ],
+            [
+                'type' => 'form-data',
+                'name' => 'thread_ids',
+                'data' => '["0"]',
+            ],
+            [
+                'type' => 'form-data',
+                'name' => 'text',
+                'data' => is_null($text) ? '' : $text,
+            ],
+        ];
+        $data = $this->buildBody($bodies, $boundary);
+        $headers = [
+                'Proxy-Connection: keep-alive',
+                'Connection: keep-alive',
+                'Accept: */*',
+                'Content-type: multipart/form-data; boundary='.$boundary,
+                'Accept-Language: en-en',
+        ];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, $this->parent->debug);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $this->verifyHost);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->parent->IGDataPath.$this->parent->username.'-cookies.dat');
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->parent->IGDataPath.$this->parent->username.'-cookies.dat');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        if ($this->parent->proxy) {
+            curl_setopt($ch, CURLOPT_PROXY, $this->parent->proxyHost);
+            if ($this->parent->proxyAuth) {
+                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->parent->proxyAuth);
+            }
+        }
+        $resp = curl_exec($ch);
+        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($resp, 0, $header_len);
+        $upload = json_decode(substr($resp, $header_len), true);
+        curl_close($ch);
+
+      
     }
 
     public function direct_share($media_id, $recipients, $text = null)
