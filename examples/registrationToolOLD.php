@@ -174,7 +174,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 {
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 2000;  //27000
+	$posts_per_day = 800;  //27000
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -924,7 +924,7 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id = n
 
 	try {
  
-		$message_recipient = "1009845355"; //4ewir   , "3299015045" array(
+		// $message_recipient = "1009845355"; //4ewir   , "3299015045" array(
 
 		// $answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
   
@@ -996,73 +996,75 @@ if (count($argv) == 6 ) {
 	$i->login();
 	 sleep(15);
 
-	// $filesVideo = scandir($dir);
-	// 	$ava = true;
-	// 	$uploadCounter = 0;
-	// 	$filesVid = shuffle_assoc($filesVideo);
+	$filesVideo = scandir($dir);
+		$ava = false; // switch to true
+		$uploadCounter = 0;
+		$filesVid = shuffle_assoc($filesVideo);
 
-	// 	foreach ( $filesVid as $k => $value ) {
+		foreach ( $filesVid as $k => $value ) {
 
-	// 	    $ext = pathinfo($value, PATHINFO_EXTENSION);
-	// 	    if ($ext == "mp4") { 
-	// 			try {
-	// 			    $i->uploadVideo($dir.'/'.$value, $caption);  
-	// 			} catch (Exception $e) {
-	// 			    echo $e->getMessage();
-	// 			}
+		    $ext = pathinfo($value, PATHINFO_EXTENSION);
+		    if ($ext == "mp4") { 
+				try {
+				    $i->uploadVideo($dir.'/'.$value, $caption);  
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
 
-	// 			sleep(10);
-	// 	    }
-	// 	    elseif ($ext == "jpg" && $ava == true ) {
+				sleep(10);
+		    }
+		    elseif ($ext == "jpg" && $ava == true ) {
 
-	// 	    	try {
-	// 	    		if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
-	// 				{
+		    	try {
+		    		if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+					{
 						
-	// 					if ($GLOBALS["redis"]->scard($value) == 0 ) {
-	// 					     $GLOBALS["redis"]->sadd('picked', $value);
-	// 					    foreach (range(-12, 12) as $number) {
-	// 					        if ($number != 0)
-	// 					            $GLOBALS["redis"]->sadd($value, $number);
-	// 					    }
-	// 					}
-	// 					$degrees = $GLOBALS["redis"]->spop($value);
-	// 			        echo $degrees;
-	// 			    	$i->changeProfilePicture($dir.'/'.$value, $degrees);
-	// 				}
-	// 			} catch (Exception $e) {
-	// 			    echo $e->getMessage();
-	// 			}
-	// 			sleep(10);
-	// 			$ava = false;
+						if ($GLOBALS["redis"]->scard($value) == 0 ) {
+						     $GLOBALS["redis"]->sadd('picked', $value);
+						    foreach (range(-12, 12) as $number) {
+						        if ($number != 0)
+						            $GLOBALS["redis"]->sadd($value, $number);
+						    }
+						}
+						$degrees = $GLOBALS["redis"]->spop($value);
+				        echo $degrees;
+				    	$i->changeProfilePicture($dir.'/'.$value, $degrees);
+					}
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+				sleep(10);
+				$ava = false;
 
-	// 		} else {
-	// 			if ($uploadCounter == 6) { break; }
-	// 			try {
-	// 				if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
-	// 				{
+			} else {
+				if ($uploadCounter == 1) { break; } //6
+				try {
+					if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+					{
 						
-	// 					if ($GLOBALS["redis"]->scard($value) == 0 ) {
-	// 					     $GLOBALS["redis"]->sadd('picked', $value);
-	// 					    foreach (range(-12, 12) as $number) {
-	// 					        if ($number != 0)
-	// 					            $GLOBALS["redis"]->sadd($value, $number);
-	// 					    }
-	// 					}
-	// 			        $degrees = $GLOBALS["redis"]->spop($value);
-	// 					echo $degrees;
+						if ($GLOBALS["redis"]->scard($value) == 0 ) {
+						     $GLOBALS["redis"]->sadd('picked', $value);
+						    foreach (range(-12, 12) as $number) {
+						        if ($number != 0)
+						            $GLOBALS["redis"]->sadd($value, $number);
+						    }
+						}
+				        $degrees = $GLOBALS["redis"]->spop($value);
+						echo $degrees;
 				      
-	// 				    $i->uploadPhoto($dir.'/'.$value, "", null, $degrees);  //caption
-	// 				    $uploadCounter = $uploadCounter + 1;
-	// 				}
-	// 			} catch (Exception $e) {
-	// 			    echo $e->getMessage();
-	// 			}
-	// 			sleep(30);
-	// 	    }
-	// 	}
+					    $i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees);   
+					    
 
-	// 	echo "video and photo downloaded!\n"; 
+					    $uploadCounter = $uploadCounter + 1;
+					}
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+				sleep(30);
+		    }
+		}
+
+		echo "video and photo downloaded!\n"; 
 
 
 	 
@@ -1344,7 +1346,8 @@ while ( $redis->scard("proxy") > 0 )
 				        $degrees = $GLOBALS["redis"]->spop($value);
 						echo $degrees;
 				      
-					    $i->uploadPhoto($dir.'/'.$value, $caption , null , $degrees);  //$
+					 	$i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
+
 					    $uploadCounter = $uploadCounter + 1;
 					}
 				} catch (Exception $e) {

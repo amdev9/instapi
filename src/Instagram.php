@@ -486,53 +486,9 @@ public function sendConfirmEmail($email) {
      * @return array
      *               Upload data
      */
-    public function uploadPhoto($photo, $caption = null, $upload_id = null, $degrees = 0)
+    public function uploadPhoto($photo, $caption = null, $upload_id = null,  $customPreview = null, $location = null, $reel_flag = false,  $degrees = 0)
+    
     {
-
-        ////
-        // $_prefix = 'IMG';
-        // $image = $photo;
-        // $output = 'output.jpg';
-        // $_image = $image;
-        // list($_width, $_height) = getimagesize($image);
-        // $_output = $output;
-        // $_tmp = $_prefix.rand();
-        // copy($_image, $_tmp);
-        // $colors_list = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2' ,'3','4', '5', '6', '7', '9'];
-        // $fe_list = ['F', 'E'];
-        // $firstcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
-        // $secondcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
-        // $thirdcol = $colors_list[mt_rand(0, count($colors_list) - 1)]; 
-        // $fe1 = $fe_list[mt_rand(0, count($fe_list) - 1)];
-        // $fe2 = $fe_list[mt_rand(0, count($fe_list) - 1)];
-        // $fe3 = $fe_list[mt_rand(0, count($fe_list) - 1)];
-        // $color  = '#'.$fe1.$firstcol.$fe2.$secondcol.$fe3.$thirdcol; // F or E
-        // echo  $color;
-        // $input = $_tmp;
-        // $width = 1;
-        // $command = "convert $input -bordercolor $color -border {$width}x{$width} $input";
-        // $command = str_replace(array("\n", "'"), array('', '"'), $command);
-        // $command = escapeshellcmd($command);
-        // exec($command);
-        // rename($_tmp, $_output);
-        ///NEED TEST
-        // $fileToUpload1 = imagecreatefromjpeg($photo);
-        // $imgdata = getimagesize($photo);
-        // $width = $imgdata[0];
-        // $height = $imgdata[1];
-        // $pix_w=mt_rand(20, $width - 10);
-        // $pix_h=mt_rand(20, $height - 10);
-        // // echo $pix_w." ".$pix_h;
-        // $rgb = imagecolorallocate($fileToUpload1, 255, 0, 0); 
-        // // $rgb = imagecolorat($fileToUpload1, $pix_w-10,$pix_h-10);
-        // // $red = imagecolorallocate($gd, 255, 0, 0); 
-        // imagesetpixel($fileToUpload1, $pix_w , $pix_h, $rgb);
-        // ob_start();
-        // imagejpeg($fileToUpload1);
-        // $fileToUpload =  ob_get_contents();
-        // ob_end_clean();
-        // ////
-
   
         $rotate = imagecreatefromjpeg($photo);
         $square_size = imagesx($rotate); //960 
@@ -602,13 +558,16 @@ public function sendConfirmEmail($email) {
         $fileToUpload =  ob_get_contents();
         ob_end_clean();
 
-//////
+ 
         $endpoint = Constants::API_URL.'upload/photo/';
         $boundary = $this->uuid;
 
         if (!is_null($upload_id)) {
             $fileToUpload = createVideoIcon($photo);
-        } else {
+        } elseif (!is_null($customPreview)) {
+            $fileToUpload = file_get_contents($customPreview);
+        }
+        else {
             $upload_id = number_format(round(microtime(true) * 1000), 0, '', '');
              $fileToUpload = file_get_contents('result.jpg');
         }
@@ -693,7 +652,17 @@ public function sendConfirmEmail($email) {
             echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
         }
 
-        $configure = $this->configure($upload['upload_id'], $photo, $caption);
+
+        if ($reel_flag) {
+            $configure = $this->configureToReel($upload['upload_id'], $photo);
+        } else {
+             $configure = $this->configure($upload['upload_id'], $photo, $caption);
+            // $configure = $this->parent->configure($upload->getUploadId(), $photo, $caption, $location);
+        }
+
+
+
+       
         $this->expose();
 
         return $configure;
@@ -1095,16 +1064,18 @@ public function sendConfirmEmail($email) {
         return $this->request('media/configure/?video=1', $this->generateSignature($post))[1];
     }
 
-    protected function configure($upload_id, $photo, $caption = '')
+    protected function configure($upload_id, $photo, $caption = '', $location = null)
     {
+
+        $caption = is_null($caption) ? '' : $caption;
         $size = getimagesize($photo)[0];
 
         $post = json_encode([
         'upload_id'          => $upload_id,
-        'camera_model'       => 'HM1S',
+        'camera_model'       => 'HM1S',     //model
         'source_type'        => 3,
         'date_time_original' => date('Y:m:d H:i:s'),
-        'camera_make'        => 'XIAOMI',
+        'camera_make'        => 'XIAOMI',  //manufacturer
         'edits'              => [
           'crop_original_size' => [$size, $size],
           'crop_zoom'          => 1.3333334,
@@ -1126,10 +1097,70 @@ public function sendConfirmEmail($email) {
         'caption'     => $caption,
      ]);
 
+     if (!is_null($location))
+     {
+         $loc = [
+             $location->getExternalIdSource() .'_id' => $location->getExternalId(),
+             'name' => $location->getName(),
+             'lat'  => $location->getLatitude(),
+             'lng'  => $location->getLongitude(),
+             'address'  => $location->getAddress(),
+             'external_source'  => $location->getExternalIdSource(),
+         ];
+         $post['location'] = json_encode($loc);
+         $post['geotag_enabled'] = true;
+         $post['media_latitude'] = $location->getLatitude();
+         $post['posting_latitude'] = $location->getLatitude();
+         $post['media_longitude'] = $location->getLongitude();
+         $post['posting_longitude'] = $location->getLongitude();
+         $post['altitude'] = mt_rand(10, 800);
+    }
+    
         $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,-0.0]', $post);
 
         return $this->request('media/configure/', $this->generateSignature($post))[1];
     }
+
+
+
+    public function configureToReel($upload_id, $photo)
+    {
+        $size = getimagesize($photo)[0];
+        $post = json_encode([
+          'upload_id'          => $upload_id,
+          'source_type'        => 3,
+          'edits'              => [
+              'crop_original_size' => [$size, $size],
+              'crop_zoom'          => 1.3333334,
+              'crop_center'        => [0.0, 0.0],
+          ],
+          'extra' => [
+              'source_width'  => $size,
+              'source_height' => $size,
+          ],
+          'device' => [
+            'manufacturer'    => 'Xiaomi',
+            'model'           => 'HM 1SW',
+            'android_version' => 18,
+            'android_release' => '4.3',
+          ],
+
+          '_csrftoken'  => $this->token,
+          '_uuid'       => $this->uuid,
+          '_uid'        => $this->username_id,
+      ]);
+
+         // 'manufacturer'    => //$this->settings->get('manufacturer'),
+              // 'model'           => //$this->settings->get('model'),
+              // 'android_version' => //Constants::ANDROID_VERSION,
+              // 'android_release' => //Constants::ANDROID_RELEASE,
+        
+        $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,0.0]', $post);
+        
+        return $this->request('media/configure_to_reel/', $this->generateSignature($post))[1];
+
+    }
+
 
   /**
    * Edit media.
