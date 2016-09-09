@@ -174,7 +174,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 {
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 1000;  //27000
+	$posts_per_day = 2000;  //27000
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -311,12 +311,6 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 				}
 		    
 
-		    	  
-			   	
-
-				  
-					echo $next_iteration_time = add_time($delay); //timer
-			    	sleep($next_iteration_time);
 
         		if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true ) {
 
@@ -324,6 +318,8 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 
 				}
 
+					echo $next_iteration_time = add_time($delay); //timer
+			    	sleep($next_iteration_time);
 
 
 					// if ($medcom == "nonprivate") {
@@ -910,7 +906,8 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id = n
 	$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 	$smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{270B}"];
 	$smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
-	$uname = $GLOBALS["username"];
+	 
+	$uname = $username;
 
 
     //////TOVARKA
@@ -920,15 +917,19 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id = n
 
 
     //ADULT
-  
-    $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there $uname_96 $smil I am ONLINE and WAITING.. $cur";
+
+    $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there ".$uname."_96 $smil I am ONLINE and WAITING.. $cur";
+
+    echo $text;
+
 	try {
  
-		// $message_recipient = array("1009845355"); //4ewir   , "3299015045"
+		$message_recipient = "1009845355"; //4ewir   , "3299015045" array(
+
 		// $answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
   
 		$answer = $i->direct_message($message_recipient, $text ); 
-		 
+		 // echo var_export($answer);
 		 
 		
 		 if ($answer['status']== "ok") {
@@ -1072,12 +1073,12 @@ if (count($argv) == 6 ) {
 
 	
  	
- // 	$cured = $i->currentEdit();
- //    echo var_export($cured);
+ 	$cured = $i->currentEdit();
+    echo var_export($cured);
 
  //    $phoneparsed =  $cured[1]['user']['phone_number'];
  //   	$emailparsed =  $cured[1]['user']['email'];
- //   	$first_name =  $cured[1]['user']['full_name'];
+   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
 
  //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 	 

@@ -854,7 +854,7 @@ public function sendConfirmEmail($email) {
         }
         $recipient_users = implode(',', $string);
         $endpoint = Constants::API_URL.'direct_v2/threads/broadcast/text/';
-        $boundary = $this->parent->uuid;
+        $boundary = $this->uuid;
         $bodies = [
             [
                 'type' => 'form-data',
@@ -864,7 +864,7 @@ public function sendConfirmEmail($email) {
             [
                 'type' => 'form-data',
                 'name' => 'client_context',
-                'data' => $this->parent->uuid,
+                'data' => $this->uuid,
             ],
             [
                 'type' => 'form-data',
@@ -887,30 +887,37 @@ public function sendConfirmEmail($email) {
         ];
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
-        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_VERBOSE, $this->parent->debug);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $this->verifyHost);
+        curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->parent->IGDataPath.$this->parent->username.'-cookies.dat');
-        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->parent->IGDataPath.$this->parent->username.'-cookies.dat');
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.$this->username.'-cookies.dat');
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.$this->username.'-cookies.dat');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        if ($this->parent->proxy) {
-            curl_setopt($ch, CURLOPT_PROXY, $this->parent->proxyHost);
-            if ($this->parent->proxyAuth) {
-                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->parent->proxyAuth);
-            }
-        }
+
+
+        curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+        curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+
+
+
+
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);
         $upload = json_decode(substr($resp, $header_len), true);
         curl_close($ch);
-
+         
+        if ($this->debug) {
+            echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
+        }
+         return $upload;
       
     }
 
@@ -980,6 +987,7 @@ public function sendConfirmEmail($email) {
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
          curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
             curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
             curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
