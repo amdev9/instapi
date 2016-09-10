@@ -976,7 +976,7 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id = n
 if (count($argv) == 6 ) {
 
 
-	$debug = true; 
+	$debug = false; 
 
 	$userstring = $redis->spop("tologin");
 	$userarray = explode ( " ", $userstring  ) ; 
@@ -1106,7 +1106,7 @@ if (count($argv) == 6 ) {
 
 
 /// DEBUG MODE ///
-$debug = true; 
+$debug = false; 
 
 $password = $argv[1]; 
 $email= $argv[2]; 
