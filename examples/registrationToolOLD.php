@@ -174,7 +174,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 {
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 800;  //27000
+	$posts_per_day = 1000;  //27000
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -312,11 +312,11 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 		    
 
 
-        		if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true ) {
+    //     		if ($GLOBALS["redis"]->sismember("disabled", "direct_".$usernamelink) != true ) {
 
-        			functiondirectshare($usernamelink, $ilink, $actioner );//,$ad_media_id
+    //     			functiondirectshare($usernamelink, $ilink, $actioner );//,$ad_media_id
 
-				}
+				// }
 
 					echo $next_iteration_time = add_time($delay); //timer
 			    	sleep($next_iteration_time);
@@ -375,36 +375,36 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 	/// MASS FOLLOW		//// 
-				// if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 600!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 600!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					
-				// 	$fres = $ilink->follow($actioner);
-				// 	if ($fres[1]['status'] == 'ok') {
-				// 	 	$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
-				// 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
-				// 	 	$ilink->login(true);
-				// 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
-				// 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $fres[1]['checkpoint_url']);
-				//         echo "\nVerification code sent! >>>>>\n";
-		 	// 		 	// $resp_code = trim(fgets(STDIN));
-    //                     $resp_code = "";
-		 	// 		    while( ctype_digit($resp_code) != true) {
-				// 		 	// $line = readline("Command: ");
-				// 		  	$resp_code = readline("Command: ");
-				// 		}
-				// 		echo "\n---->".$resp_code;
-				// 		$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
-				// 		echo var_export($results);
-				// 	}
-				// 	else {
-				// 			 			echo var_export($fres);
+					$fres = $ilink->follow($actioner);
+					if ($fres[1]['status'] == 'ok') {
+					 	$GLOBALS["redis"]->sadd("followed".$usernamelink, $actioner);
+					} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
+					 	$ilink->login(true);
+					} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
+						$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $fres[1]['checkpoint_url']);
+				        echo "\nVerification code sent! >>>>>\n";
+		 			 	// $resp_code = trim(fgets(STDIN));
+                        $resp_code = "";
+		 			    while( ctype_digit($resp_code) != true) {
+						 	// $line = readline("Command: ");
+						  	$resp_code = readline("Command: ");
+						}
+						echo "\n---->".$resp_code;
+						$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
+						echo var_export($results);
+					}
+					else {
+							 			echo var_export($fres);
 
-				// 	}
-				// 	echo var_export($fres);
+					}
+					echo var_export($fres);
 
-				// 	}
-				// 	else {
-				// 		 return;
-				// 	}		
+					}
+					else {
+						 return;
+					}		
 
 
 	}
@@ -997,7 +997,7 @@ if (count($argv) == 6 ) {
 	 sleep(15);
 
 	$filesVideo = scandir($dir);
-		$ava = false; // switch to true
+		$ava = true; // switch to true
 		$uploadCounter = 0;
 		$filesVid = shuffle_assoc($filesVideo);
 
@@ -1068,29 +1068,31 @@ if (count($argv) == 6 ) {
 
 
 	 
-	//  sleep(5);
-	// // // $i->setPublicAccount();
-		// $i->setPrivateAccount();
+	 sleep(5);
+	// // $i->setPublicAccount();
+	
+	$i->setPrivateAccount();
+	
 	// sleep(10);
 
 	
  	
- 	$cured = $i->currentEdit();
-    echo var_export($cured);
+ // 	$cured = $i->currentEdit();
+ //    echo var_export($cured);
 
  //    $phoneparsed =  $cured[1]['user']['phone_number'];
  //   	$emailparsed =  $cured[1]['user']['email'];
-   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
+ //   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
 
  //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 	 
 	// sleep(4);
 	// $i->editProfile($GLOBALS["url"], $phoneparsed , $GLOBALS["first_name"], $GLOBALS["biography"], $emailparsed , $GLOBALS["gender"]);
-	// sleep(4);//1 $GLOBALS["email"]
+	// sleep(4);
 
 	  
- //  	$logined = $proxy." ".$username." ".$password;//." ".$email;
- //  	$redis->sadd("successlogin", $logined);	
+  	$logined = $proxy." ".$username." ".$password;//." ".$email;
+  	$redis->sadd("successlogin", $logined);	
 
 
      $pk = $i->getusernameId();
@@ -1331,7 +1333,7 @@ while ( $redis->scard("proxy") > 0 )
 				$ava = false;
 
 			} else {
-				if ($uploadCounter == 9) { break; }
+				if ($uploadCounter == 1) { break; }
 				try {
 					if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
 					{
@@ -1346,7 +1348,7 @@ while ( $redis->scard("proxy") > 0 )
 				        $degrees = $GLOBALS["redis"]->spop($value);
 						echo $degrees;
 				      
-					 	$i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
+					 	$i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees);   
 
 					    $uploadCounter = $uploadCounter + 1;
 					}
@@ -1362,7 +1364,8 @@ while ( $redis->scard("proxy") > 0 )
 		$cured = $i->currentEdit();
 		echo var_export($cured);
 		sleep(4);
-		$i->editProfile($GLOBALS["url"],"", $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"] , $GLOBALS["gender"]);
+		$i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], "" , $GLOBALS["gender"]);
+
 		sleep(4);//
 
 		try {

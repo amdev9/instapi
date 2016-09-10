@@ -1150,11 +1150,6 @@ public function sendConfirmEmail($email) {
           '_uid'        => $this->username_id,
       ]);
 
-         // 'manufacturer'    => //$this->settings->get('manufacturer'),
-              // 'model'           => //$this->settings->get('model'),
-              // 'android_version' => //Constants::ANDROID_VERSION,
-              // 'android_release' => //Constants::ANDROID_RELEASE,
-
         $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,0.0]', $post);
         
         return $this->request('media/configure_to_reel/', $this->generateSignature($post))[1];
