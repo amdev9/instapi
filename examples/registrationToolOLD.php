@@ -2,9 +2,13 @@
 
  
 
-$romerINSTAPI = '/Users/alex/dev/instapi/';
-$romerPREDIS = '/Users/alex/dev/redis/predis/';
-$romerINSTA = '/Users/alex/dev/insta/';
+$romerINSTAPI = '/root/instapi/';
+$romerPREDIS = '/root/redis/predis/';
+$romerINSTA = '/root/insta/';
+
+// $romerINSTAPI = '/Users/alex/dev/instapi/';
+// $romerPREDIS = '/Users/alex/dev/redis/predis/';
+// $romerINSTA = '/Users/alex/dev/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -1069,26 +1073,26 @@ if (count($argv) == 6 ) {
 
 	 
 	 sleep(5);
-	// // $i->setPublicAccount();
+	// $i->setPublicAccount();
 	
 	$i->setPrivateAccount();
 	
-	// sleep(10);
+	sleep(10);
 
 	
  	
- // 	$cured = $i->currentEdit();
- //    echo var_export($cured);
+ 	$cured = $i->currentEdit();
+    echo var_export($cured);
 
- //    $phoneparsed =  $cured[1]['user']['phone_number'];
- //   	$emailparsed =  $cured[1]['user']['email'];
- //   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
+    $phoneparsed =  $cured[1]['user']['phone_number'];
+   	$emailparsed =  $cured[1]['user']['email'];
+   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
 
- //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
+    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 	 
-	// sleep(4);
-	// $i->editProfile($GLOBALS["url"], $phoneparsed , $GLOBALS["first_name"], $GLOBALS["biography"], $emailparsed , $GLOBALS["gender"]);
-	// sleep(4);
+	sleep(4);
+	$i->editProfile($GLOBALS["url"], $phoneparsed , $GLOBALS["first_name"], $GLOBALS["biography"], $emailparsed , $GLOBALS["gender"]);
+	sleep(4);
 
 	  
   	$logined = $proxy." ".$username." ".$password;//." ".$email;
