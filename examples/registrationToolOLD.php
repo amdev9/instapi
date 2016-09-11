@@ -2,13 +2,13 @@
 
  
 
-$romerINSTAPI = '/root/instapi/';
-$romerPREDIS = '/root/redis/predis/';
-$romerINSTA = '/root/insta/';
+// $romerINSTAPI = '/root/instapi/';
+// $romerPREDIS = '/root/redis/predis/';
+// $romerINSTA = '/root/insta/';
 
-// $romerINSTAPI = '/Users/alex/dev/instapi/';
-// $romerPREDIS = '/Users/alex/dev/redis/predis/';
-// $romerINSTA = '/Users/alex/dev/insta/';
+$romerINSTAPI = '/Users/alex/dev/instapi/';
+$romerPREDIS = '/Users/alex/dev/redis/predis/';
+$romerINSTA = '/Users/alex/dev/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -1119,22 +1119,27 @@ $gender = 2;
 $dir = $romerINSTAPI.'src/adult/';
  
 $phone = $argv[7];
-$proxy = "";
+$proxy = null; 
 $username = "";
 $qs_stamp = "";
 
  
 
-while ( $redis->scard("proxy") > 0 ) 
+while ( $redis->scard("proxy") > 0 || $proxy == null) 
 {
   	
 	// SDIFF "used_proxy" "black_proxy" used_proxy - black_proxy
 	// SDIFFSTORE "proxy" "used_proxy" "black_proxy"
+
+	if ($proxy != null) {
 	$prox =  $redis->spop("proxy");	
  	echo "\n******************------------>".$prox."<------------*********************\n";
     // $prox[$p]."<-------------------------*********************\n";
 	
 	$redis->sadd("used_proxy", $prox);
+	} else {
+		$prox = null;
+	}
 
 	$r = new InstagramRegistration($prox, $debug);
 	 
@@ -1153,11 +1158,11 @@ while ( $redis->scard("proxy") > 0 )
 
 	
 
-	// $check = $r->checkEmail($email);
- //    if (isset($check[1]['available']) && $check[1]['available'] == false) {
- //    	$redis->sadd("blacklist_email",  $email);
-	//     break;
-	// }     
+	$check = $r->checkEmail($email);
+    if (isset($check[1]['available']) && $check[1]['available'] == false) {
+    	$redis->sadd("blacklist_email",  $email);
+	    break;
+	}     
 
 
 	$outputs = $r->fetchHeaders();
@@ -1186,29 +1191,29 @@ while ( $redis->scard("proxy") > 0 )
 	}	
 	 
  
-	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
-	echo var_export($sres);
-	 echo "\nVerification code sent! >>>>>\n";
-	 //add code for sms service
-     	 // while ($redis->scard("code") < 1) {
-     	 // 		sleep(3);
-     	 // 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
-     	 // }
-     	 // $cod = $redis->spop("code");
-     	 $cod = readline("Command: ");
-     	 echo "\n".$cod."\n";
+	// $sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
+	// echo var_export($sres);
+	//  echo "\nVerification code sent! >>>>>\n";
+	//  //add code for sms service
+ //     	 // while ($redis->scard("code") < 1) {
+ //     	 // 		sleep(3);
+ //     	 // 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
+ //     	 // }
+ //     	 // $cod = $redis->spop("code");
+ //     	 $cod = readline("Command: ");
+ //     	 echo "\n".$cod."\n";
      	 
  
-	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
-	 echo var_export($sval);
+	//  $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
+	//  echo var_export($sval);
       
    
-	 
-	 
+	  
     $sugger = $r->usernameSuggestions($email,$first_name );
    	$GLOBALS["username"] = $sugger[1]['suggestions'][0];
 	$GLOBALS["first_name"] = $first_name;
 
+	 
 
 	 
  //    while ( $redis->scard("names") > 0 ) {  
@@ -1226,8 +1231,8 @@ while ( $redis->scard("proxy") > 0 )
 	 
 
  
-	// $result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
-	 $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
+	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
+	 // $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
 
 
 	$resToPrint =  var_export($result);

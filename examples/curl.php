@@ -4,92 +4,92 @@
 
 // $im = imagecreatefromjpeg('2.jpg');
 
-$degrees = 10;
-$rotate = imagecreatefromjpeg('2.jpg');
+// $degrees = 10;
+// $rotate = imagecreatefromjpeg('2.jpg');
 
-        $square_size = imagesx($rotate); //960 
+//         $square_size = imagesx($rotate); //960 
 
-        $original_width = imagesx($rotate); 
-        $original_height = imagesy($rotate);
-        if($original_width > $original_height){
-            $new_height = $square_size;
-            $new_width = $new_height*($original_width/$original_height);
-        }
-        if($original_height > $original_width){
-            $new_width = $square_size;
-            $new_height = $new_width*($original_height/$original_width);
-        }
-        if($original_height == $original_width){
-            $new_width = $square_size;
-            $new_height = $square_size;
-        }
+//         $original_width = imagesx($rotate); 
+//         $original_height = imagesy($rotate);
+//         if($original_width > $original_height){
+//             $new_height = $square_size;
+//             $new_width = $new_height*($original_width/$original_height);
+//         }
+//         if($original_height > $original_width){
+//             $new_width = $square_size;
+//             $new_height = $new_width*($original_height/$original_width);
+//         }
+//         if($original_height == $original_width){
+//             $new_width = $square_size;
+//             $new_height = $square_size;
+//         }
 
-        $new_width = round($new_width);
-        $new_height = round($new_height);
+//         $new_width = round($new_width);
+//         $new_height = round($new_height);
 
-        $smaller_image = imagecreatetruecolor($new_width, $new_height);
-        $square_image = imagecreatetruecolor($square_size, $square_size);
+//         $smaller_image = imagecreatetruecolor($new_width, $new_height);
+//         $square_image = imagecreatetruecolor($square_size, $square_size);
 
-        imagecopyresampled($smaller_image, $rotate, 0, 0, 0, 0, $new_width, $new_height, $original_width, $original_height);
+//         imagecopyresampled($smaller_image, $rotate, 0, 0, 0, 0, $new_width, $new_height, $original_width, $original_height);
 
-        if($new_width>$new_height){
-            $difference = $new_width-$new_height;
-            $half_difference =  round($difference/2);
-            imagecopyresampled($square_image, $smaller_image, 0-$half_difference+1, 0, 0, 0, $square_size+$difference, $square_size, $new_width, $new_height);
-        }
-        if($new_height>$new_width){
-            $difference = $new_height-$new_width;
-            $half_difference =  round($difference/2);
-            imagecopyresampled($square_image, $smaller_image, 0, 0-$half_difference+1, 0, 0, $square_size, $square_size+$difference, $new_width, $new_height);
-        }
-        if($new_height == $new_width){
-            imagecopyresampled($square_image, $smaller_image, 0, 0, 0, 0, $square_size, $square_size, $new_width, $new_height);
-        }
+//         if($new_width>$new_height){
+//             $difference = $new_width-$new_height;
+//             $half_difference =  round($difference/2);
+//             imagecopyresampled($square_image, $smaller_image, 0-$half_difference+1, 0, 0, 0, $square_size+$difference, $square_size, $new_width, $new_height);
+//         }
+//         if($new_height>$new_width){
+//             $difference = $new_height-$new_width;
+//             $half_difference =  round($difference/2);
+//             imagecopyresampled($square_image, $smaller_image, 0, 0-$half_difference+1, 0, 0, $square_size, $square_size+$difference, $new_width, $new_height);
+//         }
+//         if($new_height == $new_width){
+//             imagecopyresampled($square_image, $smaller_image, 0, 0, 0, 0, $square_size, $square_size, $new_width, $new_height);
+//         }
 
          
-        $square_image = imagerotate($square_image, $degrees, 0);
+//         $square_image = imagerotate($square_image, $degrees, 0);
 
-        $rotated_size = imagesx($square_image);
-        $enlargement_coeff = ($rotated_size - $square_size) * 1.807;
-        $enlarged_size = round($rotated_size + $enlargement_coeff);
-        $enlarged_image = imagecreatetruecolor($enlarged_size, $enlarged_size);
-        $final_image = imagecreatetruecolor($square_size, $square_size);
+//         $rotated_size = imagesx($square_image);
+//         $enlargement_coeff = ($rotated_size - $square_size) * 1.807;
+//         $enlarged_size = round($rotated_size + $enlargement_coeff);
+//         $enlarged_image = imagecreatetruecolor($enlarged_size, $enlarged_size);
+//         $final_image = imagecreatetruecolor($square_size, $square_size);
 
-        imagecopyresampled($enlarged_image, $square_image, 0, 0, 0, 0, $enlarged_size, $enlarged_size, $rotated_size, $rotated_size);
-        imagecopyresampled($final_image, $enlarged_image, 0, 0, round($enlarged_size / 2) - ($square_size / 2), round($enlarged_size / 2) - ($square_size / 2), $square_size, $square_size, $square_size, $square_size);
-
-
+//         imagecopyresampled($enlarged_image, $square_image, 0, 0, 0, 0, $enlarged_size, $enlarged_size, $rotated_size, $rotated_size);
+//         imagecopyresampled($final_image, $enlarged_image, 0, 0, round($enlarged_size / 2) - ($square_size / 2), round($enlarged_size / 2) - ($square_size / 2), $square_size, $square_size, $square_size, $square_size);
 
 
 
-// Установка полей для штампа и получение высоты/ширины штампа
-// $marge_right = 10;
-// $marge_bottom = 10;
 
 
-$stamp = imagecreatefrompng('stamp2.png');
-$sx = imagesx($stamp);
-$sy = imagesy($stamp);
-$marge_right = 30;
-imagecopy($final_image, $stamp, imagesx($final_image) - $sx + $marge_right , imagesy($final_image) - $sy , 0, 0, imagesx($stamp), imagesy($stamp));
+// // Установка полей для штампа и получение высоты/ширины штампа
+// // $marge_right = 10;
+// // $marge_bottom = 10;
 
 
-// Копирование изображения штампа на фотографию с помощью смещения края
-// и ширины фотографии для расчета позиционирования штампа. 
-
-//- $marge_bottom
-//
-// Вывод и освобождение памяти
-// header('Content-type: image/png');
-imagejpeg($final_image, "result.jpg");
-imagedestroy($final_image);
+// $stamp = imagecreatefrompng('stamp2.png');
+// $sx = imagesx($stamp);
+// $sy = imagesy($stamp);
+// $marge_right = 30;
+// imagecopy($final_image, $stamp, imagesx($final_image) - $sx + $marge_right , imagesy($final_image) - $sy , 0, 0, imagesx($stamp), imagesy($stamp));
 
 
+// // Копирование изображения штампа на фотографию с помощью смещения края
+// // и ширины фотографии для расчета позиционирования штампа. 
 
-// echo time()."\n";
-// echo md5(microtime())."\n";
+// //- $marge_bottom
+// //
+// // Вывод и освобождение памяти
+// // header('Content-type: image/png');
+// imagejpeg($final_image, "result.jpg");
+// imagedestroy($final_image);
 
 
+
+echo time()."\n";
+echo md5(microtime())."\n";
+
+echo '97f2065bab894294ae8dcf8f2a6fcbe8';
 // $a= base64_encode(microtime());
 
 //   // openssl_random_pseudo_bytes(19));
@@ -106,10 +106,10 @@ imagedestroy($final_image);
 // echo openssl_random_pseudo_bytes(8)."\n";
 //  echo bin2hex(openssl_random_pseudo_bytes(8));
  
-// explode(" ", // 
-  // $password = explode(" ",$redis->spop("tologin"))[1]  ;  
+ 
+//   $password = explode(" ",$redis->spop("tologin"))[1]  ;  
 
-  // echo var_export($userarray);
+//   echo var_export($userarray);
 // echo  $password;
 
 // function shuffle_assoc($list) { 
