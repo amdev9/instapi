@@ -977,7 +977,7 @@ if (count($argv) == 6 ) {
 
 
 	$debug = false; 
-
+	$proxy = null;
 	$userstring = $redis->spop("tologin");
 	$userarray = explode ( " ", $userstring  ) ; 
 	$username =  $userarray[0];
@@ -992,8 +992,11 @@ if (count($argv) == 6 ) {
 	 
 	$dir = $romerINSTAPI.'src/adult/';
 
-	 
-	$proxy =  $redis->spop("proxy");	
+	if ($proxy != null) {
+		$proxy =  $redis->spop("proxy");	
+	} else {
+		$proxy = null;
+	}
 
 	$i = new Instagram($username, $password, $proxy, $debug );
 
@@ -1001,7 +1004,7 @@ if (count($argv) == 6 ) {
 	 sleep(15);
 
 	$filesVideo = scandir($dir);
-		$ava = true; // switch to true
+		$ava = false; // switch to true
 		$uploadCounter = 0;
 		$filesVid = shuffle_assoc($filesVideo);
 
@@ -1056,7 +1059,7 @@ if (count($argv) == 6 ) {
 				        $degrees = $GLOBALS["redis"]->spop($value);
 						echo $degrees;
 				      
-					    $i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees);   
+					    $i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
 					    
 
 					    $uploadCounter = $uploadCounter + 1;
@@ -1075,24 +1078,23 @@ if (count($argv) == 6 ) {
 	 sleep(5);
 	// $i->setPublicAccount();
 	
-	$i->setPrivateAccount();
+	// $i->setPrivateAccount();
 	
-	sleep(10);
+	// sleep(10);
 
 	
- 	
- // 	$cured = $i->currentEdit();
- //    echo var_export($cured);
+ 	$cured = $i->currentEdit();
+    echo var_export($cured);
 
- //    $phoneparsed =  $cured[1]['user']['phone_number'];
- //   	$emailparsed =  $cured[1]['user']['email'];
- //   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
+    $phoneparsed =  $cured[1]['user']['phone_number'];
+   	$emailparsed =  $cured[1]['user']['email'];
+   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
 
- //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
+    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 	 
-	// sleep(4);
-	// $i->editProfile($GLOBALS["url"], $phoneparsed , $GLOBALS["first_name"], $GLOBALS["biography"], $emailparsed , $GLOBALS["gender"]);
-	// sleep(4);
+	sleep(4);
+	$i->editProfile($GLOBALS["url"], $phoneparsed , $GLOBALS["first_name"], $GLOBALS["biography"], $emailparsed , $GLOBALS["gender"]);
+	sleep(4);
 
 	  
   	$logined = $proxy." ".$username." ".$password;//." ".$email;
@@ -1273,7 +1275,11 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 		 
 		$registered = $proxy." ".$username." ".$email." ".$password." ".$first_name;
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
+
+
          $caption = str_replace( "_username" , explode(" ",$first_name)[0]  ,  $caption );  
+         $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
+
 
      	$redis->sadd("registered", $registered);
      	$redis->sadd("blacklist_email",  $email);
@@ -1289,8 +1295,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
      	 //  echo var_export($versms);
 
 		  
-		 $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
-
+		
 
 		// try {
 		//    $prres =  $i->setPrivateAccount();
@@ -1370,12 +1375,12 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 
 		echo "video and photo downloaded!\n";
 
-		$cured = $i->currentEdit();
-		echo var_export($cured);
-		sleep(4);
-		$i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], "" , $GLOBALS["gender"]);
+		// $cured = $i->currentEdit();
+		// echo var_export($cured);
+		// sleep(4);
+		// $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"] , $GLOBALS["gender"]);
 
-		sleep(4);//
+		sleep(4); 
 
 		try {
 		    $i->setPrivateAccount();

@@ -34,7 +34,7 @@ class Instagram
    *  Default folder to store data, you can change it.
    */
 
-  public function __construct($username, $password, $proxy ,  $debug = false, $IGDataPath = null)
+  public function __construct($username, $password,  $proxy ,  $debug = false, $IGDataPath = null)
   {
     
       $this->debug = $debug;
@@ -630,10 +630,11 @@ public function sendConfirmEmail($email) {
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-
+         if ( $this->proxy != null) {
         curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
         curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+         }
 
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -722,10 +723,11 @@ public function sendConfirmEmail($email) {
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+         if ( $this->proxy != null) {
          curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
         curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-
+        }
 
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -770,10 +772,12 @@ public function sendConfirmEmail($email) {
             curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, substr($videoData, $start, $end));
+
+             if ( $this->proxy != null) {
              curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
             curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
             curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-
+            }
 
 
             $result = curl_exec($ch);
@@ -869,12 +873,13 @@ public function sendConfirmEmail($email) {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
+ if ( $this->proxy != null) {
 
         curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
         curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
 
-
+ }
 
 
         $resp = curl_exec($ch);
@@ -957,10 +962,11 @@ public function sendConfirmEmail($email) {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
+ if ( $this->proxy != null) {
          curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
             curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
             curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-
+ }
 
 
         $resp = curl_exec($ch);
@@ -1492,10 +1498,11 @@ public function sendConfirmEmail($email) {
       curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
       curl_setopt($ch, CURLOPT_POST, true);
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+       if ( $this->proxy != null) {
       curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
       curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
       curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-
+      }
 
       $resp = curl_exec($ch);
       $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -2503,6 +2510,53 @@ public function sendConfirmEmail($email) {
         return $type ? $uuid : str_replace('-', '', $uuid);
     }
 
+      public static function getFilterCode($filter)
+    {
+        $filters = [];
+        $filters[108] = "Charmes";
+        $filters[116] = "Ashby";
+        $filters[117] = "Helena";
+        $filters[115] = "Brooklyn";
+        $filters[105] = "Dogpatch";
+        $filters[113] = "Skyline";
+        $filters[107] = "Ginza";
+        $filters[118] = "Maven";
+        $filters[16] = "Kelvin";
+        $filters[14] = "1977";
+        $filters[20] = "Walden";
+        $filters[19] = "Toaster";
+        $filters[18] = "Sutro";
+        $filters[22] = "Brannan";
+        $filters[3] = "Earlybird";
+        $filters[106] = "Vesper";
+        $filters[109] = "Stinson";
+        $filters[15] = "Nashville";
+        $filters[21] = "Hefe";
+        $filters[10] = "Inkwell";
+        $filters[2] = "Lo-Fi";
+        $filters[28] = "Willow";
+        $filters[27] = "Sierra";
+        $filters[1] = "X Pro II";
+        $filters[25] = "Valencia";
+        $filters[26] = "Hudson";
+        $filters[23] = "Rise";
+        $filters[17] = "Mayfair";
+        $filters[24] = "Amaro";
+        $filters[608] = "Perpetua";
+        $filters[612] = "Aden";
+        $filters[603] = "Ludwig";
+        $filters[616] = "Crema";
+        $filters[605] = "Slumber";
+        $filters[613] = "Juno";
+        $filters[614] = "Reyes";
+        $filters[615] = "Lark";
+        $filters[111] = "Moon";
+        $filters[114] = "Gingham";
+        $filters[112] = "Clarendon";
+        $filters[0] = "Normal";
+        return array_search ($filter, $filters);
+    }
+
     protected function buildBody($bodies, $boundary)
     {
         $body = '';
@@ -2578,11 +2632,11 @@ public function sendConfirmEmail($email) {
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //need test added
          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //need test added
-
+ if ( $this->proxy != null) {  
         curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
         curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-
+    }
 
         // if (file_exists($this->IGDataPath."$this->username-cookies.dat")) {
             curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
@@ -2730,10 +2784,11 @@ public function sendConfirmEmail($email) {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
+ if ( $this->proxy != null) {
         curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
         curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-
+ }
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);
@@ -2784,10 +2839,11 @@ public function sendConfirmEmail($email) {
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
+         if ( $this->proxy != null) {
           curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
         curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-
+        }
 
         if ($post) {
             curl_setopt($ch, CURLOPT_POST, true);

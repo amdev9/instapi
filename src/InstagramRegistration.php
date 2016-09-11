@@ -247,9 +247,12 @@ public function usernameSuggestions($email ,$full_name) //not use for now
       'waterfall_id' => $this->waterfall_id,    
       ]);
 
+      echo "\nPOST DATA: ".$this->generateSignature($data)."\n";
 
      $response =   $this->request('accounts/username_suggestions/', $this->generateSignature($data));//[1];
 echo var_export( $response);
+
+
 
   preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $matcht);
       $this->token = $matcht[1];
@@ -274,6 +277,7 @@ echo var_export( $response);
   {
 
       $data = json_encode([
+          'allow_contacts_sync' => 'false',
           'phone_id'           => $this->phone_id,
           '_csrftoken'         => $this->token,  
           'username'           => $username,
@@ -286,6 +290,9 @@ echo var_export( $response);
           'qs_stamp'           => $qs_stamp, 
           'password'           => $password,
       ]);
+
+
+      echo "\nPOST DATA: ".$this->generateSignature($data)."\n";
 
       $result = $this->request('accounts/create/', $this->generateSignature($data));
      
@@ -322,18 +329,18 @@ echo var_export($result);
 
     public function GenerateUserAgent() {  
       // NEED TEST
-      // $csvfile = __DIR__.'/devices.csv';
-      // $file_handle = fopen($csvfile, 'r');
-      // $line_of_text = [];
-      // while (!feof($file_handle)) {
-      //     $line_of_text[] = fgetcsv($file_handle, 1024);
-      // }
-      // $deviceData = explode(';', $line_of_text[mt_rand(0, 11867)][0]);
-      // fclose($file_handle);
-      // return sprintf('Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
+      $csvfile = __DIR__.'/devices.csv';
+      $file_handle = fopen($csvfile, 'r');
+      $line_of_text = [];
+      while (!feof($file_handle)) {
+          $line_of_text[] = fgetcsv($file_handle, 1024);
+      }
+      $deviceData = explode(';', $line_of_text[mt_rand(0, 11867)][0]);
+      fclose($file_handle);
+      return sprintf('Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
 
 
-      return 'Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
+      // return 'Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
 
 
    }
@@ -427,10 +434,12 @@ $endpoint = "https://graph.facebook.com/v2.3/124024574287414/activities";
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //need test added
          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //need test added
 
-        curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
-        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-        curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-        
+         if ( $this->proxy != null) {
+          curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+          curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+          curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        }
+
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
        
 
@@ -534,10 +543,12 @@ $endpoint = "https://graph.facebook.com/v2.3/124024574287414/activities";
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
-        curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
-        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-        curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-
+        if ( $this->proxy != null) {
+            curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+            curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        }
+        
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);
@@ -565,57 +576,63 @@ $endpoint = "https://graph.facebook.com/v2.3/124024574287414/activities";
       
  
 
-     $headers = [
-      'Host: i.instagram.com',
-      'Connection: keep-alive',
-      'Content-Length: '.strlen($post),
-      'X-IG-Connection-Type: WIFI',
-      'X-IG-Capabilities: 3QI=',
-      'Accept-Language: en-US', 
-      'Accept-Encoding: gzip, deflate',
-      'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
-      'Cookie2: $Version=1',
+  $headers = [
+        'Connection: close',
+        'Accept: */*',
+        'X-IG-Capabilities: 3QI=',
+        'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
+        'Cookie2: $Version=1',
+        'Accept-Language: en-US',
+    ];
+
+     // $headers = [
+     //  'Host: i.instagram.com',
+     //  'Connection: keep-alive',
+     //  'Content-Length: '.strlen($post),
+     //  'X-IG-Connection-Type: WIFI',
+     //  'X-IG-Capabilities: 3QI=',
+     //  'Accept-Language: en-US', 
+     //  'Accept-Encoding: gzip, deflate',
+     //  'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
+     //  'Cookie2: $Version=1',
                  
-     ];
+     // ];
 
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, Constants::API_URL.$endpoint);
-        // curl_setopt($ch, CURLINFO_HEADER_OUT, TRUE);
+        //// curl_setopt($ch, CURLINFO_HEADER_OUT, TRUE);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->UA ); //Constants::USER_AGENT); //// 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);//true 
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); //need test
         //new
-        curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
+        // curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
         // new
         curl_setopt($ch, CURLOPT_VERBOSE, false);
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //need test added
          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);  //need test added
 
-        curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
-        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-        curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-
+         if ( $this->proxy != null) {
+          curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+          curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+          curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        }
 
         if (file_exists($this->IGDataPath."$this->username-cookies.dat")) {
             curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
             curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
         } else {
-            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat'); //need fix $this->device_id
-            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');   //need fix $this->device_id
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat');  
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');      
         }
 
         if ($post) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         }
-
-
-       // $information = curl_getinfo($ch);
-       // echo var_export( $information);
 
 
         $resp = curl_exec($ch);
