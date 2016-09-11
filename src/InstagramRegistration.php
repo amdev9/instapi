@@ -287,7 +287,7 @@ echo var_export( $response);
           'email'              => $email,
           'force_sign_up_code' => "",
           'waterfall_id'       => $this->waterfall_id,
-          'qs_stamp'           => $qs_stamp, 
+          'qs_stamp'           => "",//$qs_stamp, 
           'password'           => $password,
       ]);
 
@@ -337,7 +337,7 @@ echo var_export($result);
       }
       $deviceData = explode(';', $line_of_text[mt_rand(0, 11867)][0]);
       fclose($file_handle);
-      return sprintf('Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
+      return sprintf('Instagram 9.2.5 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
 
 
       // return 'Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';

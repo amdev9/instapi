@@ -178,7 +178,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 {
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 1000;  //27000
+	$posts_per_day = 5900;  //27000
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -1003,102 +1003,102 @@ if (count($argv) == 6 ) {
 	$i->login();
 	 sleep(15);
 
-	$filesVideo = scandir($dir);
-		$ava = false; // switch to true
-		$uploadCounter = 0;
-		$filesVid = shuffle_assoc($filesVideo);
+	// $filesVideo = scandir($dir);
+	// 	$ava = false; // switch to true
+	// 	$uploadCounter = 0;
+	// 	$filesVid = shuffle_assoc($filesVideo);
 
-		foreach ( $filesVid as $k => $value ) {
+	// 	foreach ( $filesVid as $k => $value ) {
 
-		    $ext = pathinfo($value, PATHINFO_EXTENSION);
-		    if ($ext == "mp4") { 
-				try {
-				    $i->uploadVideo($dir.'/'.$value, $caption);  
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
+	// 	    $ext = pathinfo($value, PATHINFO_EXTENSION);
+	// 	    if ($ext == "mp4") { 
+	// 			try {
+	// 			    $i->uploadVideo($dir.'/'.$value, $caption);  
+	// 			} catch (Exception $e) {
+	// 			    echo $e->getMessage();
+	// 			}
 
-				sleep(10);
-		    }
-		    elseif ($ext == "jpg" && $ava == true ) {
+	// 			sleep(10);
+	// 	    }
+	// 	    elseif ($ext == "jpg" && $ava == true ) {
 
-		    	try {
-		    		if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
-					{
+	// 	    	try {
+	// 	    		if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+	// 				{
 						
-						if ($GLOBALS["redis"]->scard($value) == 0 ) {
-						     $GLOBALS["redis"]->sadd('picked', $value);
-						    foreach (range(-12, 12) as $number) {
-						        if ($number != 0)
-						            $GLOBALS["redis"]->sadd($value, $number);
-						    }
-						}
-						$degrees = $GLOBALS["redis"]->spop($value);
-				        echo $degrees;
-				    	$i->changeProfilePicture($dir.'/'.$value, $degrees);
-					}
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
-				sleep(10);
-				$ava = false;
+	// 					if ($GLOBALS["redis"]->scard($value) == 0 ) {
+	// 					     $GLOBALS["redis"]->sadd('picked', $value);
+	// 					    foreach (range(-12, 12) as $number) {
+	// 					        if ($number != 0)
+	// 					            $GLOBALS["redis"]->sadd($value, $number);
+	// 					    }
+	// 					}
+	// 					$degrees = $GLOBALS["redis"]->spop($value);
+	// 			        echo $degrees;
+	// 			    	$i->changeProfilePicture($dir.'/'.$value, $degrees);
+	// 				}
+	// 			} catch (Exception $e) {
+	// 			    echo $e->getMessage();
+	// 			}
+	// 			sleep(10);
+	// 			$ava = false;
 
-			} else {
-				if ($uploadCounter == 1) { break; } //6
-				try {
-					if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
-					{
+	// 		} else {
+	// 			if ($uploadCounter == 1) { break; } //6
+	// 			try {
+	// 				if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+	// 				{
 						
-						if ($GLOBALS["redis"]->scard($value) == 0 ) {
-						     $GLOBALS["redis"]->sadd('picked', $value);
-						    foreach (range(-12, 12) as $number) {
-						        if ($number != 0)
-						            $GLOBALS["redis"]->sadd($value, $number);
-						    }
-						}
-				        $degrees = $GLOBALS["redis"]->spop($value);
-						echo $degrees;
+	// 					if ($GLOBALS["redis"]->scard($value) == 0 ) {
+	// 					     $GLOBALS["redis"]->sadd('picked', $value);
+	// 					    foreach (range(-12, 12) as $number) {
+	// 					        if ($number != 0)
+	// 					            $GLOBALS["redis"]->sadd($value, $number);
+	// 					    }
+	// 					}
+	// 			        $degrees = $GLOBALS["redis"]->spop($value);
+	// 					echo $degrees;
 				      
-					    $i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
+	// 				    $i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
 					    
 
-					    $uploadCounter = $uploadCounter + 1;
-					}
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
-				sleep(30);
-		    }
-		}
+	// 				    $uploadCounter = $uploadCounter + 1;
+	// 				}
+	// 			} catch (Exception $e) {
+	// 			    echo $e->getMessage();
+	// 			}
+	// 			sleep(30);
+	// 	    }
+	// 	}
 
-		echo "video and photo downloaded!\n"; 
+	// 	echo "video and photo downloaded!\n"; 
 
 
 	 
-	 sleep(5);
-	// $i->setPublicAccount();
+	//  sleep(5);
+	// // $i->setPublicAccount();
 	
-	// $i->setPrivateAccount();
+	// // $i->setPrivateAccount();
 	
-	// sleep(10);
+	// // sleep(10);
 
 	
- 	$cured = $i->currentEdit();
-    echo var_export($cured);
+ // 	$cured = $i->currentEdit();
+ //    echo var_export($cured);
 
-    $phoneparsed =  $cured[1]['user']['phone_number'];
-   	$emailparsed =  $cured[1]['user']['email'];
-   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
+ //    $phoneparsed =  $cured[1]['user']['phone_number'];
+ //   	$emailparsed =  $cured[1]['user']['email'];
+ //   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
 
-    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
+ //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 	 
-	sleep(4);
-	$i->editProfile($GLOBALS["url"], $phoneparsed , $GLOBALS["first_name"], $GLOBALS["biography"], $emailparsed , $GLOBALS["gender"]);
-	sleep(4);
+	// sleep(4);
+	// $i->editProfile($GLOBALS["url"], $phoneparsed , $GLOBALS["first_name"], $GLOBALS["biography"], $emailparsed , $GLOBALS["gender"]);
+	// sleep(4);
 
 	  
-  	$logined = $proxy." ".$username." ".$password;//." ".$email;
-  	$redis->sadd("successlogin", $logined);	
+ //  	$logined = $proxy." ".$username." ".$password;//." ".$email;
+ //  	$redis->sadd("successlogin", $logined);	
 
 
      $pk = $i->getusernameId();
@@ -1121,7 +1121,7 @@ $gender = 2;
 $dir = $romerINSTAPI.'src/adult/';
  
 $phone = $argv[7];
-$proxy = null; 
+$proxy = "a"; 
 $username = "";
 $qs_stamp = "";
 
@@ -1160,11 +1160,11 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 
 	
 
-	$check = $r->checkEmail($email);
-    if (isset($check[1]['available']) && $check[1]['available'] == false) {
-    	$redis->sadd("blacklist_email",  $email);
-	    break;
-	}     
+	// $check = $r->checkEmail($email);
+ //    if (isset($check[1]['available']) && $check[1]['available'] == false) {
+ //    	$redis->sadd("blacklist_email",  $email);
+	//     break;
+	// }     
 
 
 	$outputs = $r->fetchHeaders();
@@ -1193,24 +1193,23 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 	}	
 	 
  
-	// $sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
-	// echo var_export($sres);
-	//  echo "\nVerification code sent! >>>>>\n";
-	//  //add code for sms service
- //     	 // while ($redis->scard("code") < 1) {
- //     	 // 		sleep(3);
- //     	 // 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
- //     	 // }
- //     	 // $cod = $redis->spop("code");
- //     	 $cod = readline("Command: ");
- //     	 echo "\n".$cod."\n";
+	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
+	echo var_export($sres);
+	 echo "\nVerification code sent! >>>>>\n";
+	 //add code for sms service
+     	 // while ($redis->scard("code") < 1) {
+     	 // 		sleep(3);
+     	 // 		exec("python /Users/alex/home/dev/rails/instagram/scrapping/gamm/decodesms.py", $runned);
+     	 // }
+     	 // $cod = $redis->spop("code");
+     	 $cod = readline("Command: ");
+     	 echo "\n".$cod."\n";
      	 
  
-	//  $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
-	//  echo var_export($sval);
+	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
+	 echo var_export($sval);
       
-   
-	  
+
     $sugger = $r->usernameSuggestions($email,$first_name );
    	$GLOBALS["username"] = $sugger[1]['suggestions'][0];
 	$GLOBALS["first_name"] = $first_name;
@@ -1233,8 +1232,8 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 	 
 
  
-	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
-	 // $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
+	// $result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
+	 $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
 
 
 	$resToPrint =  var_export($result);
@@ -1347,7 +1346,8 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 				$ava = false;
 
 			} else {
-				if ($uploadCounter == 1) { break; }
+		
+				if ($uploadCounter == 6) { break; }
 				try {
 					if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
 					{
@@ -1362,7 +1362,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 				        $degrees = $GLOBALS["redis"]->spop($value);
 						echo $degrees;
 				      
-					 	$i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees);   
+					 	$i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
 
 					    $uploadCounter = $uploadCounter + 1;
 					}
@@ -1373,12 +1373,15 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 		    }
 		}
 
+		$i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, 10);  
+		sleep(10);
+
 		echo "video and photo downloaded!\n";
 
-		// $cured = $i->currentEdit();
-		// echo var_export($cured);
-		// sleep(4);
-		// $i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"] , $GLOBALS["gender"]);
+		$cured = $i->currentEdit();
+		echo var_export($cured);
+		sleep(4);
+		$i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"] , $GLOBALS["gender"]);
 
 		sleep(4); 
 
@@ -1389,7 +1392,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 		}
 
 		
-		// sleep(6);
+		sleep(6);
 
 		funcrecur($i, $username, $pk  ); 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
