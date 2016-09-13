@@ -122,6 +122,7 @@ public function validateSignupSmsCode($verification_code, $phone) {
 public function createValidatedAccount($username, $verification_code, $phone, $full_name , $password) {
 
       $data = json_encode([
+          'allow_contacts_sync' => 'false',
           'verification_code'   =>  $verification_code,
           'phone_id'   => $this->phone_id,
           'phone_number'   => $phone,   
@@ -329,18 +330,18 @@ echo var_export($result);
 
     public function GenerateUserAgent() {  
       // NEED TEST
-      $csvfile = __DIR__.'/devices.csv';
-      $file_handle = fopen($csvfile, 'r');
-      $line_of_text = [];
-      while (!feof($file_handle)) {
-          $line_of_text[] = fgetcsv($file_handle, 1024);
-      }
-      $deviceData = explode(';', $line_of_text[mt_rand(0, 11867)][0]);
-      fclose($file_handle);
-      return sprintf('Instagram 9.2.5 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
+      // $csvfile = __DIR__.'/devices.csv';
+      // $file_handle = fopen($csvfile, 'r');
+      // $line_of_text = [];
+      // while (!feof($file_handle)) {
+      //     $line_of_text[] = fgetcsv($file_handle, 1024);
+      // }
+      // $deviceData = explode(';', $line_of_text[mt_rand(0, 11867)][0]);
+      // fclose($file_handle);
+      // return sprintf('Instagram 9.2.5 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
 
 
-      // return 'Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
+      return 'Instagram 9.2.5 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
 
 
    }

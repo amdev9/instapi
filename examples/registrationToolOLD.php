@@ -2,13 +2,13 @@
 
  
 
-// $romerINSTAPI = '/root/instapi/';
-// $romerPREDIS = '/root/redis/predis/';
-// $romerINSTA = '/root/insta/';
+$romerINSTAPI = '/root/instapi/';
+$romerPREDIS = '/root/redis/predis/';
+$romerINSTA = '/root/insta/';
 
-$romerINSTAPI = '/Users/alex/dev/instapi/';
-$romerPREDIS = '/Users/alex/dev/redis/predis/';
-$romerINSTA = '/Users/alex/dev/insta/';
+// $romerINSTAPI = '/Users/alex/dev/instapi/';
+// $romerPREDIS = '/Users/alex/dev/redis/predis/';
+// $romerINSTA = '/Users/alex/dev/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -178,7 +178,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 {
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 5900;  //27000
+	$posts_per_day = 700;  //27000
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -976,8 +976,8 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id = n
 if (count($argv) == 6 ) {
 
 
-	$debug = false; 
-	$proxy = null;
+	$debug = true; 
+	$proxy = "a";
 	$userstring = $redis->spop("tologin");
 	$userarray = explode ( " ", $userstring  ) ; 
 	$username =  $userarray[0];
@@ -1121,7 +1121,7 @@ $gender = 2;
 $dir = $romerINSTAPI.'src/adult/';
  
 $phone = $argv[7];
-$proxy = "a"; 
+$proxy = null; 
 $username = "";
 $qs_stamp = "";
 
@@ -1372,9 +1372,6 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 				sleep(30);
 		    }
 		}
-
-		$i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, 10);  
-		sleep(10);
 
 		echo "video and photo downloaded!\n";
 
