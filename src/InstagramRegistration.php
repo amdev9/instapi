@@ -338,10 +338,10 @@ echo var_export($result);
       // }
       // $deviceData = explode(';', $line_of_text[mt_rand(0, 11867)][0]);
       // fclose($file_handle);
-      // return sprintf('Instagram 9.2.5 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
+      // return sprintf('Instagram 9.3.0 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
 
 
-      return 'Instagram 9.2.5 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
+      return 'Instagram 9.3.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
 
 
    }
@@ -577,14 +577,16 @@ $endpoint = "https://graph.facebook.com/v2.3/124024574287414/activities";
       
  
 
-  $headers = [
+   $headers = [
         'Connection: close',
         'Accept: */*',
-        'X-IG-Capabilities: 3QI=',
+        'X-IG-Capabilities: 3Q4=',
+        'X-IG-Connection-Type: WIFI',
         'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
         'Cookie2: $Version=1',
         'Accept-Language: en-US',
     ];
+
 
      // $headers = [
      //  'Host: i.instagram.com',

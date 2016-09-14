@@ -1070,18 +1070,19 @@ public function sendConfirmEmail($email) {
         return $this->request('media/configure/?video=1', $this->generateSignature($post))[1];
     }
 
-    protected function configure($upload_id, $photo, $caption = '', $location = null)
+    protected function configure($upload_id, $photo, $caption = '', $location = null, $filter = null)
     {
 
         $caption = is_null($caption) ? '' : $caption;
         $size = getimagesize($photo)[0];
 
-        $post = json_encode([
+        $post = [
         'upload_id'          => $upload_id,
         'camera_model'       => 'HM1S',     //model
-        'source_type'        => 3,
+        'source_type'        => 1,
         'date_time_original' => date('Y:m:d H:i:s'),
         'camera_make'        => 'XIAOMI',  //manufacturer
+        'geotag_enabled'     => false,
         'edits'              => [
           'crop_original_size' => [$size, $size],
           'crop_zoom'          => 1.3333334,
@@ -1100,8 +1101,15 @@ public function sendConfirmEmail($email) {
         '_csrftoken'  => $this->token,
         '_uuid'       => $this->uuid,
         '_uid'        => $this->username_id,
-        'caption'     => $caption,
-     ]);
+        'waterfall_id'  => $this->waterfall_id,
+        'scene_type'    => 1,
+
+     ];
+
+
+      if(!is_null($caption)) {
+            $post['caption'] = $caption;
+        }
 
      if (!is_null($location))
      {
@@ -1121,6 +1129,12 @@ public function sendConfirmEmail($email) {
          $post['posting_longitude'] = $location->getLongitude();
          $post['altitude'] = mt_rand(10, 800);
     }
+
+       if (!is_null($filter)) {
+            $post['edits']['filter_type'] = Utils::getFilterCode($filter);
+        }
+
+         $post = json_encode($post);
     
         $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,-0.0]', $post);
 
@@ -2817,14 +2831,16 @@ public function sendConfirmEmail($email) {
         //     return;
         // }
 
-     $headers = [
+       $headers = [
         'Connection: close',
         'Accept: */*',
-        'X-IG-Capabilities: 3QI=',
+        'X-IG-Capabilities: 3Q4=',
+        'X-IG-Connection-Type: WIFI',
         'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
         'Cookie2: $Version=1',
         'Accept-Language: en-US',
     ];
+
 
         $ch = curl_init();
 

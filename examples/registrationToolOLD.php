@@ -2,13 +2,13 @@
 
  
 
-$romerINSTAPI = '/root/instapi/';
-$romerPREDIS = '/root/redis/predis/';
-$romerINSTA = '/root/insta/';
+// $romerINSTAPI = '/root/instapi/';
+// $romerPREDIS = '/root/redis/predis/';
+// $romerINSTA = '/root/insta/';
 
-// $romerINSTAPI = '/Users/alex/dev/instapi/';
-// $romerPREDIS = '/Users/alex/dev/redis/predis/';
-// $romerINSTA = '/Users/alex/dev/insta/';
+$romerINSTAPI = '/Users/alex/dev/instagram/instapi/';
+$romerPREDIS = '/Users/alex/dev/instagram/redis/predis/';
+$romerINSTA = '/Users/alex/dev/instagram/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -178,7 +178,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 {
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 700;  //27000
+	$posts_per_day = 7000;  //27000
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -1083,12 +1083,12 @@ if (count($argv) == 6 ) {
 	// // sleep(10);
 
 	
- // 	$cured = $i->currentEdit();
- //    echo var_export($cured);
+ 	$cured = $i->currentEdit();
+    echo var_export($cured);
 
- //    $phoneparsed =  $cured[1]['user']['phone_number'];
- //   	$emailparsed =  $cured[1]['user']['email'];
- //   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
+    $phone =  $cured[1]['user']['phone_number'];
+   	$email =  $cured[1]['user']['email'];
+   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
 
  //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 	 
@@ -1121,7 +1121,7 @@ $gender = 2;
 $dir = $romerINSTAPI.'src/adult/';
  
 $phone = $argv[7];
-$proxy = null; 
+$proxy = null;//"a"; 
 $username = "";
 $qs_stamp = "";
 
@@ -1347,7 +1347,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 
 			} else {
 		
-				if ($uploadCounter == 6) { break; }
+				if ($uploadCounter == 3) { break; }
 				try {
 					if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
 					{
@@ -1364,6 +1364,12 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 				      
 					 	$i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
 
+					 	if ($uploadCounter == 2) {
+					 		sleep(10);
+					 		$i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees);   
+
+					 	}
+
 					    $uploadCounter = $uploadCounter + 1;
 					}
 				} catch (Exception $e) {
@@ -1378,15 +1384,40 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 		$cured = $i->currentEdit();
 		echo var_export($cured);
 		sleep(4);
-		$i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"] , $GLOBALS["gender"]);
+		$i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], "", $GLOBALS["gender"]); 
+
+			//$GLOBALS["email"] 
+			
 
 		sleep(4); 
 
-		try {
-		    $i->setPrivateAccount();
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}
+		// try {
+		    $fres = $i->setPrivateAccount();
+		    if ($fres[1]['status'] == 'ok') {
+					 	 echo "ok";
+					} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
+					 	$i->login(true);
+					} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
+						$i->checkpointPhoneChallenge($GLOBALS["phone"], $fres[1]['checkpoint_url']);
+				        echo "\nVerification code sent! >>>>>\n";
+		 			 	// $resp_code = trim(fgets(STDIN));
+                        $resp_code = "";
+		 			    while( ctype_digit($resp_code) != true) {
+						 	// $line = readline("Command: ");
+						  	$resp_code = readline("Command: ");
+						}
+						echo "\n---->".$resp_code;
+						$results = $i->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
+						echo var_export($results);
+					}
+					else {
+							 			echo var_export($fres);
+
+					}
+
+		// } catch (Exception $e) {
+		//     echo $e->getMessage();
+		// }
 
 		
 		sleep(6);
