@@ -106,10 +106,20 @@ $emails = imap_search($inbox,'ALL');
 
     // $header = imap_headerinfo($inbox,$emails[$message_len -1]);
     // $overview = imap_fetch_overview($inbox,$emails[$message_len -1]);
-    $message = imap_fetchbody($inbox,$emails[$message_len -1] ,0 );
+    // $message = imap_fetchbody($inbox,$emails[$message_len -1] ,0 );
     // echo var_export($header)."\n";
     // echo var_export($overview)."\n";
-    echo var_export($message)."\n";
+    // echo var_export($message)."\n";
+
+
+    $emailStructure = imap_fetchstructure($inbox,$emails[$message_len -1]);
+    
+    if(!isset($emailStructure->parts)) {
+         echo  imap_body($inbox, $mail, FT_PEEK); 
+    } else {
+        //    
+    }
+
 
     // break;
 // }
