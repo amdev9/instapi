@@ -104,6 +104,7 @@ $emails = imap_search($inbox,'ALL');
 
 rsort($emails);
 
+$code = '';
 foreach($emails as $email_number) {
 
     $overview = imap_fetch_overview($inbox,$email_number,0);
@@ -121,6 +122,7 @@ foreach($emails as $email_number) {
   $re8='.*?'; # Non-greedy match on filler
   $re9='(verify)';  # Word 3
 
+
   if ($c=preg_match_all ("/".$re1.$re2.$re3.$re4.$re5.$re6.$re7.$re8.$re9."/is", $message, $matches))
   {
       $word1=$matches[1][0];
@@ -128,11 +130,13 @@ foreach($emails as $email_number) {
       $int2=$matches[3][0];
       $word2=$matches[4][0];
       $word3=$matches[5][0];
-      print $int1." ".$int2;
+      $code =  $int1.$int2;
 
       break;
   }
 
+
+echo $code;
 
 //Don't lose your phone number!
     // $header = imap_headerinfo($inbox,$email_number);
