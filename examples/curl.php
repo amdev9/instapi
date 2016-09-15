@@ -11,11 +11,17 @@
   private $msg_cnt;
 
   // email login credentials
-  private $server = 'yourserver.com';
-  private $user   = 'email@yourserver.com';
-  private $pass   = 'yourpassword';
-  private $port   = 143; // adjust according to server settings
 
+
+// $hostname = 
+// $username = 
+// $password = 
+
+
+  private $server = '{imap.gmail.com:993/imap/ssl}INBOX';
+  private $user   = 'iprofilenumberqweqweqweqweqweq@gmail.com';
+  private $pass   = 'iprofilenumber';
+ 
   // connect to the server and get the inbox emails
   function __construct() {
     $this->connect();
@@ -34,7 +40,7 @@
   // the imap_open function parameters will need to be changed for the particular server
   // these are laid out to connect to a Dreamhost IMAP server
   function connect() {
-    $this->conn = imap_open('{'.$this->server.'/notls}', $this->user, $this->pass);
+    $this->conn = imap_open($this->server, $this->user, $this->pass);
   }
 
   // move the message to a new folder
