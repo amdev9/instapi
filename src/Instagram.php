@@ -18,7 +18,7 @@ class Instagram
   protected $rank_token;          // Rank token
   protected $IGDataPath;          // Data storage path
  
-
+  protected $waterfall_id;
   protected $phone_id;
 
   /**
@@ -91,6 +91,8 @@ class Instagram
           $this->device_id =trim(file_get_contents($this->IGDataPath."$username-deviceid.dat"));
           $this->uuid = trim(file_get_contents($this->IGDataPath."$username-uuid.dat"));
           $this->phone_id = trim(file_get_contents($this->IGDataPath."$username-phoneid.dat"));
+           $this->waterfall_id = trim(file_get_contents($this->IGDataPath."$username-waterfall.dat"));
+
       
       } else {
           $this->isLoggedIn = false;

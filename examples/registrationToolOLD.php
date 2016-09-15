@@ -379,7 +379,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 	/// MASS FOLLOW		//// 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 600!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 1200!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					
 					$fres = $ilink->follow($actioner);
 					if ($fres[1]['status'] == 'ok') {
@@ -977,7 +977,7 @@ if (count($argv) == 6 ) {
 
 
 	$debug = true; 
-	$proxy = "a";
+	 
 	$userstring = $redis->spop("tologin");
 	$userarray = explode ( " ", $userstring  ) ; 
 	$username =  $userarray[0];
@@ -992,7 +992,7 @@ if (count($argv) == 6 ) {
 	 
 	$dir = $romerINSTAPI.'src/adult/';
 
-	if ($proxy != null) {
+	if ($redis->scard("proxy") >  0) {
 		$proxy =  $redis->spop("proxy");	
 	} else {
 		$proxy = null;
@@ -1133,7 +1133,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 	// SDIFF "used_proxy" "black_proxy" used_proxy - black_proxy
 	// SDIFFSTORE "proxy" "used_proxy" "black_proxy"
 
-	if ($proxy != null) {
+	if ($redis->scard("proxy") > 0) {
 	$prox =  $redis->spop("proxy");	
  	echo "\n******************------------>".$prox."<------------*********************\n";
     // $prox[$p]."<-------------------------*********************\n";
@@ -1155,8 +1155,8 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 
 	$r->syncFeaturesRegister();
 
-	$r->fbRequestAppInstalled();
-	$r->fbRequest(); 
+	// $r->fbRequestAppInstalled();
+	// $r->fbRequest(); 
 
 	
 
@@ -1320,7 +1320,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 				    echo $e->getMessage();
 				}
 
-				sleep(10);
+				 
 		    }
 		    elseif ($ext == "jpg" && $ava == true ) {
 
@@ -1342,7 +1342,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 				} catch (Exception $e) {
 				    echo $e->getMessage();
 				}
-				sleep(10);
+				 
 				$ava = false;
 
 			} else {
@@ -1375,7 +1375,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 				} catch (Exception $e) {
 				    echo $e->getMessage();
 				}
-				sleep(30);
+				 
 		    }
 		}
 
@@ -1420,7 +1420,6 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 		// }
 
 		
-		sleep(6);
 
 		funcrecur($i, $username, $pk  ); 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

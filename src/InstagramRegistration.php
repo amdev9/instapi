@@ -150,6 +150,7 @@ public function createValidatedAccount($username, $verification_code, $phone, $f
             file_put_contents($this->IGDataPath.$this->username.'-uuid.dat', $this->uuid);
              file_put_contents($this->IGDataPath.$this->username.'-phoneid.dat', $this->phone_id);
               file_put_contents($this->IGDataPath.$this->username.'-deviceid.dat', $this->device_id);
+               file_put_contents($this->IGDataPath.$this->username.'-waterfall.dat', $this->waterfall_id);
         ///////
           // copy($this->IGDataPath.'cookies.dat', $this->IGDataPath.'cookies2.dat'); //no need??
           rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat");  
