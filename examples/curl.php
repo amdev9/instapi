@@ -10,7 +10,7 @@ $username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
 $password = 'iprofilenumber';
 
 /* try to connect */
-$inbox = imap_open($hostname,$username,$password) 
+$inbox = imap_open($hostname,$username,$password); 
 // or die('Cannot connect to Gmail: ' . imap_last_error());
 
 /* grab emails */
