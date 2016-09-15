@@ -128,7 +128,7 @@ foreach($emails as $email_number) {
       $int2=$matches[3][0];
       $word2=$matches[4][0];
       $word3=$matches[5][0];
-      print "$int1$int2";
+      print $int1." ".$int2;
 
       break;
   }
