@@ -25,67 +25,46 @@ $redis = new Predis\Client(array(
 
 
 
-function imap_reader()
+function imap_reader ( $username, $password )
 {
+	$hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
+	//$username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
+	//$password = 'iprofilenumber';
+	$inbox = imap_open($hostname,$username,$password); 
+	echo "fine";
+	$message_len = imap_num_msg($inbox)."\n";
+	$emails = imap_search($inbox,'ALL');
+	rsort($emails);
+	$code = '';
+	foreach($emails as $email_number) {
+		// $overview = imap_fetch_overview($inbox,$email_number,0);
+		$message = quoted_printable_decode(imap_fetchbody($inbox,$email_number,1)); 
 
-		$hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
-		$username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
-		$password = 'iprofilenumber';
+		$re1='(Use)';  # Word 1
+		$re2='.*?'; # Non-greedy match on filler
+		$re3='(\\d+)';  # Integer Number 1
+		$re4='.*?'; # Non-greedy match on filler
+		$re5='(\\d+)';  # Integer Number 2
+		$re6='.*?'; # Non-greedy match on filler
+		$re7='(to)';  # Word 2
+		$re8='.*?'; # Non-greedy match on filler
+		$re9='(verify)';  # Word 3
 
+		if ($c=preg_match_all ("/".$re1.$re2.$re3.$re4.$re5.$re6.$re7.$re8.$re9."/is", $message, $matches))
+		{
+			$word1=$matches[1][0];
+			$int1=$matches[2][0];
+			$int2=$matches[3][0];
+			$word2=$matches[4][0];
+			$word3=$matches[5][0];
+			$code =  $int1."".$int2;
 
-		 
-		$inbox = imap_open($hostname,$username,$password); 
-
-		echo "fine";
-		$message_len = imap_num_msg($inbox)."\n";
-
-
-		$emails = imap_search($inbox,'ALL');
-
-		rsort($emails);
-
-		$code = '';
-		foreach($emails as $email_number) {
-
-		    $overview = imap_fetch_overview($inbox,$email_number,0);
-		    // $message = imap_fetchbody($inbox,$email_number, 1);
-
-		    $message = quoted_printable_decode(imap_fetchbody($inbox,$email_number,1)); 
-
-		 $re1='(Use)';  # Word 1
-		  $re2='.*?'; # Non-greedy match on filler
-		  $re3='(\\d+)';  # Integer Number 1
-		  $re4='.*?'; # Non-greedy match on filler
-		  $re5='(\\d+)';  # Integer Number 2
-		  $re6='.*?'; # Non-greedy match on filler
-		  $re7='(to)';  # Word 2
-		  $re8='.*?'; # Non-greedy match on filler
-		  $re9='(verify)';  # Word 3
-
-
-		  if ($c=preg_match_all ("/".$re1.$re2.$re3.$re4.$re5.$re6.$re7.$re8.$re9."/is", $message, $matches))
-		  {
-		      $word1=$matches[1][0];
-		      $int1=$matches[2][0];
-		      $int2=$matches[3][0];
-		      $word2=$matches[4][0];
-		      $word3=$matches[5][0];
-		      $code =  $int1."".$int2;
-
-		      break;
-		  }
-
-
-		echo "+";
-
-
-	 
-
-		 
+			break;
 		}
-		imap_close($inbox);
-
-		return $code;
+		echo "+";
+	}
+	imap_close($inbox);
+	return $code;
 }
 
 function shuffle_assoc($list) { 
@@ -1261,16 +1240,16 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 
 	echo var_export($sres);
 
-	$cod = imap_reader();
-
+	$phone_email = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
+	$emailpass = 'iprofilenumberthree';
+	$cod = imap_reader( $phone_email , $emailpass);
 
 	//  echo "\nVerification code sent! >>>>>\n";
-
  //     	 // $cod = readline("Command: ");
     
      echo "\n>>> CODE PARSED: ".$cod."\n";
-     	 
- 
+
+
 	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
 	 echo var_export($sval);
       
