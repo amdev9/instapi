@@ -25,7 +25,7 @@ $inbox = imap_open($hostname,$username,$password);
 echo "fine";
 
 
-$emails = imap_search($inbox,'RECENT');
+$emails = imap_search($inbox,'ALL');
 
 foreach($emails as $email_number) {
     
