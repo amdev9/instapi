@@ -106,9 +106,9 @@ foreach($emails as $email_number) {
     
     /* get information specific to this email */
 
-    $header = imap_headerinfo($inbox,$email_number, $message_len );
-    $overview = imap_fetch_overview($inbox,$email_number, $message_len );
-    $message = imap_fetchbody($inbox,$email_number, $message_len );
+    $header = imap_headerinfo($inbox,$email_number, $message_len -1 );
+    $overview = imap_fetch_overview($inbox,$email_number, $message_len -1);
+    $message = imap_fetchbody($inbox,$email_number, $message_len - 1 );
     echo var_export($header) ;
     break;
 
