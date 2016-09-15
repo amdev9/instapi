@@ -107,7 +107,9 @@ rsort($emails);
 foreach($emails as $email_number) {
 
     $overview = imap_fetch_overview($inbox,$email_number,0);
-    $message = imap_fetchbody($inbox,$email_number, 1);
+    // $message = imap_fetchbody($inbox,$email_number, 1);
+
+    $message = quoted_printable_decode(imap_fetchbody($inbox,$email_number,1.1)); 
 
     // $header = imap_headerinfo($inbox,$email_number);
     // $overview = imap_fetch_overview($inbox,$email_number);
@@ -115,8 +117,6 @@ foreach($emails as $email_number) {
     // echo var_export($header)."\n";
     // echo var_export($overview)."\n";
     echo $message."\n";
-
- 
 
 
     break;
