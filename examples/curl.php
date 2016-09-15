@@ -107,7 +107,7 @@ rsort($emails);
 foreach($emails as $email_number) {
 
     $overview = imap_fetch_overview($inbox,$email_number,0);
-    $message = imap_fetchbody($inbox,$email_number,2);
+    $message = imap_fetchbody($inbox,$email_number, 1);
 
     // $header = imap_headerinfo($inbox,$email_number);
     // $overview = imap_fetch_overview($inbox,$email_number);
