@@ -111,12 +111,19 @@ foreach($emails as $email_number) {
 
     $message = quoted_printable_decode(imap_fetchbody($inbox,$email_number,1)); 
 
+   
+    $pattern = '/^Don\'t lose your phone number/';
+    
+    preg_match($pattern, $message, $matches, PREG_OFFSET_CAPTURE, 3);
+print_r($matches);
+
+//Don't lose your phone number!
     // $header = imap_headerinfo($inbox,$email_number);
     // $overview = imap_fetch_overview($inbox,$email_number);
     // $message = imap_fetchbody($inbox,$email_number ,0 );
     // echo var_export($header)."\n";
     // echo var_export($overview)."\n";
-    echo $message."\n";
+    // echo $message."\n";
 
 
     break;
