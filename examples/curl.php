@@ -97,9 +97,7 @@ $password = 'iprofilenumber';
 $inbox = imap_open($hostname,$username,$password); 
 
 echo "fine";
-echo imap_num_msg($inbox)."\n";
-
-
+$message_len = imap_num_msg($inbox)."\n";
 
 
 $emails = imap_search($inbox,'ALL');
@@ -108,9 +106,9 @@ foreach($emails as $email_number) {
     
     /* get information specific to this email */
 
-    $header = imap_headerinfo($inbox,$email_number,0);
-    $overview = imap_fetch_overview($inbox,$email_number,0);
-    $message = imap_fetchbody($inbox,$email_number,0);
+    $header = imap_headerinfo($inbox,$email_number, $message_len );
+    $overview = imap_fetch_overview($inbox,$email_number, $message_len );
+    $message = imap_fetchbody($inbox,$email_number, $message_len );
     echo var_export($header) ;
     break;
 
