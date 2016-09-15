@@ -104,11 +104,11 @@ $emails = imap_search($inbox,'ALL');
 
 // foreach($emails as $email_number) {
 
-    $header = imap_headerinfo($inbox,$emails[$message_len -1]);
-    $overview = imap_fetch_overview($inbox,$emails[$message_len -1]);
-    $message = imap_fetchbody($inbox,$emails[$message_len -1] );
-    echo var_export($header)."\n";
-    echo var_export($overview)."\n";
+    // $header = imap_headerinfo($inbox,$emails[$message_len -1]);
+    // $overview = imap_fetch_overview($inbox,$emails[$message_len -1]);
+    $message = imap_fetchbody($inbox,$emails[$message_len -1] ,0 );
+    // echo var_export($header)."\n";
+    // echo var_export($overview)."\n";
     echo var_export($message)."\n";
 
     // break;
