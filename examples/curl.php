@@ -104,7 +104,7 @@ $emails = imap_search($inbox,'ALL');
 
 // foreach($emails as $email_number) {
 
-    $header = imap_headerinfo($inbox,$inbox[$message_len -1], 0);
+    $header = imap_headerinfo($inbox,$emails[$message_len -1], 0);
     // $overview = imap_fetch_overview($inbox,$email_number, 0);
     // $message = imap_fetchbody($inbox,$email_number, 2 );
     echo var_export($header)."\n";
