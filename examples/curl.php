@@ -112,7 +112,7 @@ foreach($emails as $email_number) {
     $message = quoted_printable_decode(imap_fetchbody($inbox,$email_number,1)); 
 
    
-    $pattern = '/^Don\'t lose your phone number/';
+    $pattern = '/^lose your phone number/';
     
     preg_match($pattern, $message, $matches, PREG_OFFSET_CAPTURE, 3);
 print_r($matches);
