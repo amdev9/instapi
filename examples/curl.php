@@ -102,27 +102,25 @@ $message_len = imap_num_msg($inbox)."\n";
 
 $emails = imap_search($inbox,'ALL');
 
-// foreach($emails as $email_number) {
+rsort($emails);
 
-    // $header = imap_headerinfo($inbox,$emails[$message_len -1]);
-    // $overview = imap_fetch_overview($inbox,$emails[$message_len -1]);
-    // $message = imap_fetchbody($inbox,$emails[$message_len -1] ,0 );
+foreach($emails as $email_number) {
+
+    $overview = imap_fetch_overview($inbox,$email_number,0);
+    $message = imap_fetchbody($inbox,$email_number,2);
+
+    // $header = imap_headerinfo($inbox,$email_number);
+    // $overview = imap_fetch_overview($inbox,$email_number);
+    // $message = imap_fetchbody($inbox,$email_number ,0 );
     // echo var_export($header)."\n";
     // echo var_export($overview)."\n";
-    // echo var_export($message)."\n";
+    echo $message."\n";
+
+ 
 
 
-    $emailStructure = imap_fetchstructure($inbox,$emails[$message_len -1]);
-    
-    if(!isset($emailStructure->parts)) {
-         echo  imap_body($inbox, $mail, FT_PEEK); 
-    } else {
-        //    
-    }
-
-
-    // break;
-// }
+    break;
+}
 
 imap_close($inbox);
 
