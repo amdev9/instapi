@@ -110,6 +110,7 @@ foreach($emails as $email_number) {
     $overview = imap_fetch_overview($inbox,$email_number,0);
     $message = imap_fetchbody($inbox,$email_number,2);
     echo $message."\n";
+    break;
 
   }
  
