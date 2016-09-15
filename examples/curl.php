@@ -102,23 +102,19 @@ $message_len = imap_num_msg($inbox)."\n";
 
 $emails = imap_search($inbox,'ALL');
 
-foreach($emails as $email_number) {
-    
-    /* get information specific to this email */
+// foreach($emails as $email_number) {
 
-    $header = imap_headerinfo($inbox,$email_number, 0);
-    $overview = imap_fetch_overview($inbox,$email_number, 0);
-    $message = imap_fetchbody($inbox,$email_number, 2 );
+    $header = imap_headerinfo($inbox,$inbox[$message_len -1], 0);
+    // $overview = imap_fetch_overview($inbox,$email_number, 0);
+    // $message = imap_fetchbody($inbox,$email_number, 2 );
     echo var_export($header)."\n";
-    echo var_export($overview)."\n";
-    echo var_export($message)."\n";
+    // echo var_export($overview)."\n";
+    // echo var_export($message)."\n";
 
+    // break;
+// }
 
-    break;
-
-  }
- 
-  imap_close($inbox);
+imap_close($inbox);
 
 
 // Загрузка штампа и фото, для которого применяется водяной знак (называется штамп или печать)
