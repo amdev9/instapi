@@ -116,13 +116,19 @@ foreach($emails as $email_number) {
   $re3='(\\d+)';  # Integer Number 1
   $re4='.*?'; # Non-greedy match on filler
   $re5='(\\d+)';  # Integer Number 2
+  $re6='.*?'; # Non-greedy match on filler
+  $re7='(to)';  # Word 2
+  $re8='.*?'; # Non-greedy match on filler
+  $re9='(verify)';  # Word 3
 
-  if ($c=preg_match_all ("/".$re1.$re2.$re3.$re4.$re5."/is", $message, $matches))
+  if ($c=preg_match_all ("/".$re1.$re2.$re3.$re4.$re5.$re6.$re7.$re8.$re9."/is", $message, $matches))
   {
       $word1=$matches[1][0];
       $int1=$matches[2][0];
       $int2=$matches[3][0];
-      print "($word1) ($int1) ($int2) \n";
+      $word2=$matches[4][0];
+      $word3=$matches[5][0];
+      print "($word1) ($int1) ($int2) ($word2) ($word3) \n";
   }
 
 
