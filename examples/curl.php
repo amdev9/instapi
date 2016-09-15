@@ -1,161 +1,119 @@
 <?php
  
 
- class Email_reader {
+//  class Email_reader {
 
-  // imap server connection
-  public $conn;
+//   // imap server connection
+//   public $conn;
 
-  // inbox storage and inbox message count
-  private $inbox;
-  private $msg_cnt;
+//   // inbox storage and inbox message count
+//   private $inbox;
+//   private $msg_cnt;
 
-  // email login credentials
-
-
-// $hostname = 
-// $username = 
-// $password = 
+//   // email login credentials
 
 
-  private $server = '{imap.gmail.com:993/imap/ssl}INBOX';
-  private $user   = 'iprofilenumberqweqweqweqweqweq@gmail.com';
-  private $pass   = 'iprofilenumber';
+// // $hostname = 
+// // $username = 
+// // $password = 
+
+
+//   private $server = '{imap.gmail.com:993/imap/ssl}INBOX';
+//   private $user   = 'iprofilenumberqweqweqweqweqweq@gmail.com';
+//   private $pass   = 'iprofilenumber';
  
-  // connect to the server and get the inbox emails
-  function __construct() {
-    $this->connect();
-    $this->inbox();
-  }
-
-  // close the server connection
-  function close() {
-    $this->inbox = array();
-    $this->msg_cnt = 0;
-
-    imap_close($this->conn);
-  }
-
-  // open the server connection
-  // the imap_open function parameters will need to be changed for the particular server
-  // these are laid out to connect to a Dreamhost IMAP server
-  function connect() {
-    $this->conn = imap_open($this->server, $this->user, $this->pass);
-  }
-
-  // move the message to a new folder
-  function move($msg_index, $folder='INBOX.Processed') {
-    // move on server
-    imap_mail_move($this->conn, $msg_index, $folder);
-    imap_expunge($this->conn);
-
-    // re-read the inbox
-    $this->inbox();
-  }
-
-  // get a specific message (1 = first email, 2 = second email, etc.)
-  function get($msg_index=NULL) {
-    if (count($this->inbox) <= 0) {
-      return array();
-    }
-    elseif ( ! is_null($msg_index) && isset($this->inbox[$msg_index])) {
-      return $this->inbox[$msg_index];
-    }
-
-    return $this->inbox[0];
-  }
-
-  // read the inbox
-  function inbox() {
-    $this->msg_cnt = imap_num_msg($this->conn);
-
-    $in = array();
-    for($i = 1; $i <= $this->msg_cnt; $i++) {
-      $in[] = array(
-        'index'     => $i,
-        'header'    => imap_headerinfo($this->conn, $i),
-        'body'      => imap_body($this->conn, $i),
-        'structure' => imap_fetchstructure($this->conn, $i)
-      );
-    }
-
-    $this->inbox = $in;
-  }
-
-}
-
-
-$r = new Email_reader();
-echo $r->get(1);
-
-// $hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
-// $username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
-// $password = 'iprofilenumber';
-
-
-// // $folders = imap_list($imap, "{imap.gmail.com:993/imap/ssl}", "*");
-// // echo "<ul>";
-// // foreach ($folders as $folder) {
-// //     $folder = str_replace("{imap.gmail.com:993/imap/ssl}", "", imap_utf7_decode($folder));
-// //     echo '<li><a href="mail.php?folder=' . $folder . '&func=view">' . $folder . '</a></li>';
-// // }
-// // echo "</ul>";
-
-
-// /* try to connect */
-// $inbox = imap_open($hostname,$username,$password); 
-
-// echo "fine";
-
-
-// $emails = imap_search($inbox,'ALL');
-
-// foreach($emails as $email_number) {
-    
-//     /* get information specific to this email */
-//     $overview = imap_fetch_overview($inbox,$email_number,0);
-//     $message = imap_fetchbody($inbox,$email_number,2);
-//     echo $message."\n";
-
-  // }
-
-// or die('Cannot connect to Gmail: ' . imap_last_error());
-
-// /* grab emails */
-// $emails = imap_search($inbox,'ALL');
-
-// /* if emails are returned, cycle through each... */
-// if($emails) {
-  
-//   /* begin output var */
-//   $output = '';
-  
-//   /* put the newest emails on top */
-//   rsort($emails);
-  
-//   /* for every email... */
-//   foreach($emails as $email_number) {
-    
-//     /* get information specific to this email */
-//     $overview = imap_fetch_overview($inbox,$email_number,0);
-//     $message = imap_fetchbody($inbox,$email_number,2);
-    
-//     // output the email header information 
-//     $output.= '<div class="toggler '.($overview[0]->seen ? 'read' : 'unread').'">';
-//     $output.= '<span class="subject">'.$overview[0]->subject.'</span> ';
-//     $output.= '<span class="from">'.$overview[0]->from.'</span>';
-//     $output.= '<span class="date">on '.$overview[0]->date.'</span>';
-//     $output.= '</div>';
-    
-//     /* output the email body */
-//     $output.= '<div class="body">'.$message.'</div>';
+//   // connect to the server and get the inbox emails
+//   function __construct() {
+//     $this->connect();
+//     $this->inbox();
 //   }
-  
-//   echo $output;
-// } 
 
-//  close the connection 
-// imap_close($inbox);
+//   // close the server connection
+//   function close() {
+//     $this->inbox = array();
+//     $this->msg_cnt = 0;
+
+//     imap_close($this->conn);
+//   }
+
+//   // open the server connection
+//   // the imap_open function parameters will need to be changed for the particular server
+//   // these are laid out to connect to a Dreamhost IMAP server
+//   function connect() {
+//     $this->conn = imap_open($this->server, $this->user, $this->pass);
+//   }
+
+//   // move the message to a new folder
+//   function move($msg_index, $folder='INBOX.Processed') {
+//     // move on server
+//     imap_mail_move($this->conn, $msg_index, $folder);
+//     imap_expunge($this->conn);
+
+//     // re-read the inbox
+//     $this->inbox();
+//   }
+
+//   // get a specific message (1 = first email, 2 = second email, etc.)
+//   function get($msg_index=NULL) {
+//     if (count($this->inbox) <= 0) {
+//       return array();
+//     }
+//     elseif ( ! is_null($msg_index) && isset($this->inbox[$msg_index])) {
+//       return $this->inbox[$msg_index];
+//     }
+
+//     return $this->inbox[0];
+//   }
+
+//   // read the inbox
+//   function inbox() {
+//     $this->msg_cnt = imap_num_msg($this->conn);
+
+//     $in = array();
+//     for($i = 1; $i <= $this->msg_cnt; $i++) {
+//       $in[] = array(
+//         'index'     => $i,
+//         'header'    => imap_headerinfo($this->conn, $i),
+//         'body'      => imap_body($this->conn, $i),
+//         'structure' => imap_fetchstructure($this->conn, $i)
+//       );
+//     }
+
+//     $this->inbox = $in;
+//   }
+
+// }
+
+
+// $r = new Email_reader();
+// echo $r->get(1);
+
+$hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
+$username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
+$password = 'iprofilenumber';
+
+
+ 
+$inbox = imap_open($hostname,$username,$password); 
+
+echo "fine";
+echo imap_num_msg($inbox);
+
+
+
+
+$emails = imap_search($inbox,'ALL');
+
+foreach($emails as $email_number) {
+    
+    /* get information specific to this email */
+    $overview = imap_fetch_overview($inbox,$email_number,0);
+    $message = imap_fetchbody($inbox,$email_number,2);
+    echo $message."\n";
+
+  }
+ 
+  imap_close($inbox);
 
 
 // Загрузка штампа и фото, для которого применяется водяной знак (называется штамп или печать)
