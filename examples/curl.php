@@ -111,22 +111,19 @@ foreach($emails as $email_number) {
 
     $message = quoted_printable_decode(imap_fetchbody($inbox,$email_number,1)); 
 
-        
-    $re1='(Use)'; # Word 1
-    $re2='.*?'; # Non-greedy match on filler
-    $re3='(\\d+)';  # Integer Number 1
-    $re4='.*?'; # Non-greedy match on filler
-    $re5='(\\d+)';  # Integer Number 2
+ $re1='(Use)';  # Word 1
+  $re2='.*?'; # Non-greedy match on filler
+  $re3='(\\d+)';  # Integer Number 1
+  $re4='.*?'; # Non-greedy match on filler
+  $re5='(\\d+)';  # Integer Number 2
 
-    $re=$re1.$re2.$re3.$re4.$re5;
-    if ($message =~ m/$re/is)
-    {
-        $word1=$1;
-        $int1=$2;
-        $int2=$3;
-        print "($word1) ($int1) ($int2) \n";
-    }
-
+  if ($c=preg_match_all ("/".$re1.$re2.$re3.$re4.$re5."/is", $message, $matches))
+  {
+      $word1=$matches[1][0];
+      $int1=$matches[2][0];
+      $int2=$matches[3][0];
+      print "($word1) ($int1) ($int2) \n";
+  }
 
 
 //Don't lose your phone number!
