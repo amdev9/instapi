@@ -130,13 +130,14 @@ foreach($emails as $email_number) {
       $int2=$matches[3][0];
       $word2=$matches[4][0];
       $word3=$matches[5][0];
-      $code =  $int1.$int2;
+      $code =  $int1."".$int2;
 
       break;
   }
 
 
-echo $code;
+echo "+";
+
 
 //Don't lose your phone number!
     // $header = imap_headerinfo($inbox,$email_number);
@@ -148,6 +149,8 @@ echo $code;
 
  
 }
+
+echo $code;
 
 imap_close($inbox);
 
