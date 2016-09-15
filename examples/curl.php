@@ -111,11 +111,23 @@ foreach($emails as $email_number) {
 
     $message = quoted_printable_decode(imap_fetchbody($inbox,$email_number,1)); 
 
-   
-    $pattern = '/^lose your phone number/';
-    
-    preg_match($pattern, $message, $matches, PREG_OFFSET_CAPTURE, 3);
-print_r($matches);
+        
+    $re1='(Use)'; # Word 1
+    $re2='.*?'; # Non-greedy match on filler
+    $re3='(\\d+)';  # Integer Number 1
+    $re4='.*?'; # Non-greedy match on filler
+    $re5='(\\d+)';  # Integer Number 2
+
+    $re=$re1.$re2.$re3.$re4.$re5;
+    if ($message =~ m/$re/is)
+    {
+        $word1=$1;
+        $int1=$2;
+        $int2=$3;
+        print "($word1) ($int1) ($int2) \n";
+    }
+
+
 
 //Don't lose your phone number!
     // $header = imap_headerinfo($inbox,$email_number);
@@ -125,8 +137,7 @@ print_r($matches);
     // echo var_export($overview)."\n";
     // echo $message."\n";
 
-
-    break;
+ 
 }
 
 imap_close($inbox);
