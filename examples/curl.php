@@ -1,5 +1,28 @@
 <?php
  
+class ChildThread extends Thread {
+    public $data;
+
+    public function run() {
+      /* Do some work */
+
+      $this->data = 'result';
+    }
+}
+
+$thread = new ChildThread();
+
+if ($thread->start()) {
+    /*
+     * Do some work here, while already doing other
+     * work in the child thread.
+     */
+
+    // wait until thread is finished
+    $thread->join();
+
+    // we can now even access $thread->data
+}
 
 //  class Email_reader {
 
