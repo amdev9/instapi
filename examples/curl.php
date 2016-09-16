@@ -1,29 +1,6 @@
 <?php
  
-class ChildThread extends Thread {
-    public $data;
-
-    public function run() {
-      /* Do some work */
-
-      $this->data = 'result';
-    }
-}
-
-$thread = new ChildThread();
-
-if ($thread->start()) {
-    /*
-     * Do some work here, while already doing other
-     * work in the child thread.
-     */
-
-    // wait until thread is finished
-    $thread->join();
-
-    // we can now even access $thread->data
-}
-
+ 
 //  class Email_reader {
 
 //   // imap server connection
@@ -112,9 +89,11 @@ if ($thread->start()) {
 // echo $r->get(1);
 
 $hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
-$username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
-$password = 'iprofilenumber';
+// $username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
+// $password = 'iprofilenumber';
 
+$username = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
+  $password = 'iprofilenumberthree';
 
  
 $inbox = imap_open($hostname,$username,$password); 
