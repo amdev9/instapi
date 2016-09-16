@@ -89,11 +89,11 @@
 // echo $r->get(1);
 
 $hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
-$username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
-$password = 'iprofilenumber';
+// $username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
+// $password = 'iprofilenumber';
 
-// $username = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
-//   $password = 'iprofilenumberthree';
+$username = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
+  $password = 'iprofilenumberthree';
 
  
 $inbox = imap_open($hostname,$username,$password); 
