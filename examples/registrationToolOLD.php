@@ -2,13 +2,13 @@
 
  
 
-$romerINSTAPI = '/root/instapi/';
-$romerPREDIS = '/root/redis/predis/';
-$romerINSTA = '/root/insta/';
+// $romerINSTAPI = '/root/instapi/';
+// $romerPREDIS = '/root/redis/predis/';
+// $romerINSTA = '/root/insta/';
 
-// $romerINSTAPI = '/Users/alex/dev/instagram/instapi/';
-// $romerPREDIS = '/Users/alex/dev/instagram/redis/predis/';
-// $romerINSTA = '/Users/alex/dev/instagram/insta/';
+$romerINSTAPI = '/Users/alex/dev/instagram/instapi/';
+$romerPREDIS = '/Users/alex/dev/instagram/redis/predis/';
+$romerINSTA = '/Users/alex/dev/instagram/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -1246,8 +1246,8 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 	$emailpass = 'iprofilenumberthree';
 	$cod = imap_reader( $phone_email , $emailpass);
 
-	//  echo "\nVerification code sent! >>>>>\n";
- //     	 // $cod = readline("Command: ");
+	 // echo "\nVerification code sent! >>>>>\n";
+  //    	 $cod = readline("Command: ");
     
      echo "\n>>> CODE PARSED: ".$cod."\n";
 
