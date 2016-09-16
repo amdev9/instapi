@@ -2,13 +2,13 @@
 
  
 
-// $romerINSTAPI = '/root/instapi/';
-// $romerPREDIS = '/root/redis/predis/';
-// $romerINSTA = '/root/insta/';
+$romerINSTAPI = '/root/instapi/';
+$romerPREDIS = '/root/redis/predis/';
+$romerINSTA = '/root/insta/';
 
-$romerINSTAPI = '/Users/alex/dev/instagram/instapi/';
-$romerPREDIS = '/Users/alex/dev/instagram/redis/predis/';
-$romerINSTA = '/Users/alex/dev/instagram/insta/';
+// $romerINSTAPI = '/Users/alex/dev/instagram/instapi/';
+// $romerPREDIS = '/Users/alex/dev/instagram/redis/predis/';
+// $romerINSTA = '/Users/alex/dev/instagram/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
