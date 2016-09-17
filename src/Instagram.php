@@ -488,7 +488,7 @@ public function sendConfirmEmail($email) {
      * @return array
      *               Upload data
      */
-    public function uploadPhoto($photo, $caption = null, $upload_id = null,  $customPreview = null, $location = null, $reel_flag = false,  $degrees = 0)
+    public function uploadPhoto($photo, $caption = '', $upload_id = null,  $customPreview = null, $location = null, $reel_flag = false,  $degrees = 0)
     
     {
   
@@ -1072,15 +1072,13 @@ public function sendConfirmEmail($email) {
         return $this->request('media/configure/?video=1', $this->generateSignature($post))[1];
     }
 
-    protected function configure($upload_id, $photo, $caption = null, $location = null, $filter = null)
+    protected function configure($upload_id, $photo, $caption = '', $location = null, $filter = null)
     {
 
         
         $size = getimagesize($photo)[0];
 
-         if(is_null($caption)) {
-            $post['caption'] = '';
-        }  
+          
 
 
           $post = [
@@ -1090,6 +1088,7 @@ public function sendConfirmEmail($email) {
             '_uid'               => $this->username_id,
             '_uuid'              => $this->uuid,
             'upload_id'          => $upload_id,
+            'caption'        => $caption,
             'device' => [
                 'manufacturer'    => 'Xiaomi',
                 'model'           => 'HM 1SW',
