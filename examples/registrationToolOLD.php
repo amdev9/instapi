@@ -1408,11 +1408,11 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 				        $degrees = $GLOBALS["redis"]->spop($value);
 						echo $degrees;
 				      
-					 	$i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
+					 	$i->uploadPhoto($dir.'/'.$value, $caption = null, $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
 
 					 	if ($uploadCounter == 2) {
 					 		sleep(10);
-					 		$i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees);   
+					 		$i->uploadPhoto($dir.'/'.$value, $caption = null, $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees);   
 
 					 	}
 

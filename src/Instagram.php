@@ -1072,7 +1072,7 @@ public function sendConfirmEmail($email) {
         return $this->request('media/configure/?video=1', $this->generateSignature($post))[1];
     }
 
-    protected function configure($upload_id, $photo, $caption = '', $location = null, $filter = null)
+    protected function configure($upload_id, $photo, $caption = null, $location = null, $filter = null)
     {
 
         
@@ -1080,6 +1080,9 @@ public function sendConfirmEmail($email) {
 
          if(!is_null($caption)) {
             $post['caption'] = $caption;
+        } else 
+        {
+           $post['caption'] = '';
         }
 
 
@@ -1089,7 +1092,6 @@ public function sendConfirmEmail($email) {
             'source_type'        => 4,
             '_uid'               => $this->username_id,
             '_uuid'              => $this->uuid,
-            'caption'            => $caption,
             'upload_id'          => $upload_id,
             'device' => [
                 'manufacturer'    => 'Xiaomi',
