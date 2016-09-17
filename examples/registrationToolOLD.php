@@ -1247,8 +1247,11 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 
 	sleep(10);
 
-	$phone_email = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
-	$emailpass = 'iprofilenumberthree';
+	// $phone_email = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
+	// $emailpass = 'iprofilenumberthree';
+
+	$phone_email = 'igrofilecreateyouownworlbeasww@gmail.com';
+	$emailpass = 'igrofilecreate';
 	$cod = imap_reader( $phone_email , $emailpass);
 
 	 // echo "\nVerification code sent! >>>>>\n";
@@ -1426,7 +1429,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 				} catch (Exception $e) {
 				    echo $e->getMessage();
 				}
-				 
+				 sleep(10);
 		    }
 		}
 
