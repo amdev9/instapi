@@ -1246,7 +1246,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 
 	echo var_export($sres);
 
-	sleep(10);
+	// sleep(10);
 
 	// $phone_email = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
 	// $emailpass = 'iprofilenumberthree';
