@@ -96,9 +96,11 @@ $hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
 // $username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
 // $password = 'iprofilenumber';
 
-$username = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
-  $password = 'iprofilenumberthree';
+// $username = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
+  // $password = 'iprofilenumberthree';
 
+$username = 'igrofilecreateyouownworlbeasww@gmail.com';
+  $password = 'igrofilecreate';
  
 $inbox = imap_open($hostname,$username,$password); 
 
