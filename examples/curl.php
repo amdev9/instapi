@@ -88,6 +88,10 @@
 // $r = new Email_reader();
 // echo $r->get(1);
 
+
+shell_exec('tunnelbear stop');
+sleep(5);
+
 $hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
 // $username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
 // $password = 'iprofilenumber';
@@ -156,6 +160,7 @@ echo $code;
 
 imap_close($inbox);
 
+shell_exec('tunnelbear UnitedStates');
 
 // Загрузка штампа и фото, для которого применяется водяной знак (называется штамп или печать)
 
