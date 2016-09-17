@@ -1253,10 +1253,10 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 
 	$phone_email = 'iprofilenumberqweqweqweqweqweq@gmail.com';
 	$emailpass = 'iprofilenumber';
-	$cod = imap_reader( $phone_email , $emailpass);
+	// $cod = imap_reader( $phone_email , $emailpass);
 
-	 // echo "\nVerification code sent! >>>>>\n";
-  //    	 $cod = readline("Command: ");
+	 echo "\nVerification code sent! >>>>>\n";
+     	 $cod = readline("Command: ");
     
      echo "\n>>> CODE PARSED: ".$cod."\n";
 
