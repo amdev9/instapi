@@ -1078,12 +1078,9 @@ public function sendConfirmEmail($email) {
         
         $size = getimagesize($photo)[0];
 
-         if(!is_null($caption)) {
-            $post['caption'] = $caption;
-        } else 
-        {
-           $post['caption'] = '';
-        }
+         if(is_null($caption)) {
+            $post['caption'] = '';
+        }  
 
 
           $post = [
