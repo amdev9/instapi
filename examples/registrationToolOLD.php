@@ -29,7 +29,8 @@ function imap_reader ( $username, $password )
 {
 
 	shell_exec('tunnelbear stop');
-	sleep(15);
+	echo "tunnelbear stopped\n";
+	sleep(20);
 	$hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
 	//$username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
 	//$password = 'iprofilenumber';
