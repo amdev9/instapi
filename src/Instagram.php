@@ -1075,44 +1075,41 @@ public function sendConfirmEmail($email) {
     protected function configure($upload_id, $photo, $caption = '', $location = null, $filter = null)
     {
 
-        $caption = is_null($caption) ? '' : $caption;
+        
         $size = getimagesize($photo)[0];
 
-        $post = [
-        'upload_id'          => $upload_id,
-        'camera_model'       => 'HM1S',     //model
-        'source_type'        => 1,
-        'date_time_original' => date('Y:m:d H:i:s'),
-        'camera_make'        => 'XIAOMI',  //manufacturer
-        'geotag_enabled'     => false,
-        'edits'              => [
-          'crop_original_size' => [$size, $size],
-          'crop_zoom'          => 1.3333334,
-          'crop_center'        => [0.0, -0.0],
-        ],
-        'extra' => [
-          'source_width'  => $size,
-          'source_height' => $size,
-        ],
-        'device' => [
-          'manufacturer'    => 'Xiaomi',
-          'model'           => 'HM 1SW',
-          'android_version' => 18,
-          'android_release' => '4.3',
-        ],
-        '_csrftoken'  => $this->token,
-        '_uuid'       => $this->uuid,
-        '_uid'        => $this->username_id,
-        'waterfall_id'  => $this->waterfall_id,
-        'scene_type'    => 1,
-
-     ];
-
-
-      if(!is_null($caption)) {
+         if(!is_null($caption)) {
             $post['caption'] = $caption;
         }
 
+
+          $post = [
+            '_csrftoken'         => $this->token,
+            'media_folder'       => 'Instagram',
+            'source_type'        => 4,
+            '_uid'               => $this->username_id,
+            '_uuid'              => $this->uuid,
+            'caption'            => $caption,
+            'upload_id'          => $upload_id,
+            'device' => [
+                'manufacturer'    => 'Xiaomi',
+                'model'           => 'HM 1SW',
+                'android_version' => 18,
+                'android_release' => '4.3',
+            ],
+            'edits'              => [
+                'crop_original_size' => [$size, $size],
+                'crop_center'        => [0, 0],
+                'crop_zoom'          => 1,
+            ],
+            'extra' => [
+                'source_width'  => $size,
+                'source_height' => $size,
+            ],
+        ];
+
+
+  
      if (!is_null($location))
      {
          $loc = [
@@ -1136,9 +1133,12 @@ public function sendConfirmEmail($email) {
             $post['edits']['filter_type'] = Utils::getFilterCode($filter);
         }
 
-         $post = json_encode($post);
-    
+        $post = json_encode($post);
+
         $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,-0.0]', $post);
+        $post = str_replace('"crop_zoom":1', '"crop_zoom":1.0', $post);
+        $post = str_replace('"crop_original_size":'."[$size,$size]", '"crop_original_size":'."[$size.0,$size.0]", $post);
+
 
         return $this->request('media/configure/', $this->generateSignature($post))[1];
     }

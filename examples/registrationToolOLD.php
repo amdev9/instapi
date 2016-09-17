@@ -1430,9 +1430,9 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 		$cured = $i->currentEdit();
 		echo var_export($cured);
 		sleep(4);
-		$i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], "", $GLOBALS["gender"]); 
+		$i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"] , $GLOBALS["gender"]); 
 
-			//$GLOBALS["email"] 
+			//
 			
 
 		sleep(4); 
