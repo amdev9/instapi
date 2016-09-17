@@ -90,7 +90,7 @@
 
 
 shell_exec('tunnelbear stop');
-sleep(5);
+sleep(15);
 
 $hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
 // $username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
