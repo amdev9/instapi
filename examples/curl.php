@@ -89,62 +89,62 @@
 // echo $r->get(1);
 
 
-shell_exec('tunnelbear stop');
-sleep(15);
+// shell_exec('tunnelbear stop');
+// sleep(15);
 
-$hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
+// $hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
+// // $username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
+// // $password = 'iprofilenumber';
+
+// // $username = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
+//   // $password = 'iprofilenumberthree';
+
 // $username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
-// $password = 'iprofilenumber';
-
-// $username = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
-  // $password = 'iprofilenumberthree';
-
-$username = 'iprofilenumberqweqweqweqweqweq@gmail.com';
-  $password = 'iprofilenumber';
+//   $password = 'iprofilenumber';
  
-$inbox = imap_open($hostname,$username,$password); 
+// $inbox = imap_open($hostname,$username,$password); 
 
-echo "fine";
-$message_len = imap_num_msg($inbox)."\n";
-
-
-$emails = imap_search($inbox,'ALL');
-
-rsort($emails);
-
-$code = '';
-foreach($emails as $email_number) {
-
-    $overview = imap_fetch_overview($inbox,$email_number,0);
-    // $message = imap_fetchbody($inbox,$email_number, 1);
-
-    $message = quoted_printable_decode(imap_fetchbody($inbox,$email_number,1)); 
-
- $re1='(Use)';  # Word 1
-  $re2='.*?'; # Non-greedy match on filler
-  $re3='(\\d+)';  # Integer Number 1
-  $re4='.*?'; # Non-greedy match on filler
-  $re5='(\\d+)';  # Integer Number 2
-  $re6='.*?'; # Non-greedy match on filler
-  $re7='(to)';  # Word 2
-  $re8='.*?'; # Non-greedy match on filler
-  $re9='(verify)';  # Word 3
+// echo "fine";
+// $message_len = imap_num_msg($inbox)."\n";
 
 
-  if ($c=preg_match_all ("/".$re1.$re2.$re3.$re4.$re5.$re6.$re7.$re8.$re9."/is", $message, $matches))
-  {
-      $word1=$matches[1][0];
-      $int1=$matches[2][0];
-      $int2=$matches[3][0];
-      $word2=$matches[4][0];
-      $word3=$matches[5][0];
-      $code =  $int1."".$int2;
+// $emails = imap_search($inbox,'ALL');
 
-      break;
-  }
+// rsort($emails);
+
+// $code = '';
+// foreach($emails as $email_number) {
+
+//     $overview = imap_fetch_overview($inbox,$email_number,0);
+//     // $message = imap_fetchbody($inbox,$email_number, 1);
+
+//     $message = quoted_printable_decode(imap_fetchbody($inbox,$email_number,1)); 
+
+//  $re1='(Use)';  # Word 1
+//   $re2='.*?'; # Non-greedy match on filler
+//   $re3='(\\d+)';  # Integer Number 1
+//   $re4='.*?'; # Non-greedy match on filler
+//   $re5='(\\d+)';  # Integer Number 2
+//   $re6='.*?'; # Non-greedy match on filler
+//   $re7='(to)';  # Word 2
+//   $re8='.*?'; # Non-greedy match on filler
+//   $re9='(verify)';  # Word 3
 
 
-echo "+";
+//   if ($c=preg_match_all ("/".$re1.$re2.$re3.$re4.$re5.$re6.$re7.$re8.$re9."/is", $message, $matches))
+//   {
+//       $word1=$matches[1][0];
+//       $int1=$matches[2][0];
+//       $int2=$matches[3][0];
+//       $word2=$matches[4][0];
+//       $word3=$matches[5][0];
+//       $code =  $int1."".$int2;
+
+//       break;
+//   }
+
+
+// echo "+";
 
 
 //Don't lose your phone number!
@@ -156,15 +156,15 @@ echo "+";
     // echo $message."\n";
 
  
-}
+// }
 
-echo $code;
+// echo $code;
 
-imap_close($inbox);
+// imap_close($inbox);
 
-shell_exec('tunnelbear UnitedStates');
+// shell_exec('tunnelbear UnitedStates');
 
-// Загрузка штампа и фото, для которого применяется водяной знак (называется штамп или печать)
+// // Загрузка штампа и фото, для которого применяется водяной знак (называется штамп или печать)
 
 // $im = imagecreatefromjpeg('2.jpg');
 
@@ -251,7 +251,10 @@ shell_exec('tunnelbear UnitedStates');
 
 
 // echo time()."\n";
-// echo md5(microtime())."\n";
+echo microtime()."\n";
+
+echo round(microtime(true) * 1000);
+// echo strtotime("now"), "\n";
 
 // echo '97f2065bab894294ae8dcf8f2a6fcbe8';
 // // $a= base64_encode(microtime());
