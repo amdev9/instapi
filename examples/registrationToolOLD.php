@@ -1209,11 +1209,11 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 
 	
 
-	// $check = $r->checkEmail($email);
- //    if (isset($check[1]['available']) && $check[1]['available'] == false) {
- //    	$redis->sadd("blacklist_email",  $email);
-	//     break;
-	// }     
+	$check = $r->checkEmail($email);
+    if (isset($check[1]['available']) && $check[1]['available'] == false) {
+    	$redis->sadd("blacklist_email",  $email);
+	    break;
+	}     
 
 
 	$outputs = $r->fetchHeaders();
@@ -1242,27 +1242,27 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 	}	
 	 
  
-	$sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
+	// $sres = $r->sendSignupSmsCode($GLOBALS["phone"]);
 
-	echo var_export($sres);
+	// echo var_export($sres);
 
-	// sleep(10);
+	// // sleep(10);
 
-	// $phone_email = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
-	// $emailpass = 'iprofilenumberthree';
+	// // $phone_email = 'iprogileqweqwe12dsfsdfsdfsdfsd@gmail.com';
+	// // $emailpass = 'iprofilenumberthree';
 
-	$phone_email = 'iprofilenumberqweqweqweqweqweq@gmail.com';
-	$emailpass = 'iprofilenumber';
-	// $cod = imap_reader( $phone_email , $emailpass);
+	// $phone_email = 'iprofilenumberqweqweqweqweqweq@gmail.com';
+	// $emailpass = 'iprofilenumber';
+	// // $cod = imap_reader( $phone_email , $emailpass);
 
-	 echo "\nVerification code sent! >>>>>\n";
-     	 $cod = readline("Command: ");
+	//  echo "\nVerification code sent! >>>>>\n";
+ //     	 $cod = readline("Command: ");
     
-     echo "\n>>> CODE PARSED: ".$cod."\n";
+ //     echo "\n>>> CODE PARSED: ".$cod."\n";
 
 
-	 $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
-	 echo var_export($sval);
+	//  $sval = $r->validateSignupSmsCode($cod, $GLOBALS["phone"]);
+	//  echo var_export($sval);
       
 
     $sugger = $r->usernameSuggestions($email,$first_name );
@@ -1287,8 +1287,8 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 	 
 
  
-	// $result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
-	 $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
+	$result = $r->createAccount($username, $password, $email, $qs_stamp, $GLOBALS["first_name"] );
+	 // $result = $r->createValidatedAccount($username, $cod,$GLOBALS["phone"], $GLOBALS["first_name"] , $password);
 
 
 	$resToPrint =  var_export($result);
