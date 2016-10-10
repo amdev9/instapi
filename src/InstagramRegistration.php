@@ -310,6 +310,8 @@ echo var_export( $response);
             file_put_contents($this->IGDataPath.$this->username.'-uuid.dat', $this->uuid);
              file_put_contents($this->IGDataPath.$this->username.'-phoneid.dat', $this->phone_id);
               file_put_contents($this->IGDataPath.$this->username.'-deviceid.dat', $this->device_id);
+               file_put_contents($this->IGDataPath.$this->username.'-waterfall.dat', $this->waterfall_id);
+
         ///////
           // copy($this->IGDataPath.'cookies.dat', $this->IGDataPath.'cookies2.dat'); //no need??
           rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat");  
@@ -342,7 +344,7 @@ echo var_export($result);
       // return sprintf('Instagram 9.3.0 Android (18/4.3; 320dpi; 720x1280; %s; %s; %s; qcom; en_US)',  $deviceData[0], $deviceData[1], $deviceData[2]);
 
 
-      return 'Instagram 9.3.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
+      return 'Instagram 9.4.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)';
 
 
    }
@@ -581,7 +583,7 @@ $endpoint = "https://graph.facebook.com/v2.3/124024574287414/activities";
    $headers = [
         'Connection: close',
         'Accept: */*',
-        'X-IG-Capabilities: 3Q4=',
+        'X-IG-Capabilities: 3R4=',
         'X-IG-Connection-Type: WIFI',
         'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
         'Cookie2: $Version=1',

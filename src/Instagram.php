@@ -2834,7 +2834,7 @@ public function sendConfirmEmail($email) {
        $headers = [
         'Connection: close',
         'Accept: */*',
-        'X-IG-Capabilities: 3Q4=',
+        'X-IG-Capabilities: 3R4=',
         'X-IG-Connection-Type: WIFI',
         'Content-type: application/x-www-form-urlencoded; charset=UTF-8',
         'Cookie2: $Version=1',

@@ -2,13 +2,13 @@
 
  
 
-$romerINSTAPI = '/root/instapi/';
-$romerPREDIS = '/root/redis/predis/';
-$romerINSTA = '/root/insta/';
+// $romerINSTAPI = '/root/instapi/';
+// $romerPREDIS = '/root/redis/predis/';
+// $romerINSTA = '/root/insta/';
 
-// $romerINSTAPI = '/Users/alex/dev/instagram/instapi/';
-// $romerPREDIS = '/Users/alex/dev/instagram/redis/predis/';
-// $romerINSTA = '/Users/alex/dev/instagram/insta/';
+$romerINSTAPI = '/Users/alex/dev/instagram/instapi/';
+$romerPREDIS = '/Users/alex/dev/instagram/redis/predis/';
+$romerINSTA = '/Users/alex/dev/instagram/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 
@@ -1402,7 +1402,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 
 			} else {
 		
-				if ($uploadCounter == 3) { break; }
+				if ($uploadCounter == 2) { break; }
 				try {
 					if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
 					{
@@ -1419,7 +1419,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 				      
 					 	$i->uploadPhoto($dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
 
-					 	if ($uploadCounter == 2) {
+					 	if ($uploadCounter == 1) {
 					 		sleep(10);
 					 		$i->uploadPhoto($dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees);   
 
@@ -1439,7 +1439,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 		$cured = $i->currentEdit();
 		echo var_export($cured);
 		sleep(4);
-		$i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], '' , $GLOBALS["gender"]); 
+		$i->editProfile($GLOBALS["url"], $GLOBALS["phone"], $GLOBALS["first_name"], $GLOBALS["biography"], $GLOBALS["email"] , $GLOBALS["gender"]); 
 
 			//$GLOBALS["email"]
 			
