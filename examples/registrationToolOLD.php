@@ -1161,7 +1161,7 @@ $debug = false;
 
 $password = $argv[1]; 
 $email= $argv[2]; 
-$url  = $argv[3]; 
+$url  = $redis->spop('links_t');//$argv[3]; 
 $biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_kiss", "\u{1F48B}", str_replace("_smi_video", "🔞\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $argv[4])) ) ) ;
 $caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} ", str_replace("_smi_video", "\u{1F4A6}",   $argv[5] ) ) );
 $first_name =  $argv[6];
@@ -1327,8 +1327,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 		sleep(3);
 
 		 
-		$registered = $username.":".$password.":blackking:Name0123Space:".$proxy." ".$email." ".$first_name;
-
+		$registered = $username.":".$password.":blackking:Name0123Space:".$proxy; //.$email." ".$first_name;
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
 
 
@@ -1477,7 +1476,7 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 
 		
 
-		funcrecur($i, $username, $pk  ); 
+		// funcrecur($i, $username, $pk  ); 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	// }
