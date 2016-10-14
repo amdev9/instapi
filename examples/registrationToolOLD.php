@@ -227,7 +227,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 {
 
 	$time_in_day = 24*60*60;
-	$posts_per_day = 7000;  //27000
+	$posts_per_day = 10000;  //27000
 	$delay = $time_in_day / $posts_per_day;
 
 
@@ -428,7 +428,7 @@ function funcrecur($ilink, $usernamelink, $pkuser)
 			    	// sleep($next_iteration_time);
 					// &&  $GLOBALS["redis"]->scard("followed".$usernamelink) < 1590
 	/// MASS FOLLOW		//// 
-				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 50!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
+				if ($GLOBALS["redis"]->sismember("followed".$usernamelink , $actioner) != true  &&  ($GLOBALS["redis"]->scard("followed".$usernamelink) % 150!= 0  || $GLOBALS["redis"]->scard("followed".$usernamelink) == 0 )) {
 					
 					$fres = $ilink->follow($actioner);
 					if ($fres[1]['status'] == 'ok') {
@@ -1327,7 +1327,8 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 		sleep(3);
 
 		 
-		$registered = $proxy." ".$username." ".$email." ".$password." ".$first_name;
+		$registered = $username.":".$password.":blackking:Name0123Space:".$proxy." ".$email." ".$first_name;
+
       	file_put_contents($romerINSTA."logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
 
 
