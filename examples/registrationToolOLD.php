@@ -1022,154 +1022,168 @@ function functiondirectshare($username, $i, $message_recipient, $ad_media_id = n
 
 
 
-if (count($argv) == 6 ) {
+// if (count($argv) == 6 ) {
 
 
-	$debug = true; 
+// 	$debug = true; 
 	 
-	$userstring = $redis->spop("tologin");
-	$userarray = explode ( " ", $userstring  ) ; 
-	$username =  $userarray[0];
-	$password =  $userarray[1];
+// 	$userstring = $redis->spop("tologin");
+// 	$userarray = explode ( " ", $userstring  ) ; 
+// 	$username =  $userarray[0];
+// 	$password =  $userarray[1];
 
 	 
-	$url  = $argv[3]; 
-	$biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_kiss", "\u{1F48B}", str_replace("_smi_video", "🔞\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $argv[4])) ) ) ;
-	$caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} ", str_replace("_smi_video", "\u{1F4A6}",   $argv[5] ) ) );
+// 	$url  = $argv[3]; 
+// 	$biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_kiss", "\u{1F48B}", str_replace("_smi_video", "🔞\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $argv[4])) ) ) ;
+// 	$caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} ", str_replace("_smi_video", "\u{1F4A6}",   $argv[5] ) ) );
 	 
-	$gender = 2;
+// 	$gender = 2;
 	 
-	$dir = $romerINSTAPI.'src/adult/';
+// 	$dir = $romerINSTAPI.'src/adult/';
 
-	if ($redis->scard("proxy") >  0) {
-		$proxy =  $redis->spop("proxy");	
-	} else {
-		$proxy = null;
-	}
+// 	if ($redis->scard("proxy") >  0) {
+// 		$proxy =  $redis->spop("proxy");	
+// 	} else {
+// 		$proxy = null;
+// 	}
 
-	$i = new Instagram($username, $password, $proxy, $debug );
+// 	$i = new Instagram($username, $password, $proxy, $debug );
 
-	$i->login();
-	 sleep(15);
+// 	$i->login();
+// 	 sleep(15);
 
-	// $filesVideo = scandir($dir);
-	// 	$ava = false; // switch to true
-	// 	$uploadCounter = 0;
-	// 	$filesVid = shuffle_assoc($filesVideo);
+// 	// $filesVideo = scandir($dir);
+// 	// 	$ava = false; // switch to true
+// 	// 	$uploadCounter = 0;
+// 	// 	$filesVid = shuffle_assoc($filesVideo);
 
-	// 	foreach ( $filesVid as $k => $value ) {
+// 	// 	foreach ( $filesVid as $k => $value ) {
 
-	// 	    $ext = pathinfo($value, PATHINFO_EXTENSION);
-	// 	    if ($ext == "mp4") { 
-	// 			try {
-	// 			    $i->uploadVideo($dir.'/'.$value, $caption);  
-	// 			} catch (Exception $e) {
-	// 			    echo $e->getMessage();
-	// 			}
+// 	// 	    $ext = pathinfo($value, PATHINFO_EXTENSION);
+// 	// 	    if ($ext == "mp4") { 
+// 	// 			try {
+// 	// 			    $i->uploadVideo($dir.'/'.$value, $caption);  
+// 	// 			} catch (Exception $e) {
+// 	// 			    echo $e->getMessage();
+// 	// 			}
 
-	// 			sleep(10);
-	// 	    }
-	// 	    elseif ($ext == "jpg" && $ava == true ) {
+// 	// 			sleep(10);
+// 	// 	    }
+// 	// 	    elseif ($ext == "jpg" && $ava == true ) {
 
-	// 	    	try {
-	// 	    		if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
-	// 				{
+// 	// 	    	try {
+// 	// 	    		if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+// 	// 				{
 						
-	// 					if ($GLOBALS["redis"]->scard($value) == 0 ) {
-	// 					     $GLOBALS["redis"]->sadd('picked', $value);
-	// 					    foreach (range(-12, 12) as $number) {
-	// 					        if ($number != 0)
-	// 					            $GLOBALS["redis"]->sadd($value, $number);
-	// 					    }
-	// 					}
-	// 					$degrees = $GLOBALS["redis"]->spop($value);
-	// 			        echo $degrees;
-	// 			    	$i->changeProfilePicture($dir.'/'.$value, $degrees);
-	// 				}
-	// 			} catch (Exception $e) {
-	// 			    echo $e->getMessage();
-	// 			}
-	// 			sleep(10);
-	// 			$ava = false;
+// 	// 					if ($GLOBALS["redis"]->scard($value) == 0 ) {
+// 	// 					     $GLOBALS["redis"]->sadd('picked', $value);
+// 	// 					    foreach (range(-12, 12) as $number) {
+// 	// 					        if ($number != 0)
+// 	// 					            $GLOBALS["redis"]->sadd($value, $number);
+// 	// 					    }
+// 	// 					}
+// 	// 					$degrees = $GLOBALS["redis"]->spop($value);
+// 	// 			        echo $degrees;
+// 	// 			    	$i->changeProfilePicture($dir.'/'.$value, $degrees);
+// 	// 				}
+// 	// 			} catch (Exception $e) {
+// 	// 			    echo $e->getMessage();
+// 	// 			}
+// 	// 			sleep(10);
+// 	// 			$ava = false;
 
-	// 		} else {
-	// 			if ($uploadCounter == 1) { break; } //6
-	// 			try {
-	// 				if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
-	// 				{
+// 	// 		} else {
+// 	// 			if ($uploadCounter == 1) { break; } //6
+// 	// 			try {
+// 	// 				if ($GLOBALS["redis"]->scard($value) >= 0 || $GLOBALS["redis"]->sismember('picked', $value) != true) 
+// 	// 				{
 						
-	// 					if ($GLOBALS["redis"]->scard($value) == 0 ) {
-	// 					     $GLOBALS["redis"]->sadd('picked', $value);
-	// 					    foreach (range(-12, 12) as $number) {
-	// 					        if ($number != 0)
-	// 					            $GLOBALS["redis"]->sadd($value, $number);
-	// 					    }
-	// 					}
-	// 			        $degrees = $GLOBALS["redis"]->spop($value);
-	// 					echo $degrees;
+// 	// 					if ($GLOBALS["redis"]->scard($value) == 0 ) {
+// 	// 					     $GLOBALS["redis"]->sadd('picked', $value);
+// 	// 					    foreach (range(-12, 12) as $number) {
+// 	// 					        if ($number != 0)
+// 	// 					            $GLOBALS["redis"]->sadd($value, $number);
+// 	// 					    }
+// 	// 					}
+// 	// 			        $degrees = $GLOBALS["redis"]->spop($value);
+// 	// 					echo $degrees;
 				      
-	// 				    $i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
+// 	// 				    $i->uploadPhoto($dir.'/'.$value, $caption = "", $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
 					    
 
-	// 				    $uploadCounter = $uploadCounter + 1;
-	// 				}
-	// 			} catch (Exception $e) {
-	// 			    echo $e->getMessage();
-	// 			}
-	// 			sleep(30);
-	// 	    }
-	// 	}
+// 	// 				    $uploadCounter = $uploadCounter + 1;
+// 	// 				}
+// 	// 			} catch (Exception $e) {
+// 	// 			    echo $e->getMessage();
+// 	// 			}
+// 	// 			sleep(30);
+// 	// 	    }
+// 	// 	}
 
-	// 	echo "video and photo downloaded!\n"; 
+// 	// 	echo "video and photo downloaded!\n"; 
 
 
 	 
-	//  sleep(5);
-	// // $i->setPublicAccount();
+// 	//  sleep(5);
+// 	// // $i->setPublicAccount();
 	
-	// // $i->setPrivateAccount();
+// 	// // $i->setPrivateAccount();
 	
-	// // sleep(10);
+// 	// // sleep(10);
 
 	
- 	$cured = $i->currentEdit();
-    echo var_export($cured);
+//  	$cured = $i->currentEdit();
+//     echo var_export($cured);
 
-    $phone =  $cured[1]['user']['phone_number'];
-   	$email =  $cured[1]['user']['email'];
-   	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
+//     $phone =  $cured[1]['user']['phone_number'];
+//    	$email =  $cured[1]['user']['email'];
+//    	$GLOBALS["first_name"] =  $cured[1]['user']['full_name'];
 
- //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
+//  //    $GLOBALS["biography"]  = str_replace( "_username" ,explode(" ",$GLOBALS["first_name"])[0]."".explode(" ",$GLOBALS["first_name"])[1], $GLOBALS["biography"] );
 	 
-	// sleep(4);
-	// $i->editProfile($GLOBALS["url"], $phoneparsed , $GLOBALS["first_name"], $GLOBALS["biography"], $emailparsed , $GLOBALS["gender"]);
-	// sleep(4);
+// 	// sleep(4);
+// 	// $i->editProfile($GLOBALS["url"], $phoneparsed , $GLOBALS["first_name"], $GLOBALS["biography"], $emailparsed , $GLOBALS["gender"]);
+// 	// sleep(4);
 
 	  
- //  	$logined = $proxy." ".$username." ".$password;//." ".$email;
- //  	$redis->sadd("successlogin", $logined);	
+//  //  	$logined = $proxy." ".$username." ".$password;//." ".$email;
+//  //  	$redis->sadd("successlogin", $logined);	
 
 
-     $pk = $i->getusernameId();
-     funcrecur($i, $username, $pk  ); 
+//      $pk = $i->getusernameId();
+//      funcrecur($i, $username, $pk  ); 
 
-}  else {
+// }  else {
 
 
 /// DEBUG MODE ///
+
+
+// line_r = profile_password +' '+ profile_email +' '+ bioParsed+ ' '+ captionParsed + ' ' + random.choice(names).title() + ' ' +  random.choice(surnames).strip() 
+      
+
 $debug = false; 
 
-$password = $argv[1]; 
-$email= $argv[2]; 
+$line_inst = $redis->spop('line_inst');
+
+$password = explode("|", $line_inst)[0]; ///$argv[1]; 
+$email= 	explode("|", $line_inst)[1]; ///$argv[2]; 
+$bioparse = explode("|", $line_inst)[2];//$argv[4]
+$captionparse = explode("|", $line_inst)[3]; //$argv[5]
+$first_name =  explode("|", $line_inst)[4];//$argv[6];
+
+$phone = ""; /// $argv[7];
 $url  = $redis->spop('links_t');//$argv[3]; 
-$biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_kiss", "\u{1F48B}", str_replace("_smi_video", "🔞\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $argv[4])) ) ) ;
-$caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} ", str_replace("_smi_video", "\u{1F4A6}",   $argv[5] ) ) );
-$first_name =  $argv[6];
+
+
+$biography = str_replace( "_cur_down", "\u{1F447}" , str_replace ( "_kiss", "\u{1F48B}", str_replace("_smi_video", "🔞\u{1F4A6}", str_replace("_smi_hi", "\u{1F60D}", $bioparse)) ) ) ;
+$caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} ", str_replace("_smi_video", "\u{1F4A6}",   $captionparse ) ) );
+
 $gender = 2;
  
 $dir = $romerINSTAPI.'src/adult/';
  
-$phone = $argv[7];
+
 $proxy = null;//"a"; 
 $username = "";
 $qs_stamp = "";
@@ -1670,6 +1684,5 @@ while ( $redis->scard("proxy") > 0 || $proxy == null)
 	 sleep(3);
 }     
    
-   }
-
+   
 
