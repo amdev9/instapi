@@ -23,7 +23,6 @@ class InstagramRegistration
     {
         $this->proxy = $proxy;
         $this->debug = $debug;
-
         $this->uuid = $this->generateUUID(true);
 
          $this->phone_id = $this->generateUUID(true);
