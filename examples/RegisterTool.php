@@ -11,7 +11,7 @@ $romerINSTA = '/Users/alex/dev/instagram/insta/';
 
 require_once $romerINSTAPI.'src/InstagramRegistration.php';
 require $romerINSTAPI.'src/Instagram.php';
-// require $romerPREDIS.'autoload.php';
+ 
 
 class RegisterTool extends Threaded
 {
@@ -215,7 +215,6 @@ class RegisterTool extends Threaded
 		$delay = $time_in_day / $posts_per_day;
 
 	////HASHTAGS////////
-
 		// while ($redis->scard("detection".$usernamelink) == 0) {
 		// 	  // funcgeocoordparse($ilink, $redis);
 		// 	if ($redis->sismember("hashtag_actor" , $usernamelink) != true) {
@@ -298,144 +297,95 @@ class RegisterTool extends Threaded
 
 	 }
 
-	////////////////
-
-	 	// $actioner = $redis->spop("detection");
-
-	 	
-	 	// $this->functofollow($ilink, $usernamelink, $actioner);	 
-	////.......//////////
-
-		// if ($redis->sismember("comment_sentactor" , $usernamelink) != true) {
-		//  	  for($t = 0; $t < 9; $t++) {  //expressive spam 12 OK no sleep
-		// 		if ($redis->sismember("disabled", "comment_".$usernamelink) != true) {
-		// 			$this->functocomment($ilink, $usernamelink);   
-		// 			sleep(30);
-		// 			//$timetosleep = add_time($delay*10);      	
-		// 		 	//sleep($timetosleep);
-		// 		}
-		// 	}
+	 if ($redis->scard("detection".$this->username) > 0 ) {
+		$acmed = $redis->spop("detection".$this->username);
+		if (strpos($acmed, ':') !== false) {
+			$datapart = explode(":", $acmed);
+		   	$actioner =  $datapart[0];
+    		$medcom = $datapart[1];
+		}
+		else {
+			$actioner =  $acmed ;
+		}
+		// 40 __>>>__ 700
+		// if ($redis->sismember("disabled", "direct_".$this->username) != true ) {
+		//   $this->functiondirectshare( $ilink, $actioner, $redis );//,$ad_media_id
 		// }
-		 //$redis->sadd("track", "comment".$this->username."_".date("Y-m-d_H:i:s"));
+		echo $next_iteration_time = $this->add_time($delay); //timer
+		sleep($next_iteration_time);
 
+		if ($medcom == "nonprivate") {
 
-		// // if ($redis->scard("detection") == 0) {
-		// // 	    $this->funcgeocoordparse($ilink, $redis);
-		// 	   //   $timetosleep = add_time($delay);      	
-		//  		 // sleep($timetosleep);	 
-		// // }		 
-		 
-		  if ($redis->scard("detection".$this->username) > 0 ) {
-
-			    // for($t = 0; $t < 51; $t++) {  //TOVARKA
-			  //   	if 	($redis->scard("detection") == 0 ) {
-					//     	$this->funcgeocoordparse($ilink, $redis);
-					// }
-
-		  			$acmed = $redis->spop("detection".$this->username);
-					if (strpos($acmed, ':') !== false) {
-						$datapart = explode(":", $acmed);
-					   	$actioner =  $datapart[0];
-			    		$medcom = $datapart[1];
-					}
+			$usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
+			echo "\nfeed fecthed\n";
+			if (isset($usfeed['items'][0]['pk'])) {
+				$med = $usfeed['items'][0]['pk'];
+				sleep(3);
+				if ( $redis->sismember("liked".$this->username , $med) != true ) {
+					$lres =$ilink->like($med);
+					echo var_export($lres); //need to test res code
+					if ($lres[1]['status'] == 'ok') {
+						$redis->sadd("liked".$this->username, $med);
+					} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
+						$ilink->login(true);
+					} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
+						$ilink->checkpointPhoneChallenge($this->phone, $lres[1]['checkpoint_url']);
+					    echo "\nVerification code sent! >>>>>\n";
+					    $resp_code = "";
+						while( ctype_digit($resp_code) != true) {
+						  $resp_code = readline("Command: ");
+						}
+				 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
+				 			echo var_export($results);
+					 	}
 					else {
-						$actioner =  $acmed ;
-					}
-			    
-	        		if ($redis->sismember("disabled", "direct_".$this->username) != true ) {
-	        			$this->functiondirectshare( $ilink, $actioner, $redis );//,$ad_media_id
+						echo var_export($lres);
 					}
 
-						echo $next_iteration_time = $this->add_time($delay); //timer
-				    	sleep($next_iteration_time);
+					echo $next_iteration_time = $this->add_time($delay); //timer
+					sleep($next_iteration_time);
 
+					$ilink->follow($actioner);
 
-						// if ($medcom == "nonprivate") {
-						
-						// 	 $usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
-						// 	 echo "\nfeed fecthed\n";
-						
-						//   if (isset($usfeed['items'][0]['pk'])) {
-						// 	  $med = $usfeed['items'][0]['pk'];
-						// 	  sleep(2);
+				}
+			}	 
+		}
 
+		if ($medcom == "private") {
 
-						//  if ( $redis->sismember("liked".$usernamelink , $med) != true ) {
-						// 			$lres =$ilink->like($med);
-						// 			echo var_export($lres); //need to test res code
-								 
-
-						// 		if ($lres[1]['status'] == 'ok') {
-						//  		$redis->sadd("liked".$usernamelink, $med);
-						//  	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
-						//  		$ilink->login(true);
-						//  	} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
-						// 		 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $lres[1]['checkpoint_url']);
-					 //                     echo "\nVerification code sent! >>>>>\n";
-						// 	 			 // $resp_code = trim(fgets(STDIN));
-					 //                      $resp_code = "";
-						// 	 			   while( ctype_digit($resp_code) != true) {
-						// 					 // $line = readline("Command: ");
-						// 					  $resp_code = readline("Command: ");
-						// 					}
-
-																	 			
-
-						// 	 			 echo "\n---->".$resp_code;
-
-						// 	 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
-
-						// 	 			echo var_export($results);
-						// 		 	}
-
-						// 		 	else {
-						// 		 			echo var_export($lres);
-
-						// 		 	}
-							 
-						// 	}
-						// 	}
-						// 	 sleep(2);
-						// }
-
-				    // if ($medcom == "private") {
-				    	// echo $next_iteration_time = add_time($delay); //timer
-				    	// sleep($next_iteration_time);
-						// &&  $redis->scard("followed".$usernamelink) < 1590
-		/// MASS FOLLOW		//// 
-					// if ($redis->sismember("followed".$usernamelink , $actioner) != true  &&  ($redis->scard("followed".$usernamelink) % 150!= 0  || $redis->scard("followed".$usernamelink) == 0 )) {
-						
-					// 	$fres = $ilink->follow($actioner);
-					// 	if ($fres[1]['status'] == 'ok') {
-					// 	 	$redis->sadd("followed".$usernamelink, $actioner);
-					// 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
-					// 	 	$ilink->login(true);
-					// 	} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
-					// 		$ilink->checkpointPhoneChallenge($GLOBALS["phone"], $fres[1]['checkpoint_url']);
-					//         echo "\nVerification code sent! >>>>>\n";
-			 	// 		 	// $resp_code = trim(fgets(STDIN));
-	    //                     $resp_code = "";
-			 	// 		    while( ctype_digit($resp_code) != true) {
-					// 		 	// $line = readline("Command: ");
-					// 		  	$resp_code = readline("Command: ");
-					// 		}
-					// 		echo "\n---->".$resp_code;
-					// 		$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
-					// 		echo var_export($results);
-					// 	}
-					// 	else {
-					// 			 			echo var_export($fres);
-
-					// 	}
-					// 	echo var_export($fres);
-
-					// 	}
-					// 	else {
-					// 		 return;
-					// 	}		
+			if ($redis->sismember("followed".$this->username , $actioner) != true  &&  ($redis->scard("followed".$this->username) % 250!= 0  || $redis->scard("followed".$this->username) == 0 )) {
+				
+				$fres = $ilink->follow($actioner);
+				if ($fres[1]['status'] == 'ok') {
+				 	$redis->sadd("followed".$this->username, $actioner);
+				} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
+				 	$ilink->login(true);
+				} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
+					$ilink->checkpointPhoneChallenge($this->phone, $fres[1]['checkpoint_url']);
+			        echo "\nVerification code sent! >>>>>\n";
+	                $resp_code = "";
+	 			    while( ctype_digit($resp_code) != true) {
+					  	$resp_code = readline("Command: ");
+					}
+					echo "\n---->".$resp_code;
+					$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
+					echo var_export($results);
+				}
+				else {
+					 echo var_export($fres);
+				}
+				echo var_export($fres);
+			}
+			else {
+				 return;
+			}		
 		}	
-		$this->funcrecur($ilink, $pkuser, $redis  );
+		/////
+		$this->funcrecur( $ilink, $pkuser, $redis );
 	}
+}
+
+
 	
 	public  function f_rand($min=0,$max=1,$mul=100000){
 	    if ($min>$max) return false;
@@ -1045,7 +995,6 @@ class RegisterTool extends Threaded
 			     	 // $versms = $i->verifySmsCode($phone, $code_verif);
 			     	 //  echo var_export($versms);
 
-				 
 					$filesVideo = scandir($dir);
 					$ava = true;
 					$uploadCounter = 0;
@@ -1123,33 +1072,33 @@ class RegisterTool extends Threaded
 					$i->editProfile($url, $this->phone, $this->first_name, $biography, $this->email , $gender); 
 					sleep(4); 
 
-			
-					    $fres = $i->setPrivateAccount();
-					    if ($fres[1]['status'] == 'ok') {
-								 	 echo "ok";
-								} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
-								 	$i->login(true);
-								} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
-									$i->checkpointPhoneChallenge($phone, $fres[1]['checkpoint_url']);
-							        echo "\nVerification code sent! >>>>>\n";
-					 			 	// $resp_code = trim(fgets(STDIN));
-			                        $resp_code = "";
-					 			    while( ctype_digit($resp_code) != true) {
-									 	// $line = readline("Command: ");
-									  	$resp_code = readline("Command: ");
-									}
-									echo "\n---->".$resp_code;
-									$results = $i->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
-									echo var_export($results);
-								}
-								else {
-										 			echo var_export($fres);
+					// $fres = $i->setPrivateAccount();
+					// if ($fres[1]['status'] == 'ok') {
+					// 	echo "ok";
+					// } elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
+					//  	$i->login(true);
+					// } elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
+					// 	$i->checkpointPhoneChallenge($phone, $fres[1]['checkpoint_url']);
+				 	//        echo "\nVerification code sent! >>>>>\n";
+		 			// 	 	// $resp_code = trim(fgets(STDIN));
+     				//  $resp_code = "";
+		 			// 	    while( ctype_digit($resp_code) != true) {
+					// 	 	// $line = readline("Command: ");
+					// 	  	$resp_code = readline("Command: ");
+					// 	}
+					// 	echo "\n---->".$resp_code;
+					// 	$results = $i->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
+					// 	echo var_export($results);
+					// }
+					// else {
+					// 	echo var_export($fres);
+					// }
 
-								}
 					$this->funcrecur($i, $pk , $redis ); 
+					//////
 				    break;
 			    }
-				 sleep(3);
+				sleep(3);
 			}     
 	   }
 
