@@ -215,43 +215,42 @@ class RegisterTool extends Threaded
 		$delay = $time_in_day / $posts_per_day;
 
 	////HASHTAGS////////
-		// while ($redis->scard("detection".$usernamelink) == 0) {
-		// 	  // funcgeocoordparse($ilink, $redis);
-		// 	if ($redis->sismember("hashtag_actor" , $usernamelink) != true) {
-		// 	$hashtags = [ "follow4follow", "followforfollow" ];
+		while ($redis->scard("detection".$this->username) == 0) {
+			// funcgeocoordparse($ilink, $redis);
+			if ($redis->sismember("hashtag_actor" , $this->username) != true) {
+			$hashtags = [ "follow4follow", "followforfollow" ];
+	 		$availableHashtags = [];
+	 		foreach ($hashtags as $ind) {
+			    if (	 $redis->lrange("$ind:max_id", -1, -1) != "0"  ) {
+			   		array_push($availableHashtags, $ind); 
+			    }
+			}
+	 		if ( empty($availableHashtags) == true ) {
+	 			$availableHashtags = $hashtags;
+	 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)]; 
+	 		} else {
+	 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)];
+				$red = $redis->lrange("$hashtag:max_id", -1, -1);
+	 		}
+			if(empty ($red)) {
+				try {
+					 $hashtagers = $ilink->getHashtagFeed($hashtag, $maxid = null);
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
 
-	 // 		$availableHashtags = [];
-	 // 		foreach ($hashtags as $ind) {
-		// 	    if (	 $redis->lrange("$ind:max_id", -1, -1) != "0"  ) {
-		// 	   		array_push($availableHashtags, $ind); 
-		// 	    }
-		// 	}
-	 // 		if ( empty($availableHashtags) == true ) {
-	 // 			$availableHashtags = $hashtags;
-	 // 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)]; 
-	 // 		} else {
-	 // 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)];
-		// 		$red = $redis->lrange("$hashtag:max_id", -1, -1);
-	 // 		}
-		// 	if(empty ($red)) {
-		// 		try {
-		// 			 $hashtagers = $ilink->getHashtagFeed($hashtag, $maxid = null);
-		// 		} catch (Exception $e) {
-		// 		    echo $e->getMessage();
-		// 		}
+			} else {
+				try {
+					 $hashtagers = $ilink->getHashtagFeed($hashtag, $red[0]);
+				} catch (Exception $e) {
+				    echo $e->getMessage();
+				}
+			}
+		   $this->hashtagparse($hashtagers, $ilink, $redis, $hashtag);
+		}
+		 $redis->sadd("hashtag_actor", $this->username );
 
-		// 	} else {
-		// 		try {
-		// 			 $hashtagers = $ilink->getHashtagFeed($hashtag, $red[0]);
-		// 		} catch (Exception $e) {
-		// 		    echo $e->getMessage();
-		// 		}
-		// 	}
-		//    $this->hashtagparse($hashtagers, $ilink, $redis, $hashtag);
-		// }
-		//    $redis->sadd("hashtag_actor", $usernamelink );
-
-	 // }
+	 }
 
 	////ADULT////////// 	 
 
@@ -462,7 +461,6 @@ class RegisterTool extends Threaded
 					  
 						$redis->sadd("detection".$this->username, $followers['users'][$iter]['pk'].":nonprivate");
 							//sadd
-
 						//.":".$word1);
 
 						  // $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
@@ -597,52 +595,48 @@ class RegisterTool extends Threaded
 
 	public  function hashtagparse($getl, $i, $redis, $hashtag)
 	{
+		// $getl = $i->getHashtagFeed($hashtag, $maxid = null);
+        $num_rank_results = 0;
+        while ($num_rank_results < $getl['num_results']) {
+        	if($getl['items'][$num_rank_results]['user']['has_anonymous_profile_picture'] == false) {
 
-		//$getl = $i->getHashtagFeed($hashtag, $maxid = null);
+        	   echo $getl['items'][$num_rank_results]['user']['pk'].">---user pk\n"; ///////
+	           if ($getl['items'][$num_rank_results]['user']['is_private'] == false) {
+	             $redis->sadd("detection".$this->username, $getl['items'][$num_rank_results]['user']['pk'].":nonprivate");
+	           } else {
+	             $redis->sadd("detection".$this->username, $getl['items'][$num_rank_results]['user']['pk'].":private");
+	           }
+          }
+          $num_rank_results++;
+        } 
+        sleep(1);
 
-		        $num_rank_results =0;
-		        while ($num_rank_results < $getl['num_results']) {
-		          if($getl['items'][$num_rank_results]['user']['has_anonymous_profile_picture'] == false) {
-		             echo $getl['items'][$num_rank_results]['user']['pk'].">---user pk\n"; ///////
-		              $redis->sadd("detection".$this->username, $getl['items'][$num_rank_results]['user']['pk']);
+        if ($getl['more_available'] ==true ) {
+          $next_next_max_id = $getl['next_max_id'];
+          $getnewl = $i->getHashtagFeed($hashtag, $next_next_max_id);
+        } else {
+          echo "------>NO more\n";
+        }
+        $countertrue = 0;
+        while (isset($getnewl['more_available']) && $getnewl['more_available'] == true && $countertrue < 2) {  
+            $tmpgetnewl = $getnewl;
 
-		          }
-		          $num_rank_results++;
-		        } 
-		        sleep(1);
-
-		        if ($getl['more_available'] ==true ) {
-		          $next_next_max_id = $getl['next_max_id'];
-		          $getnewl = $i->getHashtagFeed($hashtag, $next_next_max_id);
-
-		        } else {
-
-		          echo "------>NO more\n";
-		        }
-
-		        $countertrue = 0;
-		        while (isset($getnewl['more_available']) && $getnewl['more_available'] ==true && $countertrue < 25) {  
-		            $tmpgetnewl = $getnewl;
-
-		            $num_results = 0;
-		            while ($num_results < $getnewl['num_results']) {
-		       
-		            echo $getnewl['items'][$num_results]['user']['pk'].">---user pk\n";
-		            
-		             $redis->sadd("detection".$this->username, $getnewl['items'][$num_results]['user']['pk']);
-		          
-		             $num_results++;
-		            }
-
-		            sleep(1);
-		            $getnewl = $i->getHashtagFeed( $hashtag, $tmpgetnewl['next_max_id']);
-
-		            $redis->rpush($hashtag.":max_id",  $tmpgetnewl['next_max_id'] ); 
-
-		            $countertrue++;
-		      }
+            $num_results = 0;
+            while ($num_results < $getnewl['num_results']) {
+	            echo $getnewl['items'][$num_results]['user']['pk'].">---user pk\n";
+	            if ( $getnewl['items'][$num_results]['user']['is_private'] == false) {
+	            	 $redis->sadd("detection".$this->username, $getnewl['items'][$num_results]['user']['pk'].":nonprivate");
+	          	} else {
+	          		 $redis->sadd("detection".$this->username, $getnewl['items'][$num_results]['user']['pk'].":private");
+	          	}
+	            $num_results++;
+          	}
+            sleep(1);
+            $getnewl = $i->getHashtagFeed( $hashtag, $tmpgetnewl['next_max_id']);
+            $redis->rpush($hashtag.":max_id",  $tmpgetnewl['next_max_id'] ); 
+            $countertrue++;
+       }
 	}
-
 
 
 	public  function funcgeocoordparse($i, $redis) 
