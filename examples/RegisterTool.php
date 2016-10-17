@@ -841,9 +841,9 @@ class RegisterTool extends Threaded
 	  
 
 
-	public function   to_create_new() 
+	public function to_create_new() 
 	{
-		
+
 			$this->redis = $this->worker->getConnection();
 			$this->debug = true; 
 			$line_inst = $this->redis->spop('line_inst');
@@ -1067,7 +1067,10 @@ class RegisterTool extends Threaded
 					$i->editProfile($url, $this->phone, $this->first_name, $biography, $this->email , $gender); 
 					sleep(4); 
 
-   				}     
+   				}  
+
+   				/// while loop
+   				sleep(3);  
 			}
 
 
@@ -1118,8 +1121,8 @@ class RegisterTool extends Threaded
 	}
 		 
 	public function run() {   
-		// $this->to_login();
-		$this->to_create_new();				 
+		$this->to_login();
+		// $this->to_create_new();				 
 	} 
 }
 
