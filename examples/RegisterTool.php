@@ -212,7 +212,7 @@ class RegisterTool extends Threaded
 	{
 
 		$time_in_day = 24*60*60;
-		$posts_per_day = 700;  //27000
+		$posts_per_day = 9000;  //27000
 		$delay = $time_in_day / $posts_per_day;
 
 	////HASHTAGS////////
@@ -266,31 +266,22 @@ class RegisterTool extends Threaded
 
 	 		$availableInf = [];
 	 		foreach ($influencers as $ind) {
-			    if (	 $this->redis->lrange("$ind:max_id", -1, -1) != null  ) {
-			   		array_push($availableInf, $ind); 
-			    }
+			   if (	 $this->redis->lrange("$ind:max_id", -1, -1) != null  ) {
+			   	  array_push($availableInf, $ind); 
+			   }
 			}
 	 		if ( empty($availableInf) == true ) {
-	 			$availableInf = $influencers;
-	 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
+	 		   $availableInf = $influencers;
+	 		   $influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
 	 		} else {
-	 			$influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
-				$red = $this->redis->lrange("$influencer:max_id", -1, -1);
+	 		   $influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
+			   $red = $this->redis->lrange("$influencer:max_id", -1, -1);
 	 		}
 
 			if(empty ($red)) {
-				try {
-					 $followers = $ilink->getUserFollowers($influencer, $maxid = null);
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
-
-			} else {
-				try {
-					 $followers = $ilink->getUserFollowers($influencer, $red[0]);
-				} catch (Exception $e) {
-				    echo $e->getMessage();
-				}
+			   $followers = $ilink->getUserFollowers($influencer, $maxid = null);
+			} else {	 
+			   $followers = $ilink->getUserFollowers($influencer, $red[0]);
 			}
 			 
 		    $this->funcparse($followers, $ilink, $influencer);
@@ -342,44 +333,46 @@ class RegisterTool extends Threaded
 						echo var_export($lres);
 					}
 
-					echo $next_iteration_time = $this->add_time($delay); //timer
-					sleep($next_iteration_time);
+					// echo $next_iteration_time = $this->add_time($delay); //timer
+					// sleep($next_iteration_time);
 
-					$ilink->follow($actioner);
+					// $ilink->follow($actioner);
 
 				}
 			}	 
 		}
 
-		if ($medcom == "private") {
+		// if ($medcom == "private") {
 
-			if ($this->redis->sismember("followed".$this->username , $actioner) != true  &&  ($this->redis->scard("followed".$this->username) % 250!= 0  || $this->redis->scard("followed".$this->username) == 0 )) {
+		// 	if ($this->redis->sismember("followed".$this->username , $actioner) != true) {
 				
-				$fres = $ilink->follow($actioner);
-				if ($fres[1]['status'] == 'ok') {
-				 	$this->redis->sadd("followed".$this->username, $actioner);
-				} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
-				 	$ilink->login(true);
-				} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
-					$ilink->checkpointPhoneChallenge($this->phone, $fres[1]['checkpoint_url']);
-			        echo "\nVerification code sent! >>>>>\n";
-	                $resp_code = "";
-	 			    while( ctype_digit($resp_code) != true) {
-					  	$resp_code = readline("Command: ");
-					}
-					echo "\n---->".$resp_code;
-					$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
-					echo var_export($results);
-				}
-				else {
-					 echo var_export($fres);
-				}
-				echo var_export($fres);
-			}
-			else {
-				 return;
-			}		
-		}	
+		// 		//&&  ($this->redis->scard("followed".$this->username) % 250!= 0  || $this->redis->scard("followed".$this->username) == 0)
+
+		// 		$fres = $ilink->follow($actioner);
+		// 		if ($fres[1]['status'] == 'ok') {
+		// 		 	$this->redis->sadd("followed".$this->username, $actioner);
+		// 		} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
+		// 		 	$ilink->login(true);
+		// 		} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
+		// 			$ilink->checkpointPhoneChallenge($this->phone, $fres[1]['checkpoint_url']);
+		// 	        echo "\nVerification code sent! >>>>>\n";
+	 //                $resp_code = "";
+	 // 			    while( ctype_digit($resp_code) != true) {
+		// 			  	$resp_code = readline("Command: ");
+		// 			}
+		// 			echo "\n---->".$resp_code;
+		// 			$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
+		// 			echo var_export($results);
+		// 		}
+		// 		else {
+		// 			 echo var_export($fres);
+		// 		}
+		// 		echo var_export($fres);
+		// 	}
+		// 	else {
+		// 		 return;
+		// 	}		
+		// }	
 		/////
 		$this->funcrecur( $ilink, $pkuser );
 	}
@@ -1114,7 +1107,17 @@ class RegisterTool extends Threaded
 			$i->login();
 
 			$cured = $i->currentEdit();
+			
 			$pk = $cured[1]['user']['pk'];
+			$url = $this->redis->spop('links_t');
+			$this->phone = $cured[1]['user']['phone_number'];
+			$this->first_name = $cured[1]['user']['full_name'];
+			$biography = $cured[1]['user']['biography'];
+			$this->email = $cured[1]['user']['email'];
+			$gender = $cured[1]['user']['gender'];
+
+			sleep(4);
+			$i->editProfile($url, $this->phone, $this->first_name, $biography, $this->email , $gender); 
 
 			$this->funcrecur($i, $pk); 
 			 
