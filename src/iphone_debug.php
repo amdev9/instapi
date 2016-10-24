@@ -21,11 +21,29 @@
     {
 
 
-      $data =  'signed_body=88777998bb9b354a5e8882906247af04a84dca8930e055d1384a4d09e7dc32fc.%7B%22id%22%3A%22F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B%22%2C%22experiments%22%3A%22ig_ios_link_ci_in_reg_test%2Cig_ios_email_phone_switcher_universe%2Cig_ios_registration_robo_call_time%2Cig_ios_continue_as_2_universe%2Cig_ios_ci_checkbox_in_reg_test%2Cig_ios_reg_redesign%2Cig_ios_reg_flow_status_bar%2Cig_ios_one_click_login_tab_design_universe%2Cig_ios_password_less_registration_universe%2Cig_ios_iconless_contactpoint%2Cig_ios_universal_link_login%2Cig_ios_reg_filled_button_universe%2Cig_nonfb_sso_universe%2Cenable_nux_language%2Cig_ios_iconless_confirmation%2Cig_ios_use_family_device_id_universe%2Cig_ios_one_click_login_universe_2%2Cig_ios_one_password_extension%2Cig_ios_new_fb_signup_universe%2Cig_ios_iconless_username%22%7D&ig_sig_key_version=5';
+ // $data = json_encode([
+ //        '_csrftoken'  => $this->token,
+ //        'send_source' => "edit_profile",
+ //         '_uid'       => $this->username_id,
+ //        '_uuid'       => $this->uuid,
+ //        'email'       => $email,
+ //      ]);
+
+// signed_body=88777998bb9b354a5e8882906247af04a84dca8930e055d1384a4d09e7dc32fc.
+     $data = json_encode([
+       "id" => "F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B", //"f2cd7326-ea40-44f8-9fc3-71a0a5e1f55b",
+       "experiments" => "ig_ios_link_ci_in_reg_test,ig_ios_email_phone_switcher_universe,ig_ios_registration_robo_call_time,ig_ios_continue_as_2_universe,ig_ios_ci_checkbox_in_reg_test,ig_ios_reg_redesign,ig_ios_reg_flow_status_bar,ig_ios_one_click_login_tab_design_universe,ig_ios_password_less_registration_universe,ig_ios_iconless_contactpoint,ig_ios_universal_link_login,ig_ios_reg_filled_button_universe,ig_nonfb_sso_universe,enable_nux_language,ig_ios_iconless_confirmation,ig_ios_use_family_device_id_universe,ig_ios_one_click_login_universe_2,ig_ios_one_password_extension,ig_ios_new_fb_signup_universe,ig_ios_iconless_username",
+     ]);
+     //   // &ig_sig_key_version=5
 
 
-      $outputs = request('https://i.instagram.com/api/v1/qe/sync/', $data);
+      // $data =  'signed_body=88777998bb9b354a5e8882906247af04a84dca8930e055d1384a4d09e7dc32fc.%7B%22id%22%3A%22F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B%22%2C%22experiments%22%3A%22ig_ios_link_ci_in_reg_test%2Cig_ios_email_phone_switcher_universe%2Cig_ios_registration_robo_call_time%2Cig_ios_continue_as_2_universe%2Cig_ios_ci_checkbox_in_reg_test%2Cig_ios_reg_redesign%2Cig_ios_reg_flow_status_bar%2Cig_ios_one_click_login_tab_design_universe%2Cig_ios_password_less_registration_universe%2Cig_ios_iconless_contactpoint%2Cig_ios_universal_link_login%2Cig_ios_reg_filled_button_universe%2Cig_nonfb_sso_universe%2Cenable_nux_language%2Cig_ios_iconless_confirmation%2Cig_ios_use_family_device_id_universe%2Cig_ios_one_click_login_universe_2%2Cig_ios_one_password_extension%2Cig_ios_new_fb_signup_universe%2Cig_ios_iconless_username%22%7D&ig_sig_key_version=5';
 
+
+     // generateSignature($data);
+
+      $outputs = request('https://i.instagram.com/api/v1/qe/sync/', generateSignature($data) );
+  
       // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
       // $this->token = $matcht[1];
       // echo var_export($outputs);  
@@ -189,6 +207,7 @@ function check_username()
 function create()
 {
 
+ 
   $data =  'signed_body=1df4671b8226d552474999160d881214ca8144cbedb73518e1003fe5379b2718.%7B%22first_name%22%3A%22Hanna%20Belford%22%2C%22password%22%3A%22qweqwe123%22%2C%22waterfall_id%22%3A%2217988db1d11b4a1283ae288c339df454%22%2C%22device_id%22%3A%22F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B%22%2C%22email%22%3A%22matveev.alexander.v.l.a.d.imit.ovi4%40gmail.com%22%2C%22username%22%3A%22belfordhanna%22%2C%22_csrftoken%22%3A%22h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs%22%7D&ig_sig_key_version=5';
 
   $outputs = request('https://i.instagram.com/api/v1/accounts/create/', $data);
@@ -201,6 +220,19 @@ function create()
 }
 
 
+ 
+
+  function generateSignature($data)
+   {
+
+        // $hash = hash_hmac('sha256', $data, ''); // NEED TO EXTRACT KEY
+        // echo "\n".($hash)."\n";
+        
+        $hash = '88777998bb9b354a5e8882906247af04a84dca8930e055d1384a4d09e7dc32fc';       
+        return 'signed_body='.$hash.'.'.urlencode($data).'&ig_sig_key_version=5';
+    }
+
+ 
 
 function request($endpoint, $post = null, $login = false)
   {
@@ -225,7 +257,7 @@ function request($endpoint, $post = null, $login = false)
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $endpoint);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+'); 
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+');  // 9 5
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);
@@ -271,10 +303,12 @@ function request($endpoint, $post = null, $login = false)
 
 
 
+ 
+
 syncFeaturesRegister();
-show_continue_as();
-check_email();
-username_suggestions();
-check_username();
-create();
+// show_continue_as();
+// check_email();
+// username_suggestions();
+// check_username();
+// create();
 
