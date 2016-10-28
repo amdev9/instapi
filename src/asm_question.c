@@ -47,6 +47,7 @@
 
 #include <stdio.h>
 
+#include <string.h>
 // void sub_22ed8(int arg0) {
 
 //     r0 = arg0;
@@ -140,7 +141,7 @@
 
 
 
-int  sub_22ED8(int result)
+int sub_22ED8(int result)
 {
   int v1; // r1@1
   signed int v2; // r4@2
@@ -149,8 +150,14 @@ int  sub_22ED8(int result)
   v1 = 0;
   do
   {
-    v2 = aJLIILMMTMJLTlM[v1];
+  
+    //(unsigned __int8)
+    v2 = (unsigned int)aJLIILMMTMJLTlM[v1];
+    printf ("-> %d\n", v2);
+
+
     result  = v2 - v1;
+    
     if ( v2 > 193 )
     {
       if ( v2 > 233 )
@@ -229,18 +236,22 @@ int  sub_22ED8(int result)
       }
     }
     ++v1;
+    printf("v1= %d\n", v1 );
+     printf ("res->   %d\n", result);
   }
   while ( v1 != 64 );
   return result;
 }
  
 
-
  int main(){
     int res;
-    // sub_22ED8(12);
-    res = sub_22ED8(392);
+    char v25;// = 'a';
+    size_t siz;
+    sub_22ED8( (int)&v25 );
 
-    printf("%d", res);
+
+    printf("--->%s", &v25 );
+    printf("--->%lu", strlen(&v25) );
     return 0;
  }
