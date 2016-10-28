@@ -225,10 +225,10 @@ function create()
   function generateSignature($data)
    {
 
-        $hash = hash_hmac('sha256', $data, '-8'); // NEED TO EXTRACT KEY
-        echo "\n".($hash)."\n";
+        // $hash = hash_hmac('sha256', $data, '-8'); // NEED TO EXTRACT KEY
+        // echo "\n".($hash)."\n";
         
-        // $hash = '88777998bb9b354a5e8882906247af04a84dca8930e055d1384a4d09e7dc32fc';    
+        $hash = '88777998bb9b354a5e8882906247af04a84dca8930e055d1384a4d09e7dc32fc';    
         echo "\n".($hash)."\n";   
         return 'signed_body='.$hash.'.'.urlencode($data).'&ig_sig_key_version=5';
     }
