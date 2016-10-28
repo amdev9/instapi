@@ -292,10 +292,6 @@ class RegisterTool extends Threaded
 
 ///////// PARSE FROM FILE //////
 
-
-	// get results from file and upload to redis detection
-	
-
 	  $file_to_parse = __DIR__.'/alena_filter_id.txt';
       $file_handle = fopen($file_to_parse, 'r');
       $line_of_text = [];
@@ -324,10 +320,8 @@ class RegisterTool extends Threaded
 		  $this->functiondirectshare( $ilink, $actioner );//, $ad_media_id);
 		}
 
-
 		echo $next_iteration_time = $this->add_time($delay);  
 		sleep($next_iteration_time);
-
 
 //////// LIKE && FOLLOW /////
 
@@ -1069,7 +1063,7 @@ class RegisterTool extends Threaded
 							        $degrees = $this->redis->spop($value);
 									echo $degrees;
 							      
-								 	$i->uploadPhoto($dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
+								 	$i->uploadPhoto($dir.'/'.$value, $caption, $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
 
 								 	if ($uploadCounter == 1) {
 								 		sleep(10);
@@ -1098,7 +1092,7 @@ class RegisterTool extends Threaded
    				sleep(3);  
 			}
 
-
+			
 			// $fres = $i->setPrivateAccount();
 			// if ($fres[1]['status'] == 'ok') {
 			// 	echo "ok";
