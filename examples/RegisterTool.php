@@ -292,16 +292,16 @@ class RegisterTool extends Threaded
 
 ///////// PARSE FROM FILE //////
 
-	  $file_to_parse = __DIR__.'/alena_filter_id.txt';
-      $file_handle = fopen($file_to_parse, 'r');
-      $line_of_text = [];
-      while (!feof($file_handle)) {
-          $line_of_text[] = fgetcsv($file_handle, 1024);
-      }
-      foreach ($line_of_text as $parsed_id ) {
-      	 $this->redis->sadd("detection", $parsed_id);
-      }
-      fclose($file_handle);
+	  // $file_to_parse = __DIR__.'/alena_filter_id.txt';
+   //    $file_handle = fopen($file_to_parse, 'r');
+   //    $line_of_text = [];
+   //    while (!feof($file_handle)) {
+   //        $line_of_text[] = fgetcsv($file_handle, 1024);
+   //    }
+   //    foreach ($line_of_text as $parsed_id ) {
+   //    	 $this->redis->sadd("detection", $parsed_id);
+   //    }
+   //    fclose($file_handle);
 
 	 if ($this->redis->scard("detection") > 0 ) { //.$this->username) > 0 ) {
 		$acmed = $this->redis->spop("detection"); //.$this->username);
@@ -311,7 +311,9 @@ class RegisterTool extends Threaded
     		$medcom = $datapart[1];
 		}
 		else {
-			$actioner =  $acmed ;
+			if ($acmed != '' ) { 
+				$actioner =  $acmed ;
+			}
 		}
 
 
