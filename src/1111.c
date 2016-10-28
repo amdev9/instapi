@@ -1,19 +1,19 @@
+#include <stdio.h>
 
-
-#import <objc/objc.h>
-#import <objc/Object.h>
-#import <Foundation/Foundation.h>
+// #import <objc/objc.h>
+// #import <objc/Object.h>
+// #import <Foundation/Foundation.h>
  
 // "4749bda4fc1f49372dae3d79db339ce4959cfbbe"
 // 9.5.2
 // "\x86\xD6\xD6\xC2\x8B\xF3\xEA\xF0`\xF3~\x89\xD6\xF0~\xC2\xC2\xF0\xEA\xC2\x89\xD6\xD2\x8B~~\x8C\xF0\x8C\xC2\xC2\xEA\x92\xEA\x8C\xC2\x86\xF0l\xD6\xD2\x92l\xD6`\xF3\xD6\xEA\x8C\x86l\x86\x89\x8B\xD6l\xF0\xC2\xD2\x89~\x8B\xC2\xF0", 0 ; XREF=sub_22ed8+8, sub_22ed8+14, sub_22ed8+22
  
-int main (int argc, const char * argv[])
+int main () //int argc, const char * argv[])
 {
-   NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+  // NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 sub_57ea20();
    //NSLog (@"hello world");
-   [pool drain];
+   //[pool drain];
  
    return 0;
 }
@@ -111,7 +111,7 @@ loc_57eaaa:
  
 loc_57eab2:
     printf("so sad");
-    goto *0x57eab6[r0];
+    // goto *0x57eab6[r0];
  
 loc_57eac6:
     r4 = 0x62;

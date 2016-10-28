@@ -963,7 +963,7 @@ class RegisterTool extends Threaded
 
 					 
 					$registered = $this->username.":".$this->password.":blackking:Name0123Space:".$this->proxy; //.$email." ".$first_name;
-			      	file_put_contents("/Users/alex/dev/instagram/insta/logs/regDone.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
+			      	file_put_contents("/Users/alex/dev/instagram/insta/logs.dat",$registered."\n", FILE_APPEND | LOCK_EX);  
 
 
 			         $caption = str_replace( "_username" , explode(" ",$this->first_name)[0]  ,  $caption );  
