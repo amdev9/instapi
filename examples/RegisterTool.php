@@ -212,84 +212,103 @@ class RegisterTool extends Threaded
 	{
 
 		$time_in_day = 24*60*60;
-		$posts_per_day = 9000;  //27000
+		$posts_per_day = 700;   
 		$delay = $time_in_day / $posts_per_day;
 
-	////HASHTAGS////////
-		// while ($this->redis->scard("detection".$this->username) == 0) {
-		// 	// funcgeocoordparse($ilink, $this->redis);
-		// 	if ($this->redis->sismember("hashtag_actor" , $this->username) != true) {
-		// 	$hashtags = [ "cute", "fashion" ];
-	 // 		$availableHashtags = [];
-	 // 		foreach ($hashtags as $ind) {
-		// 	    if (	 $this->redis->lrange("$ind:max_id", -1, -1) != "0"  ) {
-		// 	   		array_push($availableHashtags, $ind); 
-		// 	    }
-		// 	}
-	 // 		if ( empty($availableHashtags) == true ) {
-	 // 			$availableHashtags = $hashtags;
-	 // 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)]; 
-	 // 		} else {
-	 // 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)];
-		// 		$red = $this->redis->lrange("$hashtag:max_id", -1, -1);
-	 // 		}
-		// 	if(empty ($red)) {
-		// 		try {
-		// 			 $hashtagers = $ilink->getHashtagFeed($hashtag, $maxid = null);
-		// 		} catch (Exception $e) {
-		// 		    echo $e->getMessage();
-		// 		}
+////////HASHTAGS////////
+	//	
+	// while ($this->redis->scard("detection".$this->username) == 0) {
+	// 	// funcgeocoordparse($ilink, $this->redis);
+	// 	if ($this->redis->sismember("hashtag_actor" , $this->username) != true) {
+	// 	$hashtags = [ "cute", "fashion" ];
+	// 		$availableHashtags = [];
+	// 		foreach ($hashtags as $ind) {
+	// 	    if (	 $this->redis->lrange("$ind:max_id", -1, -1) != "0"  ) {
+	// 	   		array_push($availableHashtags, $ind); 
+	// 	    }
+	// 	}
+	// 		if ( empty($availableHashtags) == true ) {
+	// 			$availableHashtags = $hashtags;
+	// 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)]; 
+	// 		} else {
+	// 			$hashtag = $availableHashtags[mt_rand(0, count($availableHashtags) - 1)];
+	// 		$red = $this->redis->lrange("$hashtag:max_id", -1, -1);
+	// 		}
+	// 	if(empty ($red)) {
+	// 		try {
+	// 			 $hashtagers = $ilink->getHashtagFeed($hashtag, $maxid = null);
+	// 		} catch (Exception $e) {
+	// 		    echo $e->getMessage();
+	// 		}
 
-		// 	} else {
-		// 		try {
-		// 			 $hashtagers = $ilink->getHashtagFeed($hashtag, $red[0]);
-		// 		} catch (Exception $e) {
-		// 		    echo $e->getMessage();
-		// 		}
+	// 	} else {
+	// 		try {
+	// 			 $hashtagers = $ilink->getHashtagFeed($hashtag, $red[0]);
+	// 		} catch (Exception $e) {
+	// 		    echo $e->getMessage();
+	// 		}
+	// 	}
+	//    $this->hashtagparse($hashtagers, $ilink, $this->redis, $hashtag);
+	// }
+	//  $this->redis->sadd("hashtag_actor", $this->username );
+	// }
+  
+///////// PARSE USERS //////////
+
+		//  while ($this->redis->scard("detection") == 0) {   //.$this->username
+		// 	  //  $this->funcgeocoordparse($ilink);
+		 		
+		//  		echo $next_iteration_time = $this->add_time($delay);  
+		// 		sleep($next_iteration_time);
+			
+		// 	// $influencers_RUS = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131",   "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
+
+		// 	 $influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
+
+	 // 		$availableInf = [];
+	 // 		foreach ($influencers as $ind) {
+		// 	   if (	 $this->redis->lrange("$ind:max_id", -1, -1) != null  ) {
+		// 	   	  array_push($availableInf, $ind); 
+		// 	   }
 		// 	}
-		//    $this->hashtagparse($hashtagers, $ilink, $this->redis, $hashtag);
-		// }
-		//  $this->redis->sadd("hashtag_actor", $this->username );
+	 // 		if ( empty($availableInf) == true ) {
+	 // 		   $availableInf = $influencers;
+	 // 		   $influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
+	 // 		} else {
+	 // 		   $influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
+		// 	   $red = $this->redis->lrange("$influencer:max_id", -1, -1);
+	 // 		}
+
+		// 	if(empty ($red)) {
+		// 	   $followers = $ilink->getUserFollowers($influencer, $maxid = null);
+		// 	} else {	 
+		// 	   $followers = $ilink->getUserFollowers($influencer, $red[0]);
+		// 	}
+			 
+		//     $this->funcparse($followers, $ilink, $influencer);
 
 	 // }
 
-	////ADULT////////// 	 
 
-		 while ($this->redis->scard("detection".$this->username) == 0) {  
-			  //  $this->funcgeocoordparse($ilink);
-		 		echo $next_iteration_time = $this->add_time($delay);  
-				sleep($next_iteration_time);
-			
-			// $influencers_RUS = [ "253477742", "240333138", "256489055", "190082554", "260958616", "241024950", "804080917", "404148826", "459946968", "1036771838", "1282684193", "268042440", "1457024717", "1190583665",  "217566587", "27133622", "243939213", "487569708","1394883667", "324942506", "3164294", "179302148", "7061024", "53029140",  "544300908",  "256293874", "604890697", "1286322852", "533244285", "181360417", "479888539", "25194884", "209835405", "1474275139", "313432062", "5697152", "209042133", "13338159", "196875629", "248748736", "7320858", "178170399", "173735863", "249609133",  "2665639", "540990470", "189857544", "203773727",  "25769240", "235258491",  "52869065", "22442174", "183084146",  "50918978","14589128", "24597242", "12496926", "510101416", "18070921", "440481453", "363632546", "195781248", "4960717", "5936478",  "25019328", "26023179", "209396541", "26023306",  "173623875", "19343908", "5510916", "3073135", "269508131",   "178926270",  "507001111", "295656006", "490055695", "1530569558",   "333052291", "601451280", "18114820",  "2030072568", "9009373", "265457536", "1100997240", "208909399",  "8541943", "336735088", "305007657", "408057861", "1750942627", "223469204", "733589668", "13115790" ,"311630651", "26468707", "466579064", "477239309", "1309665720", "194697262", "37568323", "6423886", "52922525", "8741343", "267685466", "281277133","197209513", "293418826", "307808258", "335952555", "237074561", "20717765", "174492640", "401062883","2153087871", "265535236" ,"371956863" ];
+///////// PARSE FROM FILE //////
 
-			 $influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 
-	 		$availableInf = [];
-	 		foreach ($influencers as $ind) {
-			   if (	 $this->redis->lrange("$ind:max_id", -1, -1) != null  ) {
-			   	  array_push($availableInf, $ind); 
-			   }
-			}
-	 		if ( empty($availableInf) == true ) {
-	 		   $availableInf = $influencers;
-	 		   $influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
-	 		} else {
-	 		   $influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
-			   $red = $this->redis->lrange("$influencer:max_id", -1, -1);
-	 		}
+	// get results from file and upload to redis detection
+	
 
-			if(empty ($red)) {
-			   $followers = $ilink->getUserFollowers($influencer, $maxid = null);
-			} else {	 
-			   $followers = $ilink->getUserFollowers($influencer, $red[0]);
-			}
-			 
-		    $this->funcparse($followers, $ilink, $influencer);
+	  $file_to_parse = __DIR__.'/alena_filter_id.txt';
+      $file_handle = fopen($file_to_parse, 'r');
+      $line_of_text = [];
+      while (!feof($file_handle)) {
+          $line_of_text[] = fgetcsv($file_handle, 1024);
+      }
+      foreach ($line_of_text as $parsed_id ) {
+      	 $this->redis->sadd("detection", $parsed_id);
+      }
+      fclose($file_handle);
 
-	 }
-
-	 if ($this->redis->scard("detection".$this->username) > 0 ) {
-		$acmed = $this->redis->spop("detection".$this->username);
+	 if ($this->redis->scard("detection") > 0 ) { //.$this->username) > 0 ) {
+		$acmed = $this->redis->spop("detection"); //.$this->username);
 		if (strpos($acmed, ':') !== false) {
 			$datapart = explode(":", $acmed);
 		   	$actioner =  $datapart[0];
@@ -298,82 +317,92 @@ class RegisterTool extends Threaded
 		else {
 			$actioner =  $acmed ;
 		}
+
+
 		// 40 __>>>__ 700
-		// if ($this->redis->sismember("disabled", "direct_".$this->username) != true ) {
-		//   $this->functiondirectshare( $ilink, $actioner );//,$ad_media_id
-		// }
-		echo $next_iteration_time = $this->add_time($delay); //timer
-		sleep($next_iteration_time);
-
-		if ($medcom == "nonprivate") {
-
-			$usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
-			echo "\nfeed fecthed\n";
-			if (isset($usfeed['items'][0]['pk'])) {
-				$med = $usfeed['items'][0]['pk'];
-				sleep(3);
-				if ( $this->redis->sismember("liked".$this->username , $med) != true ) {
-					$lres =$ilink->like($med);
-					echo var_export($lres); //need to test res code
-					if ($lres[1]['status'] == 'ok') {
-						$this->redis->sadd("liked".$this->username, $med);
-					} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
-						$ilink->login(true);
-					} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
-						$ilink->checkpointPhoneChallenge($this->phone, $lres[1]['checkpoint_url']);
-					    echo "\nVerification code sent! >>>>>\n";
-					    $resp_code = "";
-						while( ctype_digit($resp_code) != true) {
-						  $resp_code = readline("Command: ");
-						}
-				 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
-				 			echo var_export($results);
-					 	}
-					else {
-						echo var_export($lres);
-					}
-
-					// echo $next_iteration_time = $this->add_time($delay); //timer
-					// sleep($next_iteration_time);
-
-					// $ilink->follow($actioner);
-
-				}
-			}	 
+		if ($this->redis->sismember("disabled", "direct_".$this->username) != true ) {
+		  $this->functiondirectshare( $ilink, $actioner );//, $ad_media_id);
 		}
 
-		// if ($medcom == "private") {
 
-		// 	if ($this->redis->sismember("followed".$this->username , $actioner) != true) {
+		echo $next_iteration_time = $this->add_time($delay);  
+		sleep($next_iteration_time);
+
+
+//////// LIKE && FOLLOW /////
+
+// 		if ($medcom == "nonprivate") {
+
+// 			$usfeed = $ilink->getUserFeed($actioner, $maxid = null, $minTimestamp = null);
+// 			echo "\nfeed fecthed\n";
+// 			if (isset($usfeed['items'][0]['pk'])) {
+// 				$med = $usfeed['items'][0]['pk'];
+// 				sleep(3);
+// 				if ( $this->redis->sismember("liked".$this->username , $med) != true ) {
+// 					$lres =$ilink->like($med);
+// 					echo var_export($lres); //need to test res code
+// 					if ($lres[1]['status'] == 'ok') {
+// 						$this->redis->sadd("liked".$this->username, $med);
+// 					} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'login_required' ) {
+// 						$ilink->login(true);
+// 					} elseif ($lres[1]['status'] == 'fail' && isset($lres[1]['message']) && $lres[1]['message'] == 'checkpoint_required' ) {
+// 						$ilink->checkpointPhoneChallenge($this->phone, $lres[1]['checkpoint_url']);
+// 					    echo "\nVerification code sent! >>>>>\n";
+// 					    $resp_code = "";
+// 						while( ctype_digit($resp_code) != true) {
+// 						  $resp_code = readline("Command: ");
+// 						}
+// 				 			$results = $ilink->checkpointCodeChallenge($resp_code, $lres[1]['checkpoint_url']);
+// 				 			echo var_export($results);
+// 					 	}
+// 					else {
+// 						echo var_export($lres);
+// 					}
+
+// 					echo $next_iteration_time = $this->add_time($delay); //timer
+// 					sleep($next_iteration_time);
+
+// 					$ilink->follow($actioner);
+
+// 				}
+// 			}	 
+// 		}
+
+// 		if ($medcom == "private") {
+
+// 			if ($this->redis->sismember("followed".$this->username , $actioner) != true) {
 				
-		// 		//&&  ($this->redis->scard("followed".$this->username) % 250!= 0  || $this->redis->scard("followed".$this->username) == 0)
+// 				//&&  ($this->redis->scard("followed".$this->username) % 250!= 0  || $this->redis->scard("followed".$this->username) == 0)
 
-		// 		$fres = $ilink->follow($actioner);
-		// 		if ($fres[1]['status'] == 'ok') {
-		// 		 	$this->redis->sadd("followed".$this->username, $actioner);
-		// 		} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
-		// 		 	$ilink->login(true);
-		// 		} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
-		// 			$ilink->checkpointPhoneChallenge($this->phone, $fres[1]['checkpoint_url']);
-		// 	        echo "\nVerification code sent! >>>>>\n";
-	 //                $resp_code = "";
-	 // 			    while( ctype_digit($resp_code) != true) {
-		// 			  	$resp_code = readline("Command: ");
-		// 			}
-		// 			echo "\n---->".$resp_code;
-		// 			$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
-		// 			echo var_export($results);
-		// 		}
-		// 		else {
-		// 			 echo var_export($fres);
-		// 		}
-		// 		echo var_export($fres);
-		// 	}
-		// 	else {
-		// 		 return;
-		// 	}		
-		// }	
-		/////
+// 				$fres = $ilink->follow($actioner);
+// 				if ($fres[1]['status'] == 'ok') {
+// 				 	$this->redis->sadd("followed".$this->username, $actioner);
+// 				} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'login_required' ) {
+// 				 	$ilink->login(true);
+// 				} elseif ($fres[1]['status'] == 'fail' && isset($fres[1]['message']) && $fres[1]['message'] == 'checkpoint_required' ) {
+// 					$ilink->checkpointPhoneChallenge($this->phone, $fres[1]['checkpoint_url']);
+// 			        echo "\nVerification code sent! >>>>>\n";
+// 	                $resp_code = "";
+// 	 			    while( ctype_digit($resp_code) != true) {
+// 					  	$resp_code = readline("Command: ");
+// 					}
+// 					echo "\n---->".$resp_code;
+// 					$results = $ilink->checkpointCodeChallenge($resp_code, $fres[1]['checkpoint_url']);
+// 					echo var_export($results);
+// 				}
+// 				else {
+// 					 echo var_export($fres);
+// 				}
+// 				echo var_export($fres);
+// 			}
+// 			else {
+// 				 return;
+// 			}		
+// 		}	
+// ////////////////
+
+
+
 		$this->funcrecur( $ilink, $pkuser );
 	}
 }
@@ -452,9 +481,9 @@ class RegisterTool extends Threaded
 						      $word1=$matches[1][0];
 						  }
 					  
-						$this->redis->sadd("detection".$this->username, $followers['users'][$iter]['pk'].":nonprivate");
-							//sadd
-						//.":".$word1);
+						$this->redis->sadd("detection", $followers['users'][$iter]['pk'].":nonprivate");
+							//.$this->username
+
 
 						  // $usfeed = $i->getUserFeed($followers['users'][$iter]['pk'], $maxid = null, $minTimestamp = null);
 
@@ -789,7 +818,9 @@ class RegisterTool extends Threaded
 		 
 		$uname = $this->username;
 
-	    $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there ".$uname."_96 $smil I am ONLINE and WAITING.. $cur";
+	    // $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there ".$uname."_96 $smil I am ONLINE and WAITING.. $cur";
+
+	    $text = "Привет ";
 
 	    echo $text;
 
@@ -798,7 +829,6 @@ class RegisterTool extends Threaded
 			// $message_recipient = "1009845355"; //4ewir   , "3299015045" array(
 
 			// $answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
-	  
 			$answer = $i->direct_message($message_recipient, $text ); 
 			 // echo var_export($answer);
 			 
@@ -983,6 +1013,8 @@ class RegisterTool extends Threaded
 			     	 // $versms = $i->verifySmsCode($phone, $code_verif);
 			     	 //  echo var_export($versms);
 
+			     	$i->login();
+
 					$filesVideo = scandir($dir);
 					$ava = true;
 					$uploadCounter = 0;
@@ -1124,8 +1156,8 @@ class RegisterTool extends Threaded
 	}
 		 
 	public function run() {   
-		$this->to_login();
-		// $this->to_create_new();				 
+		// $this->to_login();
+		$this->to_create_new();				 
 	} 
 }
 
