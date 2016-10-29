@@ -298,10 +298,14 @@ class RegisterTool extends Threaded
    //    while (!feof($file_handle)) {
    //        $line_of_text[] = fgetcsv($file_handle, 1024);
    //    }
+   //    fclose($file_handle);
    //    foreach ($line_of_text as $parsed_id ) {
    //    	 $this->redis->sadd("detection", $parsed_id);
+   //    	 sleep(0.2);
    //    }
-   //    fclose($file_handle);
+     
+
+
 
 	 if ($this->redis->scard("detection") > 0 ) { //.$this->username) > 0 ) {
 		$acmed = $this->redis->spop("detection"); //.$this->username);
@@ -317,9 +321,37 @@ class RegisterTool extends Threaded
 		}
 
 
+
+		// $res = $ilink->searchUsername("_parfum_premium_");
+		// var_export($res);
+
+		// $res = $ilink->getUserFeed('4050134364');
+		// var_export($res);
+
+
+
+
 		// 40 __>>>__ 700
 		if ($this->redis->sismember("disabled", "direct_".$this->username) != true ) {
-		  $this->functiondirectshare( $ilink, $actioner );//, $ad_media_id);
+
+			$ad_media =  [
+				"1371813551093588667",
+				"1371816320156499484",
+				"1371816523672445888",
+				"1371816792267240616",
+				"1371817921994594407",
+				"1371818048620820046",
+				"1371818170247103320",
+				"1371818417299917805",
+			];
+
+
+
+			$ad_media_id = $ad_media[mt_rand(0, count($ad_media) - 1)];
+		 	
+			$ilink->like($ad_media_id);
+
+		 	 $this->functiondirectshare( $ilink, $actioner, $ad_media_id);
 		}
 
 		echo $next_iteration_time = $this->add_time($delay);  
@@ -816,7 +848,7 @@ class RegisterTool extends Threaded
 
 	    // $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there ".$uname."_96 $smil I am ONLINE and WAITING.. $cur";
 
-	    $text = "Привет ";
+	    $text = " 💓  Брендовые парфюмы по 1990р.! 🎀 Успейте заказать премиум парфюм! Подробнее по ссылке в профиле 👇👇👇 @_parfum_premium_ ";
 
 	    echo $text;
 
@@ -824,8 +856,9 @@ class RegisterTool extends Threaded
 	 
 			// $message_recipient = "1009845355"; //4ewir   , "3299015045" array(
 
-			// $answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
-			$answer = $i->direct_message($message_recipient, $text ); 
+			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
+
+			// $answer = $i->direct_message($message_recipient, $text ); 
 			 // echo var_export($answer);
 			 
 			
@@ -848,7 +881,7 @@ class RegisterTool extends Threaded
 
 			 				// $this->redis->rpush("not_recieved",  $message_recipient);  // track not sended messages
 			 				// //del this --> sleep
-			 				$this->redis->sadd("disabled", "direct_".$username );
+			 				$this->redis->sadd("disabled", "direct_".$this->username );
 			 				// sleep(14400); // 4 hours sleep
 			 			 	 echo "\n\ndirect NOT send\n\n";
 			 			}
@@ -877,7 +910,7 @@ class RegisterTool extends Threaded
 			$caption = str_replace( "_cur_up", "\u{1F446}\u{1F446}\u{1F446}" , str_replace ( "_nextlines", "\u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} \u{2029} ", str_replace("_smi_video", "\u{1F4A6}",   $captionparse ) ) );
 			$gender = 2;
 
-			$dir = '/Users/alex/dev/instagram/instapi/src/adult/';
+			$dir = '/Users/alex/dev/instagram/instapi/src/parfum/';
 			$this->proxy = null; 
 			$this->username = "";
 			$this->qs_stamp = "";
@@ -1033,7 +1066,7 @@ class RegisterTool extends Threaded
 								{
 									if ($this->redis->scard($value) == 0 ) {
 									     $this->redis->sadd('picked', $value);
-									    foreach (range(-12, 12) as $number) {
+									    foreach (range(-90, 90) as $number) {
 									        if ($number != 0)
 									            $this->redis->sadd($value, $number);
 									    }
@@ -1048,44 +1081,46 @@ class RegisterTool extends Threaded
 							 
 							$ava = false;
 
-						} else {
-					
-							if ($uploadCounter == 2) { break; }
-							try {
-								if ($this->redis->scard($value) >= 0 || $this->redis->sismember('picked', $value) != true) 
-								{
-									
-									if ($this->redis->scard($value) == 0 ) {
-									     $this->redis->sadd('picked', $value);
-									    foreach (range(-12, 12) as $number) {
-									        if ($number != 0)
-									            $this->redis->sadd($value, $number);
-									    }
-									}
-							        $degrees = $this->redis->spop($value);
-									echo $degrees;
-							      
-								 	$i->uploadPhoto($dir.'/'.$value, $caption, $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
-
-								 	if ($uploadCounter == 1) {
-								 		sleep(10);
-								 		$i->uploadPhoto($dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees);   
-
-								 	}
-
-								    $uploadCounter = $uploadCounter + 1;
-								}
-							} catch (Exception $e) {
-							    echo $e->getMessage();
-							}
-							 sleep(10);
-					    }
+						}
 					}
+						 // else {
+					
+							// if ($uploadCounter == 2) { break; }
+							// try {
+							// 	if ($this->redis->scard($value) >= 0 || $this->redis->sismember('picked', $value) != true) 
+							// 	{
+									
+							// 		if ($this->redis->scard($value) == 0 ) {
+							// 		     $this->redis->sadd('picked', $value);
+							// 		    foreach (range(-12, 12) as $number) {
+							// 		        if ($number != 0)
+							// 		            $this->redis->sadd($value, $number);
+							// 		    }
+							// 		}
+							//         $degrees = $this->redis->spop($value);
+							// 		echo $degrees;
+							      
+							// 	 	$i->uploadPhoto($dir.'/'.$value, $caption, $upload_id = null, $customPreview = null , $location = null, $reel_flag = false, $degrees);   
+
+							// 	 	if ($uploadCounter == 1) {
+							// 	 		sleep(10);
+							// 	 		$i->uploadPhoto($dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees);   
+
+							// 	 	}
+
+							  // $uploadCounter = $uploadCounter + 1;
+							// 	}
+							// } catch (Exception $e) {
+							//     echo $e->getMessage();
+							// }
+							//  sleep(10);
+					    // }
+					// }
 					echo "video and photo downloaded!\n";
 					$cured = $i->currentEdit();
 					echo var_export($cured);
 					sleep(4);
-					$i->editProfile($url, $this->phone, $this->first_name, $biography, $this->email , $gender); 
+					$i->editProfile($url, $this->phone, $this->first_name, "" , $this->email , $gender); 
 					sleep(4); 
 
    				}  

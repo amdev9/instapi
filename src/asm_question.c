@@ -245,13 +245,22 @@ int sub_22ED8(int result)
  
 
  int main(){
-    int res;
-    char v25;// = 'a';
-    size_t siz;
+
+    char v25;  
+    int v26;
+    int v27;
+    char * _R0 = &v25;
+    size_t v12;
+
+    // The 128-bit register Q8 is an alias for 2 consecutive 64-bit registers D16 and D17 but does not have an alias 
+    // using the 32
+    // vmov.i32 q8, #0          \n\t"  //clear our accumulator register
+    // @ CHECK: vst1.64 {d16, d17}, [r0]       @ encoding: [0xcf,0x0a,0x40,0xf4]
+ 
     sub_22ED8( (int)&v25 );
+    v12 = sizeof(&v25);
 
-
-    printf("--->%s", &v25 );
-    printf("--->%lu", strlen(&v25) );
+    printf("--->%p", &v25 );
+    printf("--->%lu", v12);
     return 0;
  }
