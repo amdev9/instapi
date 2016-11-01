@@ -1,8 +1,7 @@
 <?php
 
  
-
-class InstaOS
+class InstaOS  extends Threaded
 {
   protected $username;            // Instagram username
   protected $password;            // Instagram password
@@ -19,17 +18,25 @@ class InstaOS
   protected $waterfall_id;
   protected $phone_id;
 
-  public function __construct($username, $password,  $proxy ,  $debug = false, $IGDataPath = null)
-  {
+ 
+
+public function run() {   
     
-      $this->debug = $debug;
-      $this->UA = Constants::USER_AGENT;
+
+      $this->redis = $this->worker->getConnection();
+      $this->debug = true;
+      $this->UA = 'Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+';
+      
+      $this->uuid = $this->generateUUID(true);
+      $this->waterfall_id =  $this->generateUUID(true);
+
+      // this data from redis
       $this->proxy = $proxy;
-  
-
-      $this->username = $username;
       $this->password = $password;      
+      $this->email = $email;
+      $this->full_name = $full_name
 
+    
 
       if (!is_null($IGDataPath)) {
           $this->IGDataPath = $IGDataPath;
@@ -40,8 +47,6 @@ class InstaOS
       // $this->setUser($username, $password);
 
 
-
-
       $this->syncFeaturesRegister();
       $this->show_continue_as();
       $this->check_email();
@@ -49,9 +54,8 @@ class InstaOS
       $this->check_username();
       $this->create();
 
-
  }
- 
+
 
 
    public function syncFeaturesRegister()
@@ -121,8 +125,8 @@ class InstaOS
 
      $outputs = request('https://i.instagram.com/api/v1/fb/show_continue_as/', generateSignature($data) );
 
-      // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
-      // $this->token = $matcht[1];
+      preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
+      $this->token = $matcht[1];
       // echo var_export($outputs);  
 
 
@@ -194,13 +198,16 @@ public function username_suggestions()
 
   $data = json_encode([
    
-     "name"=>"Hanna Belford",
+     "name"=> $this->full_name, //"Hanna Belford",
      "waterfall_id"=> $this->waterfall_id,//"17988db1d11b4a1283ae288c339df454",
      "_csrftoken"=>  $this->token,//"h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs" 
 
     ]);
 
   $outputs = request('https://i.instagram.com/api/v1/accounts/username_suggestions/', generateSignature($data));
+
+
+  $this->username = $outputs[1]['suggestions'][0];
 
   // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
   // $this->token = $matcht[1];
@@ -285,6 +292,7 @@ public function create()
     ]);
   $outputs = request('https://i.instagram.com/api/v1/accounts/create/', generateSignature($data));
 
+    $this->username_id = $outputs[1]['created_user']['pk'];
   // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
   // $this->token = $matcht[1];
   // echo var_export($outputs);  
@@ -376,8 +384,6 @@ public function create()
         $hash = hash_hmac('sha256', $data, 'ebbf19d239c4b2cff2df4b51cc626ffdad6fe27b5a7b39bd6e7e41b72f54c1f2'); // NEED TO EXTRACT KEY
         // echo "\n".($hash)."\n";
         
-        // $hash = '88777998bb9b354a5e8882906247af04a84dca8930e055d1384a4d09e7dc32fc';    
-        // echo "\n".($hash)."\n";   
         return 'signed_body='.$hash.'.'.urlencode($data).'&ig_sig_key_version=5';
     }
 
@@ -385,28 +391,24 @@ public function create()
 
   public function request($endpoint, $post = null, $login = false)
   {
-      
-
-
 
     $headers = [
-
-		'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
-		'Accept: *',
-		'Accept-Encoding: gzip, deflate',
-		'Connection: keep-alive',
-		'Proxy-Connection: keep-alive',
-		'X-IG-Capabilities: 3wo=',
-		'Accept-Language: ru-RU;q=1',
-		'X-IG-Connection-Type: WiFi-Fallback',
-		'Cookie2: $Version=1',
+    		'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
+    		'Accept: *',
+    		'Accept-Encoding: gzip, deflate',
+    		'Connection: keep-alive',
+    		'Proxy-Connection: keep-alive',
+    		'X-IG-Capabilities: 3wo=',
+    		'Accept-Language: ru-RU;q=1',
+    		'X-IG-Connection-Type: WiFi-Fallback',
+    		'Cookie2: $Version=1',
     ];
 
 
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $endpoint);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+');  // 9 5
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);  // 9 5
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, true);

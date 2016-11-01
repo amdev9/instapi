@@ -3,6 +3,7 @@
  
 
 require '/Users/alex/dev/instagram/instapi/examples/RegisterTool.php';
+require '/Users/alex/dev/instagram/instapi/src/ios.php'
 require_once '/Users/alex/dev/instagram/redis/predis/autoload.php';
 
 
@@ -25,7 +26,8 @@ class Connect extends Worker {
 }
 $pool = new Pool(1, "Connect", []);
 for ($i = 0; $i < 1; $i++) {
-   $pool->submit (new registerTool());  
+   // $pool->submit (new registerTool());  // fix to ios and add username pass and email
+  $pool->submit (new InstaOS()); 
 }
 
 
