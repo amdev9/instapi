@@ -413,6 +413,27 @@ public function reels_media()
   
 
 
+public function  notifications_badge()
+{
+  $data = "_csrftoken=".$this->token."&_uuid=".$this->uuid."&user_ids=4050134364&device_id=".$this->uuid;
+    $outputs = $this->request('https://i.instagram.com/api/v1/notifications/badge/', $data);
+    return $outputs;
+}
+  
+
+
+public function  notifications_badge()
+{
+   
+    $outputs = $this->request('https://i.instagram.com/api/v1/notifications/badge/');
+    return $outputs;
+}
+  
+ 
+
+ 
+
+
 
 public function graphFb() {
 
@@ -443,7 +464,7 @@ public function graphFb() {
 // Content-Type: multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
 // Connection: keep-alive
 // Proxy-Connection: keep-alive
-// Accept: */*
+// Accept: *
 // User-Agent: FBiOSSDK.4.14.0
 // Accept-Language: ru
 // Accept-Encoding: gzip, deflate
