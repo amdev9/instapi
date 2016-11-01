@@ -25,13 +25,14 @@ public function run() {
 
       $this->redis = $this->worker->getConnection();
       $this->debug = true;
+      $IGDataPath = null;
       $this->UA = 'Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+';
       
       $this->uuid = $this->generateUUID(true);
       $this->waterfall_id =  $this->generateUUID(true);
 
       // this data from redis
-      $this->proxy = $this->redis->spop('proxy');
+      $this->proxy = null; //$this->redis->spop('proxy');
 
       $line_inst = $this->redis->spop('line_inst');
       $this->password = explode("|", $line_inst)[0];  
@@ -42,10 +43,6 @@ public function run() {
       // $captionparse = explode("|", $line_inst)[3]; 
       // $this->phone = ""; 
 
-
-      $this->password = $password;      
-      $this->email = $email;
-      
 
       if (!is_null($IGDataPath)) {
           $this->IGDataPath = $IGDataPath;
@@ -95,7 +92,7 @@ public function run() {
 
      // generateSignature($data);
 
-      $outputs = request('https://i.instagram.com/api/v1/qe/sync/', generateSignature($data) );
+      $outputs = $this->request('https://i.instagram.com/api/v1/qe/sync/', $this->generateSignature($data) );
   
       // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
       // $this->token = $matcht[1];
@@ -135,7 +132,7 @@ public function run() {
        "screen"=> "landing"
      ]);
 
-     $outputs = request('https://i.instagram.com/api/v1/fb/show_continue_as/', generateSignature($data) );
+     $outputs = $this->request('https://i.instagram.com/api/v1/fb/show_continue_as/', $this->generateSignature($data) );
 
       preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
       $this->token = $matcht[1];
@@ -175,7 +172,7 @@ public function check_email()
       "_csrftoken" => $this->token, //"h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs"
     ]);
 
-    $outputs = request('https://i.instagram.com/api/v1/users/check_email/', generateSignature($data) );
+    $outputs = $this->request('https://i.instagram.com/api/v1/users/check_email/', $this->generateSignature($data) );
 
   // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
   // $this->token = $matcht[1];
@@ -216,7 +213,7 @@ public function username_suggestions()
 
     ]);
 
-  $outputs = request('https://i.instagram.com/api/v1/accounts/username_suggestions/', generateSignature($data));
+  $outputs = $this->request('https://i.instagram.com/api/v1/accounts/username_suggestions/', $this->generateSignature($data));
 
 
   $this->username = $outputs[1]['suggestions'][0];
@@ -257,7 +254,7 @@ $data = json_encode([
       "_csrftoken"=> $this->token, //"h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs"
 
   ]);
-  $outputs = request('https://i.instagram.com/api/v1/users/check_username/', generateSignature($data));
+  $outputs = $this->request('https://i.instagram.com/api/v1/users/check_username/', $this->generateSignature($data));
 
   // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
   // $this->token = $matcht[1];
@@ -302,7 +299,7 @@ public function create()
      "_csrftoken"=> $this->token, //"h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs"
 
     ]);
-  $outputs = request('https://i.instagram.com/api/v1/accounts/create/', generateSignature($data));
+  $outputs = $this->request('https://i.instagram.com/api/v1/accounts/create/', $this->generateSignature($data));
 
     $this->username_id = $outputs[1]['created_user']['pk'];
   // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
@@ -327,7 +324,7 @@ public function create()
 
     ]);
  
-   $outputs = request('https://i.instagram.com/api/v1/qe/sync/', generateSignature($data));
+   $outputs = $this->request('https://i.instagram.com/api/v1/qe/sync/', $this->generateSignature($data));
 
   // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
   // $this->token = $matcht[1];
@@ -343,7 +340,7 @@ public function create()
     $data = "_csrftoken=".$this->token."&_uuid=".$this->uuid."&paginate=true&module=explore_people&num_media=3";
     
    
-     $outputs = request('https://i.instagram.com/api/v1/discover/ayml/', $data);
+     $outputs = $this->request('https://i.instagram.com/api/v1/discover/ayml/', $data);
 
     // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
     // $this->token = $matcht[1];
@@ -355,7 +352,7 @@ public function create()
   public function autocomplete_user_list()
   {
     
-     $outputs = request('https://i.instagram.com/api/v1/friendships/autocomplete_user_list/?version=2');
+     $outputs = $this->request('https://i.instagram.com/api/v1/friendships/autocomplete_user_list/?version=2');
 
 
    //  GET https://i.instagram.com/api/v1/friendships/autocomplete_user_list/?version=2 HTTP/1.1
