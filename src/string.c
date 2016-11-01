@@ -30,10 +30,10 @@ int main()
 	for(int j = 0; j < 128; j = j + 2) {
 
         sprintf(res, "%c%c", hex_str[j], hex_str[j+1] );
-    	printf("%s ", res);
+    	// printf("%s ", res);
    
 		sscanf(res, "%x", &intVal);
-		printf(" %x - %d ", intVal, intVal);
+		// printf(" %x - %d ", intVal, intVal);
 
 		v2  = intVal;
 	 	
@@ -116,12 +116,13 @@ int main()
 		      }
 		    }
 
-		  printf("-> %d", v1);
-		  printf(" >> %c\n", (char)v1);
+		  // printf("-> %d", v1);
+		  printf("%c", (char)v1);
+
 		s++;
 		 
     }
-    printf("%d\n", s);
+    // printf("%d\n", s);
 
 
 }

@@ -74,10 +74,15 @@
    function show_continue_as()
     {
 
+      // $data =  'signed_body=6d2d1d44bb7f58a6bb7d0ebfa15f19d2d50f0fba355c1b0906220afc8a4911d2.%7B%22phone_id%22%3A%22%22%2C%22screen%22%3A%22landing%22%7D&ig_sig_key_version=5';
 
-      $data =  'signed_body=6d2d1d44bb7f58a6bb7d0ebfa15f19d2d50f0fba355c1b0906220afc8a4911d2.%7B%22phone_id%22%3A%22%22%2C%22screen%22%3A%22landing%22%7D&ig_sig_key_version=5';
 
-      $outputs = request('https://i.instagram.com/api/v1/fb/show_continue_as/', $data);
+     $data =  json_encode([
+       "phone_id"=> "",
+       "screen"=> "landing"
+     ]);
+
+     $outputs = request('https://i.instagram.com/api/v1/fb/show_continue_as/', generateSignature($data) );
 
       // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
       // $this->token = $matcht[1];
@@ -86,8 +91,6 @@
 
         return $outputs;
     }
-
-
 
 
 // POST https://i.instagram.com/api/v1/users/check_email/ HTTP/1.1
@@ -111,9 +114,15 @@
 function check_email()
 {
 
-  $data =  'signed_body=21ebd1aaef2dc91204b3ff702d1599317060de732a117403637ad99e2588d250.%7B%22email%22%3A%22matveev.alexander.v.l.a.d.imit.ovi4%40gmail.com%22%2C%22qe_id%22%3A%22F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B%22%2C%22_csrftoken%22%3A%22h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs%22%7D&ig_sig_key_version=5';
+  // $data =  'signed_body=21ebd1aaef2dc91204b3ff702d1599317060de732a117403637ad99e2588d250.%7B%22email%22%3A%22matveev.alexander.v.l.a.d.imit.ovi4%40gmail.com%22%2C%22qe_id%22%3A%22F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B%22%2C%22_csrftoken%22%3A%22h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs%22%7D&ig_sig_key_version=5';
 
-  $outputs = request('https://i.instagram.com/api/v1/users/check_email/', $data);
+    $data = json_encode([
+      "email" => "matveev.a.lexander.v.l.a.d.imit.ovi4@gmail.com",
+      "qe_id" => "F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B",
+      "_csrftoken" => "h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs"
+    ]);
+
+    $outputs = request('https://i.instagram.com/api/v1/users/check_email/', generateSignature($data) );
 
   // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
   // $this->token = $matcht[1];
@@ -225,11 +234,11 @@ function create()
   function generateSignature($data)
    {
 
-        $hash = hash_hmac('sha256', $data, '?6 +n'); // NEED TO EXTRACT KEY
-        echo "\n".($hash)."\n";
+        $hash = hash_hmac('sha256', $data, 'ebbf19d239c4b2cff2df4b51cc626ffdad6fe27b5a7b39bd6e7e41b72f54c1f2'); // NEED TO EXTRACT KEY
+        // echo "\n".($hash)."\n";
         
-        $hash = '88777998bb9b354a5e8882906247af04a84dca8930e055d1384a4d09e7dc32fc';    
-        echo "\n".($hash)."\n";   
+        // $hash = '88777998bb9b354a5e8882906247af04a84dca8930e055d1384a4d09e7dc32fc';    
+        // echo "\n".($hash)."\n";   
         return 'signed_body='.$hash.'.'.urlencode($data).'&ig_sig_key_version=5';
     }
 
@@ -307,8 +316,8 @@ function request($endpoint, $post = null, $login = false)
  
 
 syncFeaturesRegister();
-// show_continue_as();
-// check_email();
+show_continue_as();
+check_email();
 // username_suggestions();
 // check_username();
 // create();
