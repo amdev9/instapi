@@ -54,6 +54,9 @@ public function run() {
       $this->check_username();
       $this->create();
 
+      $this->sync();
+      $this->ayml();
+
  }
 
 
@@ -345,7 +348,6 @@ public function create()
     
      $outputs = request('https://i.instagram.com/api/v1/friendships/autocomplete_user_list/?version=2');
 
-   
 
    //  GET https://i.instagram.com/api/v1/friendships/autocomplete_user_list/?version=2 HTTP/1.1
   // Host: i.instagram.com
@@ -451,7 +453,6 @@ public function create()
 
         return [$header, json_decode($body, true)];
     }
-
 
 
 }
