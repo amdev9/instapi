@@ -349,7 +349,7 @@ class RegisterTool extends Threaded
 
 			$ad_media_id = $ad_media[mt_rand(0, count($ad_media) - 1)];
 		 	
-			$ilink->like($ad_media_id);
+			// $ilink->like($ad_media_id);
 
 		 	 $this->functiondirectshare( $ilink, $actioner, $ad_media_id);
 		}
@@ -839,7 +839,8 @@ class RegisterTool extends Threaded
 		$smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
 		$smil = $smiles[mt_rand(0, count($smiles) - 1)];
 		$first_name_txt = explode(" ",$this->first_name);
-		$hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+		// $hi_word = ["Hey! What's up? I am", "Hi! I am", "Hey there, I am"];
+		$hi_word = ["Здравствуйте! ", "Добрый день! "];
 		$hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
 		$smiles_hi =  ["\u{26A1}", "\u{1F60C}"   ,  "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{270B}"];
 		$smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
@@ -848,7 +849,7 @@ class RegisterTool extends Threaded
 
 	    // $text = "$hiw $first_name_txt[0] 19 years old $smi_hi Let's have a HOT chat (snap, kik, dm) \u{1F4A6} CLICK link in profile \u{1F449} @$uname \u{1F448} for contacts! \u{1F446}\u{1F446}\u{1F446} my login there ".$uname."_96 $smil I am ONLINE and WAITING.. $cur";
 
-	    $text = " 💓  Брендовые парфюмы по 1990р.! 🎀 Успейте заказать премиум парфюм! Подробнее по ссылке в профиле 👇👇👇 @_parfum_premium_ ";
+	    $text = " $hiw ";
 
 	    echo $text;
 
@@ -856,9 +857,9 @@ class RegisterTool extends Threaded
 	 
 			// $message_recipient = "1009845355"; //4ewir   , "3299015045" array(
 
-			$answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
+			// $answer = $i->direct_share($ad_media_id, $message_recipient, $text ); 
 
-			// $answer = $i->direct_message($message_recipient, $text ); 
+			$answer = $i->direct_message($message_recipient, $text ); 
 			 // echo var_export($answer);
 			 
 			
@@ -883,7 +884,9 @@ class RegisterTool extends Threaded
 			 				// //del this --> sleep
 			 				$this->redis->sadd("disabled", "direct_".$this->username );
 			 				// sleep(14400); // 4 hours sleep
-			 			 	 echo "\n\ndirect NOT send\n\n";
+			 				  echo "\n\ndirect NOT send\n\n";
+			 				return;
+			 			 	
 			 			}
 
 					} catch (Exception $e) {
