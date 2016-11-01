@@ -153,9 +153,17 @@ function check_email()
 function username_suggestions()
 {
 
-  $data =  'signed_body=91c63e53bc961edae0e4054e1e0671ecdda20f43ee1e9f964893de043819bbe0.%7B%22name%22%3A%22Hanna%20Belford%22%2C%22waterfall_id%22%3A%2217988db1d11b4a1283ae288c339df454%22%2C%22_csrftoken%22%3A%22h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs%22%7D&ig_sig_key_version=5';
+  // $data =  'signed_body=91c63e53bc961edae0e4054e1e0671ecdda20f43ee1e9f964893de043819bbe0.%7B%22name%22%3A%22Hanna%20Belford%22%2C%22waterfall_id%22%3A%2217988db1d11b4a1283ae288c339df454%22%2C%22_csrftoken%22%3A%22h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs%22%7D&ig_sig_key_version=5';
 
-  $outputs = request('https://i.instagram.com/api/v1/accounts/username_suggestions/', $data);
+  $data = json_encode([
+   
+     "name"=>"Hanna Belford",
+     "waterfall_id"=>"17988db1d11b4a1283ae288c339df454",
+     "_csrftoken"=>"h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs" 
+
+    ]);
+
+  $outputs = request('https://i.instagram.com/api/v1/accounts/username_suggestions/', generateSignature($data));
 
   // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
   // $this->token = $matcht[1];
@@ -184,9 +192,16 @@ function username_suggestions()
 
 function check_username()
 {
-  $data =  'signed_body=0a8ab4311555dde3da733e30aa625d72278881574c6b4592259f2ac295ebfa1f.%7B%22username%22%3A%22belfordhanna%22%2C%22_csrftoken%22%3A%22h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs%22%7D&ig_sig_key_version=5';
+ 
+  // $data =  'signed_body=0a8ab4311555dde3da733e30aa625d72278881574c6b4592259f2ac295ebfa1f.%7B%22username%22%3A%22belfordhanna%22%2C%22_csrftoken%22%3A%22h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs%22%7D&ig_sig_key_version=5';
 
-  $outputs = request('https://i.instagram.com/api/v1/users/check_username/', $data);
+$data = json_encode([
+
+      "username"=>"belfordhanna",
+      "_csrftoken"=>"h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs"
+
+  ]);
+  $outputs = request('https://i.instagram.com/api/v1/users/check_username/', generateSignature($data));
 
   // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
   // $this->token = $matcht[1];
@@ -217,9 +232,21 @@ function create()
 {
 
  
-  $data =  'signed_body=1df4671b8226d552474999160d881214ca8144cbedb73518e1003fe5379b2718.%7B%22first_name%22%3A%22Hanna%20Belford%22%2C%22password%22%3A%22qweqwe123%22%2C%22waterfall_id%22%3A%2217988db1d11b4a1283ae288c339df454%22%2C%22device_id%22%3A%22F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B%22%2C%22email%22%3A%22matveev.alexander.v.l.a.d.imit.ovi4%40gmail.com%22%2C%22username%22%3A%22belfordhanna%22%2C%22_csrftoken%22%3A%22h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs%22%7D&ig_sig_key_version=5';
+  // $data =  'signed_body=1df4671b8226d552474999160d881214ca8144cbedb73518e1003fe5379b2718.%7B%22first_name%22%3A%22Hanna%20Belford%22%2C%22password%22%3A%22qweqwe123%22%2C%22waterfall_id%22%3A%2217988db1d11b4a1283ae288c339df454%22%2C%22device_id%22%3A%22F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B%22%2C%22email%22%3A%22matveev.alexander.v.l.a.d.imit.ovi4%40gmail.com%22%2C%22username%22%3A%22belfordhanna%22%2C%22_csrftoken%22%3A%22h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs%22%7D&ig_sig_key_version=5';
 
-  $outputs = request('https://i.instagram.com/api/v1/accounts/create/', $data);
+
+  $data = json_encode([
+
+     "first_name" => "Hanna Belford",
+     "password" => "qweqwe123",
+     "waterfall_id" => "17988db1d11b4a1283ae288c339df454",
+     "device_id" => "F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B",
+     "email"=>"matveev.alexander.v.l.a.d.imit.ovi4@gmail.com",
+     "username"=>"belfordhanna",
+     "_csrftoken"=>"h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs"
+
+    ]);
+  $outputs = request('https://i.instagram.com/api/v1/accounts/create/', generateSignature($data));
 
   // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
   // $this->token = $matcht[1];
@@ -318,7 +345,7 @@ function request($endpoint, $post = null, $login = false)
 syncFeaturesRegister();
 show_continue_as();
 check_email();
-// username_suggestions();
-// check_username();
+username_suggestions();
+check_username();
 // create();
 
