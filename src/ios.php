@@ -297,7 +297,7 @@ function ayml()
 }
  
 
-function ayml()
+function autocomplete_user_list()
 {
   
    $outputs = request('https://i.instagram.com/api/v1/friendships/autocomplete_user_list/?version=2');
