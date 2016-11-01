@@ -241,7 +241,7 @@ function create()
      "password" => "qweqwe123",
      "waterfall_id" => "17988db1d11b4a1283ae288c339df454",
      "device_id" => "F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B",
-     "email"=>"matveev.alexander.v.l.a.d.imit.ovi4@gmail.com",
+     "email"=>"matveev.a.lexander.v.l.a.d.imit.ovi4@gmail.com",
      "username"=>"belfordhanna",
      "_csrftoken"=>"h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs"
 
@@ -347,5 +347,5 @@ show_continue_as();
 check_email();
 username_suggestions();
 check_username();
-// create();
+create();
 
