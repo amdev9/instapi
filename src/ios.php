@@ -349,6 +349,233 @@ public function create()
       return $outputs;
   }
    
+
+
+
+public function direct_inbox()
+{
+  $outputs = $this->request('https://i.instagram.com/api/v1/direct_v2/inbox/');
+  return $outputs;
+}
+
+public function ranked_recipients()
+{
+  $outputs = $this->request('https://i.instagram.com/api/v1/direct_v2/ranked_recipients/?mode=reshare&show_threads=true');
+  return $outputs;
+}
+ 
+
+
+ public function inbox()
+  {
+    
+     $outputs = $this->request('https://i.instagram.com/api/v1/news/inbox/?activity_module=all');
+    return $outputs;
+}
+
+ public function reels_tray()
+{
+    
+     $outputs = $this->request('https://i.instagram.com/api/v1/feed/reels_tray/?tray_session_id=1ae5839959534712b3ffd12aa1a2cb6d');
+    return $outputs;
+}
+
+
+
+public function discover_explore()
+{
+    
+     $outputs = $this->request('https://i.instagram.com/api/v1/discover/explore/?is_on_wifi=true&network_transfer_rate=30.99&is_prefetch=true&session_id='.$this->username_id.'_'.$this->generateUUID(true).'&timezone_offset=10800');  /// fix for transfer rate
+    return $outputs;
+}
+
+
+
+public function channels_home()
+{
+    $outputs = $this->request('https://i.instagram.com/api/v1/discover/channels_home/');  /// fix for transfer rate
+    return $outputs;
+}
+
+ 
+
+
+public function graphFb() {
+
+//   POST https://graph.facebook.com/v2.7 HTTP/1.1
+// Host: graph.facebook.com
+// Content-Type: multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Connection: keep-alive
+// Proxy-Connection: keep-alive
+// Accept: */*
+// User-Agent: FBiOSSDK.4.14.0
+// Accept-Language: ru
+// Accept-Encoding: gzip, deflate
+// Content-Length: 1081
+
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="batch_app_id"
+
+// 124024574287414
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="batch"
+
+// [{"relative_url":"124024574287414?fields=app_events_feature_bitmask%2Cname%2Cdefault_share_mode%2Cios_dialog_configs%2Cios_sdk_dialog_flows.os_version%289.3.1%29%2Cios_sdk_error_categories%2Csupports_implicit_sdk_logging%2Cgdpv4_nux_enabled%2Cgdpv4_nux_content%2Cios_supports_native_proxy_auth_flow%2Cios_supports_system_auth%2Capp_events_session_timeout&format=json&include_headers=false&sdk=ios","method":"GET"},{"relative_url":"124024574287414?fields=app_events_feature_bitmask%2Cname%2Cdefault_share_mode%2Cios_dialog_configs%2Cios_sdk_dialog_flows.os_version%289.3.1%29%2Cios_sdk_error_categories%2Csupports_implicit_sdk_logging%2Cgdpv4_nux_enabled%2Cgdpv4_nux_content%2Cios_supports_native_proxy_auth_flow%2Cios_supports_system_auth%2Capp_events_session_timeout&format=json&include_headers=false&sdk=ios","method":"GET"}]
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+
+//////2////
+// POST https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=MOBILE_APP_INSTALL&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D HTTP/1.1
+// Host: graph.facebook.com
+// Content-Type: multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Connection: keep-alive
+// Proxy-Connection: keep-alive
+// Accept: */*
+// User-Agent: FBiOSSDK.4.14.0
+// Accept-Language: ru
+// Accept-Encoding: gzip, deflate
+// Content-Length: 1408
+
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="format"
+
+// json
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="anon_id"
+
+// XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="application_tracking_enabled"
+
+// 1
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="extinfo"
+
+// ["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe\/Moscow"]
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="event"
+
+// MOBILE_APP_INSTALL
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="advertiser_id"
+
+// 9AA0EE34-845C-4793-8830-0D3F354A474B
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="advertiser_tracking_enabled"
+
+// 1
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="include_headers"
+
+// false
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="sdk"
+
+// ios
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="url_schemes"
+
+// ["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+
+///////3//////
+
+//   POST https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D HTTP/1.1
+// Host: graph.facebook.com
+// Content-Type: multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Connection: keep-alive
+// Proxy-Connection: keep-alive
+// Accept: */*
+// User-Agent: FBiOSSDK.4.14.0
+// Accept-Language: ru
+// Accept-Encoding: gzip, deflate
+// Content-Length: 1747
+
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="custom_events_file"; filename="custom_events_file"
+// Content-Type: content/unknown
+
+// [{"_ui":"no_ui","_eventName":"fb_mobile_activate_app","_logTime":1476716975,"_session_id":"24E504EA-4510-4F88-83AC-AB2E833B6B46","fb_mobile_launch_source":"Unclassified"}]
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="anon_id"
+
+// XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="application_tracking_enabled"
+
+// 1
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="extinfo"
+
+// ["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe\/Moscow"]
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="event"
+
+// CUSTOM_APP_EVENTS
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="advertiser_id"
+
+// 9AA0EE34-845C-4793-8830-0D3F354A474B
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="advertiser_tracking_enabled"
+
+// 1
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="format"
+
+// json
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="include_headers"
+
+// false
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="sdk"
+
+// ios
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+// Content-Disposition: form-data; name="url_schemes"
+
+// ["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]
+// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+
+
+}
+
+
+
+
+
+
+
+public function timeline()
+{
+  $outputs = $this->request('https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800');
+
+ 
+
+// GET https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800 HTTP/1.1
+// Host: i.instagram.com
+// Accept: *
+// Proxy-Connection: keep-alive
+// X-IG-Connection-Type: WiFi
+// Accept-Language: ru-RU;q=1
+// Accept-Encoding: gzip, deflate
+// X-IDFA: 9AA0EE34-845C-4793-8830-0D3F354A474B  /// -> facebook adveriser id
+// X-Ads-Opt-Out: 0
+// X-FB: 0
+// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+
+// X-DEVICE-ID: F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B    /// -> uuid
+// Connection: keep-alive
+// X-IG-Capabilities: 3wo=
+// Cookie: csrftoken=ZcsBlgJVBdnESnAEUMBuWuy2W2vAwQRZ; ds_user_id=4050134364; mid=WATprwAAAAFg3XoGK03ZryWXvhJs; s_network=; sessionid=IGSC66cf8f8c5da55856662424dd8207ecdb44820e4a92d744132029951ed222570d%3AxB1GJdpcuewZSQgPxGpJbNALz3SXj8vd%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A4050134364%2C%22_token%22%3A%224050134364%3AjASZsutTjkcaDyLDvHI8FQojv7nkLtkk%3A64b954b6b30319c845822728b604e02a96a17358a5787e752f5483944b41e135%22%2C%22asns%22%3A%7B%2295.73.175.251%22%3A25515%2C%22time%22%3A1476717052%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1476717052.30863%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
+// X-IG-INSTALLED-APPS: eyIxIjowLCIyIjowfQ==          /// -> check if the same for devices
+
+
+
+  return $outputs;
+}
+
+
+
   public function autocomplete_user_list()
   {
     
@@ -361,7 +588,7 @@ public function create()
   // Cookie: csrftoken=ZcsBlgJVBdnESnAEUMBuWuy2W2vAwQRZ; ds_user_id=4050134364; mid=WATprwAAAAFg3XoGK03ZryWXvhJs; s_network=; sessionid=IGSC66cf8f8c5da55856662424dd8207ecdb44820e4a92d744132029951ed222570d%3AxB1GJdpcuewZSQgPxGpJbNALz3SXj8vd%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A4050134364%2C%22_token%22%3A%224050134364%3AjASZsutTjkcaDyLDvHI8FQojv7nkLtkk%3A64b954b6b30319c845822728b604e02a96a17358a5787e752f5483944b41e135%22%2C%22asns%22%3A%7B%2295.73.175.251%22%3A25515%2C%22time%22%3A1476717052%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1476717052.30863%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
   // Connection: keep-alive
   // Proxy-Connection: keep-alive
-  // Accept: */*
+  // Accept: *
   // User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+
   // Accept-Language: ru-RU;q=1
   // Accept-Encoding: gzip, deflate
