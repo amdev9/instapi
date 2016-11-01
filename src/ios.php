@@ -31,12 +31,21 @@ public function run() {
       $this->waterfall_id =  $this->generateUUID(true);
 
       // this data from redis
-      $this->proxy = $proxy;
+      $this->proxy = $this->redis->spop('proxy');
+
+      $line_inst = $this->redis->spop('line_inst');
+      $this->password = explode("|", $line_inst)[0];  
+      $this->email = explode("|", $line_inst)[1]; 
+      $this->full_name =  explode("|", $line_inst)[4]; 
+      
+      // $bioparse = explode("|", $line_inst)[2];  
+      // $captionparse = explode("|", $line_inst)[3]; 
+      // $this->phone = ""; 
+
+
       $this->password = $password;      
       $this->email = $email;
-      $this->full_name = $full_name
-
-    
+      
 
       if (!is_null($IGDataPath)) {
           $this->IGDataPath = $IGDataPath;
