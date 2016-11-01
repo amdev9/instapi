@@ -258,6 +258,74 @@ function create()
 
  
 
+function sync()
+{
+  $data = json_encode([
+      "_csrftoken"=>"ZcsBlgJVBdnESnAEUMBuWuy2W2vAwQRZ",
+      "id"=>"4050134364", /// == uid from set cookie
+      "_uuid"=>"F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B",
+      "experiments"=>"ig_direct_message_service,ig_boomerang_entry,ig_ios_react_native_universe_kill_switch,ig_ios_nscache_replacement,ig_ios_ad_pbia_profile_tap_universe,ig_feed_seen_state_universe,ig_ios_webview_dismiss,instagram_ios_resumable_upload_sc,ig_ios_direct_sqlite,ig_video_copyright_whitelist_qe,ig_ios_main_feed_headers_universe,ig_creation_growth_holdout,ig_ios_redirect_change_phone_universe,ig_ios_business_conversion_flow_universe,ig_ios_discover_people_icon_universe,ig_ios_upload_post_model,ig_ios_ads_holdout_universe,ig_ios_video_target_view_dealloc,ig_ios_follow_button_redesign,ig_ios_autoupdater_force_manual_update,ig_ios_disable_comment_option_public_universe,ig_ios_deeplinking_2,ig_ios_video_should_play_before_cover_photo_loaded,ig_ios_ad_intent_to_highlight_universe,ig_ios_share_screen_caption_universe,ig_ios_comment_thread_show_keyboard,ig_ios_explore_ui_universe,ig_ios_contextual_feed_refactor_universe,ig_ios_disable_comment_option_universe,ig_ios_aymf_feed_unit_nudge_universe,ig_ios_search_null_state_hiding,ig_ios_upload_progress,ig_ios_react_native_universe,ig_ios_video_edit_default_to_trim,ig_ios_comment_redesign,ig_ios_new_business_endpoint,ig_ios_direct_typing_indicator_receiver,ig_explore_channel_home_universe,ig_ios_grid_video_icon,ig_ios_dynamic_text,ig_ios_feed_nudging_universe,ig_ios_external_sticky_share_universe,ig_ios_new_logging_universe,ig_ios_default_multi_select,ig_ios_video_asset_dealloc_delay,ig_ios_ad_holdout_16h2m1_universe,ig_ios_profile_prefetch_universe,ig_show_promote_button_in_feed,ig_ios_watch_browse_universe,ig_ios_replace_username_with_fullname_aymf_universe,instant_activity_badge_universe,ig_ios_app_group_testing,ig_ios_2fac,ig_ios_feed_ufi_redesign,ig_ios_default_to_non_square_asset,ig_ios_high_res_upload,ig_ios_search_tab_back_to_explore,ig_ios_universal_link_2_universe,ig_ios_video_cache_policy,ig_ios_translation_universe,ig_ios_immersive_viewer,ig_ios_new_discover_people_page_universe,ig_ios_boomerang_disable_video_icon,ig_ios_video_corrected_viewport_logging,ig_ios_search_preview_media,ig_ios_listkit_universe,ig_ios_media_service_universe,ig_ios_blocked_list,ig_ios_chaining_see_all_v2_universe,ig_ios_album_video_upload_params,ig_ios_stories_at_mentions,ig_ios_follow_in_story_viewer_universe,ig_ios_creation_lazy_tabs,ig_ios_video_fnf_player,ig_ios_creation_always_kill_camera_session,ig_direct_launch_app_ads,ig_ios_media_picker_non_sticky_universe,ig_ios_direct_raven,ig_video_use_sve_universe,ig_ios_django_endpoint_for_insights_universe,ig_ios_insta_video_universe,ig_ios_manual_updater_background_downloading,ig_ios_ad_sponsored_label_universe,ig_ios_activity_feed_new_people_feed_universe,ig_ios_multiclip,ig_ios_feed_zoom,ig_ios_stories_change_font,ig_ios_direct_new_thread_view_rewrite,ig_ios_video_time_indicator_universe,ig_ios_view_count_decouple_likes_universe,ig_comments_holdout_universe,ig_ios_new_hon_logging_universe,ig_ios_profile_photo_as_media,ig_ios_stories_persistent_your_story,ig_ios_inline_gallery,ig_ios_album_viewer_prefetch_universe,ig_ios_rn_photos_of_you,ig_ios_profile_link_browser_universe,ig_ios_feed_refactor_universe,ig_ios_whatsapp_share_universe,ig_ios_search_recent_searches,ig_ios_cinematic_camera_stabilization,ig_ios_ad_holdout_16m5_universe,ig_ios_follows_you_badge_universe,ig_ios_aymf_pagination_universe,ig_video_max_duration_qe_preuniverse,ig_longcat_aspect_ratio_range,ig_ios_su_activity_feed,ig_ios_video_playback_bandwidth_threshold,ig_ios_ad_comment_cta_universe,ig_ios_video_stitching_universe,ig_ios_share_screen_refactor_universe,ig_ios_reorder_share_sheet_universe,ig_ios_add_profile_nux_universe,ig_ios_new_story_pill_universe,ig_ios_post_to_feed_from_direct_universe,ig_typeahead_search_ranking_universe,ig_ios_feed_pjpeg,ig_ios_direct_disable_swipe_to_inbox,ig_ios_activity_feed_refactor_universe,ig_ios_extra_dialog_for_skip,ig_feed_holdout_universe,ig_ios_stories_mute,ig_ios_social_context,ig_ios_direct_main_inbox_donot_clear_count,ig_ios_usertag_feed_refactor_universe,ig_ios_direct_typing_indicator_send,ig_ios_stories_afterboom_universe,ig_ios_new_follow_list_universe,ig_ios_share_screen_tagging_universe,ig_search_ios_universe,ig_ios_explore_loading_universe,ig_ios_streaming_video_cache_universe,ig_ios_profile,ig_ios_redirect_change_email,ig_organic_insights_base,ig_ios_invite_in_nux_universe,ig_ios_business_promotion,ig_ios_handoff,ig_ios_video_caption_universe,ig_ios_show_animation_teaser_for_aymf_unit_universe,ig_ios_feed_pagination_universe,ig_ios_draw_dm_story_universe,ig_show_su_in_following_list,ig_react_native_promote,ig_ios_video_upload_params,ig_ios_video_recording_timer_universe,ig_ios_feed_send_battery_info_universe,ig_checkpoint_rn_flow_universe,ig_ios_main_feed_refactor_universe_2,ig_ios_new_fb_list,ig_ios_search_null_state,ig_ios_draw_use_gpu,ig_ios_share_on_screenshot_universe,ig_ios_zoom_gesture_recognition_enabled,ig_ios_push_notification_prepromt_content,ig_ios_scroll_perf_metric,ig_ios_video_offset_for_playback_universe,ig_upload_retry_experiment_universe,ig_ios_force_cold_start_after_qe_update,ig_ios_discover_people_3d_touch_universe,ig_ios_fb_token_delay_universe,ig_ios_tagging_prefetch_universe",
+      
+      "_uid"=>"4050134364"
+    ]);
+ 
+   $outputs = request('https://i.instagram.com/api/v1/qe/sync/', generateSignature($data));
+
+  // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
+  // $this->token = $matcht[1];
+  // echo var_export($outputs);  
+
+    return $outputs;
+}
+
+
+ 
+ 
+
+function ayml()
+{
+  $data = "_csrftoken=ZcsBlgJVBdnESnAEUMBuWuy2W2vAwQRZ&_uuid=F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B&paginate=true&module=explore_people&num_media=3";
+  
+ 
+   $outputs = request('https://i.instagram.com/api/v1/discover/ayml/', $data);
+
+  // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
+  // $this->token = $matcht[1];
+  // echo var_export($outputs);  
+
+    return $outputs;
+}
+ 
+
+function ayml()
+{
+  
+   $outputs = request('https://i.instagram.com/api/v1/friendships/autocomplete_user_list/?version=2');
+
+ 
+
+ //  GET https://i.instagram.com/api/v1/friendships/autocomplete_user_list/?version=2 HTTP/1.1
+// Host: i.instagram.com
+// X-IG-Capabilities: 3wo=
+// Cookie: csrftoken=ZcsBlgJVBdnESnAEUMBuWuy2W2vAwQRZ; ds_user_id=4050134364; mid=WATprwAAAAFg3XoGK03ZryWXvhJs; s_network=; sessionid=IGSC66cf8f8c5da55856662424dd8207ecdb44820e4a92d744132029951ed222570d%3AxB1GJdpcuewZSQgPxGpJbNALz3SXj8vd%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A4050134364%2C%22_token%22%3A%224050134364%3AjASZsutTjkcaDyLDvHI8FQojv7nkLtkk%3A64b954b6b30319c845822728b604e02a96a17358a5787e752f5483944b41e135%22%2C%22asns%22%3A%7B%2295.73.175.251%22%3A25515%2C%22time%22%3A1476717052%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1476717052.30863%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
+// Connection: keep-alive
+// Proxy-Connection: keep-alive
+// Accept: */*
+// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+
+// Accept-Language: ru-RU;q=1
+// Accept-Encoding: gzip, deflate
+// X-IG-Connection-Type: WiFi
+
+
+    return $outputs;
+}
+ 
+
+
+
+
+
+
   function generateSignature($data)
    {
 
@@ -338,10 +406,7 @@ function request($endpoint, $post = null, $login = false)
         return [$header, json_decode($body, true)];
     }
 
-
-
  
-
 syncFeaturesRegister();
 show_continue_as();
 check_email();
