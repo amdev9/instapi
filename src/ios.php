@@ -364,10 +364,8 @@ public function ranked_recipients()
   return $outputs;
 }
  
-
-
- public function inbox()
-  {
+public function inbox()
+{
     
      $outputs = $this->request('https://i.instagram.com/api/v1/news/inbox/?activity_module=all');
     return $outputs;
@@ -380,8 +378,6 @@ public function ranked_recipients()
     return $outputs;
 }
 
-
-
 public function discover_explore()
 {
     
@@ -389,14 +385,19 @@ public function discover_explore()
     return $outputs;
 }
 
-
-
 public function channels_home()
 {
     $outputs = $this->request('https://i.instagram.com/api/v1/discover/channels_home/');  /// fix for transfer rate
     return $outputs;
 }
 
+
+public function users_info()
+{
+    $outputs = $this->request('https://i.instagram.com/api/v1/users/'.$this->username_id.'/info/');   
+    return $outputs;
+}
+ 
  
 
 
