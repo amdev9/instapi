@@ -398,7 +398,20 @@ public function users_info()
     return $outputs;
 }
  
- 
+public function reels_media()
+{
+
+  $data = json_encode([
+      "_csrftoken"=> $this->token,
+      "_uuid"=> $this->uuid,
+      "_uid"=> $this->username_id,
+      "user_ids"=>'["'.$this->username_id.'"]',
+    ]);
+    $outputs = $this->request('https://i.instagram.com/api/v1/feed/reels_media/', $this->generateSignature($data));
+    return $outputs;
+}
+  
+
 
 
 public function graphFb() {
@@ -408,7 +421,7 @@ public function graphFb() {
 // Content-Type: multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
 // Connection: keep-alive
 // Proxy-Connection: keep-alive
-// Accept: */*
+// Accept: *
 // User-Agent: FBiOSSDK.4.14.0
 // Accept-Language: ru
 // Accept-Encoding: gzip, deflate
