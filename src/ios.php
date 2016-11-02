@@ -55,13 +55,18 @@ public function run() {
 
       $this->syncFeaturesRegister();
       $this->show_continue_as();
-      $this->check_email();
-      $this->username_suggestions();
-      $this->check_username();
-      $this->create();
 
-      $this->sync();
-      $this->ayml();
+       $this->graphFb();
+       $this->graphFb_activities_appinstall();
+       $this->graphFb_activities_appevents();
+
+      // $this->check_email();
+      // $this->username_suggestions();
+      // $this->check_username();
+      // $this->create();
+
+      // $this->sync();
+      // $this->ayml();
 
  }
 
@@ -500,8 +505,8 @@ public function graphFb() {
               'name' => 'batch',
               'data' => '[{"relative_url":"124024574287414?fields=app_events_feature_bitmask%2Cname%2Cdefault_share_mode%2Cios_dialog_configs%2Cios_sdk_dialog_flows.os_version%289.3.1%29%2Cios_sdk_error_categories%2Csupports_implicit_sdk_logging%2Cgdpv4_nux_enabled%2Cgdpv4_nux_content%2Cios_supports_native_proxy_auth_flow%2Cios_supports_system_auth%2Capp_events_session_timeout&format=json&include_headers=false&sdk=ios","method":"GET"},{"relative_url":"124024574287414?fields=app_events_feature_bitmask%2Cname%2Cdefault_share_mode%2Cios_dialog_configs%2Cios_sdk_dialog_flows.os_version%289.3.1%29%2Cios_sdk_error_categories%2Csupports_implicit_sdk_logging%2Cgdpv4_nux_enabled%2Cgdpv4_nux_content%2Cios_supports_native_proxy_auth_flow%2Cios_supports_system_auth%2Capp_events_session_timeout&format=json&include_headers=false&sdk=ios","method":"GET"}]',
           ],
-          
         ];
+
 
         $data = $this->buildBodyFb($bodies, $boundary);
         
@@ -562,131 +567,280 @@ public function graphFb() {
 
 //////2////
 
-  // $outputs = $this->fb_request('https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=MOBILE_APP_INSTALL&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D', $data);
-
+public function graphFb_activities_appinstall() {
  
+  $outputs = $this->fb_request('https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=MOBILE_APP_INSTALL&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D', $data);
 
-// POST https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=MOBILE_APP_INSTALL&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D HTTP/1.1
-// Host: graph.facebook.com
-// Content-Type: multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Connection: keep-alive
-// Proxy-Connection: keep-alive
-// Accept: *
-// User-Agent: FBiOSSDK.4.14.0
-// Accept-Language: ru
-// Accept-Encoding: gzip, deflate
-// Content-Length: 1408
+  // https://graph.facebook.com/v2.7/124024574287414/activities?
+  // rawurldecode(
+  // advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B
+  // &advertiser_tracking_enabled=1
+  // &anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61
+  // &application_tracking_enabled=1&event=MOBILE_APP_INSTALL
+  // &extinfo=["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe\/Moscow"]
+  // &format=json
+  // &include_headers=false
+  // &sdk=ios
+  // &url_schemes=["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]
+  // )
 
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="format"
+     $boundary = '3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f'; 
 
-// json
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="anon_id"
+      $bodies = [
+          [
+              'type' => 'form-data',
+              'name' => 'format',
+              'data' => 'json',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'anon_id',
+              'data' => 'XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'application_tracking_enabled',
+              'data' => '1',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'extinfo',
+              'data' => '["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe/Moscow"]',
+          ],
+           [
+              'type' => 'form-data',
+              'name' => 'event',
+              'data' => 'MOBILE_APP_INSTALL',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'advertiser_id',
+              'data' => '9AA0EE34-845C-4793-8830-0D3F354A474B',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'advertiser_tracking_enabled',
+              'data' => '1',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'include_headers',
+              'data' => 'false',
+          ],
+           [
+              'type' => 'form-data',
+              'name' => 'sdk',
+              'data' => 'ios',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'url_schemes',
+              'data' => '["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]',
+          ],
+        ];
 
-// XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="application_tracking_enabled"
 
-// 1
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="extinfo"
+        $data = $this->buildBodyFb($bodies, $boundary);
+        
+        $headers = [
+          'Host: graph.facebook.com',
+          'Connection: keep-alive',
+          'Proxy-Connection: keep-alive',
+          'Accept: *',
+          'Content-Length: '.strlen($data),
+          'Accept-Language: ru', 
+          'Accept-Encoding: gzip, deflate',
+          'Content-Type: multipart/form-data; boundary='.$boundary,  
 
-// ["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe\/Moscow"]
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="event"
+        ];
 
-// MOBILE_APP_INSTALL
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="advertiser_id"
+    $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'FBiOSSDK.4.14.0'); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-// 9AA0EE34-845C-4793-8830-0D3F354A474B
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="advertiser_tracking_enabled"
+        curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
+        // curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
+        // curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
-// 1
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="include_headers"
+        if ( $this->proxy != null) {
+          curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+          curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+          curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        }
+        $resp = curl_exec($ch);
+        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($resp, 0, $header_len);
+        $upload = json_decode(substr($resp, $header_len), true);
 
-// false
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="sdk"
+        curl_close($ch);
 
-// ios
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="url_schemes"
+        // if ($upload['success'] == 'false') {
+        //     throw new InstagramException($upload['message']);
 
-// ["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+        //     return;
+        // }
+
+        if ($this->debug) {
+            echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
+        }
+ 
+        return [$header, $upload];
+}
 
 ///////3//////
 
-   // $outputs = $this->fb_request('https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D', $data);
 
 
+public function graphFb_activities_appevents() 
+{
 
 
-//   POST https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D HTTP/1.1
-// Host: graph.facebook.com
-// Content-Type: multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Connection: keep-alive
-// Proxy-Connection: keep-alive
-// Accept: */*
-// User-Agent: FBiOSSDK.4.14.0
-// Accept-Language: ru
-// Accept-Encoding: gzip, deflate
-// Content-Length: 1747
+   $outputs = $this->fb_request('https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D', $data);
 
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="custom_events_file"; filename="custom_events_file"
-// Content-Type: content/unknown
 
-// [{"_ui":"no_ui","_eventName":"fb_mobile_activate_app","_logTime":1476716975,"_session_id":"24E504EA-4510-4F88-83AC-AB2E833B6B46","fb_mobile_launch_source":"Unclassified"}]
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="anon_id"
+ // https://graph.facebook.com/v2.7/124024574287414/activities?
+ // advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B
+ // &advertiser_tracking_enabled=1
+ // &anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61
+ // &application_tracking_enabled=1
+ // &event=CUSTOM_APP_EVENTS
+ // &extinfo=["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe\/Moscow"]
+ // &format=json
+ // &include_headers=false
+ // &sdk=ios
+ // &url_schemes=["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"] 
 
-// XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="application_tracking_enabled"
 
-// 1
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="extinfo"
+     $boundary = '3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f'; 
 
-// ["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe\/Moscow"]
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="event"
+      $bodies = [
+          [
+              'type' => 'form-data',
+              'name' => 'custom_events_file',
+              'filename' => 'custom_events_file',
+              'headers'  => [
+                  'Content-Type: content/unknown',   
+              ],
+              'data' => '[{"_ui":"no_ui","_eventName":"fb_mobile_activate_app","_logTime":1476716975,"_session_id":"24E504EA-4510-4F88-83AC-AB2E833B6B46","fb_mobile_launch_source":"Unclassified"}]',
 
-// CUSTOM_APP_EVENTS
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="advertiser_id"
+          ],
 
-// 9AA0EE34-845C-4793-8830-0D3F354A474B
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="advertiser_tracking_enabled"
+          [
+              'type' => 'form-data',
+              'name' => 'anon_id',
+              'data' => 'XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'application_tracking_enabled',
+              'data' => '1',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'extinfo',
+              'data' => '["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe/Moscow"]',
+          ],
+           [
+              'type' => 'form-data',
+              'name' => 'event',
+              'data' => 'CUSTOM_APP_EVENTS',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'advertiser_id',
+              'data' => '9AA0EE34-845C-4793-8830-0D3F354A474B',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'advertiser_tracking_enabled',
+              'data' => '1',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'include_headers',
+              'data' => 'false',
+          ],
+           [
+              'type' => 'form-data',
+              'name' => 'sdk',
+              'data' => 'ios',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'url_schemes',
+              'data' => '["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]',
+          ],
+        ];
 
-// 1
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="format"
 
-// json
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="include_headers"
+        $data = $this->buildBodyFb($bodies, $boundary);
+        
+        $headers = [
+          'Host: graph.facebook.com',
+          'Connection: keep-alive',
+          'Proxy-Connection: keep-alive',
+          'Accept: *',
+          'Content-Length: '.strlen($data),
+          'Accept-Language: ru', 
+          'Accept-Encoding: gzip, deflate',
+          'Content-Type: multipart/form-data; boundary='.$boundary,  
 
-// false
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="sdk"
+        ];
 
-// ios
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
-// Content-Disposition: form-data; name="url_schemes"
+    $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'FBiOSSDK.4.14.0'); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-// ["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]
-// --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
+        curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
+        // curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
+        // curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+        if ( $this->proxy != null) {
+          curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+          curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+          curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        }
+        $resp = curl_exec($ch);
+        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($resp, 0, $header_len);
+        $upload = json_decode(substr($resp, $header_len), true);
+
+        curl_close($ch);
+
+        // if ($upload['success'] == 'false') {
+        //     throw new InstagramException($upload['message']);
+
+        //     return;
+        // }
+
+        if ($this->debug) {
+            echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
+        }
+ 
+        return [$header, $upload];
+}
 
 
  
-
+ 
 
 
 public function timeline()
