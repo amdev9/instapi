@@ -25,11 +25,10 @@ class InstaOS  extends Threaded
 
 public function run() {   
     
-
       $this->redis = $this->worker->getConnection();
       $this->debug = true;
       $IGDataPath = null;
-      $this->UA = 'Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+';
+      $this->UA = 'Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; en_US; en-US; scale=2.00; 750x1334) AppleWebKit/420+';
       
       $this->uuid = $this->generateUUID(true);
       $this->waterfall_id =  $this->generateUUID(true);
@@ -131,8 +130,8 @@ public function run() {
 // Connection: keep-alive
 // Proxy-Connection: keep-alive
 // X-IG-Capabilities: 3wo=
-// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+
-// Accept-Language: ru-RU;q=1
+// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; en-US; scale=2.00; 750x1334) AppleWebKit/420+
+// Accept-Language: en-US;q=1
 // Content-Length: 158
 // X-IG-Connection-Type: WiFi-Fallback
 
@@ -167,10 +166,10 @@ public function run() {
 // Proxy-Connection: keep-alive
 // X-IG-Connection-Type: WiFi
 // Accept-Encoding: gzip, deflate
-// Accept-Language: ru-RU;q=1
+// Accept-Language: en-US;q=1
 // Content-Type: application/x-www-form-urlencoded; charset=UTF-8
 // Content-Length: 290
-// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+
+// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; en-US; scale=2.00; 750x1334) AppleWebKit/420+
 // Connection: keep-alive
 // X-IG-Capabilities: 3wo=
 // Cookie: csrftoken=h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs; mid=WATprwAAAAFg3XoGK03ZryWXvhJs
@@ -206,10 +205,10 @@ public function check_email()
 // Proxy-Connection: keep-alive
 // X-IG-Connection-Type: WiFi
 // Accept-Encoding: gzip, deflate
-// Accept-Language: ru-RU;q=1
+// Accept-Language: en-US;q=1
 // Content-Type: application/x-www-form-urlencoded; charset=UTF-8
 // Content-Length: 260
-// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+
+// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; en-US; scale=2.00; 750x1334) AppleWebKit/420+
 // Connection: keep-alive
 // X-IG-Capabilities: 3wo=
 // Cookie: csrftoken=h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs; mid=WATprwAAAAFg3XoGK03ZryWXvhJs
@@ -250,10 +249,10 @@ public function username_suggestions()
 // Proxy-Connection: keep-alive
 // X-IG-Connection-Type: WiFi
 // Accept-Encoding: gzip, deflate
-// Accept-Language: ru-RU;q=1
+// Accept-Language: en-US;q=1
 // Content-Type: application/x-www-form-urlencoded; charset=UTF-8
 // Content-Length: 199
-// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+
+// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; en-US; scale=2.00; 750x1334) AppleWebKit/420+
 // Connection: keep-alive
 // X-IG-Capabilities: 3wo=
 // Cookie: csrftoken=h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs; mid=WATprwAAAAFg3XoGK03ZryWXvhJs
@@ -288,10 +287,10 @@ $data = json_encode([
 // Proxy-Connection: keep-alive
 // X-IG-Connection-Type: WiFi
 // Accept-Encoding: gzip, deflate
-// Accept-Language: ru-RU;q=1
+// Accept-Language: en-US;q=1
 // Content-Type: application/x-www-form-urlencoded; charset=UTF-8
 // Content-Length: 472
-// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+
+// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; en-US; scale=2.00; 750x1334) AppleWebKit/420+
 // Connection: keep-alive
 // X-IG-Capabilities: 3wo=
 // Cookie: csrftoken=h0rtCU9uwNd4CAojcO61cVEPUl4HbIGs; mid=WATprwAAAAFg3XoGK03ZryWXvhJs
@@ -324,6 +323,7 @@ public function create()
   // $this->token = $matcht[1];
   // echo var_export($outputs);  
 
+     rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat"); 
     return $outputs;
 }
 
@@ -367,8 +367,6 @@ public function create()
       return $outputs;
   }
    
-
-
 
 public function direct_inbox()
 {
@@ -448,8 +446,6 @@ public function notifications_badge_get()
     return $outputs;
 }
   
- 
-
 
 protected function buildBodyFb($bodies, $boundary)
     {
@@ -530,7 +526,7 @@ public function graphFb() {
           'Proxy-Connection: keep-alive',
           'Accept: *',
           'Content-Length: '.strlen($data),
-          'Accept-Language: ru', 
+          'Accept-Language: en', 
           'Accept-Encoding: gzip, deflate',
           'Content-Type: multipart/form-data; boundary='.$boundary,  
 
@@ -584,22 +580,16 @@ public function graphFb() {
 public function graphFb_activities_appinstall() {
  
 
-
-
-  $endpoint = 'https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id='.$this->advertiser_id.'&advertiser_tracking_enabled=1&anon_id=XZ'.$this->anon_id.'&application_tracking_enabled=1&event=MOBILE_APP_INSTALL&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D';
-
-  // https://graph.facebook.com/v2.7/124024574287414/activities?
-  // rawurldecode(
-  // advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B
-  // &advertiser_tracking_enabled=1
-  // &anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61
-  // &application_tracking_enabled=1&event=MOBILE_APP_INSTALL
-  // &extinfo=["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe\/Moscow"]
-  // &format=json
-  // &include_headers=false
-  // &sdk=ios
-  // &url_schemes=["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]
-  // )
+  $endpoint = 'https://graph.facebook.com/v2.7/124024574287414/activities?'.rawurldecode(
+  'advertiser_id='.$this->advertiser_id.'&advertiser_tracking_enabled=1'.
+  '&anon_id=XZ'.$this->anon_id.
+  '&application_tracking_enabled=1&event=MOBILE_APP_INSTALL'.
+  '&extinfo=["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]'.
+  '&format=json'.
+  '&include_headers=false'.
+  '&sdk=ios'.
+ '&url_schemes=["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]'
+  );
 
      $boundary = '3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f'; 
 
@@ -622,7 +612,7 @@ public function graphFb_activities_appinstall() {
           [
               'type' => 'form-data',
               'name' => 'extinfo',
-              'data' => '["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe/Moscow"]',
+              'data' => '["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]',
           ],
            [
               'type' => 'form-data',
@@ -666,7 +656,7 @@ public function graphFb_activities_appinstall() {
           'Proxy-Connection: keep-alive',
           'Accept: *',
           'Content-Length: '.strlen($data),
-          'Accept-Language: ru', 
+          'Accept-Language: en', 
           'Accept-Encoding: gzip, deflate',
           'Content-Type: multipart/form-data; boundary='.$boundary,  
 
@@ -717,25 +707,24 @@ public function graphFb_activities_appinstall() {
 ///////3//////
 
 
-
 public function graphFb_activities_appevents() 
 {
 
 
-   $endpoint = 'https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id='.$this->advertiser_id.'&advertiser_tracking_enabled=1&anon_id=XZ'.$this->anon_id.'&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D';
+  $endpoint = 'https://graph.facebook.com/v2.7/124024574287414/activities?'.rawurldecode(
+  'advertiser_id='.$this->advertiser_id.'&advertiser_tracking_enabled=1'.
+  '&anon_id=XZ'.$this->anon_id.
+  '&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS'.
+  '&extinfo=["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]'.
+  '&format=json'.
+  '&include_headers=false'.
+  '&sdk=ios'.
+ '&url_schemes=["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]'
+  );
 
 
- // https://graph.facebook.com/v2.7/124024574287414/activities?
- // advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B
- // &advertiser_tracking_enabled=1
- // &anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61
- // &application_tracking_enabled=1
- // &event=CUSTOM_APP_EVENTS
- // &extinfo=["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe\/Moscow"]
- // &format=json
- // &include_headers=false
- // &sdk=ios
- // &url_schemes=["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"] 
+
+ 
 
 
      $boundary = '3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f'; 
@@ -765,7 +754,7 @@ public function graphFb_activities_appevents()
           [
               'type' => 'form-data',
               'name' => 'extinfo',
-              'data' => '["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","ru_RU","GMT+3","Beeline",375,667,"2.00",2,12,11,"Europe/Moscow"]',
+              'data' => '["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]',
           ],
            [
               'type' => 'form-data',
@@ -807,7 +796,7 @@ public function graphFb_activities_appevents()
           'Proxy-Connection: keep-alive',
           'Accept: *',
           'Content-Length: '.strlen($data),
-          'Accept-Language: ru', 
+          'Accept-Language: en', 
           'Accept-Encoding: gzip, deflate',
           'Content-Type: multipart/form-data; boundary='.$boundary,  
 
@@ -857,29 +846,14 @@ public function graphFb_activities_appevents()
 
 
 public function timeline()
-{
-
-// Host: i.instagram.com
-// Accept: *
-// Proxy-Connection: keep-alive +
-// X-IG-Connection-Type: WiFi +
-// Accept-Language: ru-RU;q=1 +
-// Accept-Encoding: gzip, deflate +
-// X-IDFA: 9AA0EE34-845C-4793-8830-0D3F354A474B  /// -> facebook adveriser id +
-// X-Ads-Opt-Out: 0
-// X-FB: 0
-// User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+
-// X-DEVICE-ID: F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B    /// -> uuid +
-// Connection: keep-alive +
-// X-IG-Capabilities: 3wo=
-// Cookie: csrftoken=ZcsBlgJVBdnESnAEUMBuWuy2W2vAwQRZ; ds_user_id=4050134364; mid=WATprwAAAAFg3XoGK03ZryWXvhJs; s_network=; sessionid=IGSC66cf8f8c5da55856662424dd8207ecdb44820e4a92d744132029951ed222570d%3AxB1GJdpcuewZSQgPxGpJbNALz3SXj8vd%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A4050134364%2C%22_token%22%3A%224050134364%3AjASZsutTjkcaDyLDvHI8FQojv7nkLtkk%3A64b954b6b30319c845822728b604e02a96a17358a5787e752f5483944b41e135%22%2C%22asns%22%3A%7B%2295.73.175.251%22%3A25515%2C%22time%22%3A1476717052%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1476717052.30863%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
-// X-IG-INSTALLED-APPS: eyIxIjowLCIyIjowfQ==          /// -> check if the same for devices
+{ 
 
 
-  $endpoint = 'https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800';
+
+  $endpoint = 'https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=-18000';
 
 
-$headers = [
+    $headers = [
         'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
         'Accept: *',
         'Accept-Encoding: gzip, deflate',
@@ -890,12 +864,11 @@ $headers = [
         'Connection: keep-alive',
         'Proxy-Connection: keep-alive',
         'X-IG-Capabilities: 3wo=',
-        'Accept-Language: ru-RU;q=1',
-        'X-IG-Connection-Type: WiFi-Fallback',
+        'Accept-Language: en-US;q=1',
+        'X-IG-Connection-Type: WiFi',
         'Cookie2: $Version=1',
         'X-IG-INSTALLED-APPS: eyIxIjowLCIyIjowfQ==', /// -> check if the same for devices
     ];
-
 
         $ch = curl_init();
 
@@ -960,8 +933,8 @@ $headers = [
   // Connection: keep-alive
   // Proxy-Connection: keep-alive
   // Accept: *
-  // User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+
-  // Accept-Language: ru-RU;q=1
+  // User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; en-US; scale=2.00; 750x1334) AppleWebKit/420+
+  // Accept-Language: en-US;q=1
   // Accept-Encoding: gzip, deflate
   // X-IG-Connection-Type: WiFi
 
@@ -1006,7 +979,7 @@ $headers = [
           		'Connection: keep-alive',
           		'Proxy-Connection: keep-alive',
           		'X-IG-Capabilities: 3wo=',
-          		'Accept-Language: ru-RU;q=1',
+          		'Accept-Language: en-US;q=1',
           		'X-IG-Connection-Type: WiFi-Fallback',
           		'Cookie2: $Version=1',
           ];
@@ -1018,7 +991,7 @@ $headers = [
               'Connection: keep-alive',
               'Proxy-Connection: keep-alive',
               'X-IG-Capabilities: 3wo=',
-              'Accept-Language: ru-RU;q=1',
+              'Accept-Language: en-US;q=1',
               'X-IG-Connection-Type: WiFi',
               'Cookie2: $Version=1',
           ];
@@ -1038,8 +1011,16 @@ $headers = [
         curl_setopt($ch, CURLOPT_VERBOSE, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE,  $this->IGDataPath."cookies.dat");
-        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."cookies.dat");
+
+
+         if (file_exists($this->IGDataPath."$this->username-cookies.dat")) {
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
+        } else {
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat');  
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');      
+        }
+
         //  if ( $this->proxy != null) {
         //   curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
         // curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
