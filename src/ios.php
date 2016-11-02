@@ -323,7 +323,7 @@ public function create()
   // $this->token = $matcht[1];
   // echo var_export($outputs);  
 
-     rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$username-cookies.dat"); 
+     rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$this->username-cookies.dat"); 
     return $outputs;
 }
 
