@@ -468,7 +468,7 @@ protected function buildBodyFb($bodies, $boundary)
 
 public function graphFb() {
 
- $outputs = $this->fb_request('https://graph.facebook.com/v2.7', $data);
+ $endpoint = 'https://graph.facebook.com/v2.7';
 
 //   POST https://graph.facebook.com/v2.7 HTTP/1.1
 // Host: graph.facebook.com
@@ -569,7 +569,7 @@ public function graphFb() {
 
 public function graphFb_activities_appinstall() {
  
-  $outputs = $this->fb_request('https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=MOBILE_APP_INSTALL&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D', $data);
+  $endpoint = 'https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=MOBILE_APP_INSTALL&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D';
 
   // https://graph.facebook.com/v2.7/124024574287414/activities?
   // rawurldecode(
@@ -704,7 +704,7 @@ public function graphFb_activities_appevents()
 {
 
 
-   $outputs = $this->fb_request('https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D', $data);
+   $endpoint = 'https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D';
 
 
  // https://graph.facebook.com/v2.7/124024574287414/activities?
@@ -842,7 +842,6 @@ public function graphFb_activities_appevents()
 public function timeline()
 {
 
-
 // Host: i.instagram.com
 // Accept: *
 // Proxy-Connection: keep-alive +
@@ -860,7 +859,7 @@ public function timeline()
 // X-IG-INSTALLED-APPS: eyIxIjowLCIyIjowfQ==          /// -> check if the same for devices
 
 
-  $outputs = $this->ad_request('https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800');
+  $endpoint = 'https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800';
 
 
 $headers = [
@@ -870,14 +869,14 @@ $headers = [
         'X-IDFA: 9AA0EE34-845C-4793-8830-0D3F354A474B',   /// -> facebook adveriser id'
         'X-Ads-Opt-Out: 0',
         'X-FB: 0',
-        'X-DEVICE-ID: F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B',
+        'X-DEVICE-ID: F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B',  /// -> uuid 
         'Connection: keep-alive',
         'Proxy-Connection: keep-alive',
         'X-IG-Capabilities: 3wo=',
         'Accept-Language: ru-RU;q=1',
         'X-IG-Connection-Type: WiFi-Fallback',
         'Cookie2: $Version=1',
-        'X-IG-INSTALLED-APPS: eyIxIjowLCIyIjowfQ==',
+        'X-IG-INSTALLED-APPS: eyIxIjowLCIyIjowfQ==', /// -> check if the same for devices
     ];
 
 
