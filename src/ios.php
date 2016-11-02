@@ -103,17 +103,17 @@ public function  edit_profile()
 
    $data = json_encode([
         "gender" => "3",
-        "_csrftoken" => "ZcsBlgJVBdnESnAEUMBuWuy2W2vAwQRZ",
-        "_uuid" => "F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B",
-        "_uid"=>"4050134364",
-        "external_url"=>"sweetygloriah.tumblr.com",
-        "username"=>"belfordhanna",
-        "email"=>"matveev.alexander.v.l.a.d.imit.ovi4@gmail.com",
+        "_csrftoken" => $this->token,
+        "_uuid" => $this->uuid,
+        "_uid"=> $this->username_id,
+        "external_url"=> "sweetygloriah.tumblr.com",
+        "username"=> $this->username,
+        "email"=> $this->email,
         "phone_number"=>"",
         "biography"=>"",
-        "first_name"=>"Hanna Belford"
+        "first_name"=> $this->full_name,
     ]);
-
+   
      $outputs = $this->request('https://i.instagram.com/api/v1/accounts/edit_profile/', $this->generateSignature($data));
     return $outputs;
 }
