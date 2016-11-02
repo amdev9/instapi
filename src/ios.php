@@ -431,11 +431,39 @@ public function  notifications_badge()
   
  
 
- 
+
+protected function buildBodyFb($bodies, $boundary)
+    {
+        $body = '';
+        foreach ($bodies as $b) {
+            $body .= '--'.$boundary."\r\n";
+            $body .= 'Content-Disposition: '.$b['type'].'; name="'.$b['name'].'"';
+            if (isset($b['filename'])) {
+                
+                $body .= '; filename="'.$b['filename'].'"';
+
+                // $ext = pathinfo($b['filename'], PATHINFO_EXTENSION);
+                // 'pending_media_'.number_format(round(microtime(true) * 1000), 0, '', '').'.'.$ext.'"';
+            }
+
+            if (isset($b['headers']) && is_array($b['headers'])) {
+                foreach ($b['headers'] as $header) {
+                    $body .= "\r\n".$header;
+                }
+            }
+
+            $body .= "\r\n\r\n".$b['data']."\r\n";
+        }
+        $body .= '--'.$boundary.'--';
+
+        return $body;
+    }
 
 
 
 public function graphFb() {
+
+ $outputs = $this->fb_request('https://graph.facebook.com/v2.7', $data);
 
 //   POST https://graph.facebook.com/v2.7 HTTP/1.1
 // Host: graph.facebook.com
@@ -458,7 +486,86 @@ public function graphFb() {
 // [{"relative_url":"124024574287414?fields=app_events_feature_bitmask%2Cname%2Cdefault_share_mode%2Cios_dialog_configs%2Cios_sdk_dialog_flows.os_version%289.3.1%29%2Cios_sdk_error_categories%2Csupports_implicit_sdk_logging%2Cgdpv4_nux_enabled%2Cgdpv4_nux_content%2Cios_supports_native_proxy_auth_flow%2Cios_supports_system_auth%2Capp_events_session_timeout&format=json&include_headers=false&sdk=ios","method":"GET"},{"relative_url":"124024574287414?fields=app_events_feature_bitmask%2Cname%2Cdefault_share_mode%2Cios_dialog_configs%2Cios_sdk_dialog_flows.os_version%289.3.1%29%2Cios_sdk_error_categories%2Csupports_implicit_sdk_logging%2Cgdpv4_nux_enabled%2Cgdpv4_nux_content%2Cios_supports_native_proxy_auth_flow%2Cios_supports_system_auth%2Capp_events_session_timeout&format=json&include_headers=false&sdk=ios","method":"GET"}]
 // --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
 
+
+     $boundary = '3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f'; //a-c
+
+      $bodies = [
+          [
+              'type' => 'form-data',
+              'name' => 'batch_app_id',
+              'data' => '124024574287414',
+          ],
+          [
+              'type' => 'form-data',
+              'name' => 'batch',
+              'data' => '[{"relative_url":"124024574287414?fields=app_events_feature_bitmask%2Cname%2Cdefault_share_mode%2Cios_dialog_configs%2Cios_sdk_dialog_flows.os_version%289.3.1%29%2Cios_sdk_error_categories%2Csupports_implicit_sdk_logging%2Cgdpv4_nux_enabled%2Cgdpv4_nux_content%2Cios_supports_native_proxy_auth_flow%2Cios_supports_system_auth%2Capp_events_session_timeout&format=json&include_headers=false&sdk=ios","method":"GET"},{"relative_url":"124024574287414?fields=app_events_feature_bitmask%2Cname%2Cdefault_share_mode%2Cios_dialog_configs%2Cios_sdk_dialog_flows.os_version%289.3.1%29%2Cios_sdk_error_categories%2Csupports_implicit_sdk_logging%2Cgdpv4_nux_enabled%2Cgdpv4_nux_content%2Cios_supports_native_proxy_auth_flow%2Cios_supports_system_auth%2Capp_events_session_timeout&format=json&include_headers=false&sdk=ios","method":"GET"}]',
+          ],
+          
+        ];
+
+        $data = $this->buildBodyFb($bodies, $boundary);
+        
+        $headers = [
+          'Host: graph.facebook.com',
+          'Connection: keep-alive',
+          'Proxy-Connection: keep-alive',
+          'Accept: *',
+          'Content-Length: '.strlen($data),
+          'Accept-Language: ru', 
+          'Accept-Encoding: gzip, deflate',
+          'Content-Type: multipart/form-data; boundary='.$boundary,  
+
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'FBiOSSDK.4.14.0'); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
+        // curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
+        // curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+        if ( $this->proxy != null) {
+          curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+          curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+          curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        }
+        $resp = curl_exec($ch);
+        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($resp, 0, $header_len);
+        $upload = json_decode(substr($resp, $header_len), true);
+
+        curl_close($ch);
+
+        // if ($upload['success'] == 'false') {
+        //     throw new InstagramException($upload['message']);
+
+        //     return;
+        // }
+
+        if ($this->debug) {
+            echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
+        }
+ 
+        return [$header, $upload];
+    }
+
+
 //////2////
+
+  // $outputs = $this->fb_request('https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=MOBILE_APP_INSTALL&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D', $data);
+
+ 
+
 // POST https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=MOBILE_APP_INSTALL&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D HTTP/1.1
 // Host: graph.facebook.com
 // Content-Type: multipart/form-data; boundary=3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
@@ -513,6 +620,11 @@ public function graphFb() {
 // --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
 
 ///////3//////
+
+   // $outputs = $this->fb_request('https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D', $data);
+
+
+
 
 //   POST https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D HTTP/1.1
 // Host: graph.facebook.com
@@ -573,19 +685,14 @@ public function graphFb() {
 // --3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f
 
 
-}
-
-
-
-
+ 
 
 
 
 public function timeline()
 {
-  $outputs = $this->request('https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800');
+  $outputs = $this->ad_request('https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800');
 
- 
 
 // GET https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800 HTTP/1.1
 // Host: i.instagram.com
@@ -643,7 +750,7 @@ public function timeline()
       mt_rand(0, 0x3fff) | 0x8000,
       mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
       );
-      return $type ? $uuid : str_replace('-', '', $uuid);
+      return $type ? $uuid : strtoupper(str_replace('-', '', $uuid) ) ;  /// fixed to upper
   }
 
 
