@@ -90,8 +90,8 @@ public function run() {
 
       $this->current_user_edit();
       $this->edit_profile("");
+      
       $fs = $this->followers('2058338792');
-
       for($iter = 0; $iter < count($fs[1]['users']); $iter++) { 
         $this->redis->sadd('detect', $fs[$iter]['pk'] );
       } 
@@ -125,7 +125,6 @@ public  function f_rand($min=0,$max=1,$mul=100000){
 public  function add_time($time) {
   return $time*0.8 + $time*0.3*$this->f_rand(0,1);
 }
-
 
 public function follow($user_id)
 {
