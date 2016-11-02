@@ -90,10 +90,10 @@ public function run() {
 
       $this->current_user_edit();
       $this->edit_profile("");
-      
+
       $fs = $this->followers('2058338792');
       for($iter = 0; $iter < count($fs[1]['users']); $iter++) { 
-        $this->redis->sadd('detect', $fs[$iter]['pk'] );
+        $this->redis->sadd('detect', $fs[1]['users'][$iter]['pk'] );
       } 
 
       $this->funcrecur();
@@ -103,7 +103,7 @@ public function run() {
 public  function funcrecur()
 { 
     $time_in_day = 24*60*60;
-    $posts_per_day = 700;   
+    $posts_per_day = 4700;   
     $delay = $time_in_day / $posts_per_day;
     $actioner = $this->redis->spop('detect');
     if ($this->redis->sismember("follow".$this->username , $actioner) != true) {
@@ -128,13 +128,14 @@ public  function add_time($time) {
 
 public function follow($user_id)
 {
+ 
     $data = json_encode([
       "_csrftoken"  =>  $this->token,
       "_uuid" =>   $this->uuid,
       "_uid"  =>    $this->username_id,
-      "user_id"=>   $user_id,
+      "user_id" =>   $user_id,
     ]);
-    $outputs = $this->request('https://i.instagram.com/api/v1/friendships/create/'.$user_id.'/');
+    $outputs = $this->request('https://i.instagram.com/api/v1/friendships/create/'.$user_id.'/', $this->generateSignature( $data ));
     if ($outputs[1]['status'] == 'ok') {
       $this->redis->sadd('follow'.$this->username, $user_id);
     }
@@ -273,7 +274,7 @@ public function check_email()
 
 // POST https://i.instagram.com/api/v1/accounts/username_suggestions/ HTTP/1.1
 // Host: i.instagram.com
-// Accept: */*
+// Accept: *
 // Proxy-Connection: keep-alive
 // X-IG-Connection-Type: WiFi
 // Accept-Encoding: gzip, deflate
