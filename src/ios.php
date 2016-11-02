@@ -388,7 +388,7 @@ public function inbox()
  public function reels_tray()
 {
     
-     $outputs = $this->request('https://i.instagram.com/api/v1/feed/reels_tray/?tray_session_id='.$this->generateUUID(false);  
+  $outputs = $this->request('https://i.instagram.com/api/v1/feed/reels_tray/?tray_session_id='.$this->generateUUID(false) );  
      //1ae5839959534712b3ffd12aa1a2cb6d');
     return $outputs;
 }
@@ -437,7 +437,7 @@ public function  notifications_badge()
   
 
 
-public function  notifications_badge()
+public function  notifications_badge_get()
 {
    
     $outputs = $this->request('https://i.instagram.com/api/v1/notifications/badge/');
