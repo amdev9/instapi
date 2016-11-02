@@ -913,16 +913,17 @@ $headers = [
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_COOKIEFILE,  $this->IGDataPath."cookies.dat");
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."cookies.dat");
+
         //  if ( $this->proxy != null) {
         //   curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
         // curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
         // curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
         // }
 
-        if ($post) {
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-        }
+        // if ($post) {
+        //     curl_setopt($ch, CURLOPT_POST, true);
+        //     curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        // }
 
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -997,18 +998,31 @@ $headers = [
   public function request($endpoint, $post = null, $login = false)
   {
 
-    $headers = [
-    		'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
-    		'Accept: *',
-    		'Accept-Encoding: gzip, deflate',
-    		'Connection: keep-alive',
-    		'Proxy-Connection: keep-alive',
-    		'X-IG-Capabilities: 3wo=',
-    		'Accept-Language: ru-RU;q=1',
-    		'X-IG-Connection-Type: WiFi-Fallback',
-    		'Cookie2: $Version=1',
-    ];
-
+      if ($endpoint == 'https://i.instagram.com/api/v1/qe/sync/' || $endpoint == 'https://i.instagram.com/api/v1/fb/show_continue_as/' ) { 
+          $headers = [
+          		'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
+          		'Accept: */*',
+          		'Accept-Encoding: gzip, deflate',
+          		'Connection: keep-alive',
+          		'Proxy-Connection: keep-alive',
+          		'X-IG-Capabilities: 3wo=',
+          		'Accept-Language: ru-RU;q=1',
+          		'X-IG-Connection-Type: WiFi-Fallback',
+          		'Cookie2: $Version=1',
+          ];
+      } else {
+         $headers = [
+              'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
+              'Accept: */*',
+              'Accept-Encoding: gzip, deflate',
+              'Connection: keep-alive',
+              'Proxy-Connection: keep-alive',
+              'X-IG-Capabilities: 3wo=',
+              'Accept-Language: ru-RU;q=1',
+              'X-IG-Connection-Type: WiFi',
+              'Cookie2: $Version=1',
+          ];
+      }
 
         $ch = curl_init();
 
