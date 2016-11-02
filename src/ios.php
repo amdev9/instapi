@@ -884,8 +884,16 @@ public function timeline()
         curl_setopt($ch, CURLOPT_VERBOSE, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE,  $this->IGDataPath."cookies.dat");
-        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."cookies.dat");
+
+
+        if (file_exists($this->IGDataPath."$this->username-cookies.dat")) {
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
+        } else {
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat');  
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');      
+        }
+        
 
         //  if ( $this->proxy != null) {
         //   curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
@@ -902,21 +910,15 @@ public function timeline()
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);
         $body = substr($resp, $header_len);
+        $upload = json_decode(substr($resp, $header_len), true);
 
         curl_close($ch);
 
-        if (true) {
-            echo "REQUEST: $endpoint\n";
-            if (!is_null($post)) {
-                if (!is_array($post)) {
-                    echo 'DATA: '.urldecode($post)."\n";
-                }
-            }
-            echo "RESPONSE: $body\n\n";
+        if ($this->debug) {
+            echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
         }
 
-        return [$header, json_decode($body, true)];
-  
+        return [$header, $upload];
 
 }
 
@@ -960,14 +962,13 @@ public function timeline()
   public function generateSignature($data)
    {
 
-        $hash = hash_hmac('sha256', $data, 'ebbf19d239c4b2cff2df4b51cc626ffdad6fe27b5a7b39bd6e7e41b72f54c1f2'); // NEED TO EXTRACT KEY
+        $hash = hash_hmac('sha256', $data, 'ebbf19d239c4b2cff2df4b51cc626ffdad6fe27b5a7b39bd6e7e41b72f54c1f2');  
         // echo "\n".($hash)."\n";
         
         return 'signed_body='.$hash.'.'.urlencode($data).'&ig_sig_key_version=5';
     }
 
  
-
   public function request($endpoint, $post = null, $login = false)
   {
 
