@@ -893,7 +893,7 @@ public function timeline()
             curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat');  
             curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');      
         }
-        
+
 
         //  if ( $this->proxy != null) {
         //   curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
@@ -915,6 +915,7 @@ public function timeline()
         curl_close($ch);
 
         if ($this->debug) {
+            echo "REQUEST: $endpoint\n";
             echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
         }
 
