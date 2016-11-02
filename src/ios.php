@@ -80,7 +80,44 @@ public function run() {
       $this->direct_inbox();
       $this->ranked_recipients();
       $this->timeline();
+
+
+      $this->inbox();
+      $this->reels_tray();
+      $this->discover_explore();
+      $this->channels_home();
+
  }
+
+
+
+
+public function  current_user_edit()
+{
+     $outputs = $this->request('https://i.instagram.com/api/v1/accounts/current_user/?edit=true');
+    return $outputs;
+}
+ 
+public function  edit_profile()
+{
+
+   $data = json_encode([
+        "gender" => "3",
+        "_csrftoken" => "ZcsBlgJVBdnESnAEUMBuWuy2W2vAwQRZ",
+        "_uuid" => "F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B",
+        "_uid"=>"4050134364",
+        "external_url"=>"sweetygloriah.tumblr.com",
+        "username"=>"belfordhanna",
+        "email"=>"matveev.alexander.v.l.a.d.imit.ovi4@gmail.com",
+        "phone_number"=>"",
+        "biography"=>"",
+        "first_name"=>"Hanna Belford"
+    ]);
+
+     $outputs = $this->request('https://i.instagram.com/api/v1/accounts/edit_profile/', $this->generateSignature($data));
+    return $outputs;
+}
+ 
 
 
 
@@ -162,7 +199,7 @@ public function run() {
 
 // POST https://i.instagram.com/api/v1/users/check_email/ HTTP/1.1
 // Host: i.instagram.com
-// Accept: */*
+// Accept: *
 // Proxy-Connection: keep-alive
 // X-IG-Connection-Type: WiFi
 // Accept-Encoding: gzip, deflate
@@ -398,7 +435,7 @@ public function inbox()
 public function discover_explore()
 {
     
-     $outputs = $this->request('https://i.instagram.com/api/v1/discover/explore/?is_on_wifi=true&network_transfer_rate=30.99&is_prefetch=true&session_id='.$this->username_id.'_'.$this->generateUUID(true).'&timezone_offset=10800');  /// fix for transfer rate
+     $outputs = $this->request('https://i.instagram.com/api/v1/discover/explore/?is_on_wifi=true&network_transfer_rate=30.99&is_prefetch=true&session_id='.$this->username_id.'_'.$this->generateUUID(true).'&timezone_offset=-18000');  /// fix for transfer rate
     return $outputs;
 }
 
@@ -848,10 +885,7 @@ public function graphFb_activities_appevents()
 public function timeline()
 { 
 
-
-
   $endpoint = 'https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=-18000';
-
 
     $headers = [
         'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
