@@ -96,14 +96,38 @@ public function run() {
  }
 
 
-public function follow ($user_id)
+public  function funcrecur()
+{ 
+    $time_in_day = 24*60*60;
+    $posts_per_day = 700;   
+    $delay = $time_in_day / $posts_per_day;
+
+    $actioner = $this->redis->spop('detect');
+    $this->follow($actioner);
+
+    echo $next_iteration_time = $this->add_time($delay);  
+    sleep($next_iteration_time);
+
+    $this->funcrecur();
+}
+
+public  function f_rand($min=0,$max=1,$mul=100000){
+    if ($min>$max) return false;
+    return mt_rand($min*$mul,$max*$mul)/$mul;
+}
+
+public  function add_time($time) {
+  return $time*0.8 + $time*0.3*$this->f_rand(0,1);
+}
+
+
+public function follow($user_id)
 {
     $data = json_encode([
       "_csrftoken"  =>  $this->token,
       "_uuid" =>   $this->uuid,
       "_uid"  =>    $this->username_id,
-      "user_id"=>   $user_id, 
-
+      "user_id"=>   $user_id,
     ]);
     $outputs = $this->request('https://i.instagram.com/api/v1/friendships/create/'.$user_id.'/');
     return $outputs;
@@ -120,7 +144,6 @@ public function  current_user_edit()
     $outputs = $this->request('https://i.instagram.com/api/v1/accounts/current_user/?edit=true');
     return $outputs;
 }
- 
 
 public function  edit_profile($website)
 {
