@@ -18,6 +18,11 @@ class InstaOS  extends Threaded
   protected $waterfall_id;
   protected $phone_id;
 
+
+
+////
+  protected $advertiser_id;
+   protected $anon_id;
  
 
 public function run() {   
@@ -569,7 +574,10 @@ public function graphFb() {
 
 public function graphFb_activities_appinstall() {
  
-  $endpoint = 'https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=MOBILE_APP_INSTALL&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D';
+
+
+
+  $endpoint = 'https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id='.$this->advertiser_id.'&advertiser_tracking_enabled=1&anon_id=XZ'.$this->anon_id.'&application_tracking_enabled=1&event=MOBILE_APP_INSTALL&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D';
 
   // https://graph.facebook.com/v2.7/124024574287414/activities?
   // rawurldecode(
@@ -595,7 +603,7 @@ public function graphFb_activities_appinstall() {
           [
               'type' => 'form-data',
               'name' => 'anon_id',
-              'data' => 'XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61',
+              'data' => 'XZ'.$this->anon_id,
           ],
           [
               'type' => 'form-data',
@@ -615,7 +623,7 @@ public function graphFb_activities_appinstall() {
           [
               'type' => 'form-data',
               'name' => 'advertiser_id',
-              'data' => '9AA0EE34-845C-4793-8830-0D3F354A474B',
+              'data' => $this->advertiser_id, //'9AA0EE34-845C-4793-8830-0D3F354A474B',
                           
           ],
           [
@@ -705,7 +713,7 @@ public function graphFb_activities_appevents()
 {
 
 
-   $endpoint = 'https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id=9AA0EE34-845C-4793-8830-0D3F354A474B&advertiser_tracking_enabled=1&anon_id=XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D';
+   $endpoint = 'https://graph.facebook.com/v2.7/124024574287414/activities?advertiser_id='.$this->advertiser_id.'&advertiser_tracking_enabled=1&anon_id=XZ'.$this->anon_id.'&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS&extinfo=%5B%22i2%22%2C%22com.burbn.instagram%22%2C%2241483633%22%2C%229.5.2%22%2C%229.3.1%22%2C%22iPhone8%2C1%22%2C%22ru_RU%22%2C%22GMT%2B3%22%2C%22Beeline%22%2C375%2C667%2C%222.00%22%2C2%2C12%2C11%2C%22Europe%5C%2FMoscow%22%5D&format=json&include_headers=false&sdk=ios&url_schemes=%5B%22fb124024574287414%22%2C%22instagram%22%2C%22instagram-capture%22%2C%22fsq%2Bkylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj%2Bpost%22%5D';
 
 
  // https://graph.facebook.com/v2.7/124024574287414/activities?
@@ -731,14 +739,14 @@ public function graphFb_activities_appevents()
               'headers'  => [
                   'Content-Type: content/unknown',   
               ],
-              'data' => '[{"_ui":"no_ui","_eventName":"fb_mobile_activate_app","_logTime":1476716975,"_session_id":"24E504EA-4510-4F88-83AC-AB2E833B6B46","fb_mobile_launch_source":"Unclassified"}]',
+              'data' => '[{"_ui":"no_ui","_eventName":"fb_mobile_activate_app","_logTime":1476716975,"_session_id":"24E504EA-4510-4F88-83AC-AB2E833B6B46","fb_mobile_launch_source":"Unclassified"}]',   // FIX to timestamp
 
           ],
 
           [
               'type' => 'form-data',
               'name' => 'anon_id',
-              'data' => 'XZFF8E8CDC-77F3-4FFD-83C8-0CC2E75D8B61',
+              'data' => 'XZ'.$this->anon_id,
           ],
           [
               'type' => 'form-data',
@@ -758,7 +766,7 @@ public function graphFb_activities_appevents()
           [
               'type' => 'form-data',
               'name' => 'advertiser_id',
-              'data' => '9AA0EE34-845C-4793-8830-0D3F354A474B',
+              'data' => $this->advertiser_id ,//'9AA0EE34-845C-4793-8830-0D3F354A474B',
           ],
           [
               'type' => 'form-data',
@@ -867,10 +875,10 @@ $headers = [
         'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
         'Accept: *',
         'Accept-Encoding: gzip, deflate',
-        'X-IDFA: 9AA0EE34-845C-4793-8830-0D3F354A474B',   /// -> facebook adveriser id'
+        'X-IDFA: '.$this->advertiser_id,   /// -> facebook adveriser id'
         'X-Ads-Opt-Out: 0',
         'X-FB: 0',
-        'X-DEVICE-ID: F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B',  /// -> uuid 
+        'X-DEVICE-ID: '.$this->uuid,  /// -> uuid 
         'Connection: keep-alive',
         'Proxy-Connection: keep-alive',
         'X-IG-Capabilities: 3wo=',
