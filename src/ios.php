@@ -91,8 +91,12 @@ public function run() {
       $this->current_user_edit();
       $this->edit_profile("");
       $fs = $this->followers('2058338792');
-      $this->follow($fs[1]['users'][0]['pk']);
- 
+
+      for($iter = 0; $iter < count($fs[1]['users']); $iter++) { 
+        $this->redis->sadd('detect', $fs[$iter]['pk'] );
+      } 
+
+      $this->funcrecur();
  }
 
 
@@ -110,6 +114,7 @@ public  function funcrecur()
 
     $this->funcrecur();
 }
+
 
 public  function f_rand($min=0,$max=1,$mul=100000){
     if ($min>$max) return false;
