@@ -18,12 +18,10 @@ class InstaOS  extends Threaded
   protected $waterfall_id;
   protected $phone_id;
 
-
-
 ////
   protected $advertiser_id;
-   protected $anon_id;
- 
+  protected $anon_id;
+  protected $session_id;
 
 public function run() {   
     
@@ -35,6 +33,12 @@ public function run() {
       
       $this->uuid = $this->generateUUID(true);
       $this->waterfall_id =  $this->generateUUID(true);
+
+      ////
+      $this->advertiser_id = $this->generateUUID(true);
+      $this->anon_id = $this->generateUUID(true);
+      $this->session_id = $this->generateUUID(true);
+      ////
 
       // this data from redis
       $this->proxy = null; //$this->redis->spop('proxy');
@@ -739,7 +743,7 @@ public function graphFb_activities_appevents()
               'headers'  => [
                   'Content-Type: content/unknown',   
               ],
-              'data' => '[{"_ui":"no_ui","_eventName":"fb_mobile_activate_app","_logTime":'.time().',"_session_id":"24E504EA-4510-4F88-83AC-AB2E833B6B46","fb_mobile_launch_source":"Unclassified"}]',   // FIX to session_id to random UUID
+              'data' => '[{"_ui":"no_ui","_eventName":"fb_mobile_activate_app","_logTime":'.time().',"_session_id":"'.$this->session_id.'","fb_mobile_launch_source":"Unclassified"}]',   // FIX to session_id to random UUID 24E504EA-4510-4F88-83AC-AB2E833B6B46
 
           ],
 
@@ -789,7 +793,6 @@ public function graphFb_activities_appevents()
               'data' => '["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]',
           ],
         ];
-
 
         $data = $this->buildBodyFb($bodies, $boundary);
         
