@@ -947,12 +947,10 @@ $headers = [
 }
 
 
-
   public function autocomplete_user_list()
   {
     
      $outputs = $this->request('https://i.instagram.com/api/v1/friendships/autocomplete_user_list/?version=2');
-
 
    //  GET https://i.instagram.com/api/v1/friendships/autocomplete_user_list/?version=2 HTTP/1.1
   // Host: i.instagram.com
