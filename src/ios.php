@@ -65,18 +65,22 @@ public function run() {
       $this->syncFeaturesRegister();
       $this->show_continue_as();
 
-       $this->graphFb();
-       $this->graphFb_activities_appinstall();
-       $this->graphFb_activities_appevents();
+      $this->graphFb();
+      $this->graphFb_activities_appinstall();
+      $this->graphFb_activities_appevents();
 
-      // $this->check_email();
-      // $this->username_suggestions();
-      // $this->check_username();
-      // $this->create();
+      $this->check_email();
+      $this->username_suggestions();
+      $this->check_username();
+      $this->create();
 
-      // $this->sync();
-      // $this->ayml();
+      $this->sync();
+      $this->ayml();
 
+      $this->autocomplete_user_list();
+      $this->direct_inbox();
+      $this->ranked_recipients();
+      $this->timeline();
  }
 
 
@@ -437,7 +441,7 @@ public function  notifications_badge()
   
 
 
-public function  notifications_badge_get()
+public function notifications_badge_get()
 {
    
     $outputs = $this->request('https://i.instagram.com/api/v1/notifications/badge/');
