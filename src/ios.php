@@ -124,7 +124,6 @@ public function  current_user_edit()
 
 public function  edit_profile($website)
 {
-
    $data = json_encode([
         "gender" => "3",
         "_csrftoken" => $this->token,
@@ -142,8 +141,6 @@ public function  edit_profile($website)
     return $outputs;
 }
  
-
-
 
    public function syncFeaturesRegister()
     {
