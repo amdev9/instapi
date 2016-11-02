@@ -87,16 +87,21 @@ public function run() {
       $this->discover_explore();
       $this->channels_home();
 
- }
 
+      $this->current_user_edit();
+      $this->edit_profile("");
+      $fs = $this->followers('2058338792');
+      $this->follow($fs['users'][0]['pk']);
+ 
+ }
 
 
 public function follow ($user_id)
 {
     $data = json_encode([
-      "_csrftoken"=>  $this->token,
-      "_uuid"=>   $this->uuid,
-      "_uid"=>    $this->username_id,
+      "_csrftoken"  =>  $this->token,
+      "_uuid" =>   $this->uuid,
+      "_uid"  =>    $this->username_id,
       "user_id"=>   $user_id, 
 
     ]);
@@ -104,15 +109,11 @@ public function follow ($user_id)
     return $outputs;
 }
 
-
-
 public function followers($user_id, $max_id = null)
 {
     $outputs = $this->request('https://i.instagram.com/api/v1/friendships/'.$user_id.'/followers/'.(!is_null($max_id) ? '?max_id='.$max_id : '?rank_token='.$this->username_id.'_'.$this->generateUUID(true) ) );
     return $outputs;
 }
-
-
 
 public function  current_user_edit()
 {
