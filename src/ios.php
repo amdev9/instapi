@@ -105,10 +105,11 @@ public  function funcrecur()
     $time_in_day = 24*60*60;
     $posts_per_day = 700;   
     $delay = $time_in_day / $posts_per_day;
-
     $actioner = $this->redis->spop('detect');
-    $this->follow($actioner);
+    if ($this->redis->sismember("follow".$this->username , $actioner) != true) {
+        $this->follow($actioner);
 
+    }
     echo $next_iteration_time = $this->add_time($delay);  
     sleep($next_iteration_time);
 
@@ -135,6 +136,9 @@ public function follow($user_id)
       "user_id"=>   $user_id,
     ]);
     $outputs = $this->request('https://i.instagram.com/api/v1/friendships/create/'.$user_id.'/');
+    if ($outputs[1]['status'] == 'ok') {
+      $this->redis->sadd('follow'.$this->username, $user_id);
+    }
     return $outputs;
 }
 
