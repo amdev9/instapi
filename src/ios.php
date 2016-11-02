@@ -91,7 +91,7 @@ public function run() {
       $this->current_user_edit();
       $this->edit_profile("");
       $fs = $this->followers('2058338792');
-      $this->follow($fs['users'][0]['pk']);
+      $this->follow($fs[1]['users'][0]['pk']);
  
  }
 
