@@ -845,29 +845,94 @@ public function graphFb_activities_appevents()
 
 public function timeline()
 {
-  $outputs = $this->ad_request('https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800');
 
 
-// GET https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800 HTTP/1.1
 // Host: i.instagram.com
 // Accept: *
-// Proxy-Connection: keep-alive
-// X-IG-Connection-Type: WiFi
-// Accept-Language: ru-RU;q=1
-// Accept-Encoding: gzip, deflate
-// X-IDFA: 9AA0EE34-845C-4793-8830-0D3F354A474B  /// -> facebook adveriser id
+// Proxy-Connection: keep-alive +
+// X-IG-Connection-Type: WiFi +
+// Accept-Language: ru-RU;q=1 +
+// Accept-Encoding: gzip, deflate +
+// X-IDFA: 9AA0EE34-845C-4793-8830-0D3F354A474B  /// -> facebook adveriser id +
 // X-Ads-Opt-Out: 0
 // X-FB: 0
 // User-Agent: Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; ru_RU; ru-RU; scale=2.00; 750x1334) AppleWebKit/420+
-// X-DEVICE-ID: F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B    /// -> uuid
-// Connection: keep-alive
+// X-DEVICE-ID: F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B    /// -> uuid +
+// Connection: keep-alive +
 // X-IG-Capabilities: 3wo=
 // Cookie: csrftoken=ZcsBlgJVBdnESnAEUMBuWuy2W2vAwQRZ; ds_user_id=4050134364; mid=WATprwAAAAFg3XoGK03ZryWXvhJs; s_network=; sessionid=IGSC66cf8f8c5da55856662424dd8207ecdb44820e4a92d744132029951ed222570d%3AxB1GJdpcuewZSQgPxGpJbNALz3SXj8vd%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A4050134364%2C%22_token%22%3A%224050134364%3AjASZsutTjkcaDyLDvHI8FQojv7nkLtkk%3A64b954b6b30319c845822728b604e02a96a17358a5787e752f5483944b41e135%22%2C%22asns%22%3A%7B%2295.73.175.251%22%3A25515%2C%22time%22%3A1476717052%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1476717052.30863%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
 // X-IG-INSTALLED-APPS: eyIxIjowLCIyIjowfQ==          /// -> check if the same for devices
 
 
+  
+  $outputs = $this->ad_request('https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800');
 
-  return $outputs;
+
+$headers = [
+        'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
+        'Accept: *',
+        'Accept-Encoding: gzip, deflate',
+        'X-IDFA: 9AA0EE34-845C-4793-8830-0D3F354A474B',   /// -> facebook adveriser id'
+        'X-Ads-Opt-Out: 0',
+        'X-FB: 0',
+        'X-DEVICE-ID: F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B',
+        'Connection: keep-alive',
+        'Proxy-Connection: keep-alive',
+        'X-IG-Capabilities: 3wo=',
+        'Accept-Language: ru-RU;q=1',
+        'X-IG-Connection-Type: WiFi-Fallback',
+        'Cookie2: $Version=1',
+        'X-IG-INSTALLED-APPS: eyIxIjowLCIyIjowfQ==',
+    ];
+
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);  // 9 5
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+          curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
+
+        curl_setopt($ch, CURLOPT_VERBOSE, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_COOKIEFILE,  $this->IGDataPath."cookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."cookies.dat");
+        //  if ( $this->proxy != null) {
+        //   curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+        // curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+        // curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        // }
+
+        if ($post) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        }
+
+        $resp = curl_exec($ch);
+        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($resp, 0, $header_len);
+        $body = substr($resp, $header_len);
+
+        curl_close($ch);
+
+        if (true) {
+            echo "REQUEST: $endpoint\n";
+            if (!is_null($post)) {
+                if (!is_array($post)) {
+                    echo 'DATA: '.urldecode($post)."\n";
+                }
+            }
+            echo "RESPONSE: $body\n\n";
+        }
+
+        return [$header, json_decode($body, true)];
+  
+
 }
 
 
