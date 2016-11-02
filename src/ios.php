@@ -388,7 +388,8 @@ public function inbox()
  public function reels_tray()
 {
     
-     $outputs = $this->request('https://i.instagram.com/api/v1/feed/reels_tray/?tray_session_id=1ae5839959534712b3ffd12aa1a2cb6d');
+     $outputs = $this->request('https://i.instagram.com/api/v1/feed/reels_tray/?tray_session_id='.$this->generateUUID(false);  
+     //1ae5839959534712b3ffd12aa1a2cb6d');
     return $outputs;
 }
 
