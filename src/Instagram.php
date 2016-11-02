@@ -2209,8 +2209,6 @@ public function sendConfirmEmail($email) {
 
                   echo var_export($results);
 
-
-
           } else {
 
             echo "good\n";

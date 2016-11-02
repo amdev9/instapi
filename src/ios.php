@@ -91,14 +91,37 @@ public function run() {
 
 
 
+public function follow ($user_id)
+{
+    $data = json_encode([
+      "_csrftoken"=>  $this->token,
+      "_uuid"=>   $this->uuid,
+      "_uid"=>    $this->username_id,
+      "user_id"=>   $user_id, 
+
+    ]);
+    $outputs = $this->request('https://i.instagram.com/api/v1/friendships/create/'.$user_id.'/');
+    return $outputs;
+}
+
+
+
+public function followers($user_id, $max_id = null)
+{
+    $outputs = $this->request('https://i.instagram.com/api/v1/friendships/'.$user_id.'/followers/'.(!is_null($max_id) ? '?max_id='.$max_id : '?rank_token='.$this->username_id.'_'.$this->generateUUID(true) ) );
+    return $outputs;
+}
+
+
 
 public function  current_user_edit()
 {
-     $outputs = $this->request('https://i.instagram.com/api/v1/accounts/current_user/?edit=true');
+    $outputs = $this->request('https://i.instagram.com/api/v1/accounts/current_user/?edit=true');
     return $outputs;
 }
  
-public function  edit_profile()
+
+public function  edit_profile($website)
 {
 
    $data = json_encode([
@@ -106,14 +129,14 @@ public function  edit_profile()
         "_csrftoken" => $this->token,
         "_uuid" => $this->uuid,
         "_uid"=> $this->username_id,
-        "external_url"=> "sweetygloriah.tumblr.com",
+        "external_url"=> $website,
         "username"=> $this->username,
         "email"=> $this->email,
-        "phone_number"=>"",
-        "biography"=>"",
+        "phone_number"=>  "",
+        "biography"=> "",
         "first_name"=> $this->full_name,
     ]);
-   
+
      $outputs = $this->request('https://i.instagram.com/api/v1/accounts/edit_profile/', $this->generateSignature($data));
     return $outputs;
 }
@@ -124,28 +147,11 @@ public function  edit_profile()
    public function syncFeaturesRegister()
     {
 
-
- // $data = json_encode([
- //        '_csrftoken'  => $this->token,
- //        'send_source' => "edit_profile",
- //         '_uid'       => $this->username_id,
- //        '_uuid'       => $this->uuid,
- //        'email'       => $email,
- //      ]);
-
-// signed_body=88777998bb9b354a5e8882906247af04a84dca8930e055d1384a4d09e7dc32fc.
      $data = json_encode([
        "id" =>  $this->uuid, //"F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B",  
        "experiments" => "ig_ios_link_ci_in_reg_test,ig_ios_email_phone_switcher_universe,ig_ios_registration_robo_call_time,ig_ios_continue_as_2_universe,ig_ios_ci_checkbox_in_reg_test,ig_ios_reg_redesign,ig_ios_reg_flow_status_bar,ig_ios_one_click_login_tab_design_universe,ig_ios_password_less_registration_universe,ig_ios_iconless_contactpoint,ig_ios_universal_link_login,ig_ios_reg_filled_button_universe,ig_nonfb_sso_universe,enable_nux_language,ig_ios_iconless_confirmation,ig_ios_use_family_device_id_universe,ig_ios_one_click_login_universe_2,ig_ios_one_password_extension,ig_ios_new_fb_signup_universe,ig_ios_iconless_username",
      ]);
-     //   // &ig_sig_key_version=5
-
-
-      // $data =  'signed_body=88777998bb9b354a5e8882906247af04a84dca8930e055d1384a4d09e7dc32fc.%7B%22id%22%3A%22F2CD7326-EA40-44F8-9FC3-71A0A5E1F55B%22%2C%22experiments%22%3A%22ig_ios_link_ci_in_reg_test%2Cig_ios_email_phone_switcher_universe%2Cig_ios_registration_robo_call_time%2Cig_ios_continue_as_2_universe%2Cig_ios_ci_checkbox_in_reg_test%2Cig_ios_reg_redesign%2Cig_ios_reg_flow_status_bar%2Cig_ios_one_click_login_tab_design_universe%2Cig_ios_password_less_registration_universe%2Cig_ios_iconless_contactpoint%2Cig_ios_universal_link_login%2Cig_ios_reg_filled_button_universe%2Cig_nonfb_sso_universe%2Cenable_nux_language%2Cig_ios_iconless_confirmation%2Cig_ios_use_family_device_id_universe%2Cig_ios_one_click_login_universe_2%2Cig_ios_one_password_extension%2Cig_ios_new_fb_signup_universe%2Cig_ios_iconless_username%22%7D&ig_sig_key_version=5';
-
-
-     // generateSignature($data);
-
+     
       $outputs = $this->request('https://i.instagram.com/api/v1/qe/sync/', $this->generateSignature($data) );
   
       // preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
