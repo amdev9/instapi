@@ -739,7 +739,7 @@ public function graphFb_activities_appevents()
               'headers'  => [
                   'Content-Type: content/unknown',   
               ],
-              'data' => '[{"_ui":"no_ui","_eventName":"fb_mobile_activate_app","_logTime":1476716975,"_session_id":"24E504EA-4510-4F88-83AC-AB2E833B6B46","fb_mobile_launch_source":"Unclassified"}]',   // FIX to timestamp
+              'data' => '[{"_ui":"no_ui","_eventName":"fb_mobile_activate_app","_logTime":'.time().',"_session_id":"24E504EA-4510-4F88-83AC-AB2E833B6B46","fb_mobile_launch_source":"Unclassified"}]',   // FIX to session_id to random UUID
 
           ],
 
