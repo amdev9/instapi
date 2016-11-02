@@ -839,10 +839,6 @@ public function graphFb_activities_appevents()
 }
 
 
- 
- 
-
-
 public function timeline()
 {
 
@@ -864,7 +860,6 @@ public function timeline()
 // X-IG-INSTALLED-APPS: eyIxIjowLCIyIjowfQ==          /// -> check if the same for devices
 
 
-  
   $outputs = $this->ad_request('https://i.instagram.com/api/v1/feed/timeline/?unseen_posts=&recovered_from_crash=1&seen_posts=&is_prefetch=0&timezone_offset=10800');
 
 
