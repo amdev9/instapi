@@ -6,7 +6,10 @@ class InstaOS  extends Threaded
   protected $username;            // Instagram username
   protected $password;            // Instagram password
   protected $debug;               // Debug
+
   protected $proxy;
+  protected $proxy_auth_credentials;
+  
   protected $uuid;                // UUID
   protected $device_id;           // Device ID
   protected $username_id;         // Username ID
@@ -40,7 +43,13 @@ public function run() {
       ////
 
       // this data from redis
-      $this->proxy = $this->redis->spop('proxy');
+      $proxy_string = $this->redis->spop('proxy');
+      $exploded_proxy = explode(":", $proxy_string);
+
+      $this->proxy = $exploded_proxy[0].":".$exploded_proxy[1];  
+      $this->proxy_auth_credentials = $exploded_proxy[2].":".$exploded_proxy[3];  
+      echo  $exploded_proxy[0].":".$exploded_proxy[1];  
+      echo  $exploded_proxy[2].":".$exploded_proxy[3];  
 
       $line_inst = $this->redis->spop('line_inst');
       $this->password = explode("|", $line_inst)[0];  
@@ -92,20 +101,20 @@ public function run() {
       // $site = "analiesecoleman.tumblr.com"; //$this->redis->spop('links_t');
       // $this->edit_profile($site);
 
-      $fs = $this->followers('2058338792');
-      for($iter = 0; $iter < count($fs[1]['users']); $iter++) { 
-        $this->redis->sadd('detect', $fs[1]['users'][$iter]['pk'] );
-      } 
-      $fs_next = $this->followers('2058338792', $fs[1]['next_max_id']);
-      for($iter = 0; $iter < count($fs_next[1]['users']); $iter++) { 
-        $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
-      } 
-      $fs_next = $this->followers('2058338792', $fs_next[1]['next_max_id']);
-      for($iter = 0; $iter < count($fs_next[1]['users']); $iter++) { 
-        $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
-      } 
+      // $fs = $this->followers('2058338792');
+      // for($iter = 0; $iter < count($fs[1]['users']); $iter++) { 
+      //   $this->redis->sadd('detect', $fs[1]['users'][$iter]['pk'] );
+      // } 
+      // $fs_next = $this->followers('2058338792', $fs[1]['next_max_id']);
+      // for($iter = 0; $iter < count($fs_next[1]['users']); $iter++) { 
+      //   $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
+      // } 
+      // $fs_next = $this->followers('2058338792', $fs_next[1]['next_max_id']);
+      // for($iter = 0; $iter < count($fs_next[1]['users']); $iter++) { 
+      //   $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
+      // } 
 
-      $this->funcrecur();
+      // $this->funcrecur();
  }
 
 
@@ -716,7 +725,7 @@ public function graphFb() {
         if ( $this->proxy != null) {
           curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
           curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-          curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+          curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_auth_credentials);
         }
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -846,7 +855,7 @@ public function graphFb_activities_appinstall() {
         if ( $this->proxy != null) {
           curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
           curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-          curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+          curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_auth_credentials);
         }
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -983,7 +992,7 @@ public function graphFb_activities_appevents()
         if ( $this->proxy != null) {
           curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
           curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-          curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+          curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_auth_credentials);
         }
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -1056,7 +1065,7 @@ public function timeline()
          if ( $this->proxy != null) {
           curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
           curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-          curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+          curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_auth_credentials);
         }
 
         
@@ -1183,7 +1192,7 @@ public function timeline()
         if ( $this->proxy != null) {
             curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
             curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-            curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_auth_credentials);
         }
 
         if ($post) {
