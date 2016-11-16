@@ -1059,6 +1059,7 @@ public function sendConfirmEmail($email) {
         return $this->request('media/configure/?video=1', $this->generateSignature($post))[1];
     }
 
+
     protected function configure($upload_id, $photo, $caption = '', $location = null, $filter = null)
     {
 
@@ -1115,7 +1116,7 @@ public function sendConfirmEmail($email) {
     }
 
        if (!is_null($filter)) {
-            $post['edits']['filter_type'] = Utils::getFilterCode($filter);
+            $post['edits']['filter_type'] = $this->getFilterCode($filter);
         }
 
         $post = json_encode($post);
@@ -1125,7 +1126,7 @@ public function sendConfirmEmail($email) {
         $post = str_replace('"crop_original_size":'."[$size,$size]", '"crop_original_size":'."[$size.0,$size.0]", $post);
 
 
-        return $this->request('media/configure/', $this->generateSignature($post))[1];
+        return $this->request('media/configure/?', $this->generateSignature($post))[1];
     }
 
 
@@ -1174,7 +1175,7 @@ public function sendConfirmEmail($email) {
    *
    * @return array
    *   edit media data
-   */
+   
   public function editMedia($mediaId, $captionText = '')
   {
       $data = json_encode([

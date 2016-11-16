@@ -1052,6 +1052,7 @@ class RegisterTool extends Threaded
 					$uploadCounter = 0;
 					$filesVid = $this->shuffle_assoc($filesVideo);
 
+					
 					foreach ( $filesVid as $k => $value ) {
 
 					    $ext = pathinfo($value, PATHINFO_EXTENSION);

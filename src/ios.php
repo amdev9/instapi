@@ -28,7 +28,7 @@ public function run() {
       $this->redis = $this->worker->getConnection();
       $this->debug = true;
       $IGDataPath = null;
-      $this->UA = 'Instagram 9.5.2 (iPhone8,1; iPhone OS 9_3_1; en_US; en-US; scale=2.00; 750x1334) AppleWebKit/420+';
+      $this->UA = 'Instagram 9.6.0 (iPhone8,1; iPhone OS 9_3_1; en_US; en-US; scale=2.00; 750x1334) AppleWebKit/420+';
       
       $this->uuid = $this->generateUUID(true);
       $this->waterfall_id =  $this->generateUUID(true);
@@ -40,7 +40,7 @@ public function run() {
       ////
 
       // this data from redis
-      $this->proxy = null; //$this->redis->spop('proxy');
+      $this->proxy = $this->redis->spop('proxy');
 
       $line_inst = $this->redis->spop('line_inst');
       $this->password = explode("|", $line_inst)[0];  
@@ -88,32 +88,120 @@ public function run() {
       $this->channels_home();
 
 
-      $this->current_user_edit();
-      $this->edit_profile("");
+      // $this->current_user_edit();
+      // $site = "analiesecoleman.tumblr.com"; //$this->redis->spop('links_t');
+      // $this->edit_profile($site);
 
       $fs = $this->followers('2058338792');
       for($iter = 0; $iter < count($fs[1]['users']); $iter++) { 
         $this->redis->sadd('detect', $fs[1]['users'][$iter]['pk'] );
+      } 
+      $fs_next = $this->followers('2058338792', $fs[1]['next_max_id']);
+      for($iter = 0; $iter < count($fs_next[1]['users']); $iter++) { 
+        $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
+      } 
+      $fs_next = $this->followers('2058338792', $fs_next[1]['next_max_id']);
+      for($iter = 0; $iter < count($fs_next[1]['users']); $iter++) { 
+        $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
       } 
 
       $this->funcrecur();
  }
 
 
-public  function funcrecur()
+
+
+
+// search in tags
+
+// GET https://i.instagram.com/api/v1/users/search/?rank_token=1009845355_C84096E3-C829-4EDF-A29C-72788580E456&query=abbyleebrazil HTTP/1.1
+// Host: i.instagram.com
+// X-IG-Capabilities: 3wo=
+// Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; ds_user=4ewir; ds_user_id=1009845355; igfl=4ewir; is_starred_enabled=yes; mid=Vt9VQAAAAAFs7QCccW9eS1SurGzG; s_network=; sessionid=IGSCed40e4e15a0ada346d42b437a06bd6593fec35e30108424a6a6b11fc6485bc8d%3AGZUlFRrlFb4z4fwYIZwNgh7lIhVDbAyn%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A1009845355%2C%22_token%22%3A%221009845355%3AMiWMy7eZzqny2WDgpJZXTmdiNuPHVd3E%3A185e57a287881a4f98f67cbda30ac31a6227e788fc98a5b7c87b381bb6dda06b%22%2C%22asns%22%3A%7B%22162.243.254.101%22%3A62567%2C%22time%22%3A1479191736%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1479191720.065686%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
+// Connection: keep-alive
+// Proxy-Connection: keep-alive
+// Accept: */*
+// User-Agent: Instagram 9.7.0 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
+// Accept-Language: ru-RU;q=1
+// Accept-Encoding: gzip, deflate
+// X-IG-Connection-Type: WiFi
+
+// response
+
+// HTTP/1.1 200 OK
+// Content-Language: ru
+// Expires: Sat, 01 Jan 2000 00:00:00 GMT
+// Vary: Cookie, Accept-Language, Accept-Encoding
+// Pragma: no-cache
+// Cache-Control: private, no-cache, no-store, must-revalidate
+// Date: Wed, 16 Nov 2016 01:04:20 GMT
+// Content-Type: application/json
+// Set-Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; expires=Wed, 15-Nov-2017 01:04:20 GMT; Max-Age=31449600; Path=/; secure
+// Set-Cookie: ds_user_id=1009845355; expires=Tue, 14-Feb-2017 01:04:20 GMT; Max-Age=7776000; Path=/
+// Connection: keep-alive
+// Content-Length: 1254
+
+// {"has_more": false, "status": "ok", "num_results": 2, "users": [{"username": "abbyleebrazil", "has_anonymous_profile_picture": false, "byline": "\u041f\u043e\u0434\u043f\u0438\u0441\u0447\u0438\u043a\u0438: 99.3k", "friendship_status": {"following": false, "incoming_request": false, "outgoing_request": false, "is_private": true}, "unseen_count": 1, "mutual_followers_count": 0.0, "profile_pic_url": "http://scontent.cdninstagram.com/t51.2885-19/10522181_1482018448704140_1608371148_a.jpg", "full_name": "Abby Lee Brazil\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7", "follower_count": 99372, "pk": 20283423, "is_verified": false, "is_private": true}, {"username": "abbyleebrazil_", "has_anonymous_profile_picture": false, "byline": "\u041f\u043e\u0434\u043f\u0438\u0441\u0447\u0438\u043a\u0438: 6", "friendship_status": {"following": false, "incoming_request": false, "outgoing_request": false, "is_private": false}, "unseen_count": 0, "mutual_followers_count": 0.0, "profile_pic_url": "http://scontent.cdninstagram.com/t51.2885-19/s150x150/13671758_314011902282967_1832289642_a.jpg", "profile_pic_id": "1317868330849423099_3487698959", "full_name": "\u5976\u7eff", "follower_count": 6, "pk": 3487698959, "is_verified": false, "is_private": false}]}
+
+//
+
+//     POST https://i.instagram.com/api/v1/media/configure/? HTTP/1.1
+// Host: i.instagram.com
+// Accept: *
+// Proxy-Connection: keep-alive
+// X-IG-Connection-Type: WiFi
+// Accept-Encoding: gzip, deflate
+// Accept-Language: ru-RU;q=1
+// Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+// Content-Length: 1084
+// User-Agent: Instagram 9.7.0 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
+// Connection: keep-alive
+// X-IG-Capabilities: 3wo=
+// Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; ds_user=4ewir; ds_user_id=1009845355; igfl=4ewir; is_starred_enabled=yes; mid=Vt9VQAAAAAFs7QCccW9eS1SurGzG; s_network=; sessionid=IGSCed40e4e15a0ada346d42b437a06bd6593fec35e30108424a6a6b11fc6485bc8d%3AGZUlFRrlFb4z4fwYIZwNgh7lIhVDbAyn%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A1009845355%2C%22_token%22%3A%221009845355%3AMiWMy7eZzqny2WDgpJZXTmdiNuPHVd3E%3A185e57a287881a4f98f67cbda30ac31a6227e788fc98a5b7c87b381bb6dda06b%22%2C%22asns%22%3A%7B%22162.243.254.101%22%3A62567%2C%22time%22%3A1479191736%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1479191720.065686%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
+
+// signed_body=6f6013aabf8ca7b73238fe558138a13f583afff47207e2961802b66b51e49d6a.
+// {
+//   "date_time_digitized":"2016:10:31 14:13:06",
+//   "_csrftoken":"69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk",
+//   "client_timestamp":"1479258271",
+//   "edits":
+//      {
+//       "crop_zoom":1.333333333333333,
+//      "crop_center":[0,0.0007812499999999556],
+//      "crop_original_size":[2448,3264],
+//      "filter_strength":1
+//    },
+//    "_uuid":"F30F7D45-024B-478A-A1FC-75EC32B2F629",
+//    "_uid":"1009845355",
+//    "scene_type":1,
+//    "camera_position":"back",
+//    "source_type":0,
+//    "disable_comments":false,
+//    "waterfall_id":"6d565f010734405db17af85855da23d7",
+//    "scene_capture_type":"standard",
+    // "software":"9.3.5",
+//    "geotag_enabled":false,
+    // "upload_id":1479258235,
+//    "date_time_original":"2016:10:31 14:13:06",
+//    "usertags":"{\"in\":[{\"user_id\":\"20283423\",\"position\":[0.590625,0.534375]}]}"
+//  }&ig_sig_key_version=5
+
+
+
+public function funcrecur()
 { 
     $time_in_day = 24*60*60;
-    $posts_per_day = 4700;   
+    $posts_per_day = 4900;   
     $delay = $time_in_day / $posts_per_day;
-    $actioner = $this->redis->spop('detect');
-    if ($this->redis->sismember("follow".$this->username , $actioner) != true) {
-        $this->follow($actioner);
-
+    while ($this->redis->scard('detect') > 0) { 
+        $actioner = $this->redis->spop('detect');
+        if ($this->redis->sismember("follow".$this->username , $actioner) != true) {
+            $this->follow($actioner);
+        }
+        echo $next_iteration_time = $this->add_time($delay);  
+        sleep($next_iteration_time);
+        $this->funcrecur();
     }
-    echo $next_iteration_time = $this->add_time($delay);  
-    sleep($next_iteration_time);
-
-    $this->funcrecur();
 }
 
 
@@ -138,6 +226,9 @@ public function follow($user_id)
     $outputs = $this->request('https://i.instagram.com/api/v1/friendships/create/'.$user_id.'/', $this->generateSignature( $data ));
     if ($outputs[1]['status'] == 'ok') {
       $this->redis->sadd('follow'.$this->username, $user_id);
+    }
+    else {
+      return;
     }
     return $outputs;
 }
@@ -470,8 +561,8 @@ public function inbox()
 
 public function discover_explore()
 {
-    
-     $outputs = $this->request('https://i.instagram.com/api/v1/discover/explore/?is_on_wifi=true&network_transfer_rate=30.99&is_prefetch=true&session_id='.$this->username_id.'_'.$this->generateUUID(true).'&timezone_offset=-18000');  /// fix for transfer rate
+     $rand_speed = mt_rand(5,40);
+     $outputs = $this->request('https://i.instagram.com/api/v1/discover/explore/?is_on_wifi=true&network_transfer_rate='.$rand_speed.'.99&is_prefetch=true&session_id='.$this->username_id.'_'.$this->generateUUID(true).'&timezone_offset=-18000');  /// fix for transfer rate
     return $outputs;
 }
 
@@ -657,7 +748,7 @@ public function graphFb_activities_appinstall() {
   'advertiser_id='.$this->advertiser_id.'&advertiser_tracking_enabled=1'.
   '&anon_id=XZ'.$this->anon_id.
   '&application_tracking_enabled=1&event=MOBILE_APP_INSTALL'.
-  '&extinfo=["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]'.
+  '&extinfo=["i2","com.burbn.instagram","41483633","9.6.0","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]'.
   '&format=json'.
   '&include_headers=false'.
   '&sdk=ios'.
@@ -685,7 +776,7 @@ public function graphFb_activities_appinstall() {
           [
               'type' => 'form-data',
               'name' => 'extinfo',
-              'data' => '["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]',
+              'data' => '["i2","com.burbn.instagram","41483633","9.6.0","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]',
           ],
            [
               'type' => 'form-data',
@@ -788,16 +879,13 @@ public function graphFb_activities_appevents()
   'advertiser_id='.$this->advertiser_id.'&advertiser_tracking_enabled=1'.
   '&anon_id=XZ'.$this->anon_id.
   '&application_tracking_enabled=1&event=CUSTOM_APP_EVENTS'.
-  '&extinfo=["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]'.
+  '&extinfo=["i2","com.burbn.instagram","41483633","9.6.0","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]'.
   '&format=json'.
   '&include_headers=false'.
   '&sdk=ios'.
  '&url_schemes=["fb124024574287414","instagram","instagram-capture","fsq+kylm3gjcbtswk4rambrt4uyzq1dqcoc0n2hyjgcvbcbe54rj+post"]'
   );
 
-
-
- 
 
 
      $boundary = '3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f'; 
@@ -827,7 +915,7 @@ public function graphFb_activities_appevents()
           [
               'type' => 'form-data',
               'name' => 'extinfo',
-              'data' => '["i2","com.burbn.instagram","41483633","9.5.2","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]',
+              'data' => '["i2","com.burbn.instagram","41483633","9.6.0","9.3.1","iPhone8,1","en_US","GMT-5","AT&T",375,667,"2.00",2,12,11,"America/Atikokan"]',
           ],
            [
               'type' => 'form-data',
@@ -965,16 +1053,13 @@ public function timeline()
         }
 
 
-        //  if ( $this->proxy != null) {
-        //   curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
-        // curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-        // curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-        // }
+         if ( $this->proxy != null) {
+          curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+          curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+          curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        }
 
-        // if ($post) {
-        //     curl_setopt($ch, CURLOPT_POST, true);
-        //     curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-        // }
+        
 
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -1033,7 +1118,9 @@ public function timeline()
   public function generateSignature($data)
    {
 
-        $hash = hash_hmac('sha256', $data, 'ebbf19d239c4b2cff2df4b51cc626ffdad6fe27b5a7b39bd6e7e41b72f54c1f2');  
+        $hash = hash_hmac('sha256', $data, '3fdf001eb50248d8a666e0b5986c92aadae919e390b3c79d473cd1e2a14029a8');  
+              // 9.6                            
+        // 952 'ebbf19d239c4b2cff2df4b51cc626ffdad6fe27b5a7b39bd6e7e41b72f54c1f2'
         // echo "\n".($hash)."\n";
         
         return 'signed_body='.$hash.'.'.urlencode($data).'&ig_sig_key_version=5';
@@ -1093,11 +1180,11 @@ public function timeline()
             curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');      
         }
 
-        //  if ( $this->proxy != null) {
-        //   curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
-        // curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
-        // curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
-        // }
+        if ( $this->proxy != null) {
+            curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+            curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'blackking:Name0123Space');
+        }
 
         if ($post) {
             curl_setopt($ch, CURLOPT_POST, true);
