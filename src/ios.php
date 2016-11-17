@@ -97,9 +97,9 @@ public function run() {
       $this->discover_explore();
       $this->channels_home();
 
-      $user_ids = [];
+      $user_ids = ['12335461' ,'49742317']; 
       $removed_ids = $user_ids;
-      $user_ids_new = [];
+      $user_ids_new = ['230581164'];
       $res = $this->upload_photo('/Users/alex/Desktop/other/4.jpg', null, $user_ids); // return media id
       $media_id = $res[1]['media']['pk'];
       $this->edit_photo_tag($media_id, $removed_ids, $user_ids_new);
