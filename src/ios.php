@@ -182,14 +182,7 @@ public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
       $counter = 0;
       $y = $y + 1;
     }
-  // $y = $counter * $interpol;
-  // echo $y."\n";
-  // $x =  $counter * $interpol ;
-  // echo $x."\n";
- 
-  // $x_pos = round($x *  $interpol, 7);
-  // $y_pos = round($y *  $interpol, 7);
-
+   
 
   $added_user_string = '{"user_id":"'. $user_id .'","position":['. $x_pos .','. $y_pos .']}'; 
     if ($result_string_added == "") { 
@@ -216,19 +209,13 @@ if ($result_string_removed == "") {
     $result_string_removed =  $result_string_removed .",".$removed_user_string; 
   } 
 
-      // $result_string_removed =  $result_string_removed . ",".$removed_user_string;
-
+      
     }
 
- 
 
     $final_removed_string = '"removed":['.  $result_string_removed .']';
    
     $final_string =  "{".$final_removed_string.",".$final_added_string."}";
-
-
- // "usertags":"{\"removed\":[\"12335461\",\"49742317\"],\"in\":[{\"user_id\":\"230581164\",\"position\":[0.2374999970197678,0.3046875]}]}" 
-
 
  
 
@@ -240,21 +227,7 @@ if ($result_string_removed == "") {
     ]);
 
   $outputs = $this->request('https://i.instagram.com/api/v1/media/'.$media_id.'_'.$this->username_id.'/edit_media/', $this->generateSignature( $data ));
-
-//   POST https://i.instagram.com/api/v1/media/1385227495502326628_1009845355/edit_media/ HTTP/1.1
-// Host: i.instagram.com
-// Accept: *
-// Proxy-Connection: keep-alive
-// X-IG-Connection-Type: WiFi
-// Accept-Encoding: gzip, deflate
-// Accept-Language: ru-RU;q=1
-// Content-Type: application/x-www-form-urlencoded; charset=UTF-8
-// Content-Length: 480
-// User-Agent: Instagram 9.7.0 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
-// Connection: keep-alive
-// X-IG-Capabilities: 3wo=
-// Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; ds_user=4ewir; ds_user_id=1009845355; igfl=4ewir; is_starred_enabled=yes; mid=Vt9VQAAAAAFs7QCccW9eS1SurGzG; s_network=; sessionid=IGSC5e51443463901bb0a426f830d599bd2fd81a7ecc1cb98949ecbd20a58cf1a299%3AGNlw58jKM47wbjx3v9zWFZT6GPYRKHFW%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A1009845355%2C%22_token%22%3A%221009845355%3AMiWMy7eZzqny2WDgpJZXTmdiNuPHVd3E%3A185e57a287881a4f98f67cbda30ac31a6227e788fc98a5b7c87b381bb6dda06b%22%2C%22asns%22%3A%7B%2295.73.84.168%22%3A25515%2C%22time%22%3A1479341168%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1479341167.836034%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
-
+ 
  
 }
 
@@ -368,45 +341,7 @@ public function upload_photo($photo, $caption = '', $user_ids, $upload_id = null
 
         return $configure;
 
-
-// POST https://i.instagram.com/api/v1/upload/photo/ HTTP/1.1
-// Host: i.instagram.com
-// Accept: *
-// Proxy-Connection: keep-alive
-// X-IG-Connection-Type: WiFi
-// Accept-Encoding: gzip, deflate
-// Accept-Language: ru-RU;q=1
-// Content-Type: multipart/form-data; boundary=3156D799-CD14-4B1B-B5C9-992CDE05D2E7
-// Content-Length: 181530
-// User-Agent: Instagram 9.7.0 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
-// Connection: keep-alive
-// X-IG-Capabilities: 3wo=
-// Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; ds_user=4ewir; ds_user_id=1009845355; igfl=4ewir; is_starred_enabled=yes; mid=Vt9VQAAAAAFs7QCccW9eS1SurGzG; s_network=; sessionid=IGSCed40e4e15a0ada346d42b437a06bd6593fec35e30108424a6a6b11fc6485bc8d%3AGZUlFRrlFb4z4fwYIZwNgh7lIhVDbAyn%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A1009845355%2C%22_token%22%3A%221009845355%3AMiWMy7eZzqny2WDgpJZXTmdiNuPHVd3E%3A185e57a287881a4f98f67cbda30ac31a6227e788fc98a5b7c87b381bb6dda06b%22%2C%22asns%22%3A%7B%22162.243.254.101%22%3A62567%2C%22time%22%3A1479191736%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1479191720.065686%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
-
-// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7
-// Content-Disposition: form-data; name="_csrftoken"
-
-// 69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk
-// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7
-// Content-Disposition: form-data; name="image_compression"
-
-// {"lib_version":"1290.110000","lib_name":"uikit","quality":45}
-// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7
-// Content-Disposition: form-data; name="_uuid"
-
-// F30F7D45-024B-478A-A1FC-75EC32B2F629
-// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7
-// Content-Disposition: form-data; name="upload_id"
-
-// 1479258235
-// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7
-// Content-Disposition: form-data; name="photo"; filename="photo"
-// Content-Type: image/jpeg
-// Content-Transfer-Encoding: binary
-
-// /* 
-
-// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7--
+ 
 
 }
 
@@ -486,9 +421,6 @@ public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
       
   ];
 
-
- 
-
         $post = json_encode($post);
         $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,0.0]', $post);
         $post = str_replace('"crop_zoom":1', '"crop_zoom":1.0', $post);
@@ -496,11 +428,7 @@ public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
 
         return $this->request('https://i.instagram.com/api/v1/media/configure/?', $this->generateSignature($post))[1];
 
-
-// signed_body=ae7c6c9cc783f9caa13a3b6856fa78a320d30c8d16089909af89d27e06838c48.{"caption":"Hi, I am a cool photo","_csrftoken":"zKX1NmRvPeXWGNXed5VbMN24aV4pVy5q","client_timestamp":"\"1479417021\"","edits":{"crop_zoom":1.0,"crop_center":[0.0,0.0],"crop_original_size":[1080,1080],"filter_strength":1},"_uuid":"d4c41e61-7c15-45f4-9cdb-4a8e880fb795","_uid":"\"4164769105\"","scene_type":1,"camera_position":"back","source_type":0,"disable_comments":false,"waterfall_id":"97318f7a-233d-4c18-a853-e3d87706c1d4","scene_capture_type":"standard","software":"9.3.5","geotag_enabled":false,"upload_id":"1479417019664","usertags":"{\"in\":[,{\"user_id\":\"12335461\",\"position\":[0.2439024,0.1960784]},{\"user_id\":\"49742317\",\"position\":[0.4878049,0.1960784]}]}"}&ig_sig_key_version=5
-
-
- // signed_body=e02e8d74c26b8700988a72bd0b61e628c71a0bf8e28e35d8117ab360035d9db2.{"caption":"Hi, I am a cool photo","_csrftoken":"JBZIFFlTXify9z7FuUG215EwDYEM6xmN","client_timestamp":"\"1479416144\"","edits":{"crop_zoom":1.0,"crop_center":[0.0,0.0],"crop_original_size":[1080,1080],"filter_strength":1},"_uuid":"408b7e48-d6d6-4561-b2d2-4b8208d30256","_uid":"\"4167348408\"","scene_type":1,"camera_position":"back","source_type":0,"disable_comments":false,"waterfall_id":"aedad0cc-d1f1-4961-9c31-616ba4bf0f22","scene_capture_type":"standard","software":"9.3.5","geotag_enabled":false,"upload_id":"1479416141995","usertags":"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}"}&ig_sig_key_version=5 
+ 
 
 
 }
