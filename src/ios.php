@@ -81,7 +81,11 @@ public function run() {
       $this->check_email();
       $this->username_suggestions();
       $this->check_username();
-      $this->create();
+      $result =  $this->create();
+      if (isset($result[1]['errors'])) {
+        echo "ERROR <<<<<<<<";
+        return;
+      }
 
       $this->sync();
       $this->ayml();
@@ -100,8 +104,8 @@ public function run() {
       $user_ids = ['12335461' ,'49742317']; 
       $removed_ids = $user_ids;
       $user_ids_new = ['230581164'];
-      $res = $this->upload_photo('/Users/alex/Desktop/other/4.jpg', null, $user_ids); // return media id
-      $media_id = $res[1]['media']['pk'];
+      $res = $this->upload_photo('/Users/alex/Desktop/other/4.jpg', '', $user_ids); // return media id
+      $media_id = $res['media']['pk'];
       $this->edit_photo_tag($media_id, $removed_ids, $user_ids_new);
 
       // $this->current_user_edit();
@@ -153,35 +157,57 @@ public function run() {
 
 public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
 
-    $result_string_removed = "";
+    
+ $result_string_removed = "";
     $result_string_added = "";
+
+
+  $inter = 1;
+  $del_y = 5.1;
+  $del_x = 4.1;
+
+  $interpol_x =  $inter / $del_x;
+  $interpol_y =  $inter / $del_y;
+
+ 
+
+  $y = 1;
+  $counter = 1;
+  foreach ($user_ids as $user_id ) {
+
+    $x_pos = round($counter*$interpol_x,7);
+  $y_pos = round($y*$interpol_y,7);
+  echo "--\n";
+    if ($counter % 4 == 0) {
+      $counter = 0;
+      $y = $y + 1;
+    }
+  // $y = $counter * $interpol;
+  // echo $y."\n";
+  // $x =  $counter * $interpol ;
+  // echo $x."\n";
+ 
+  // $x_pos = round($x *  $interpol, 7);
+  // $y_pos = round($y *  $interpol, 7);
+
+
+  $added_user_string = '{"user_id":"'. $user_id .'","position":['. $x_pos .','. $y_pos .']}'; 
+  $result_string_added =  $result_string_added . ",".$added_user_string;
+    $counter = $counter + 1;
+  }
+  $final_added_string = '"in":['. $result_string_added .']';
+//  $final_string =  "{".$final_added_string."}";
+
    
     foreach ($removed_ids as $removed_user_id ) {
-       $removed_user_string = '\"'. $removed_user_id .'\"'; 
+       $removed_user_string = '"'. $removed_user_id .'"'; 
        $result_string_removed =  $result_string_removed . ",".$removed_user_string;
     }
 
-    $inter = 1;
-    $del = 5.1;
-    $interpol =  $inter / $del;
+ 
 
-    $counter = 1;
-    foreach ($user_ids as $user_id ) {
-
-      $y = $counter / 5;
-      $x = $counter - $y*5;
-      $x_pos = round($x *  $interpol, 7);
-      $y_pos = round($y *  $interpol, 7);
-
-  
-
-      $added_user_string = '{\"user_id\":\"'. $user_id .'\",\"position\":['. $x_pos .','. $y_pos .']}'; 
-      $result_string_added =  $result_string_added . ",".$added_user_string;
-      $counter = $counter + 1;
-    }
-
-    $final_removed_string = '\"removed\":['.  $result_string_removed .']';
-    $final_added_string = '\"in\":['. $result_string_added .']';
+    $final_removed_string = '"removed":['.  $result_string_removed .']';
+   
     $final_string =  "{".$final_removed_string.",".$final_added_string."}";
 
  // "usertags":"{\"removed\":[\"12335461\",\"49742317\"],\"in\":[{\"user_id\":\"230581164\",\"position\":[0.2374999970197678,0.3046875]}]}" 
@@ -189,12 +215,12 @@ public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
 
  
 
-    $data = [ 
+    $data = json_encode([ 
       "_csrftoken"  => $this->token,
       "_uuid" => $this->uuid,//"F30F7D45-024B-478A-A1FC-75EC32B2F629",
       "_uid"  => $this->username_id, //"1009845355",
       "usertags"  =>"{\"removed\":[\"358954311\"],\"in\":[{\"user_id\":\"2243739473\",\"position\":[0.4234375059604645,0.2906250059604645]}]}"
-    ];
+    ]);
 
   $outputs = $this->request('https://i.instagram.com/api/v1/media/'.$media_id.'_'.$this->username_id.'/edit_media/', $this->generateSignature( $data ));
 
@@ -220,7 +246,7 @@ public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
     // $dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees 
 
 
-public function upload_photo($photo, $caption = '', $upload_id = null, $user_ids = null) {
+public function upload_photo($photo, $caption = '', $user_ids, $upload_id = null) {
 
 
 
@@ -369,28 +395,43 @@ public function upload_photo($photo, $caption = '', $upload_id = null, $user_ids
 
 public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
 
+ $result_string_added = "";
 
 
-  $result_string_added = "";
   $inter = 1;
-  $del = 5.1;
-  $interpol =  $inter / $del;
+  $del_y = 5.1;
+  $del_x = 4.1;
 
+  $interpol_x =  $inter / $del_x;
+  $interpol_y =  $inter / $del_y;
+
+ 
+
+  $y = 1;
   $counter = 1;
   foreach ($user_ids as $user_id ) {
 
-  $y = $counter / 5;
-  $x = $counter - $y*5;
+    $x_pos = round($counter*$interpol_x,7);
+  $y_pos = round($y*$interpol_y,7);
+  echo "--\n";
+    if ($counter % 4 == 0) {
+      $counter = 0;
+      $y = $y + 1;
+    }
+  // $y = $counter * $interpol;
+  // echo $y."\n";
+  // $x =  $counter * $interpol ;
+  // echo $x."\n";
  
-  $x_pos = round($x *  $interpol, 7);
-  $y_pos = round($y *  $interpol, 7);
+  // $x_pos = round($x *  $interpol, 7);
+  // $y_pos = round($y *  $interpol, 7);
 
 
-  $added_user_string = '{\"user_id\":\"'. $user_id .'\",\"position\":['. $x_pos .','. $y_pos .']}'; 
+  $added_user_string = '{"user_id":"'. $user_id .'","position":['. $x_pos .','. $y_pos .']}'; 
   $result_string_added =  $result_string_added . ",".$added_user_string;
-  $counter = $counter + 1;
+    $counter = $counter + 1;
   }
-  $final_added_string = '\"in\":['. $result_string_added .']';
+  $final_added_string = '"in":['. $result_string_added .']';
   $final_string =  "{".$final_added_string."}";
 
 
@@ -426,10 +467,15 @@ public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
    ////
      //"date_time_original" =>  "2016:10:31 14:13:06", // => empty
    ////
-      "usertags" => $final_string,
-      //"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}"
+      "usertags" => "{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}" //$final_string,
+      //
       
   ];
+
+
+ // signed_body=e02e8d74c26b8700988a72bd0b61e628c71a0bf8e28e35d8117ab360035d9db2.{"caption":"Hi, I am a cool photo","_csrftoken":"JBZIFFlTXify9z7FuUG215EwDYEM6xmN","client_timestamp":"\"1479416144\"","edits":{"crop_zoom":1.0,"crop_center":[0.0,0.0],"crop_original_size":[1080,1080],"filter_strength":1},"_uuid":"408b7e48-d6d6-4561-b2d2-4b8208d30256","_uid":"\"4167348408\"","scene_type":1,"camera_position":"back","source_type":0,"disable_comments":false,"waterfall_id":"aedad0cc-d1f1-4961-9c31-616ba4bf0f22","scene_capture_type":"standard","software":"9.3.5","geotag_enabled":false,"upload_id":"1479416141995","usertags":"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}"}&ig_sig_key_version=5
+
+
 
         $post = json_encode($post);
         $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,0.0]', $post);
