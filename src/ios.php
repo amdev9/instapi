@@ -493,7 +493,39 @@ public function funcrecur()
     $time_in_day = 24*60*60;
     $posts_per_day = 4900;   
     $delay = $time_in_day / $posts_per_day;
+    
+
+     /* */
+     $iter = 0;
+     while ($iter < 20) {
+
+
+     if ($this->redis->scard('detect') > 20) { 
+        $act_array = array();
+        for ($i = 0; $i < 20; $i++) {
+          $actioner = $this->redis->spop('detect');
+          array_push($act_array , $actioner);
+        }
+     }
+     $this->upload_photo($photo, $act_array);
+     $iter =+ 1;
+    }
+
+
+    if ($this->redis->scard('detect') > 20) { 
+        $act_array = array();
+        for ($i = 0; $i < 20; $i++) {
+          $actioner = $this->redis->spop('detect');
+          array_push($act_array , $actioner);
+        }
+     }
+     $remove_ids = $this->method_to_fetch_all_posts();
+     $this->edit_photo_tag($photo, $remove_ids, $act_array);
+
+
+
     while ($this->redis->scard('detect') > 0) { 
+
         $actioner = $this->redis->spop('detect');
         if ($this->redis->sismember("follow".$this->username , $actioner) != true) {
             $this->follow($actioner);
