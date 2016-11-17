@@ -145,6 +145,7 @@ public function run() {
 
 
 
+
 public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
 
     $result_string_removed = "";
@@ -212,8 +213,11 @@ public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
     // $dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees 
 
 
-public function upload_photo($photo, $caption = '', $upload_id = null, $users_to_tag = null) {
+public function upload_photo($photo, $caption = '', $upload_id = null, $user_ids = null) {
 
+
+
+       
         $endpoint = Constants::API_URL.'upload/photo/';
         $boundary = $this->uuid;
 
@@ -307,7 +311,7 @@ public function upload_photo($photo, $caption = '', $upload_id = null, $users_to
         }
 
         
-       $configure = $this->media_configure($upload['upload_id'], $photo, $caption, $users_to_tag);
+       $configure = $this->media_configure($upload['upload_id'], $photo, $caption, $user_ids);
            
 
         // $this->expose();
@@ -356,7 +360,31 @@ public function upload_photo($photo, $caption = '', $upload_id = null, $users_to
 
 }
 
-public function media_configure($upload_id, $photo, $caption = '', $users_to_tag) {
+public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
+
+
+  
+  $result_string_added = "";
+  $inter = 1;
+  $del = 5.1;
+  $interpol =  $inter / $del;
+
+  $counter = 1;
+  foreach ($user_ids as $user_id ) {
+
+  $y = $counter / 5;
+  $x = $counter - $y*5;
+  $x_pos = $x *  $interpol;
+  $y_pos = $y *  $interpol;
+
+  $added_user_string = '{\"user_id\":\"'. $user_id .'\",\"position\":['. $x_pos .','. $y_pos .']}'; 
+  $result_string_added =  $result_string_added . ",".$added_user_string;
+  $counter = $counter + 1;
+  }
+  $final_added_string = '\"in\":['. $result_string_added .']';
+  $final_string =  "{".$final_added_string."}";
+
+
 
   $size = getimagesize($photo)[0];
 
@@ -389,14 +417,9 @@ public function media_configure($upload_id, $photo, $caption = '', $users_to_tag
    ////
      //"date_time_original" =>  "2016:10:31 14:13:06", // => empty
    ////
-      "usertags" => "{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}"
-      // "usertags" => "
-      //       {\"in\":
-      //         [
-      //           {\"user_id\":\"".$user_id_1."\",\"position\":[0.490625,0.540625]},
-      //           {\"user_id\":\"".$user_id_2."\",\"position\":[0.5828125,0.7578125]}
-      //         ]
-      //       }",
+      "usertags" => $final_string,
+      //"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}"
+      
   ];
 
         $post = json_encode($post);
