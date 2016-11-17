@@ -145,16 +145,19 @@ public function run() {
 
 
 
-public function edit_photo_tag() {
+public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
+
+  $removed_user_string = '\"removed\":[\"'. $removed_user_id .'\"]'; 
+  $added_user_string = '{\"user_id\":\"'. $user_id .'\",\"position\":['. $x_pos .','. $y_pos .']}'; 
 
     $data = [ 
-      "_csrftoken"=> $this->token,
-      "_uuid"=>"F30F7D45-024B-478A-A1FC-75EC32B2F629",
-      "_uid"=>"1009845355",
-      "usertags"=>"{\"removed\":[\"358954311\"],\"in\":[{\"user_id\":\"2243739473\",\"position\":[0.4234375059604645,0.2906250059604645]}]}"
+      "_csrftoken"  => $this->token,
+      "_uuid" => $this->uuid,//"F30F7D45-024B-478A-A1FC-75EC32B2F629",
+      "_uid"  => $this->username_id, //"1009845355",
+      "usertags"  =>"{\"removed\":[\"358954311\"],\"in\":[{\"user_id\":\"2243739473\",\"position\":[0.4234375059604645,0.2906250059604645]}]}"
     ];
 
-  $outputs = $this->request('https://i.instagram.com/api/v1/media/1385227495502326628_1009845355/edit_media/', $this->generateSignature( $data ));
+  $outputs = $this->request('https://i.instagram.com/api/v1/media/'.$media_id.'_'.$this->username_id.'/edit_media/', $this->generateSignature( $data ));
 
 //   POST https://i.instagram.com/api/v1/media/1385227495502326628_1009845355/edit_media/ HTTP/1.1
 // Host: i.instagram.com
@@ -173,9 +176,9 @@ public function edit_photo_tag() {
  
 }
 
-/* 
+ 
 
-    $dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees 
+    // $dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees 
 
 
 public function upload_photo($photo, $caption = '', $upload_id = null, $users_to_tag = null) {
