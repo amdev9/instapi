@@ -145,10 +145,38 @@ public function run() {
 
 
 
+public function edit_photo_tag() {
+
+    $data = [ 
+      "_csrftoken"=> $this->token,
+      "_uuid"=>"F30F7D45-024B-478A-A1FC-75EC32B2F629",
+      "_uid"=>"1009845355",
+      "usertags"=>"{\"removed\":[\"358954311\"],\"in\":[{\"user_id\":\"2243739473\",\"position\":[0.4234375059604645,0.2906250059604645]}]}"
+    ];
+
+  $outputs = $this->request('https://i.instagram.com/api/v1/media/1385227495502326628_1009845355/edit_media/', $this->generateSignature( $data ));
+
+//   POST https://i.instagram.com/api/v1/media/1385227495502326628_1009845355/edit_media/ HTTP/1.1
+// Host: i.instagram.com
+// Accept: *
+// Proxy-Connection: keep-alive
+// X-IG-Connection-Type: WiFi
+// Accept-Encoding: gzip, deflate
+// Accept-Language: ru-RU;q=1
+// Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+// Content-Length: 480
+// User-Agent: Instagram 9.7.0 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
+// Connection: keep-alive
+// X-IG-Capabilities: 3wo=
+// Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; ds_user=4ewir; ds_user_id=1009845355; igfl=4ewir; is_starred_enabled=yes; mid=Vt9VQAAAAAFs7QCccW9eS1SurGzG; s_network=; sessionid=IGSC5e51443463901bb0a426f830d599bd2fd81a7ecc1cb98949ecbd20a58cf1a299%3AGNlw58jKM47wbjx3v9zWFZT6GPYRKHFW%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A1009845355%2C%22_token%22%3A%221009845355%3AMiWMy7eZzqny2WDgpJZXTmdiNuPHVd3E%3A185e57a287881a4f98f67cbda30ac31a6227e788fc98a5b7c87b381bb6dda06b%22%2C%22asns%22%3A%7B%2295.73.84.168%22%3A25515%2C%22time%22%3A1479341168%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1479341167.836034%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
+
+ 
+}
+
 /* 
 
     $dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees 
-*/
+
 
 public function upload_photo($photo, $caption = '', $upload_id = null, $users_to_tag = null) {
 
