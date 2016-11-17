@@ -97,7 +97,12 @@ public function run() {
       $this->discover_explore();
       $this->channels_home();
 
-      $this->upload_photo('/Users/alex/Desktop/other/4.jpg');
+      $user_ids = [];
+      $removed_ids = $user_ids;
+      $user_ids_new = [];
+      $res = $this->upload_photo('/Users/alex/Desktop/other/4.jpg', null, $user_ids); // return media id
+      $media_id = $res[1]['media']['pk'];
+      $this->edit_photo_tag($media_id, $removed_ids, $user_ids_new);
 
       // $this->current_user_edit();
       // $site = "analiesecoleman.tumblr.com"; //$this->redis->spop('links_t');
@@ -495,32 +500,32 @@ public function funcrecur()
     $delay = $time_in_day / $posts_per_day;
     
 
-     /* */
-     $iter = 0;
-     while ($iter < 20) {
+    //  /* */
+    //  $iter = 0;
+    //  while ($iter < 20) {
 
 
-     if ($this->redis->scard('detect') > 20) { 
-        $act_array = array();
-        for ($i = 0; $i < 20; $i++) {
-          $actioner = $this->redis->spop('detect');
-          array_push($act_array , $actioner);
-        }
-     }
-     $this->upload_photo($photo, $act_array);
-     $iter =+ 1;
-    }
+    //  if ($this->redis->scard('detect') > 20) { 
+    //     $act_array = array();
+    //     for ($i = 0; $i < 20; $i++) {
+    //       $actioner = $this->redis->spop('detect');
+    //       array_push($act_array , $actioner);
+    //     }
+    //  }
+    //  $this->upload_photo($photo, $act_array);
+    //  $iter =+ 1;
+    // }
 
 
-    if ($this->redis->scard('detect') > 20) { 
-        $act_array = array();
-        for ($i = 0; $i < 20; $i++) {
-          $actioner = $this->redis->spop('detect');
-          array_push($act_array , $actioner);
-        }
-     }
-     $remove_ids = $this->method_to_fetch_all_posts();
-     $this->edit_photo_tag($photo, $remove_ids, $act_array);
+    // if ($this->redis->scard('detect') > 20) { 
+    //     $act_array = array();
+    //     for ($i = 0; $i < 20; $i++) {
+    //       $actioner = $this->redis->spop('detect');
+    //       array_push($act_array , $actioner);
+    //     }
+    //  }
+    //  $remove_ids = $this->method_to_fetch_all_posts();
+    //  $this->edit_photo_tag($photo, $remove_ids, $act_array);
 
 
 
