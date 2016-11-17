@@ -147,6 +147,12 @@ public function run() {
 
 public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
 
+
+ 
+
+ // "usertags":"{\"removed\":[\"12335461\",\"49742317\"],\"in\":[{\"user_id\":\"230581164\",\"position\":[0.2374999970197678,0.3046875]}]}" 
+
+
   $removed_user_string = '\"removed\":[\"'. $removed_user_id .'\"]'; 
   $added_user_string = '{\"user_id\":\"'. $user_id .'\",\"position\":['. $x_pos .','. $y_pos .']}'; 
 
