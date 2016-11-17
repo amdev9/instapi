@@ -26,6 +26,7 @@ class InstaOS  extends Threaded
   protected $anon_id;
   protected $session_id;
 
+
 public function run() {   
     
       $this->redis = $this->worker->getConnection();
@@ -118,41 +119,223 @@ public function run() {
  }
 
 
+ protected function buildBody($bodies, $boundary)
+    {
+        $body = '';
+        foreach ($bodies as $b) {
+            $body .= '--'.$boundary."\r\n";
+            $body .= 'Content-Disposition: '.$b['type'].'; name="'.$b['name'].'"';
+            if (isset($b['filename'])) {
+                // $ext = pathinfo($b['filename'], PATHINFO_EXTENSION);
+                $body .= '; filename="photo"';
+            }
+            if (isset($b['headers']) && is_array($b['headers'])) {
+                foreach ($b['headers'] as $header) {
+                    $body .= "\r\n".$header;
+                }
+            }
+
+            $body .= "\r\n\r\n".$b['data']."\r\n";
+        }
+        $body .= '--'.$boundary.'--';
+
+        return $body;
+    }
 
 
 
-// search in tags
+/* 
 
-// GET https://i.instagram.com/api/v1/users/search/?rank_token=1009845355_C84096E3-C829-4EDF-A29C-72788580E456&query=abbyleebrazil HTTP/1.1
+    $dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees 
+*/
+
+public function upload_photo($photo, $caption = '', $upload_id = null, $users_to_tag) {
+
+        $endpoint = Constants::API_URL.'upload/photo/';
+        $boundary = $this->uuid;
+
+        $fileToUpload = file_get_contents($photo);
+ 
+ 
+        $bodies = [
+            [
+                'type' => 'form-data',
+                'name' => '_csrftoken',
+                'data' => $this->token,
+            ],
+            [
+                'type' => 'form-data',
+                'name' => 'image_compression',
+                'data' => '{"lib_version":"1290.110000","lib_name":"uikit","quality":45}',
+            ],
+            [
+                'type' => 'form-data',
+                'name' => '_uuid',
+                'data' => $this->uuid,
+            ],
+            [
+                'type' => 'form-data',
+                'name' => 'upload_id',
+                'data' => $upload_id,
+            ],
+            [
+                'type'     => 'form-data',
+                'name'     => 'photo',
+                'data'     => $fileToUpload,
+                'filename' => 'photo',
+                'headers'  => [
+                    'Content-Type: image/jpeg',
+                    'Content-Transfer-Encoding: binary',
+                ],
+            ],
+        ];
+
+        $data = $this->buildBody($bodies, $boundary);
+
+        $headers = [
+            'Accept: *',
+            'Connection: keep-alive',
+            'Content-type: multipart/form-data; boundary='.$boundary,
+            'Content-Length: '.strlen($data),
+            'Cookie2: $Version=1',
+            'Accept-Language: en-US',
+            'Accept-Encoding: gzip, deflate',
+            'X-IG-Connection-Type: WiFi',
+            'X-IG-Capabilities: 3wo=',
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->UA);// Constants::USER_AGENT);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
+        
+        if ( $this->proxy != null) {
+            curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
+            curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP); 
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_auth_credentials );
+        }
+
+        $resp = curl_exec($ch);
+        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($resp, 0, $header_len);
+        $upload = json_decode(substr($resp, $header_len), true);
+
+        curl_close($ch);
+
+        if ($upload['status'] == 'fail') {
+            throw new InstagramException($upload['message']);
+
+            return;
+        }
+
+        if ($this->debug) {
+            echo 'RESPONSE: '.substr($resp, $header_len)."\n\n";
+        }
+
+        
+       $configure = $this->media_configure($upload['upload_id'], $photo, $caption, $users_to_tag);
+           
+
+        $this->expose();
+
+        return $configure;
+
+
+// POST https://i.instagram.com/api/v1/upload/photo/ HTTP/1.1
 // Host: i.instagram.com
+// Accept: *
+// Proxy-Connection: keep-alive
+// X-IG-Connection-Type: WiFi
+// Accept-Encoding: gzip, deflate
+// Accept-Language: ru-RU;q=1
+// Content-Type: multipart/form-data; boundary=3156D799-CD14-4B1B-B5C9-992CDE05D2E7
+// Content-Length: 181530
+// User-Agent: Instagram 9.7.0 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
+// Connection: keep-alive
 // X-IG-Capabilities: 3wo=
 // Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; ds_user=4ewir; ds_user_id=1009845355; igfl=4ewir; is_starred_enabled=yes; mid=Vt9VQAAAAAFs7QCccW9eS1SurGzG; s_network=; sessionid=IGSCed40e4e15a0ada346d42b437a06bd6593fec35e30108424a6a6b11fc6485bc8d%3AGZUlFRrlFb4z4fwYIZwNgh7lIhVDbAyn%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A1009845355%2C%22_token%22%3A%221009845355%3AMiWMy7eZzqny2WDgpJZXTmdiNuPHVd3E%3A185e57a287881a4f98f67cbda30ac31a6227e788fc98a5b7c87b381bb6dda06b%22%2C%22asns%22%3A%7B%22162.243.254.101%22%3A62567%2C%22time%22%3A1479191736%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1479191720.065686%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
-// Connection: keep-alive
-// Proxy-Connection: keep-alive
-// Accept: */*
-// User-Agent: Instagram 9.7.0 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
-// Accept-Language: ru-RU;q=1
-// Accept-Encoding: gzip, deflate
-// X-IG-Connection-Type: WiFi
 
-// response
+// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7
+// Content-Disposition: form-data; name="_csrftoken"
 
-// HTTP/1.1 200 OK
-// Content-Language: ru
-// Expires: Sat, 01 Jan 2000 00:00:00 GMT
-// Vary: Cookie, Accept-Language, Accept-Encoding
-// Pragma: no-cache
-// Cache-Control: private, no-cache, no-store, must-revalidate
-// Date: Wed, 16 Nov 2016 01:04:20 GMT
-// Content-Type: application/json
-// Set-Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; expires=Wed, 15-Nov-2017 01:04:20 GMT; Max-Age=31449600; Path=/; secure
-// Set-Cookie: ds_user_id=1009845355; expires=Tue, 14-Feb-2017 01:04:20 GMT; Max-Age=7776000; Path=/
-// Connection: keep-alive
-// Content-Length: 1254
+// 69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk
+// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7
+// Content-Disposition: form-data; name="image_compression"
 
-// {"has_more": false, "status": "ok", "num_results": 2, "users": [{"username": "abbyleebrazil", "has_anonymous_profile_picture": false, "byline": "\u041f\u043e\u0434\u043f\u0438\u0441\u0447\u0438\u043a\u0438: 99.3k", "friendship_status": {"following": false, "incoming_request": false, "outgoing_request": false, "is_private": true}, "unseen_count": 1, "mutual_followers_count": 0.0, "profile_pic_url": "http://scontent.cdninstagram.com/t51.2885-19/10522181_1482018448704140_1608371148_a.jpg", "full_name": "Abby Lee Brazil\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7", "follower_count": 99372, "pk": 20283423, "is_verified": false, "is_private": true}, {"username": "abbyleebrazil_", "has_anonymous_profile_picture": false, "byline": "\u041f\u043e\u0434\u043f\u0438\u0441\u0447\u0438\u043a\u0438: 6", "friendship_status": {"following": false, "incoming_request": false, "outgoing_request": false, "is_private": false}, "unseen_count": 0, "mutual_followers_count": 0.0, "profile_pic_url": "http://scontent.cdninstagram.com/t51.2885-19/s150x150/13671758_314011902282967_1832289642_a.jpg", "profile_pic_id": "1317868330849423099_3487698959", "full_name": "\u5976\u7eff", "follower_count": 6, "pk": 3487698959, "is_verified": false, "is_private": false}]}
+// {"lib_version":"1290.110000","lib_name":"uikit","quality":45}
+// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7
+// Content-Disposition: form-data; name="_uuid"
 
-//
+// F30F7D45-024B-478A-A1FC-75EC32B2F629
+// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7
+// Content-Disposition: form-data; name="upload_id"
+
+// 1479258235
+// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7
+// Content-Disposition: form-data; name="photo"; filename="photo"
+// Content-Type: image/jpeg
+// Content-Transfer-Encoding: binary
+
+
+// /* 
+
+// --3156D799-CD14-4B1B-B5C9-992CDE05D2E7--
+
+}
+
+public function media_configure($upload_id, $photo, $caption = '', $users_to_tag) {
+
+  $size = getimagesize($photo)[0];
+
+  $post = [
+    /////
+    "date_time_digitized"=> "2016:10:31 14:13:06",  // => "caption": "Text",
+    /////
+    "_csrftoken" => "69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk",
+    "client_timestamp" => "1479258271",
+
+    "edits" => 
+    [ 
+       "crop_zoom" => 1,
+       "crop_center" => [0,0],
+       "crop_original_size"=> [$size, $size],
+       "filter_strength" => 1,
+    ],
+
+     "_uuid" => $this->uuid,
+     "_uid" => $this->username_id,
+     "scene_type" => 1,
+     "camera_position" => "back",
+     "source_type" => 0,
+     "disable_comments"=> false,
+     "waterfall_id"=> $this->waterfall_id,
+     "scene_capture_type"=> "standard",
+      "software"  =>  "9.3.6",
+      "geotag_enabled" => false,
+      "upload_id" => $upload_id,
+   ////
+     "date_time_original" =>  "2016:10:31 14:13:06", // => empty
+   ////
+      "usertags":"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}",
+  ];
+
+        $post = json_encode($post);
+        $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,-0.0]', $post);
+        $post = str_replace('"crop_zoom":1', '"crop_zoom":1.0', $post);
+        $post = str_replace('"crop_original_size":'."[$size,$size]", '"crop_original_size":'."[$size.0,$size.0]", $post);
+
+        return $this->request('media/configure/?', $this->generateSignature($post))[1];
 
 //     POST https://i.instagram.com/api/v1/media/configure/? HTTP/1.1
 // Host: i.instagram.com
@@ -196,6 +379,9 @@ public function run() {
 //  }&ig_sig_key_version=5
 
 
+}
+
+
 
 public function funcrecur()
 { 
@@ -221,6 +407,47 @@ public  function f_rand($min=0,$max=1,$mul=100000){
 
 public  function add_time($time) {
   return $time*0.8 + $time*0.3*$this->f_rand(0,1);
+}
+
+
+
+
+public function search_in_tags($query) {
+  
+    $outputs = $this->request('https://i.instagram.com/api/v1/users/search/?rank_token='.$this->username_id.'_'.$this->generateUUID(true).'&query='.$query);   
+    return $outputs;
+
+
+  // GET https://i.instagram.com/api/v1/users/search/?rank_token=1009845355_C84096E3-C829-4EDF-A29C-72788580E456&query=abbyleebrazil HTTP/1.1
+  // Host: i.instagram.com
+  // X-IG-Capabilities: 3wo=
+  // Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; ds_user=4ewir; ds_user_id=1009845355; igfl=4ewir; is_starred_enabled=yes; mid=Vt9VQAAAAAFs7QCccW9eS1SurGzG; s_network=; sessionid=IGSCed40e4e15a0ada346d42b437a06bd6593fec35e30108424a6a6b11fc6485bc8d%3AGZUlFRrlFb4z4fwYIZwNgh7lIhVDbAyn%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A1009845355%2C%22_token%22%3A%221009845355%3AMiWMy7eZzqny2WDgpJZXTmdiNuPHVd3E%3A185e57a287881a4f98f67cbda30ac31a6227e788fc98a5b7c87b381bb6dda06b%22%2C%22asns%22%3A%7B%22162.243.254.101%22%3A62567%2C%22time%22%3A1479191736%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1479191720.065686%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
+  // Connection: keep-alive
+  // Proxy-Connection: keep-alive
+  // Accept: */*
+  // User-Agent: Instagram 9.7.0 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
+  // Accept-Language: ru-RU;q=1
+  // Accept-Encoding: gzip, deflate
+  // X-IG-Connection-Type: WiFi
+
+
+// response
+
+// HTTP/1.1 200 OK
+// Content-Language: ru
+// Expires: Sat, 01 Jan 2000 00:00:00 GMT
+// Vary: Cookie, Accept-Language, Accept-Encoding
+// Pragma: no-cache
+// Cache-Control: private, no-cache, no-store, must-revalidate
+// Date: Wed, 16 Nov 2016 01:04:20 GMT
+// Content-Type: application/json
+// Set-Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; expires=Wed, 15-Nov-2017 01:04:20 GMT; Max-Age=31449600; Path=/; secure
+// Set-Cookie: ds_user_id=1009845355; expires=Tue, 14-Feb-2017 01:04:20 GMT; Max-Age=7776000; Path=/
+// Connection: keep-alive
+// Content-Length: 1254
+
+// {"has_more": false, "status": "ok", "num_results": 2, "users": [{"username": "abbyleebrazil", "has_anonymous_profile_picture": false, "byline": "\u041f\u043e\u0434\u043f\u0438\u0441\u0447\u0438\u043a\u0438: 99.3k", "friendship_status": {"following": false, "incoming_request": false, "outgoing_request": false, "is_private": true}, "unseen_count": 1, "mutual_followers_count": 0.0, "profile_pic_url": "http://scontent.cdninstagram.com/t51.2885-19/10522181_1482018448704140_1608371148_a.jpg", "full_name": "Abby Lee Brazil\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7", "follower_count": 99372, "pk": 20283423, "is_verified": false, "is_private": true}, {"username": "abbyleebrazil_", "has_anonymous_profile_picture": false, "byline": "\u041f\u043e\u0434\u043f\u0438\u0441\u0447\u0438\u043a\u0438: 6", "friendship_status": {"following": false, "incoming_request": false, "outgoing_request": false, "is_private": false}, "unseen_count": 0, "mutual_followers_count": 0.0, "profile_pic_url": "http://scontent.cdninstagram.com/t51.2885-19/s150x150/13671758_314011902282967_1832289642_a.jpg", "profile_pic_id": "1317868330849423099_3487698959", "full_name": "\u5976\u7eff", "follower_count": 6, "pk": 3487698959, "is_verified": false, "is_private": false}]}
+
 }
 
 public function follow($user_id)
