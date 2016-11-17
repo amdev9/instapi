@@ -165,8 +165,10 @@ public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
 
       $y = $counter / 5;
       $x = $counter - $y*5;
-      $x_pos = $x *  $interpol;
-      $y_pos = $y *  $interpol;
+      $x_pos = round($x *  $interpol, 7);
+      $y_pos = round($y *  $interpol, 7);
+
+  
 
       $added_user_string = '{\"user_id\":\"'. $user_id .'\",\"position\":['. $x_pos .','. $y_pos .']}'; 
       $result_string_added =  $result_string_added . ",".$added_user_string;
@@ -363,7 +365,7 @@ public function upload_photo($photo, $caption = '', $upload_id = null, $user_ids
 public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
 
 
-  
+
   $result_string_added = "";
   $inter = 1;
   $del = 5.1;
@@ -374,8 +376,10 @@ public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
 
   $y = $counter / 5;
   $x = $counter - $y*5;
-  $x_pos = $x *  $interpol;
-  $y_pos = $y *  $interpol;
+ 
+  $x_pos = round($x *  $interpol, 7);
+  $y_pos = round($y *  $interpol, 7);
+
 
   $added_user_string = '{\"user_id\":\"'. $user_id .'\",\"position\":['. $x_pos .','. $y_pos .']}'; 
   $result_string_added =  $result_string_added . ",".$added_user_string;
