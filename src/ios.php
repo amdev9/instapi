@@ -97,6 +97,7 @@ public function run() {
       $this->discover_explore();
       $this->channels_home();
 
+      $this->upload_photo('/Users/alex/Desktop/other/4.jpg');
 
       // $this->current_user_edit();
       // $site = "analiesecoleman.tumblr.com"; //$this->redis->spop('links_t');
@@ -149,7 +150,7 @@ public function run() {
     $dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees 
 */
 
-public function upload_photo($photo, $caption = '', $upload_id = null, $users_to_tag) {
+public function upload_photo($photo, $caption = '', $upload_id = null, $users_to_tag = null) {
 
         $endpoint = Constants::API_URL.'upload/photo/';
         $boundary = $this->uuid;
@@ -247,7 +248,7 @@ public function upload_photo($photo, $caption = '', $upload_id = null, $users_to
        $configure = $this->media_configure($upload['upload_id'], $photo, $caption, $users_to_tag);
            
 
-        $this->expose();
+        // $this->expose();
 
         return $configure;
 
@@ -299,10 +300,10 @@ public function media_configure($upload_id, $photo, $caption = '', $users_to_tag
 
   $post = [
     /////
-    "caption": "Hi, I am a cool photo", //"date_time_digitized"=> "2016:10:31 14:13:06",  // => 
+    "caption" => "Hi, I am a cool photo", //"date_time_digitized"=> "2016:10:31 14:13:06",  // => 
     /////
     "_csrftoken" => $this->token, //"69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk",
-    "client_timestamp" =>  time(), //"1479258271",
+    "client_timestamp" =>  "\"".time()."\"", //"1479258271",
 
     "edits" => 
     [ 
@@ -313,34 +314,35 @@ public function media_configure($upload_id, $photo, $caption = '', $users_to_tag
     ],
 
      "_uuid" => $this->uuid,
-     "_uid" => $this->username_id,
+     "_uid" => "\"".$this->username_id."\"",
      "scene_type" => 1,
      "camera_position" => "back",
      "source_type" => 0,
      "disable_comments"=> false,
      "waterfall_id"=> $this->waterfall_id,
      "scene_capture_type"=> "standard",
-      "software"  =>  "9.3.6",
+      "software"  =>  "9.3.5",
       "geotag_enabled" => false,
       "upload_id" => $upload_id,
    ////
      //"date_time_original" =>  "2016:10:31 14:13:06", // => empty
    ////
-      "usertags" => "
-            {\"in\":
-              [
-                {\"user_id\":\"".$user_id_1."\",\"position\":[0.490625,0.540625]},
-                {\"user_id\":\"".$user_id_2."\",\"position\":[0.5828125,0.7578125]}
-              ]
-            }",
+      "usertags" => "{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}"
+      // "usertags" => "
+      //       {\"in\":
+      //         [
+      //           {\"user_id\":\"".$user_id_1."\",\"position\":[0.490625,0.540625]},
+      //           {\"user_id\":\"".$user_id_2."\",\"position\":[0.5828125,0.7578125]}
+      //         ]
+      //       }",
   ];
 
         $post = json_encode($post);
         $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,0.0]', $post);
         $post = str_replace('"crop_zoom":1', '"crop_zoom":1.0', $post);
-        $post = str_replace('"crop_original_size":'."[$size,$size]", '"crop_original_size":'."[$size.0,$size.0]", $post);
+        // $post = str_replace('"crop_original_size":'."[$size,$size]", '"crop_original_size":'."[$size.0,$size.0]", $post);
 
-        return $this->request('media/configure/?', $this->generateSignature($post))[1];
+        return $this->request('https://i.instagram.com/api/v1/media/configure/?', $this->generateSignature($post))[1];
 
 //     POST https://i.instagram.com/api/v1/media/configure/? HTTP/1.1
 // Host: i.instagram.com
@@ -384,10 +386,19 @@ public function media_configure($upload_id, $photo, $caption = '', $users_to_tag
 //  }&ig_sig_key_version=5
 
 
+// signed_body=025f5b3273f0fe6f4965bd0b87e55e9410a7c121188d552ea900b66b0c2a0ae2.{
+//   "caption":"Hi, I am a cool photo",
+//   "_csrftoken":"W3YJUITCa7wxivmyX5hCC8439e6k3PMp",
+//   "client_timestamp":1479349218,
+//   "edits":{"crop_zoom":1.0,"crop_center":[0.0,0.0],"crop_original_size":[1080.0,1080.0],"filter_strength":1},"_uuid":"ff79ff57-f7fa-4b79-9a13-5bfd1c5ed508","_uid":4163655889,"scene_type":1,"camera_position":"back","source_type":0,"disable_comments":false,
+//   "waterfall_id":"ed5f8b2f-cc1f-4d61-9d50-2210caad669f","scene_capture_type":"standard",
+//   "software":"9.3.6",
+//   "geotag_enabled":false,"upload_id":"1479349215745","usertags":"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}"}&ig_sig_key_version=5
+
+ 
+
+
 }
-
-
-
 public function funcrecur()
 { 
     $time_in_day = 24*60*60;
