@@ -154,8 +154,8 @@ public function upload_photo($photo, $caption = '', $upload_id = null, $users_to
         $endpoint = Constants::API_URL.'upload/photo/';
         $boundary = $this->uuid;
 
+        $upload_id = number_format(round(microtime(true) * 1000), 0, '', '');
         $fileToUpload = file_get_contents($photo);
- 
  
         $bodies = [
             [
@@ -300,10 +300,10 @@ public function media_configure($upload_id, $photo, $caption = '', $users_to_tag
 
   $post = [
     /////
-    "date_time_digitized"=> "2016:10:31 14:13:06",  // => "caption": "Text",
+    "caption": "Hi, I am a cool photo", //"date_time_digitized"=> "2016:10:31 14:13:06",  // => 
     /////
-    "_csrftoken" => "69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk",
-    "client_timestamp" => "1479258271",
+    "_csrftoken" => $this->token, //"69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk",
+    "client_timestamp" =>  time(), //"1479258271",
 
     "edits" => 
     [ 
@@ -325,13 +325,19 @@ public function media_configure($upload_id, $photo, $caption = '', $users_to_tag
       "geotag_enabled" => false,
       "upload_id" => $upload_id,
    ////
-     "date_time_original" =>  "2016:10:31 14:13:06", // => empty
+     //"date_time_original" =>  "2016:10:31 14:13:06", // => empty
    ////
-      "usertags":"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}",
+      "usertags" => "
+            {\"in\":
+              [
+                {\"user_id\":\"".$user_id_1."\",\"position\":[0.490625,0.540625]},
+                {\"user_id\":\"".$user_id_2."\",\"position\":[0.5828125,0.7578125]}
+              ]
+            }",
   ];
 
         $post = json_encode($post);
-        $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,-0.0]', $post);
+        $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,0.0]', $post);
         $post = str_replace('"crop_zoom":1', '"crop_zoom":1.0', $post);
         $post = str_replace('"crop_original_size":'."[$size,$size]", '"crop_original_size":'."[$size.0,$size.0]", $post);
 
