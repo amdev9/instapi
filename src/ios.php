@@ -192,16 +192,32 @@ public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
 
 
   $added_user_string = '{"user_id":"'. $user_id .'","position":['. $x_pos .','. $y_pos .']}'; 
-  $result_string_added =  $result_string_added . ",".$added_user_string;
+    if ($result_string_added == "") { 
+      $result_string_added =  $result_string_added .$added_user_string; // add ,
+    } else {
+      $result_string_added =  $result_string_added .",".$added_user_string; 
+    } 
     $counter = $counter + 1;
   }
+
+  
+
+
   $final_added_string = '"in":['. $result_string_added .']';
 //  $final_string =  "{".$final_added_string."}";
 
    
     foreach ($removed_ids as $removed_user_id ) {
        $removed_user_string = '"'. $removed_user_id .'"'; 
-       $result_string_removed =  $result_string_removed . ",".$removed_user_string;
+
+if ($result_string_removed == "") { 
+    $result_string_removed =  $result_string_removed .$removed_user_string; // add ,
+  } else {
+    $result_string_removed =  $result_string_removed .",".$removed_user_string; 
+  } 
+
+      // $result_string_removed =  $result_string_removed . ",".$removed_user_string;
+
     }
 
  
@@ -209,6 +225,7 @@ public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
     $final_removed_string = '"removed":['.  $result_string_removed .']';
    
     $final_string =  "{".$final_removed_string.",".$final_added_string."}";
+
 
  // "usertags":"{\"removed\":[\"12335461\",\"49742317\"],\"in\":[{\"user_id\":\"230581164\",\"position\":[0.2374999970197678,0.3046875]}]}" 
 
@@ -219,7 +236,7 @@ public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
       "_csrftoken"  => $this->token,
       "_uuid" => $this->uuid,//"F30F7D45-024B-478A-A1FC-75EC32B2F629",
       "_uid"  => $this->username_id, //"1009845355",
-      "usertags"  =>"{\"removed\":[\"358954311\"],\"in\":[{\"user_id\":\"2243739473\",\"position\":[0.4234375059604645,0.2906250059604645]}]}"
+      "usertags"  => $final_string, //"{\"removed\":[\"358954311\"],\"in\":[{\"user_id\":\"2243739473\",\"position\":[0.4234375059604645,0.2906250059604645]}]}"
     ]);
 
   $outputs = $this->request('https://i.instagram.com/api/v1/media/'.$media_id.'_'.$this->username_id.'/edit_media/', $this->generateSignature( $data ));
@@ -418,17 +435,14 @@ public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
       $counter = 0;
       $y = $y + 1;
     }
-  // $y = $counter * $interpol;
-  // echo $y."\n";
-  // $x =  $counter * $interpol ;
-  // echo $x."\n";
  
-  // $x_pos = round($x *  $interpol, 7);
-  // $y_pos = round($y *  $interpol, 7);
-
 
   $added_user_string = '{"user_id":"'. $user_id .'","position":['. $x_pos .','. $y_pos .']}'; 
-  $result_string_added =  $result_string_added . ",".$added_user_string;
+    if ($result_string_added == "") { 
+      $result_string_added =  $result_string_added .$added_user_string; // add ,
+    } else {
+      $result_string_added =  $result_string_added .",".$added_user_string; 
+    } 
     $counter = $counter + 1;
   }
   $final_added_string = '"in":['. $result_string_added .']';
@@ -467,15 +481,13 @@ public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
    ////
      //"date_time_original" =>  "2016:10:31 14:13:06", // => empty
    ////
-      "usertags" => "{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}" //$final_string,
+      "usertags" => $final_string, //"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}" //$final_string,
       //
       
   ];
 
 
- // signed_body=e02e8d74c26b8700988a72bd0b61e628c71a0bf8e28e35d8117ab360035d9db2.{"caption":"Hi, I am a cool photo","_csrftoken":"JBZIFFlTXify9z7FuUG215EwDYEM6xmN","client_timestamp":"\"1479416144\"","edits":{"crop_zoom":1.0,"crop_center":[0.0,0.0],"crop_original_size":[1080,1080],"filter_strength":1},"_uuid":"408b7e48-d6d6-4561-b2d2-4b8208d30256","_uid":"\"4167348408\"","scene_type":1,"camera_position":"back","source_type":0,"disable_comments":false,"waterfall_id":"aedad0cc-d1f1-4961-9c31-616ba4bf0f22","scene_capture_type":"standard","software":"9.3.5","geotag_enabled":false,"upload_id":"1479416141995","usertags":"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}"}&ig_sig_key_version=5
-
-
+ 
 
         $post = json_encode($post);
         $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,0.0]', $post);
@@ -484,58 +496,11 @@ public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
 
         return $this->request('https://i.instagram.com/api/v1/media/configure/?', $this->generateSignature($post))[1];
 
-//     POST https://i.instagram.com/api/v1/media/configure/? HTTP/1.1
-// Host: i.instagram.com
-// Accept: *
-// Proxy-Connection: keep-alive
-// X-IG-Connection-Type: WiFi
-// Accept-Encoding: gzip, deflate
-// Accept-Language: ru-RU;q=1
-// Content-Type: application/x-www-form-urlencoded; charset=UTF-8
-// Content-Length: 1084
-// User-Agent: Instagram 9.7.0 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
-// Connection: keep-alive
-// X-IG-Capabilities: 3wo=
-// Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; ds_user=4ewir; ds_user_id=1009845355; igfl=4ewir; is_starred_enabled=yes; mid=Vt9VQAAAAAFs7QCccW9eS1SurGzG; s_network=; sessionid=IGSCed40e4e15a0ada346d42b437a06bd6593fec35e30108424a6a6b11fc6485bc8d%3AGZUlFRrlFb4z4fwYIZwNgh7lIhVDbAyn%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A1009845355%2C%22_token%22%3A%221009845355%3AMiWMy7eZzqny2WDgpJZXTmdiNuPHVd3E%3A185e57a287881a4f98f67cbda30ac31a6227e788fc98a5b7c87b381bb6dda06b%22%2C%22asns%22%3A%7B%22162.243.254.101%22%3A62567%2C%22time%22%3A1479191736%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1479191720.065686%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
 
-// signed_body=6f6013aabf8ca7b73238fe558138a13f583afff47207e2961802b66b51e49d6a.
-// {
-//   "date_time_digitized":"2016:10:31 14:13:06",
-//   "_csrftoken":"69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk",
-//   "client_timestamp":"1479258271",
-//   "edits":
-//      {
-//       "crop_zoom":1.333333333333333,
-//      "crop_center":[0,0.0007812499999999556],
-//      "crop_original_size":[2448,3264],
-//      "filter_strength":1
-//    },
-//    "_uuid":"F30F7D45-024B-478A-A1FC-75EC32B2F629",
-//    "_uid":"1009845355",
-//    "scene_type":1,
-//    "camera_position":"back",
-//    "source_type":0,
-//    "disable_comments":false,
-//    "waterfall_id":"6d565f010734405db17af85855da23d7",
-//    "scene_capture_type":"standard",
-    // "software":"9.3.5",
-//    "geotag_enabled":false,
-    // "upload_id":1479258235,
-//    "date_time_original":"2016:10:31 14:13:06",
-//    "usertags":"{\"in\":[{\"user_id\":\"20283423\",\"position\":[0.590625,0.534375]}]}"
-//  }&ig_sig_key_version=5
+// signed_body=ae7c6c9cc783f9caa13a3b6856fa78a320d30c8d16089909af89d27e06838c48.{"caption":"Hi, I am a cool photo","_csrftoken":"zKX1NmRvPeXWGNXed5VbMN24aV4pVy5q","client_timestamp":"\"1479417021\"","edits":{"crop_zoom":1.0,"crop_center":[0.0,0.0],"crop_original_size":[1080,1080],"filter_strength":1},"_uuid":"d4c41e61-7c15-45f4-9cdb-4a8e880fb795","_uid":"\"4164769105\"","scene_type":1,"camera_position":"back","source_type":0,"disable_comments":false,"waterfall_id":"97318f7a-233d-4c18-a853-e3d87706c1d4","scene_capture_type":"standard","software":"9.3.5","geotag_enabled":false,"upload_id":"1479417019664","usertags":"{\"in\":[,{\"user_id\":\"12335461\",\"position\":[0.2439024,0.1960784]},{\"user_id\":\"49742317\",\"position\":[0.4878049,0.1960784]}]}"}&ig_sig_key_version=5
 
 
-// signed_body=025f5b3273f0fe6f4965bd0b87e55e9410a7c121188d552ea900b66b0c2a0ae2.{
-//   "caption":"Hi, I am a cool photo",
-//   "_csrftoken":"W3YJUITCa7wxivmyX5hCC8439e6k3PMp",
-//   "client_timestamp":1479349218,
-//   "edits":{"crop_zoom":1.0,"crop_center":[0.0,0.0],"crop_original_size":[1080.0,1080.0],"filter_strength":1},"_uuid":"ff79ff57-f7fa-4b79-9a13-5bfd1c5ed508","_uid":4163655889,"scene_type":1,"camera_position":"back","source_type":0,"disable_comments":false,
-//   "waterfall_id":"ed5f8b2f-cc1f-4d61-9d50-2210caad669f","scene_capture_type":"standard",
-//   "software":"9.3.6",
-//   "geotag_enabled":false,"upload_id":"1479349215745","usertags":"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}"}&ig_sig_key_version=5
-
- 
+ // signed_body=e02e8d74c26b8700988a72bd0b61e628c71a0bf8e28e35d8117ab360035d9db2.{"caption":"Hi, I am a cool photo","_csrftoken":"JBZIFFlTXify9z7FuUG215EwDYEM6xmN","client_timestamp":"\"1479416144\"","edits":{"crop_zoom":1.0,"crop_center":[0.0,0.0],"crop_original_size":[1080,1080],"filter_strength":1},"_uuid":"408b7e48-d6d6-4561-b2d2-4b8208d30256","_uid":"\"4167348408\"","scene_type":1,"camera_position":"back","source_type":0,"disable_comments":false,"waterfall_id":"aedad0cc-d1f1-4961-9c31-616ba4bf0f22","scene_capture_type":"standard","software":"9.3.5","geotag_enabled":false,"upload_id":"1479416141995","usertags":"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}"}&ig_sig_key_version=5 
 
 
 }
