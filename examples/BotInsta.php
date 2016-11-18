@@ -31,5 +31,7 @@ for ($i = 0; $i < 1; $i++) {
 }
 
 
+$pool->shutdown();
+
 
 

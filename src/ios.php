@@ -86,7 +86,7 @@ public function run() {
 
       $findme = 'HTTP/1.1 200 OK';
       $pos = strpos($result[0], $findme);
-      if (isset($result[1]['errors']) &&  isset($result[1]['errors']['email'][0]) && strpos($result[1]['errors']['email'][0], 'Another account is using') !== false) {
+      if ( (isset($result[1]['errors']) &&  isset($result[1]['errors']['email'][0]) && strpos($result[1]['errors']['email'][0], 'Another account is using') !== false) || $result[1]['status'] == 'fail' ) {
         echo 'Another account is using email: $email';
         $this->redis->sadd("blacklist_email",  $this->email);
          $DelFilePath =  $this->IGDataPath.'cookies.dat';
@@ -130,6 +130,16 @@ public function run() {
       $this->current_user_edit();
       $site = ""; //"analiesecoleman.tumblr.com"; //$this->redis->spop('links_t');
       $this->edit_profile($site);
+
+
+ 
+
+// signed_body=8e7f921bfac46c4b9a93d4ff81ed4b998bcc5f55b5033057168cbf6f20a3c1da.{"caption":"Txt","client_timestamp":"1479434074","_csrftoken":"69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk","edits":{"crop_zoom":1.384415728697743,"crop_center":[-0.2596154617773876,-0.209955523238066],"crop_original_size":[1562,1562],"filter_strength":1},"_uuid":"F30F7D45-024B-478A-A1FC-75EC32B2F629","_uid":"1009845355","scene_type":1,"camera_position":"back","source_type":0,"disable_comments":false,"waterfall_id":"7187904022d64b31bc23b2a9aa5f9e2e","scene_capture_type":"standard","software":"Instagram","geotag_enabled":false,"upload_id":1479434030,"usertags":
+
+   
+
+
+      // {"in":[{"user_id":"3972234248","position":[0.2439024,0.1960784]},{"user_id":"263124152","position":[0.4878049,0.1960784]}]}
 
 
       // $fs = $this->followers('2058338792');
@@ -401,10 +411,12 @@ public function media_configure($upload_id, $photo, $caption, $user_ids) {
     $final_added_string = '"in":['. $result_string_added .']';
     $final_string =  "{".$final_added_string."}";
 
-    echo "\n\n--->".$final_string;
+    echo "\n\n--->".$final_string."\n\n";
+
 
 
     $size = getimagesize($photo)[0];
+ 
 
     $post = [
     /////
@@ -429,16 +441,17 @@ public function media_configure($upload_id, $photo, $caption, $user_ids) {
      "disable_comments"=> false,
      "waterfall_id"=> $this->waterfall_id,
      "scene_capture_type"=> "standard",
-      "software"  =>  "9.3.5",
+      "software"  =>  "Instagram",
       "geotag_enabled" => false,
       "upload_id" => $upload_id,
     ////
      //"date_time_original" =>  "2016:10:31 14:13:06", // => empty
     ////
-      "usertags" => $final_string, //"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}" //$final_string,
+      "usertags" => $final_string,
       //
       
     ];  
+
 
         $post = json_encode($post);
         $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,0.0]', $post);
@@ -536,13 +549,15 @@ public function funcrecur()
         $photo = $dir ."/". $avatar_file;
 
         $act_array = array();
-        for ($i = 0; $i < 10; $i++) {  // 20
+        for ($i = 0; $i < 2; $i++) {  // 20
           $actioner = $this->redis->spop('detect');
           array_push($act_array , $actioner);
         }
         $caption = $this->text_generator();
 
-        $act_array = array ("79646134849", "253691521");
+       // $act_array = array ("1383321789", "253691521");
+        $act_array = array ("1009845355", "253625977" );//, "8144620", "1619800584", "2111407363");
+       
         $res = $this->upload_photo($photo, $caption, $act_array);
         $this->redis->hset( "media".$this->username_id, $res['media']['pk'] , implode (",", $act_array) ) ;
           
