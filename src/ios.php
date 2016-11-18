@@ -82,9 +82,28 @@ public function run() {
       $this->username_suggestions();
       $this->check_username();
       $result =  $this->create();
-      if (isset($result[1]['errors'])) {
-        echo "ERROR <<<<<<<<";
+
+
+      $findme = 'HTTP/1.1 200 OK';
+      $pos = strpos($result[0], $findme);
+      if (isset($result[1]['errors']) &&  isset($result[1]['errors']['email'][0]) && strpos($result[1]['errors']['email'][0], 'Another account is using') !== false) {
+        echo 'Another account is using email: $email';
+        $this->redis->sadd("blacklist_email",  $this->email);
+         $DelFilePath =  $this->IGDataPath.'cookies.dat';
+        if (file_exists($DelFilePath)) { 
+             unlink ($DelFilePath);          //delete cookies.dat if exist
+
+             echo "\n*****---FILE cookies.dat DELETED!--****\n";
+          }
         return;
+      }
+      if ($pos !== false && isset($result[1]["account_created"]) && ($result[1]["account_created"] == true)) {
+          
+          echo "PKKEY: ".$result[1]['created_user']['pk']."\n\n";
+          $pk = $result[1]['created_user']['pk'];
+          echo "\nconnection_established\n";
+
+          $this->redis->sadd("reg_i", $this->username."|".$this->password."|".$this->proxy.":".$this->proxy_auth_credentials);
       }
 
       $this->sync();
@@ -101,16 +120,17 @@ public function run() {
       $this->discover_explore();
       $this->channels_home();
 
-      $user_ids = ['12335461' ,'49742317']; 
-      $removed_ids = $user_ids;
-      $user_ids_new = ['230581164'];
-      $res = $this->upload_photo('/Users/alex/Desktop/other/4.jpg', '', $user_ids); // return media id
-      $media_id = $res['media']['pk'];
-      $this->edit_photo_tag($media_id, $removed_ids, $user_ids_new);
+      // $user_ids = ['12335461' ,'49742317']; 
+      // $removed_ids = $user_ids;
+      // $user_ids_new = ['230581164'];
+      // $res = $this->upload_photo('/Users/alex/Desktop/other/4.jpg', '', $user_ids); // return media id
+      // $media_id = $res['media']['pk'];
+      // $this->edit_photo_tag($media_id, $removed_ids, $user_ids_new);
 
-      // $this->current_user_edit();
-      // $site = "analiesecoleman.tumblr.com"; //$this->redis->spop('links_t');
-      // $this->edit_profile($site);
+      $this->current_user_edit();
+      $site = ""; //"analiesecoleman.tumblr.com"; //$this->redis->spop('links_t');
+      $this->edit_profile($site);
+
 
       // $fs = $this->followers('2058338792');
       // for($iter = 0; $iter < count($fs[1]['users']); $iter++) { 
@@ -125,7 +145,11 @@ public function run() {
       //   $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
       // } 
 
-      // $this->funcrecur();
+
+    
+       $this->funcrecur();
+    
+
  }
 
 
@@ -157,6 +181,8 @@ public function run() {
 
 public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
 
+  $this->redis->hdel("media".$this->username_id, $media_id);
+  $this->redis->hset("media".$this->username_id, $media_id, implode(",", $user_ids) );
     
  $result_string_removed = "";
     $result_string_added = "";
@@ -232,15 +258,12 @@ if ($result_string_removed == "") {
 }
 
  
+ 
 
-    // $dir.'/'.$value, $caption = '', $upload_id = null, $customPreview = null , $location = null, $reel_flag = true, $degrees 
-
-
-public function upload_photo($photo, $caption = '', $user_ids, $upload_id = null) {
+public function upload_photo($photo, $caption , $user_ids, $upload_id = null) {
 
 
 
-       
         $endpoint = Constants::API_URL.'upload/photo/';
         $boundary = $this->uuid;
 
@@ -345,51 +368,47 @@ public function upload_photo($photo, $caption = '', $user_ids, $upload_id = null
 
 }
 
-public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
+public function media_configure($upload_id, $photo, $caption, $user_ids) {
 
- $result_string_added = "";
+    $result_string_added = "";
+    $inter = 1;
+    $del_y = 5.1;
+    $del_x = 4.1;
 
-
-  $inter = 1;
-  $del_y = 5.1;
-  $del_x = 4.1;
-
-  $interpol_x =  $inter / $del_x;
-  $interpol_y =  $inter / $del_y;
-
- 
-
-  $y = 1;
-  $counter = 1;
-  foreach ($user_ids as $user_id ) {
+    $interpol_x =  $inter / $del_x;
+    $interpol_y =  $inter / $del_y;
+    $y = 1;
+    $counter = 1;
+    foreach ($user_ids as $user_id ) {
 
     $x_pos = round($counter*$interpol_x,7);
-  $y_pos = round($y*$interpol_y,7);
-  echo "--\n";
+    $y_pos = round($y*$interpol_y,7);
+    echo "--\n";
     if ($counter % 4 == 0) {
       $counter = 0;
       $y = $y + 1;
     }
- 
 
-  $added_user_string = '{"user_id":"'. $user_id .'","position":['. $x_pos .','. $y_pos .']}'; 
+
+    $added_user_string = '{"user_id":"'. $user_id .'","position":['. $x_pos .','. $y_pos .']}'; 
     if ($result_string_added == "") { 
       $result_string_added =  $result_string_added .$added_user_string; // add ,
     } else {
       $result_string_added =  $result_string_added .",".$added_user_string; 
     } 
     $counter = $counter + 1;
-  }
-  $final_added_string = '"in":['. $result_string_added .']';
-  $final_string =  "{".$final_added_string."}";
+    }
+    $final_added_string = '"in":['. $result_string_added .']';
+    $final_string =  "{".$final_added_string."}";
+
+    echo "\n\n--->".$final_string;
 
 
+    $size = getimagesize($photo)[0];
 
-  $size = getimagesize($photo)[0];
-
-  $post = [
+    $post = [
     /////
-    "caption" => "Hi, I am a cool photo", //"date_time_digitized"=> "2016:10:31 14:13:06",  // => 
+    "caption" => $caption, //"date_time_digitized"=> "2016:10:31 14:13:06",  // => 
     /////
     "_csrftoken" => $this->token, //"69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk",
     "client_timestamp" =>  "\"".time()."\"", //"1479258271",
@@ -413,13 +432,13 @@ public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
       "software"  =>  "9.3.5",
       "geotag_enabled" => false,
       "upload_id" => $upload_id,
-   ////
+    ////
      //"date_time_original" =>  "2016:10:31 14:13:06", // => empty
-   ////
+    ////
       "usertags" => $final_string, //"{\"in\":[{\"user_id\":\"1383321789\",\"position\":[0.490625,0.540625]},{\"user_id\":\"253691521\",\"position\":[0.5828125,0.7578125]}]}" //$final_string,
       //
       
-  ];
+    ];  
 
         $post = json_encode($post);
         $post = str_replace('"crop_center":[0,0]', '"crop_center":[0.0,0.0]', $post);
@@ -427,57 +446,141 @@ public function media_configure($upload_id, $photo, $caption = '', $user_ids) {
         // $post = str_replace('"crop_original_size":'."[$size,$size]", '"crop_original_size":'."[$size.0,$size.0]", $post);
 
         return $this->request('https://i.instagram.com/api/v1/media/configure/?', $this->generateSignature($post))[1];
-
- 
-
-
 }
+
+
+public  function shuffle_assoc($list) { 
+    if (!is_array($list)) return $list; 
+
+    $keys = array_keys($list); 
+    shuffle($keys); 
+    $random = array(); 
+    foreach ($keys as $key) { 
+      $random[$key] = $list[$key]; 
+    }
+    return $random; 
+  } 
+
+
+public  function funcparse($followers, $influencer) 
+{
+      $counter = 0;
+      for($iter = 0; $iter < count($followers['users']); $iter++) {
+         $this->redis->sadd("detect", $followers['users'][$iter]['pk']);
+      }
+          
+      $tmpfollowers = $followers;
+       
+      sleep(4);
+      if (isset($tmpfollowers['next_max_id'])) {
+        $this->redis->rpush("$influencer:max_id",  $tmpfollowers['next_max_id']); 
+        try {
+          $followers = $this->followers($influencer, $tmpfollowers['next_max_id'] ); 
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        $counter++;
+      } else {
+        $this->redis->rpush("$influencer:max_id", null);
+      }
+       sleep(5);
+}
+
+
 public function funcrecur()
 { 
     $time_in_day = 24*60*60;
-    $posts_per_day = 4900;   
+    $posts_per_day = 5000;   
     $delay = $time_in_day / $posts_per_day;
-    
+ 
+////////
+    while ($this->redis->scard("detect") < 20000) {   
+      echo $next_iteration_time = $this->add_time($delay);  
+      sleep($next_iteration_time);
 
-    //  /* */
-    //  $iter = 0;
-    //  while ($iter < 20) {
+      $influencers = ['2058338792', '2290970399', '887742497', '20283423', '1508113868', '1730743473', '2367312611', '190642982', '3185134640', '263425178', '630452793', '1730984940', '21760162', '903666490', '327139047', '13224318', "2282477435", "2204060085", "2275299806","1447362645","331474338", "1284472953"];
 
-
-    //  if ($this->redis->scard('detect') > 20) { 
-    //     $act_array = array();
-    //     for ($i = 0; $i < 20; $i++) {
-    //       $actioner = $this->redis->spop('detect');
-    //       array_push($act_array , $actioner);
-    //     }
-    //  }
-    //  $this->upload_photo($photo, $act_array);
-    //  $iter =+ 1;
-    // }
-
-
-    // if ($this->redis->scard('detect') > 20) { 
-    //     $act_array = array();
-    //     for ($i = 0; $i < 20; $i++) {
-    //       $actioner = $this->redis->spop('detect');
-    //       array_push($act_array , $actioner);
-    //     }
-    //  }
-    //  $remove_ids = $this->method_to_fetch_all_posts();
-    //  $this->edit_photo_tag($photo, $remove_ids, $act_array);
-
-
-
-    while ($this->redis->scard('detect') > 0) { 
-
-        $actioner = $this->redis->spop('detect');
-        if ($this->redis->sismember("follow".$this->username , $actioner) != true) {
-            $this->follow($actioner);
+      $availableInf = [];
+      foreach ($influencers as $ind) {
+        if (  $this->redis->lrange("$ind:max_id", -1, -1) != null  ) {
+          array_push($availableInf, $ind); 
         }
+      }
+      if ( empty($availableInf) == true ) {
+       $availableInf = $influencers;
+        $influencer = $availableInf[mt_rand(0, count($availableInf) - 1)]; 
+      } else {
+        $influencer = $availableInf[mt_rand(0, count($availableInf) - 1)];
+        $red = $this->redis->lrange("$influencer:max_id", -1, -1);
+      }
+
+      if(empty ($red)) {
+         $followers = $this->followers($influencer, $maxid = null);
+      } else {   
+         $followers = $this->followers($influencer, $red[0]);
+      }
+
+      $this->funcparse($followers, $influencer);
+
+
+    }
+
+    $dir =  __DIR__.DIRECTORY_SEPARATOR.'adult';
+    $ava_files = array_slice(scandir($dir), 2);
+    $avatar_files_shuffle =  $this->shuffle_assoc($ava_files);
+
+   // upload 20 photos 
+    while ( $this->redis->hlen("media".$this->username_id ) < 1 ) { 
+        
+        $avatar_file = $avatar_files_shuffle[mt_rand(0, count($avatar_files_shuffle) - 1)];
+        $photo = $dir ."/". $avatar_file;
+
+        $act_array = array();
+        for ($i = 0; $i < 10; $i++) {  // 20
+          $actioner = $this->redis->spop('detect');
+          array_push($act_array , $actioner);
+        }
+        $caption = $this->text_generator();
+
+        $act_array = array ("79646134849", "253691521");
+        $res = $this->upload_photo($photo, $caption, $act_array);
+        $this->redis->hset( "media".$this->username_id, $res['media']['pk'] , implode (",", $act_array) ) ;
+          
         echo $next_iteration_time = $this->add_time($delay);  
         sleep($next_iteration_time);
-        $this->funcrecur();
     }
+
+
+/////////
+
+    // $user_ids_new = array();
+    // for ($i = 0; $i < 20; $i++) {
+    //     $actioner = $this->redis->spop('detect');
+    //     array_push($user_ids_new , $actioner);
+    // }
+
+    // $media_ids = $this->redis->hkeys( "media".$this->username_id ) ; // get media from uploaded list
+    // $media_id = $media_ids[mt_rand(0, count($media_ids) - 1)]; 
+    // $removed_ids_string =  $this->redis->hget( "media" . $this->username_id, $media_id ) ; // get users_ids from uploaded media
+    // $removed_ids = explode(",", $removed_ids_string);
+    // $this->edit_photo_tag($media_id, $removed_ids, $user_ids_new);
+
+    // echo $next_iteration_time = $this->add_time($delay);  
+    // sleep($next_iteration_time);
+    // $this->funcrecur();
+   
+
+///// FOLLOW
+
+    // while ($this->redis->scard('detect') > 0) { 
+    //     $actioner = $this->redis->spop('detect');
+    //     if ($this->redis->sismember("follow".$this->username , $actioner) != true) {
+    //         $this->follow($actioner);
+    //     }
+    //     echo $next_iteration_time = $this->add_time($delay);  
+    //     sleep($next_iteration_time);
+    //     $this->funcrecur();
+    // }
 }
 
 
@@ -553,7 +656,7 @@ public function follow($user_id)
 public function followers($user_id, $max_id = null)
 {
     $outputs = $this->request('https://i.instagram.com/api/v1/friendships/'.$user_id.'/followers/'.(!is_null($max_id) ? '?max_id='.$max_id : '?rank_token='.$this->username_id.'_'.$this->generateUUID(true) ) );
-    return $outputs;
+    return $outputs[1];
 }
 
 public function  current_user_edit()
@@ -807,6 +910,33 @@ public function create()
      rename($this->IGDataPath.'cookies.dat', $this->IGDataPath."$this->username-cookies.dat"); 
     return $outputs;
 }
+
+
+
+public function text_generator() {
+
+  $smiles_list =  ["\u{1F60C}" ,"\u{1F60D}" , "\u{1F61A}"  ,"\u{1F618}", "\u{2764}"];
+  $smiles_hi =  ["\u{26A1}", "\u{1F48B}","\u{1F609}", "\u{1F633}", "\u{1F60C}" , "\u{1F61A}"  ,"\u{1F618}", "\u{270C}", "\u{1F47B}", "\u{1F525}", "\u{1F607}", "\u{1F617}", "\u{1F619}", "\u{1F60E}", "\u{1F61C}", "\u{270B}",  "\u{1F60B}"];
+  $smiles =  ["\u{1F609}", "\u{1F60D}" ];  
+  $cursors = ["\u{261D}" , "\u{2B06}", "\u{2934}", "\u{1F53C}", "\u{1F51D}" ];  
+  
+  $hi_word = [ "Hi! "];
+  $hiw = $hi_word[mt_rand(0, count($hi_word) - 1)];
+  $smi_hi = $smiles_hi[mt_rand(0, count($smiles_hi) - 1)];
+  $smil = $smiles[mt_rand(0, count($smiles) - 1)];
+
+  $cur = $cursors[mt_rand(0, count($cursors) - 1)];
+  $smi = $smiles_list[mt_rand(0, count($smiles_list) - 1)];
+  
+
+  // $first_name_txt = explode(" ",$GLOBALS["first_name"]);
+  
+ 
+    $text = " Check link in profile for more $smi_hi ";
+
+    return $text;
+}
+
 
 
  
