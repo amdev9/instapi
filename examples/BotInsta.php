@@ -24,7 +24,7 @@ class Connect extends Worker {
     **/
     protected static $link;
 }
-$pool = new Pool(1, "Connect", []);
+$pool = new Pool(200, "Connect", []);
 for ($i = 0; $i < 1; $i++) {
    // $pool->submit (new registerTool());  // fix to ios and add username pass and email
   $pool->submit (new InstaOS()); 
