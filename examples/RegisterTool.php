@@ -1192,6 +1192,7 @@ class RegisterTool extends Threaded
 		 
 	public function run() {   
 		// $this->to_login();
+		
 		$this->to_create_new();				 
 	} 
 }

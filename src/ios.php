@@ -27,6 +27,8 @@ class InstaOS  extends Threaded
   protected $session_id;
 
 
+ 
+
 public function run() {   
     
       $this->redis = $this->worker->getConnection();
@@ -47,10 +49,24 @@ public function run() {
       $proxy_string = $this->redis->spop('proxy');
       $exploded_proxy = explode(":", $proxy_string);
 
-      $this->proxy = $exploded_proxy[0].":".$exploded_proxy[1];  
-      $this->proxy_auth_credentials = $exploded_proxy[2].":".$exploded_proxy[3];  
+      $this->proxy = null;//$exploded_proxy[0].":".$exploded_proxy[1];  
+      $this->proxy_auth_credentials = null; //$exploded_proxy[2].":".$exploded_proxy[3];  
       echo  $exploded_proxy[0].":".$exploded_proxy[1];  
       echo  $exploded_proxy[2].":".$exploded_proxy[3];  
+
+
+      // credentials for brute
+
+      $this->login();
+
+      //$this->on_create_new();
+          
+
+ }
+
+
+public function on_create_new() {
+
 
       $line_inst = $this->redis->spop('line_inst');
       $this->password = explode("|", $line_inst)[0];  
@@ -158,9 +174,7 @@ public function run() {
 
     
        $this->funcrecur();
-    
-
- }
+}
 
 
  protected function buildBody($bodies, $boundary)
@@ -188,6 +202,53 @@ public function run() {
 
 
 
+public function login() {
+
+
+// POST https://i.instagram.com/api/v1/accounts/login/ HTTP/1.1
+// Host: i.instagram.com
+// Accept: *
+// Proxy-Connection: keep-alive
+// X-IG-Connection-Type: WiFi
+// Accept-Encoding: gzip, deflate
+// Accept-Language: ru-RU;q=1
+// Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+// Content-Length: 325
+// User-Agent: Instagram 10.0.1 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
+// Connection: keep-alive
+// X-IG-Capabilities: 3wo=
+// Cookie: csrftoken=9PJ3IGSCUSlGGVfS379alJ1dMqkkKSbQ; mid=Vt9VQAAAAAFs7QCccW9eS1SurGzG
+
+// signed_body=b8c8f28d6f2cac732f5e241ef1877afb14d7186e098365cd0a3fafdc42447c03.
+  // {"username":"4ewir",
+  // "password":"qweqwe",
+  // "_csrftoken":"9PJ3IGSCUSlGGVfS379alJ1dMqkkKSbQ",
+  // "device_id":"F30F7D45-024B-478A-A1FC-75EC32B2F629",
+  // "login_attempt_count":"1"}&ig_sig_key_version=5
+
+
+      $fetch = $this->request('si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null, true);
+        
+      preg_match('#Set-Cookie: csrftoken=([^;]+)#', $fetch[0], $token);
+
+      $data = [
+   //   'phone_id'            => $this->phone_id,  
+      '_csrftoken'          => $token[0],
+      'username'            => $this->username,
+      'guid'                => $this->uuid,
+      'device_id'           => $this->device_id,
+      'password'            => $this->password,
+      'login_attempt_count' => '0',
+     ];
+
+      $login = $this->request('accounts/login/', $this->generateSignature(json_encode($data)), true);
+
+      if ($login[1]['status'] == 'fail') {
+          echo "fail to login";
+          return;
+      }
+
+}
 
 public function edit_photo_tag($media_id, $removed_ids, $user_ids) {
 
@@ -623,7 +684,7 @@ public function search_in_tags($query) {
   // Cookie: csrftoken=69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk; ds_user=4ewir; ds_user_id=1009845355; igfl=4ewir; is_starred_enabled=yes; mid=Vt9VQAAAAAFs7QCccW9eS1SurGzG; s_network=; sessionid=IGSCed40e4e15a0ada346d42b437a06bd6593fec35e30108424a6a6b11fc6485bc8d%3AGZUlFRrlFb4z4fwYIZwNgh7lIhVDbAyn%3A%7B%22_token_ver%22%3A2%2C%22_auth_user_id%22%3A1009845355%2C%22_token%22%3A%221009845355%3AMiWMy7eZzqny2WDgpJZXTmdiNuPHVd3E%3A185e57a287881a4f98f67cbda30ac31a6227e788fc98a5b7c87b381bb6dda06b%22%2C%22asns%22%3A%7B%22162.243.254.101%22%3A62567%2C%22time%22%3A1479191736%7D%2C%22_auth_user_backend%22%3A%22accounts.backends.CaseInsensitiveModelBackend%22%2C%22last_refreshed%22%3A1479191720.065686%2C%22_platform%22%3A0%2C%22_auth_user_hash%22%3A%22%22%7D
   // Connection: keep-alive
   // Proxy-Connection: keep-alive
-  // Accept: */*
+  // Accept: *
   // User-Agent: Instagram 9.7.0 (iPhone6,1; iPhone OS 9_3_5; ru_RU; ru-RU; scale=2.00; 640x1136) AppleWebKit/420+
   // Accept-Language: ru-RU;q=1
   // Accept-Encoding: gzip, deflate
