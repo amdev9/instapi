@@ -1,0 +1,256 @@
+
+locale-gen ru_RU.UTF-8 && apt-get update && apt-get install gcc++ git make screen -y && echo "----------\n" && uname -a && echo "----------\n" && echo "deb http://ftp.debian.org/debian jessie-backports main non-free contrib" >> /etc/apt/sources.list && apt-get update && apt-get install aptitude -y && aptitude -t jessie-backports search linux-image && apt-get install linux-base -t jessie-backports -y && apt-get install linux-image-4.7.0-0.bpo.1-amd64 -y && reboot
+
+
+echo "----------\n" && uname -a && echo "----------\n"  && git clone https://github.com/DanielAdolfsson/ndppd.git && cd ndppd && make all && make install && nano /root/ndppd/ndppd.conf && ndppd -d -c /root/ndppd/ndppd.conf && ps -ax && cd ~  && git clone https://github.com/z3APA3A/3proxy.git && cd 3proxy/ && nano src/proxy.h && make -f Makefile.Linux && cd .. && wget http://blog.vpsville.ru/uploads/random-ipv6_64-address-generator.sh && nano random-ipv6_64-address-generator.sh && chmod +x random-ipv6_64-address-generator.sh && ./random-ipv6_64-address-generator.sh > ip.list &&  nano 3proxy.sh &&  chmod +x 3proxy.sh && ./3proxy.sh > 3proxy.cfg && mkdir /usr/local/etc/3proxy && mkdir /usr/local/etc/3proxy/bin && mkdir /usr/local/etc/3proxy/logs && mkdir /usr/local/etc/3proxy/stat && cd 3proxy && cp src/3proxy /usr/local/etc/3proxy/bin && cp ./scripts/rc.d/proxy.sh /etc/init.d/3proxy && cd ~ && cp 3proxy.cfg /usr/local/etc/3proxy/3proxy.cfg && head -25 /usr/local/etc/3proxy/3proxy.cfg && nano /etc/sysctl.conf && sysctl -p && /usr/local/etc/3proxy/bin/3proxy /usr/local/etc/3proxy/3proxy.cfg
+
+
+
+1 >>>>
+
+route-ttl 30000
+proxy eth0 {
+   router yes
+   timeout 500
+   ttl 30000
+   rule ::/64 {
+      static
+   }
+}
+
+2 >>>>
+
+echo pidfile /usr/local/etc/3proxy/3proxy.pid
+echo daemon
+echo maxconn 100
+echo nscache 65536
+echo timeouts 1 5 30 60 180 1800 15 60
+echo setgid 65535
+echo setuid 65535
+echo flush
+echo auth strong
+echo users blackking:CL:Name0123Space
+echo allow blackking
+
+port=30000
+count=1
+for i in `cat ip.list`; do
+    echo "proxy -6 -n -a -p$port -i45.63.84.19 -e$i"
+    ((port+=1))
+    ((count+=1))
+    if [ $count -eq 10001 ]; then
+        exit
+    fi
+done
+
+3 >>>>>>
+
+net.ipv6.conf.eth0.proxy_ndp=1
+net.ipv6.conf.all.proxy_ndp=1
+net.ipv6.conf.default.forwarding=1
+net.ipv6.conf.all.forwarding=1
+net.ipv6.ip_nonlocal_bind = 1
+
+
+>>>>>>
+********************************
+________________________________
+
+locale-gen ru_RU.UTF-8
+apt-get update
+apt-get install gcc++ git make screen
+uname -a
+echo "deb http://ftp.debian.org/debian jessie-backports main non-free contrib" >> /etc/apt/sources.list
+apt-get update
+apt-get install aptitude
+aptitude -t jessie-backports search linux-image
+apt-get install linux-image-4.5.0-0.bpo.2-amd64 -y
+reboot
+uname -a
+17  git clone https://github.com/DanielAdolfsson/ndppd.git
+18  cd ndppd
+19  make all && make install
+20  nano /root/ndppd/ndppd.conf
+
+>>>
+route-ttl 30000
+proxy eth0 {
+   router yes
+   timeout 500
+   ttl 30000
+   2001:0bc8:25f6/48 {
+      static
+   }
+}
+
+rule ipv6mask/64 
+>>>>
+ 
+
+
+
+21  ping6 ipv6.google.com
+22  nano /root/ndppd/ndppd.conf
+23  ndppd -d -c /root/ndppd/ndppd.conf
+24  ps -ax
+26  cd ~
+27  git clone https://github.com/z3APA3A/3proxy.git
+28  cd 3proxy/
+29  nano src/proxy.h
+30  make -f Makefile.Linux
+31  cd ..
+32  wget http://blog.vpsville.ru/uploads/random-ipv6_64-address-generator.sh
+33  nano random-ipv6_64-address-generator.sh
+34  chmod +x random-ipv6_64-address-generator.sh
+35  ./random-ipv6_64-address-generator.sh > iplist4200
+36  head -1000 iplist4200 >> ip.list
+37  wc -l ip.list
+38  nano 3proxy.sh
+39  chmod +x 3proxy.sh
+40  ./3proxy.sh > 3proxy.cfg
+41  wc -l 3proxy.cfg
+42  head -20 3proxy.cfg
+43  mkdir /usr/local/etc/3proxy
+44  mkdir /usr/local/etc/3proxy/bin
+45  mkdir /usr/local/etc/3proxy/logs
+46  mkdir /usr/local/etc/3proxy/stat
+47  cd 3proxy
+48  cp src/3proxy /usr/local/etc/3proxy/bin
+49  cp ./scripts/rc.d/proxy.sh /etc/init.d/3proxy
+50  update-rc.d 3proxy defaults
+52  cd ~
+ 
+56  cp 3proxy.cfg /usr/local/etc/3proxy/3proxy.cfg
+57  head -10 /usr/local/etc/3proxy/3proxy.cfg
+58  head -20 /usr/local/etc/3proxy/3proxy.cfg
+59  nano /usr/local/etc/3proxy/3proxy.cfg
+60  cat ./ndppd/ndppd.conf
+61  ping6 ipv6.google.com
+62  nano /etc/sysctl.conf
+
+
+>>>>>>>>>>>
+
+
+
+>>>>>>>>>>>
+63  sysctl -p
+64  /usr/local/etc/3proxy/bin/3proxy /usr/local/etc/3proxy/3proxy.cfg
+65  ps -ax
+66  ifconfig
+67  ps -ax
+68  netstat -an
+71  ip -6 route show
+72  ip -6 route add default via 2001:19f0:ac00:e9::1
+73  ip -6 route add local 2001:19f0:ac00:e9::/64 dev lo
+74  ps -ax
+75  curl -i --proxy http://blackking:Name0123Space@45.79.218.152:30201  https://m.vk.com
+
+
+
+
+
+-----------
+
+socks
+
+cat /usr/local/etc/3proxy/3proxy.cfg 
+daemon
+pidfile /usr/local/etc/3proxy/3proxy.pid
+nscache 65536
+timeouts 1 5 30 60 180 1800 15 60
+auth iponly
+allow * 90.154.72.47 * *
+allow * 45.32.7.67 * *
+
+maxconn 200
+
+socks -i45.32.7.67 -e2001:19f0:5:b:589b:390d:e18a:09bf -p30000
+socks -i45.32.7.67 -e2001:19f0:5:b:bec4:8c9c:4728:d55e -p30001
+
+ 
+
+
+
+echo pidfile /usr/local/etc/3proxy/3proxy.pid
+echo daemon
+echo maxconn 100
+echo nscache 65536
+echo timeouts 1 5 30 60 180 1800 15 60
+echo setgid 65535
+echo setuid 65535
+echo flush
+echo auth strong
+echo users blackking:CL:Name0123Space
+echo allow blackking
+
+port=30000
+count=1
+for i in `cat ip.list`; do
+    echo "proxy -6 -n -a -p$port -i45.63.84.19 -e$i"
+    ((port+=1))
+    ((count+=1))
+    if [ $count -eq 10001 ]; then
+        exit
+    fi
+done
+
+
+////////////// 56
+
+route-ttl 30000
+proxy eth0 {
+   router yes
+   timeout 500
+   ttl 30000
+   rule 2600:3c02:e001:3100::1/56 {
+      static
+   }
+}
+
+
+---------------
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+allow-hotplug eth0
+
+#iface eth0 inet6 auto
+iface eth0 inet6 static
+    address 2600:3c02:e001:3101::1
+    netmask 56
+    gateway 2600:3c02:e001:3100::1
+
+ 
+
+
+
+iface eth0 inet static
+    address 45.79.218.152/24
+    gateway 45.79.218.1
+    
+-----------*****
+
+route-ttl 30000
+proxy eth0 {
+   router yes
+   timeout 500
+   ttl 30000
+   rule 2600:3c02:e001:3100::1/56 {
+      static
+   }
+}
+
+?????????******
+
+
+iface eth0 inet6 static
+    address 2600:3c02:e001:3201::1
+    netmask 64
+    gateway 2600:3c02:e001:3200
+
+
+ip -6 route add local 2600:3c02:e001:3200::1/56  dev lo
+
