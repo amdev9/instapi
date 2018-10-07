@@ -1,3 +1,6 @@
 *.DS_Store
 *.rdb
 
+src/data
+src/dataios
+local/blacklist
